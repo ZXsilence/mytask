@@ -12,14 +12,17 @@ import logging
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-from Libs.date_handle import DateHandle
-from TaobaoSdk.Exceptions import  ErrorResponseException
-from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    logging.config.fileConfig('conf/consolelogger.conf')
 
-from xuanciw.settings import  taobao_client
-from common.decorator import  tao_api_exception
-from common.exceptions import  TBDataNotReadyException
+from TaobaoSdk import SimbaKeywordsDeleteRequest
+from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
+from TaobaoSdk.Exceptions import  ErrorResponseException
+
+from tao_models.conf.settings import taobao_client
+from tao_models.common.decorator import  tao_api_exception
+from tao_modesl.common.exceptions import  TBDataNotReadyException
 
 logger = logging.getLogger(__name__)
 
