@@ -19,5 +19,5 @@ PYTHON_SDK = os.path.normpath(os.path.join(currDir, '../../../TaobaoOpenPythonSD
     
 def getEnvReady():
     sys.path.insert(0,PYTHON_SDK)
-    sys.path.insert(0,PROJECT_ROOT)
+    sys.path.insert(0,PROJECT_PAR)
 

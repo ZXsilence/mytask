@@ -35,3 +35,5 @@ nosetests.xml
 .pydevproject
 
 tao_open_models/conf/settings.py
+
+tao_models/TaobaoSdk

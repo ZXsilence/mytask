@@ -16,7 +16,7 @@ if __name__ == '__main__':
     set_env.getEnvReady()
     logging.config.fileConfig('conf/consolelogger.conf')
 
-from TaobaoSdk import SimbaKeywordsDeleteRequest
+from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
