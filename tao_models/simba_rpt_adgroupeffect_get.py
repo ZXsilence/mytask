@@ -42,8 +42,8 @@ class SimbaRptAdgroupEffectGet(object):
         req.nick = nick
         req.adgroup_id = adgroup_id
         req.campaign_id = campaign_id
-        req.start_time = str(datetime.date(start_time.year, start_time.month, start_time.day))
-        req.end_time = str(datetime.date(end_time.year, end_time.month, end_time.day))
+        req.start_time = datetime.datetime.strftime(start_time, '%Y-%m-%d')
+        req.end_time = datetime.datetime.strftime(end_time, '%Y-%m-%d')
         req.search_type = search_type
         req.source = source
         req.subway_token = subway_token
