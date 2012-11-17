@@ -46,8 +46,8 @@ class SimbaRptAdgroupBaseGet(object):
         req.nick = nick
         req.adgroup_id = adgroup_id
         req.campaign_id = campaign_id
-        req.start_time = DateHandle.date_to_ustring(start_time)
-        req.end_time = DateHandle.date_to_ustring(end_time)
+        req.start_time = str(datetime.date(start_time.year, start_time.month, start_time.day))
+        req.end_time = str(datetime.date(end_time.year, end_time.month, end_time.day))
         req.search_type = search_type
         req.source = source
         req.subway_token = subway_token
@@ -82,7 +82,8 @@ class SimbaRptAdgroupBaseGet(object):
     @tao_api_exception
     def get_yesterday_rpt_adgroupbase_list(cls, campaign_id, adgroup_id, search_type, source, access_token, subway_token):
         'get yesterday adgroup base rpt list'
-        base_list = cls.get_rpt_adgroupbase_list(campaign_id, adgroup_id, DateHandle.get_yesterday_date(), DateHandle.get_yesterday_date(), search_type, source, access_token, subway_token)
+        yes = datetime.date.today() - datetime.timedelta(days=1)
+        base_list = cls.get_rpt_adgroupbase_list(campaign_id, adgroup_id, str(yes), str(yes), search_type, source, access_token, subway_token)
         return base_list
         
 if __name__ == '__main__':
