@@ -18,8 +18,8 @@ if __name__ == '__main__':
 from TaobaoSdk import ItemGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from comm_lib.tao_open_models.conf.settings import  taobao_client
-from comm_lib.tao_open_models.common.decorator import  tao_api_exception
+from tao_models.conf.settings import  taobao_client
+from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
 

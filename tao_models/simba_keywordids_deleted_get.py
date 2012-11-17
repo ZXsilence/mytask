@@ -14,8 +14,8 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaKeywordidsDeletedGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from xuanciw.settings import  taobao_client
-from common.decorator import  tao_api_exception
+from tao_models.conf.settings import  taobao_client
+from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class SimbaKeywordidsDeletedGet(object):
 
         req = SimbaKeywordidsDeletedGetRequest()
         req.nick = nick
-        req.start_time = start_time
+        req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
         req.page_size = cls.PAGE_SIZE
         req.page_no = 1
 
