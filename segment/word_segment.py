@@ -21,7 +21,7 @@ curr_path = os.path.dirname(__file__)
 sys.path.append(os.path.join(curr_path,'./gen-py/'))
 sys.path.append(os.path.join(curr_path,'./boss/'))
 
-from settings_segment import BOSS_CONF_FILE, OS_NAME, BOSS_THRIFT
+from settings import BOSS_CONF_FILE, OS_NAME, BOSS_THRIFT
 
 if OS_NAME in platform.platform():
     from Boss4Python import Boss4Python 
