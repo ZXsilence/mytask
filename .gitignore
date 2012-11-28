@@ -37,3 +37,4 @@ nosetests.xml
 tao_open_models/conf/settings.py
 
 tao_models/TaobaoSdk
+*.pyc
