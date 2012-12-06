@@ -28,7 +28,7 @@ class SimbaAdgroupOnlineitemsGet(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_items_online(cls, access_token, nick):
         """
         get items online

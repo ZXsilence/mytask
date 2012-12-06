@@ -31,7 +31,7 @@ class VasOrderSearch(object):
     PAGE_SIZE = 20
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_order_list(cls, article_code, item_code=None, start_created=None, end_created=None):
         order_list = []
         req = VasOrderSearchRequest()

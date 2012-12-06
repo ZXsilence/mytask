@@ -26,7 +26,7 @@ class IncrementCustomerPermit(object):
 
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def set_customer_permit(cls, access_token):
         logger.info("set customer permit request")
         req = IncrementCustomerPermitRequest()

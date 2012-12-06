@@ -41,7 +41,7 @@ class SimbaAdgroupsGet(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_adgroup_list_by_campaign(cls, access_token, nick, campaign_id):
         """
         given a campaign_id, get the adgroup list in this campaign
@@ -81,7 +81,7 @@ class SimbaAdgroupsGet(object):
         return adgroup_list
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_adgroup_list_by_adgroup_ids(cls, access_token, nick, adgroup_id_list):
 
         MAX_ADGROUP_IDS = 200

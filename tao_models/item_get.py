@@ -30,7 +30,7 @@ class ItemGet(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_cid(cls, access_token, num_iid):
         req = ItemGetRequest()
         req.num_iid = num_iid

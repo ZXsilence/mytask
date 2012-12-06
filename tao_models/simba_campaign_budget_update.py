@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class SimbaCampaignBudgetUpdate(object):
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def campaign_budget_update(cls, access_token, nick, campaign_id, budget, use_smooth):
         req = SimbaCampaignBudgetUpdateRequest()
         req.nick = nick

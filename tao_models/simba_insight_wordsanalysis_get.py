@@ -29,7 +29,7 @@ class SimbaInsightWordsanalysisGet(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_word_analysis(cls, access_token, nick, keywords, stu='hprice'):
         """
         keywords 最多200个词

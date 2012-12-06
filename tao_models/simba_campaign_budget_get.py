@@ -32,12 +32,11 @@ logger = logging.getLogger(__name__)
 class SimbaCampaignBudgetGet(object):
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception(5)
     def campaign_budget_get(cls, access_token, nick, campaign_id):
         req = SimbaCampaignBudgetGetRequest()
         req.nick = nick
         req.campaign_id = campaign_id 
-
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)

@@ -29,7 +29,7 @@ class SimbaAdgroupsChangedGet(object):
     PAGE_SIZE = 1000
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_adgroups_changed(cls, access_token, nick, start_time):
         """
 

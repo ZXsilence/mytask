@@ -28,7 +28,7 @@ class SimbaAdgroupidsDeletedGet(object):
 
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_adgroupids_deleted(cls, access_token, nick, start_time):
 
 

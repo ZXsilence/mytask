@@ -28,7 +28,7 @@ class ItemsListGet(object):
     MAX_NUM_IIDS = 20
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_item_list(cls, access_token, num_iids, fields=DEFAULT_FIELDS):
 
         num_iid_list = copy.deepcopy(num_iids)

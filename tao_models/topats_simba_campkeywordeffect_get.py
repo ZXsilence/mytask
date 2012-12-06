@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class TopatsSimbaCampkeywordeffectGet(object):
     ''
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_camp_keywordeffect_task(cls, nick, campaign_id, time_slot, access_token):
         ''
         req = TopatsSimbaCampkeywordeffectGetRequest()
