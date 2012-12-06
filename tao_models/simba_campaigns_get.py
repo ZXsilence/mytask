@@ -33,7 +33,7 @@ class SimbaCampaignsGet(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_campaign_list(cls, access_token, nick):
         """
         get campaign list for a shop.

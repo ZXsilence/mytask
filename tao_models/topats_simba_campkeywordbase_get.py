@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class TopatsSimbaCampkeywordbaseGet(object):
     ''
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_camp_keywordbase_task(cls, nick, campaign_id, time_slot, access_token):
         ''
         req = TopatsSimbaCampkeywordbaseGetRequest()

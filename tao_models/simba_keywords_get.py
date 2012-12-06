@@ -52,7 +52,7 @@ class SimbaKeywordsGet(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_keyword_list_by_adgroup(cls, access_token, nick, adgroup_id):
         """
         get keyword list for some specific adgroup id
@@ -70,7 +70,7 @@ class SimbaKeywordsGet(object):
 
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_keyword_list_by_keyword_ids(cls, access_token, nick, keyword_id_list):
         """
         get keyword list given by keyword ids

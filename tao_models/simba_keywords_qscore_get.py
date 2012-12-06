@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class SimbaKeywordsQscoreGet(object):
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_keywords_qscore(cls, access_token, nick, adgroup_id):
         req = SimbaKeywordsQscoreGetRequest()
         req.nick = nick

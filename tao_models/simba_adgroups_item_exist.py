@@ -28,7 +28,7 @@ class SimbaAdgroupsItemExist(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def is_adgroup_item_exist(cls,nick , access_token, campaign_id, num_iid):
         req = SimbaAdgroupsItemExistRequest()
         req.campaign_id = campaign_id

@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class SimbaRptCusteffectGet(object):
     ''
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_shop_rpt_effect(cls, nick, start_date, end_date, access_token, subway_token):
         ''
         logger.debug('get nick:%s cust effect rpt'%nick)
