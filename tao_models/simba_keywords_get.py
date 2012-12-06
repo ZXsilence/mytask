@@ -16,7 +16,7 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    #logging.config.fileConfig('conf/consolelogger.conf')
 
 from TaobaoSdk import SimbaKeywordsGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
