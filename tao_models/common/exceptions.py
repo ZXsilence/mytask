@@ -46,7 +46,16 @@ class TBDataNotReadyException(Exception):
         return "TBDataNotReadyException:%s"%(self.msg)
 
 
-        
+class JsonDecodeException(Exception):
+    """
+    raise this exception when api output is not json schema
+    """
+    def __init__(self, msg=None):
+        self.msg = msg
+
+    def __str__(self):
+        return "JsonDecodeException:%s "%(self.msg)
+
 class DataOutdateException(Exception):
      """
      raise this exception when data in XCW database does not keep update with taobao platform
