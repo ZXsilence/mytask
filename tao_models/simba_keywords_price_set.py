@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 class SimbaKeywordsPriceSet(object):
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def set_keywords_price(cls, access_token, nick, keyword_price_list):
         if not keyword_price_list:
             return []

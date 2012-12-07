@@ -28,7 +28,7 @@ class SimbaKeywordsAdd(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def add_keywords(cls, access_token, nick, adgroup_id, word_price_list):
         """
         args:

@@ -54,7 +54,7 @@ class IncrementItemsGet(object):
         return ret
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def _get_items_increment(cls, access_token, nick, start_modified, end_modified):
         """
         this method should only be called by get_items_incremental_changed

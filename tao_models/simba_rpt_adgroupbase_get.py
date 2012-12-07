@@ -36,7 +36,7 @@ class SimbaRptAdgroupBaseGet(object):
     """
     """
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_rpt_adgroupbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source, access_token, subway_token):
         """
         Notes:
@@ -79,7 +79,7 @@ class SimbaRptAdgroupBaseGet(object):
         return base_list
     
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_yesterday_rpt_adgroupbase_list(cls, campaign_id, adgroup_id, search_type, source, access_token, subway_token):
         'get yesterday adgroup base rpt list'
         yes = datetime.date.today() - datetime.timedelta(days=1)

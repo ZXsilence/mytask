@@ -24,11 +24,11 @@ logger = logging.getLogger(__name__)
 
 class ItemsListGet(object):
 
-    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name'
+    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid'
     MAX_NUM_IIDS = 20
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_item_list(cls, access_token, num_iids, fields=DEFAULT_FIELDS):
 
         num_iid_list = copy.deepcopy(num_iids)

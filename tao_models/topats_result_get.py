@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class TopatsResultGet(object):
     ''
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_task_result(cls, task_id, access_token):
 
         req = TopatsResultGetRequest()

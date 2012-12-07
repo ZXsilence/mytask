@@ -16,7 +16,7 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    #logging.config.fileConfig('conf/consolelogger.conf')
 
 from TaobaoSdk import SimbaKeywordsGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
@@ -52,7 +52,7 @@ class SimbaKeywordsGet(object):
     """
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_keyword_list_by_adgroup(cls, access_token, nick, adgroup_id):
         """
         get keyword list for some specific adgroup id
@@ -70,7 +70,7 @@ class SimbaKeywordsGet(object):
 
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_keyword_list_by_keyword_ids(cls, access_token, nick, keyword_id_list):
         """
         get keyword list given by keyword ids

@@ -33,7 +33,7 @@ class SimbaKeywordsChangedGet(object):
     PAGE_SIZE = 1000
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_keywords_changed(cls, access_token, nick, start_time):
         """
         注意: start_time 改成datetime 传入

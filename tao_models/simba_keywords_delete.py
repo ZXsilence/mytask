@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class SimbaKeywordsDelete(object):
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def delete_keywords(cls, access_token, nick, campaign_id, keyword_id_list):
         if not keyword_id_list:
             return []

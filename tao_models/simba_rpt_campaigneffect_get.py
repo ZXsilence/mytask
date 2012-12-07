@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class SimbaRptCampaigneffectGet(object):
     ''
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_yesterday_rpt_campeffect_list(cls, nick, campaign_id, search_type, source, access_token, subway_token):
         ''
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
@@ -47,7 +47,7 @@ class SimbaRptCampaigneffectGet(object):
         return l
     
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def get_camp_rpt_list_by_date(cls, nick, campaign_id, search_type, source, start_date, end_date, access_token, subway_token):
         ''
         req = SimbaRptCampaigneffectGetRequest()
