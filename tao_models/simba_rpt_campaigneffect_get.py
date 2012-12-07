@@ -28,7 +28,7 @@ class SimbaRptCampaigneffectGet(object):
     @tao_api_exception
     def get_yesterday_rpt_campeffect_list(cls, nick, campaign_id, search_type, source, access_token, subway_token):
         ''
-        yesterday = datetime.date.today() - datetime.timedelta
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
         req = SimbaRptCampaigneffectGetRequest()
         req.nick = nick
         req.start_time = str(yesterday)

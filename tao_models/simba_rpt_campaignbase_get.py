@@ -30,7 +30,7 @@ class SimbaRptCampaignbaseGet(object):
     @tao_api_exception
     def get_yesterday_rpt_campbase_list(cls, nick, campaign_id, search_type, source, access_token, subway_token):
         ''
-        yesterday = datetime.date.today() - datetime.timedelta
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
         req = SimbaRptCampaignbaseGetRequest()
         req.nick = nick
         req.start_time = str(yesterday)
