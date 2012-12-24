@@ -50,7 +50,7 @@ class SimbaKeywordsPriceSet(object):
         for i in range(package_num):
             keyword_price_str = ""
             for keyword_price in keyword_price_list[i*100: (i+1)*100]:
-                keyword_price_str += str(keyword_price['kid']) + '^^' + str(keyword_price['price'])
+                keyword_price_str += str(keyword_price['kid']) + '^^' + str(keyword_price['price']) + '^^' +str(keyword_price['match_scope'])
                 keyword_price_str += ','
             keyword_price_str = keyword_price_str[:-1]
             req.keywordid_prices = keyword_price_str
