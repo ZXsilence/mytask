@@ -137,8 +137,13 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         continue
                     
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
-                        if e.sub_code and u'isp.top-remote-connection-timeout' in e.sub_code:
-                            logger.error(e)
+                        if e.sub_code and u'isp.null-pointer-exception' in e.sub_code:
+                            raise #重试无法解决此类异常
+                        if e.sub_code and u'isp.top-parse-error' in e.sub_code:
+                            raise #重试无法解决此类异常
+                        if e.sub_code and u'isp.top-mapping-parse-error' in e.sub_code:
+                            raise #重试无法解决此类异常
+                        logger.error(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
