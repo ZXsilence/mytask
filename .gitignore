@@ -38,3 +38,7 @@ tao_open_models/conf/settings.py
 
 tao_models/TaobaoSdk
 *.pyc
+
+tao_models/conf/set_env.py
+
+tao_models/conf/settings.py

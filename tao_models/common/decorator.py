@@ -141,6 +141,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 40):
                             raise DataOutdateException(str(e))
                         if e.sub_msg and  u'Id不存在' in e.sub_msg:
                             raise
+                        if  u'用户未开通主动通知服' in e.sub_code:
+                            raise 
                         sleep(10)
                         if retry_times == MAX_RETRY_TIMES:
                             mail_logger.exception(str(e))
