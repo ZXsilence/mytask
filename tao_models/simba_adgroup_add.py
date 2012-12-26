@@ -13,11 +13,12 @@ if __name__ == '__main__':
     from tao_models.conf.settings import set_taobao_client
     set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
 
-from TaobaoSdk import SimbaCampaignBudgetGetRequest
+from TaobaoSdk import SimbaAdgroupAddRequest 
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import ItemForbiddenException
 
 logger = logging.getLogger(__name__)
 

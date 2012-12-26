@@ -18,6 +18,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import ImgNotBelongToAdgroupException
 
 logger = logging.getLogger(__name__)
 
@@ -49,12 +50,14 @@ class SimbaCreativeUpdate(object):
 
 
 if __name__ == '__main__':
-    access_token = '6201011016ade5298c4ZZ0c4bff2e7b98fcad8ebcf11d58520500325'
-    nick = 'chinchinstyle'
-    adgroup_id = '131326905'
-    creative_id = '139123226' 
-    img_url = 'http://img07.taobaocdn.com/bao/uploaded/i7/T1yvupXmNAXXbmMCkY_030501.jpg'
+    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/T1VM64Xk0jXXcYck3T_012555.jpg'
     title = '你好新世界'
+    
+    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
+    campaign_id = '3328400'
+    adgroup_id = '155729255'
+    creative_id = '165335144' 
+    nick = 'chinchinstyle'
     creativerecord = SimbaCreativeUpdate.update_creative(access_token, nick, adgroup_id, creative_id, img_url, title)
 
     print creativerecord.toDict()

@@ -54,8 +54,8 @@ class SimbaCampaignUpdate(object):
 
 if __name__ == '__main__':
 
-    access_token = '6201011016ade5298c4ZZ0c4bff2e7b98fcad8ebcf11d58520500325'
     nick = 'chinchinstyle'
+    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
     campaign_id = '3328400'
     title = '麦苗省油宝计划'
     online_status = 'online'

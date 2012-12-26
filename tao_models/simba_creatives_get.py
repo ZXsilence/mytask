@@ -50,9 +50,10 @@ class SimbaCreativesGet(object):
 
 
 if __name__ == '__main__':
-    access_token = '6201011016ade5298c4ZZ0c4bff2e7b98fcad8ebcf11d58520500325'
+    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
+    campaign_id = '3328400'
+    adgroup_id = '155729255'
     nick = 'chinchinstyle'
-    adgroup_id = '131326905'
     
     creatives = SimbaCreativesGet.get_creative_list_by_adgroup(access_token, nick, adgroup_id)
 

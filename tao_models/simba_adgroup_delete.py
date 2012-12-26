@@ -44,6 +44,7 @@ class SimbaAdgroupDelete(object):
         if not rsp.isSuccess():
             logger.error("delete_adgroup error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick
                  , str(adgroup_id), rsp.msg, rsp.sub_msg))
+            print "delete_adgroup:", rsp.msg, "\t", rsp.sub_msg
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
         return rsp.adgroup
@@ -52,7 +53,7 @@ class SimbaAdgroupDelete(object):
 
 if __name__ == '__main__':
 
-    access_token = '6201011016ade5298c4ZZ0c4bff2e7b98fcad8ebcf11d58520500325'
+    access_token = '6201d21d3bfa761000e15d6f4c1d3ZZ2331a6010d1ab4a8520500325'
     nick = 'chinchinstyle'
     adgroup_id = '230226374'
 

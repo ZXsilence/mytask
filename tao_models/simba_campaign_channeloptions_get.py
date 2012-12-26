@@ -49,10 +49,10 @@ class SimbaCampaignChanneloptionsGet(object):
 
 if __name__ == '__main__':
 
-    access_token = '6201f2547291c68de14fbd5ba958d3d50ZZ3e50adc7f9ca1030924525'
-    nick = u'雅鹭萱婚纱批发'
-    #nick = 'chinchinstyle'
-    #access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
+    #access_token = '6201f2547291c68de14fbd5ba958d3d50ZZ3e50adc7f9ca1030924525'
+    #nick = u'雅鹭萱婚纱批发'
+    nick = 'chinchinstyle'
+    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
 
     result = SimbaCampaignChanneloptionsGet.get_campaign_channeloptions(access_token, nick)
     for channel in result:
