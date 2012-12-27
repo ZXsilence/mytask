@@ -65,10 +65,22 @@ class SimbaRptCampaignbaseGet(object):
         l = json.loads(rsp.rpt_campaign_base_list)
         return l
         
-        
-        
-        
-        
-        
-        
+    @classmethod
+    def merge_base_list(cls, base_list):
+        cost_accumlate = 0
+        click_accumlate = 0
+        impression_accumlate = 0
+        for base in base_list:
+            try:
+                cost_accumlate += int(base['cost'])
+                click_accumlate += int(base['click'])
+                impression_accumlate += int(base['impressions'])
+            except Exception, data:
+                pass
+
+        return {'impression':impression_accumlate, 'click':click_accumlate, 'cost':cost_accumlate, \
+                'cpc':int(cost_accumlate/(click_accumlate+0.0000001)), \
+                'cpm':int(cost_accumlate/(impression_accumlate+0.0000001)*1000), \
+                }
+
         
