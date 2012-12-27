@@ -29,7 +29,7 @@ class SimbaAdgroupOnlineitemsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_items_online(cls, access_token, nick):
+    def get_items_online(cls, access_token, nick, max_page = 30):
         """
         get items online
 
@@ -63,6 +63,8 @@ class SimbaAdgroupOnlineitemsGet(object):
 
         # continue to call if more than one page
         total_pages = (rsp.page_item.total_item + cls.PAGE_SIZE - 1)/cls.PAGE_SIZE
+        if total_pages > max_page:
+            total_pages = max_page
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             rsp = taobao_client.execute(req, access_token)[0]
@@ -74,6 +76,27 @@ class SimbaAdgroupOnlineitemsGet(object):
 
         return item_online_list
 
+    @classmethod
+    @tao_api_exception(3)
+    def get_item_count(cls, access_token, nick):
+        """
+        """
+        req = SimbaAdgroupOnlineitemsGetRequest()
+        req.nick = nick
+        req.page_size = cls.PAGE_SIZE
+        req.order_field = 'bidCount'
+        req.order_by = 'true'
+        req.page_no = 1 
+
+        try:
+            rsp = taobao_client.execute(req, access_token)[0]
+        except Exception, data:
+            raise ApiExecuteException
+
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+
+        return rsp.page_item.total_item 
 
 
 

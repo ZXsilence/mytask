@@ -81,7 +81,7 @@ class VasOrderSearch(object):
 if __name__ == '__main__':
 
     article_code = 'ts-1796606'
-    #result = VasOrderSearch.search_vas_order_yesterday(article_code)
-    result = VasOrderSearch.search_vas_order_all(article_code)
+    result = VasOrderSearch.search_vas_order_yesterday(article_code)
+    #result = VasOrderSearch.search_vas_order_all(article_code)
     for element in result:
         print element.toDict()
