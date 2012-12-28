@@ -62,15 +62,27 @@ class SimbaKeywordsGet(object):
         req.nick = nick
         req.adgroup_id = adgroup_id
 
+        logger.debug('get keywords info by adgroup_id nick:%s adgroup_id:%s access_token:%s'%(nick, adgroup_id, access_token))
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
         return rsp.keywords
 
-
     @classmethod
     @tao_api_exception()
+    def _sub_get_keyword_list_by_keyword_ids(cls, access_token, nick, sub_keyword_id_list):
+        req = SimbaKeywordsGetRequest()
+        req.nick = nick
+        req.keyword_ids = ",".join([str(k) for k in sub_keyword_id_list])
+        logger.debug("get keyword info keyword_id_length:%s, nick:%s"%(len(sub_keyword_id_list), nick))
+        rsp = taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+        return rsp.keywords
+
+
+    @classmethod
     def get_keyword_list_by_keyword_ids(cls, access_token, nick, keyword_id_list):
         """
         get keyword list given by keyword ids
@@ -79,21 +91,13 @@ class SimbaKeywordsGet(object):
         keyword_id_list = copy.deepcopy(keyword_id_list)
         MAX_KEYWORD_IDS = 200
 
-        req = SimbaKeywordsGetRequest()
-        req.nick = nick
 
         total_keyword_list = []
         while keyword_id_list:
             sub_keyword_id_list = keyword_id_list[:MAX_KEYWORD_IDS]
             keyword_id_list = keyword_id_list[MAX_KEYWORD_IDS:]
-
-            req.keyword_ids = ",".join([str(k) for k in sub_keyword_id_list])
-            logger.debug("get keyword info keyword_id_length:%s, nick:%s"%(len(sub_keyword_id_list), nick))
-            rsp = taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
-
-            total_keyword_list.extend(rsp.keywords)
+            sub_keywords = cls._sub_get_keyword_list_by_keyword_ids(access_token, nick, sub_keyword_id_list)
+            total_keyword_list.extend(sub_keywords)
 
         return total_keyword_list
 

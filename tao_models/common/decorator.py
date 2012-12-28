@@ -80,6 +80,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
                         logger.info(e)
 
+                        if e.sub_code and u'isv.invalid-permission' in e.sub_code:
+                            raise
+
                         if e.sub_msg and u'包含了不属于该客户的关键词Id' in e.sub_msg:
                             raise DataOutdateException(str(e))
                         if e.sub_msg and  u'Id不存在' in e.sub_msg:
