@@ -14,7 +14,9 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_taobao_client
+    set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
+#    logging.config.fileConfig('conf/consolelogger.conf')
     
 from tao_models.conf.settings import  taobao_client
 from tao_models.common.decorator import  tao_api_exception
@@ -46,3 +48,17 @@ class SimbaRptCusteffectGet(object):
         if isinstance(l, dict):
             raise ErrorResponseException(code=l['code'], msg=rsp['msg'], sub_code=rsp['sub_code'], sub_msg=rsp['sub_msg'])
         return l
+
+if __name__ == '__main__':
+    nick = '大玛旗舰店'
+    #sid:69690113
+    import datetime as dt
+    start_date = '2012-12-25'
+    start_date = dt.datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = '2012-12-30' 
+    end_date = dt.datetime.strptime(end_date, '%Y-%m-%d')
+    access_token = '620290861d5fd7fbdfcc9cc88d93dbc1ce898ab9ca2aba2520500325'
+    subway_token = '1103984138-29938505-1356958423724-caff8f0d'
+    l = SimbaRptCusteffectGet.get_shop_rpt_effect(nick, start_date, end_date, access_token, subway_token)
+    print l 
+    
