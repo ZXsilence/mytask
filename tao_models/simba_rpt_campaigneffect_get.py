@@ -67,7 +67,29 @@ class SimbaRptCampaigneffectGet(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         l = json.loads(rsp.rpt_campaign_effect_list)
         if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
+            print "xxx:", l['sub_msg']
             raise TBDataNotReadyException(rsp.rpt_campaign_effect_list)
         return l
         
-            
+    @classmethod
+    def get_campaign_effect_accumulate(cls, nick, campaign_id, search_type, source, sdate, edate
+            , access_token, subway_token):
+        rpt_effect_list = SimbaRptCampaigneffectGet.get_camp_rpt_list_by_date(
+                nick, int(campaign_id), search_type, source, sdate, edate, access_token, subway_token)
+        pay_accumlate = 0 
+        pay_count_accumlate = 0 
+        fav_accumlate = 0 
+        for effect in rpt_effect_list:
+            if not(effect.has_key('directpay') and effect.has_key('indirectpay') \
+                    and effect.has_key('indirectpaycount') and effect.has_key('directpaycount') \
+                    and effect.has_key('favShopCount') and effect.has_key('favItemCount') \
+                    ):  
+                continue
+            pay_accumlate += int(effect['indirectpay'])
+            pay_accumlate += int(effect['directpay'])
+            pay_count_accumlate += int(effect['indirectpaycount'])
+            pay_count_accumlate += int(effect['directpaycount'])
+            fav_accumlate += int(effect['favItemCount'])
+            fav_accumlate += int(effect['favShopCount']) 
+
+        return {'pay':pay_accumlate, 'pay_count':pay_count_accumlate, 'fav':fav_accumlate}

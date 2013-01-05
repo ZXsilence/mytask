@@ -66,6 +66,24 @@ class SimbaRptCampaignbaseGet(object):
         return l
         
     @classmethod
+    def get_campaign_base_accumulate(cls, nick, campaign_id, search_type, source, sdate, edate
+            , access_token, subway_token):
+        rpt_base_list = SimbaRptCampaignbaseGet.get_camp_rpt_list_by_date(
+                nick, int(campaign_id), search_type, source, sdate, edate, access_token, subway_token)
+        cost_accumlate = 0
+        click_accumlate = 0
+        impression_accumlate = 0
+        for base in rpt_base_list:
+            if not(type(base) == type ({}) and base.has_key('cost') 
+                    and base.has_key('click') and base.has_key('impressions')):
+                continue
+            cost_accumlate += int(base['cost'])
+            click_accumlate += int(base['click'])
+            impression_accumlate += int(base['impressions'])
+
+        return {'cost':cost_accumlate, 'click':click_accumlate, 'impression':impression_accumlate}
+
+    @classmethod
     def merge_base_list(cls, base_list):
         cost_accumlate = 0
         click_accumlate = 0
