@@ -18,7 +18,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.exceptions import CampaignIdNotBelongToUserException
+from tao_models.common.exceptions import CampaignIdNotBelongToUserException
 
 
 logger = logging.getLogger(__name__)
