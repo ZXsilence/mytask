@@ -34,7 +34,7 @@ class SimbaCampaignBudgetGet(object):
         req.campaign_id = campaign_id 
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            if "未找到指定客户" in rsp.sub_msg:
+            if rsp.sub_msg and "未找到指定客户" in rsp.sub_msg:
                 raise CampaignIdNotBelongToUserException 
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.campaign_budget
