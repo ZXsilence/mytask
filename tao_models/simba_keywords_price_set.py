@@ -64,3 +64,40 @@ class SimbaKeywordsPriceSet(object):
         return keywords
 
 
+    @classmethod
+    @tao_api_exception(5)
+    def _set_price(cls, access_token, nick, keywordid_prices):
+        """
+        args:
+            wordid_price_list: [('keywordid', price),(102232, 33)]
+        """
+
+        req = SimbaKeywordsPriceSetRequest()
+        req.nick = nick
+        req.keywordid_prices = keywordid_prices
+        try:
+            rsp = taobao_client.execute(req, access_token)[0]
+        except Exception, data:
+            raise ApiExecuteException
+
+        if not rsp.isSuccess():
+            logger.error("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
+                ,rsp.msg, rsp.sub_msg))
+            raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
+        return rsp.keywords
+
+    @classmethod
+    def set_price(cls, access_token, nick, wordid_price_list):
+        
+        keywords = []
+        wordid_price_list = [str(wordid)+"^^"+str(price) for wordid, price in wordid_price_list]
+        package_num = len(wordid_price_list)/100 + 1
+        if len(wordid_price_list) % 100 == 0:
+            package_num -= 1
+
+        for i in range(package_num):
+            keywordid_prices = ",".join(wordid_price_list[i*100:(i+1)*100])
+            subkeywords = SimbaKeywordsPriceSet._set_price(access_token, nick, keywordid_prices)
+            keywords.append(subkeywords)
+        return keywords
+
