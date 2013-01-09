@@ -66,10 +66,10 @@ if __name__ == '__main__':
     campaign_id = '3328400'
     default_price = '10'
     title = '清仓 淘金币女士/男士围巾'
-    item_id = '7795118696'
-    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/T1PEYUXd4nXXaK2CkT_012736.jpg'
-    #item_id = '12965579382'
-    #img_url = 'http://img03.taobaocdn.com/bao/uploaded/i3/T1RgipXcppXXaCQevX_115020.jpg'
+    #item_id = '7795118696'
+    #img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/T1PEYUXd4nXXaK2CkT_012736.jpg'
+    item_id = '7794896442'
+    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/T14oadXa8mXXXhDvA1_041135.jpg'
 
     adgroup = SimbaAdgroupAdd.add_adgroup(access_token, nick, campaign_id, item_id, default_price, title, img_url)
     

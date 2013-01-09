@@ -18,6 +18,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import CampaignIdNotBelongToUserException
 
 
 logger = logging.getLogger(__name__)
@@ -33,6 +34,8 @@ class SimbaCampaignBudgetGet(object):
         req.campaign_id = campaign_id 
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
+            if rsp.sub_msg and "未找到指定客户" in rsp.sub_msg:
+                raise CampaignIdNotBelongToUserException 
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.campaign_budget
 

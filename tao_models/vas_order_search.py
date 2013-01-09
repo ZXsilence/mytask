@@ -71,8 +71,8 @@ class VasOrderSearch(object):
         return VasOrderSearch.search_vas_order(article_code, start_created, end_created)
 
     @classmethod
-    def search_vas_order_all(cls, article_code):
-        start = datetime.datetime.now() - datetime.timedelta(days=30)
+    def search_vas_order_all(cls, article_code,days=30):
+        start = datetime.datetime.now() - datetime.timedelta(days)
         today = datetime.datetime.now()
         start_created = start.strftime("%Y-%m-%d 00:00:00") 
         end_created = today.strftime("%Y-%m-%d 00:00:00") 
