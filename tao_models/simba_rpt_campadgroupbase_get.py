@@ -16,14 +16,12 @@ if __name__ == '__main__':
     from tao_models.conf.settings import set_taobao_client
     set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
 
-from TaobaoSdk import SimbaRptCampadgroupBaseGetRequest
+from TaobaoSdk import SimbaRptCampadgroupbaseGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
 
-
-from date_handle import DateHandle
 
 class SimbaRptCampadgroupBaseGet(object):
     """
@@ -34,8 +32,8 @@ class SimbaRptCampadgroupBaseGet(object):
         req = SimbaRptCampadgroupbaseGetRequest()
         req.campaign_id = campaign_id
         req.nick = nick
-        req.start_time = DateHandle.date_to_ustring(start_time)
-        req.end_time = DateHandle.date_to_ustring(end_time)
+        req.start_time = datetime.datetime.strftime(start_time, '%Y-%m-%d')
+        req.end_time = datetime.datetime.strftime(end_time, '%Y-%m-%d')
         req.search_type = search_type
         req.source = source
         req.subway_token = subway_token
@@ -66,12 +64,12 @@ class SimbaRptCampadgroupBaseGet(object):
 
 if __name__ == '__main__':
     try_list = SimbaRptCampadgroupBaseGet.get_rpt_adgroupbase_list('chinchinstyle',\
-                                                                    3367690, \
-                                                                   datetime.date(2012,8,30), \
-                                                                   datetime.date(2012,10,31), \
+                                                                    3442512, \
+                                                                    datetime.date(2012,12,9), \
+                                                                    datetime.date(2013,1,8), \
                                                                    'SUMMARY', \
-                                                                   'SUMMARY', \
-                                                '6201d07d3bfa761ZZ984821000e15d6f4c1d3010d1ab4a8520500325',\
-                                                '1103075437-19809948-1351694757632-efb462ed')
+                                                                   '1,2', \
+                                                '62011283186b5a5aa2bdec6d3be40595421ceg3e8a210bd520500325',\
+                                                '1103075437-19809948-1357710778622-0f91a51a')
     for item in try_list:
         print item
