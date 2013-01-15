@@ -21,6 +21,8 @@ from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
 from TaobaoSdk.Request.SimbaRptCampaignbaseGetRequest import SimbaRptCampaignbaseGetRequest
 from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
+from tao_models.common.exceptions import  TBDataNotReadyException
+
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +45,15 @@ class SimbaRptCampaignbaseGet(object):
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        l = json.loads(rsp.rpt_campaign_base_list)
+        l = json.loads(rsp.rpt_campaign_base_list.lower())
+
+        if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
+            raise TBDataNotReadyException(rsp.rpt_campaign_base_list)
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
+
         return l
     
     @classmethod
@@ -62,7 +72,14 @@ class SimbaRptCampaignbaseGet(object):
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        l = json.loads(rsp.rpt_campaign_base_list)
+        l = json.loads(rsp.rpt_campaign_base_list.lower())
+
+        if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
+            raise TBDataNotReadyException(rsp.rpt_campaign_base_list)
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
         return l
         
     @classmethod
