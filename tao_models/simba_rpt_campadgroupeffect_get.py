@@ -22,6 +22,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import  TBDataNotReadyException
 
 class SimbaRptCampadgroupEffectGet(object):
     """
@@ -44,7 +45,16 @@ class SimbaRptCampadgroupEffectGet(object):
 
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return json.loads(rsp.rpt_campadgroup_effect_list.lower())
+        l =  json.loads(rsp.rpt_campadgroup_effect_list.lower())
+
+        if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
+            raise TBDataNotReadyException(rsp.rpt_campadgroup_effect_list)
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
+
+        return l
 
     @classmethod
     def get_rpt_adgroupeffect_list(cls, nick, campaign_id, start_time, end_time, search_type, source, access_token, subway_token):

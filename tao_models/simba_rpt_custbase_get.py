@@ -41,8 +41,12 @@ class SimbaRptCustbaseGet(object):
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        l = json.loads(rsp.rpt_cust_base_list)
+        l = json.loads(rsp.rpt_cust_base_list.lower())
         #TODO: 临时处理掉
         if isinstance(l, dict):
             raise ErrorResponseException(code=l['code'], msg=rsp['msg'], sub_code=rsp['sub_code'], sub_msg=rsp['sub_msg'])
+
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
         return l
