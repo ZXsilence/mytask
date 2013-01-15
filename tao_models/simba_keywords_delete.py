@@ -50,7 +50,7 @@ class SimbaKeywordsDelete(object):
             raise ApiExecuteException
 
         if not rsp.isSuccess():
-            if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
+            if rsp.code == 15 and rsp.sub_msg == u'没有属于该客户下指定推广计划的有效关键词可删除':
                 return []
             logger.error("delete_keywords error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 , rsp.msg, rsp.sub_msg))
