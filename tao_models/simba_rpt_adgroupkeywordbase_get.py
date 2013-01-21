@@ -58,14 +58,7 @@ class SimbaRptAdgroupkeywordbaseGet(object):
         logger.debug("start get_rpt_adgroupkeywordbase_list, adgroup_id:%s"%(adgroup_id))
 
         while True:
-#            fd = open('count','r')
-#            a = int(fd.readline())
-#            fd.close()
-#            a += 1
-#            fd = open('count','w')
-#            fd.write(str(a))
-#            fd.close
-            
+
             rsp = taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)

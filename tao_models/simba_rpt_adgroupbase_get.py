@@ -65,6 +65,7 @@ class SimbaRptAdgroupBaseGet(object):
                 raise TBDataNotReadyException(rsp.rpt_adgroup_base_list)
             for rpt in l:
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
             base_list.extend(l)
             if len(l) < 500:
                 break
