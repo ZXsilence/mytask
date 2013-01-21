@@ -54,8 +54,6 @@ class SimbaRptCampaigneffectGet(object):
         req.nick = nick
         req.start_time = datetime.datetime.strftime(start_date, '%Y-%m-%d')
         req.end_time = datetime.datetime.strftime(end_date, '%Y-%m-%d')
-        print req.start_time
-        print req.end_time
 
         req.campaign_id = campaign_id
         req.source = source
@@ -67,7 +65,6 @@ class SimbaRptCampaigneffectGet(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         l = json.loads(rsp.rpt_campaign_effect_list)
         if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
-            print "xxx:", l['sub_msg']
             raise TBDataNotReadyException(rsp.rpt_campaign_effect_list)
         return l
         

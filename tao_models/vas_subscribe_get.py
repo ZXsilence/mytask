@@ -29,7 +29,7 @@ class VasSubscribeGet(object):
 
     @classmethod
     @tao_api_exception(3)
-    def get_vas_subscribe(cls, access_token, nick, article_code):
+    def get_vas_subscribe(cls, nick, article_code):
         """
         given a campaign_id, get the adgroup list in this campaign
         """
@@ -38,7 +38,7 @@ class VasSubscribeGet(object):
         req.nick = nick
         req.article_code = article_code 
         
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = taobao_client.execute(req, '')[0]
 
         if not rsp.isSuccess():
             print rsp.msg
@@ -51,10 +51,9 @@ class VasSubscribeGet(object):
 
 if __name__ == '__main__':
 
-    access_token = '6201011016ade5298c4ZZ0c4bff2e7b98fcad8ebcf11d58520500325'
-    nick = '兰红玉'
-    article_code = 'ts-1817244'
-    article_user_subscribes = VasSubscribeGet.get_vas_subscribe(access_token, nick, article_code)
+    nick = 'yunfanggz'
+    article_code = 'ts-1796606'
+    article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, article_code)
     
     for article_user_subscribe in article_user_subscribes:
         print article_user_subscribe.toDict()
