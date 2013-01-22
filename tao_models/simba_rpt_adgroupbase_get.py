@@ -10,6 +10,7 @@ import logging
 import logging.config
 import json
 import datetime
+from copy import deepcopy
 
 
 if __name__ == '__main__':
@@ -63,10 +64,16 @@ class SimbaRptAdgroupBaseGet(object):
 
             if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
                 raise TBDataNotReadyException(rsp.rpt_adgroup_base_list)
-            for rpt in l:
-                rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
 
-            base_list.extend(l)
+            l_new = []
+            for rpt in l:
+                rpt = deepcopy(rpt)
+                date_str = rpt['date']
+                rpt['date_str'] = date_str
+                rpt['date'] = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+                l_new.append(rpt)
+
+            base_list.extend(l_new)
             if len(l) < 500:
                 break
             req.page_no += 1
