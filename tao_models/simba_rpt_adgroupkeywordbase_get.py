@@ -9,6 +9,7 @@ import os
 import json
 import datetime
 import logging
+from copy import deepcopy
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
@@ -67,10 +68,15 @@ class SimbaRptAdgroupkeywordbaseGet(object):
             if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
                 raise TBDataNotReadyException(rsp.rpt_adgroupkeyword_base_list)
 
+            l_new = [] 
             for rpt in l:
-                rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+                rpt = deepcopy(rpt)
+                date_str = rpt['date']
+                rpt['date_str'] = date_str
+                rpt['date'] = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+                l_new.append(rpt)
 
-            base_list.extend(l)
+            base_list.extend(l_new)
             if len(l) < 500:
                 break
             req.page_no += 1
