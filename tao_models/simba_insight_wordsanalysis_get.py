@@ -11,8 +11,13 @@ import logging.config
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    #from xuanciw.settings import  trigger_envReady
+    #logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_taobao_client
+    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
 
 from TaobaoSdk import SimbaInsightWordsanalysisGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
@@ -51,13 +56,13 @@ class SimbaInsightWordsanalysisGet(object):
 def test():
     sid = 62847885
     nick = 'chinchinstyle'
-    access_token = '6201115889ceaa0cf4e4db3ZZ1918b607ea748deed8ab48520500325'
-    subway_token = '1103075437-19809948-1344938925765-c9bd7d79'
-    keyword_list = ['三角形围巾', '蓝色丝巾真丝']
+    access_token = "620002172c52321823fe0ff9880b1ZZ1cdd4d2c33aa6e9f520500325"
+    keyword_list = ['三角形围巾蓝色丝巾真丝', '减肥药']
     word_analysis = SimbaInsightWordsanalysisGet.get_word_analysis(access_token, nick, keyword_list)
     for word in word_analysis:
-        for k in word.toDict():
-            print k, word.toDict()[k]
+        #for k in word.toDict():
+        #    print k, word.toDict()[k]
+        print word.word, word.toDict()
 
 if __name__ == '__main__':
     test()
