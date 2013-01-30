@@ -74,11 +74,13 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         logger.error(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
                         continue
 
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
-                        logger.info(e)
+
+                        logger.error(e)
 
                         if e.sub_code and u'isv.invalid-permission' in e.sub_code:
                             raise
@@ -92,7 +94,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise 
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            mail_logger.exception(str(e))
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
                         continue
 
@@ -100,14 +102,14 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         if  e.sub_msg and  'end_modified' in e.sub_msg.encode('utf8'):
                             raise  #在这里重试不合适，到整个任务的地方去重试
 
-                        logger.info(e)
+                        logger.error(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
                         continue
 
                     elif code == TaoOpenErrorCode.SERVICE_TEMP_UNAVAILABLE:
-                        logger.info(e)
+                        logger.error(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
