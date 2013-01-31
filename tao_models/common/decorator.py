@@ -61,7 +61,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
     
                         sleep(1)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
                     
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
@@ -74,7 +75,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
@@ -93,7 +94,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_600:
@@ -102,13 +103,15 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.SERVICE_TEMP_UNAVAILABLE:
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.INVALID_SESSION_KEY:
