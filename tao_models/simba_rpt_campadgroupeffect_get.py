@@ -47,8 +47,8 @@ class SimbaRptCampadgroupEffectGet(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         l =  json.loads(rsp.rpt_campadgroup_effect_list.lower())
 
-        if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
-            raise TBDataNotReadyException(rsp.rpt_campadgroup_effect_list)
+        if isinstance(l, dict):
+            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
 
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
