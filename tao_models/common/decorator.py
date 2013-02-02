@@ -51,7 +51,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                 try:
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
-                    logger.error('meet tao api exception :%s'%(e))
+                    logger.error('meet tao api exception :%s, retry_times:%s'%(e, retry_times))
                     retry_times += 1
                     code =  e.code
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
