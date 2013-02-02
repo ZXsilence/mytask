@@ -37,7 +37,7 @@ class SimbaRptAdgroupBaseGet(object):
     """
     """
     @classmethod
-    @tao_api_exception()
+    @tao_api_exception(40)
     def get_rpt_adgroupbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source, access_token, subway_token):
         """
         Notes:

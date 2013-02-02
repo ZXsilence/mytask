@@ -45,7 +45,7 @@ class SimbaRptAdgroupkeywordeffectGet(object):
     search_type    String    必须    SEARCH         报表类型（搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH）可多选例如：SEARCH,CAT
     """
     @classmethod
-    @tao_api_exception()
+    @tao_api_exception(40)
     def get_rpt_adgroupkeywordeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type, access_token, subway_token):
         
         req = SimbaRptAdgroupkeywordeffectGetRequest()
