@@ -69,6 +69,8 @@ class SimbaRptAdgroupkeywordeffectGet(object):
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             l = json.loads(rsp.rpt_adgroupkeyword_effect_list.lower())
 
+            if l == {}:
+                l = []
             if isinstance(l, dict):
                 raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
 
