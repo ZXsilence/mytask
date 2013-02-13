@@ -54,9 +54,10 @@ class SimbaInsightWordsbaseGet(object):
 
 if __name__ == '__main__':
     access_token = "620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117"
-    word_info_list = SimbaInsightWordsbaseGet.get_words_base(access_token, 'WEEK', ['nifeifie登山鞋','冲锋衣','登山包','户外鞋','徒步鞋'])
+    word_info_list = SimbaInsightWordsbaseGet.get_words_base(access_token, 'DAY', ['nifeifie登山鞋','冲锋衣','登山包','户外鞋','徒步鞋'])
     print 'word_info_list', word_info_list
     for word_info in word_info_list:
+        print "==================="
         print word_info.toDict()
         print  word_info.word
         for x in word_info.in_record_base_list:

@@ -11,8 +11,9 @@ import logging.config
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+    sys.path.append('/home/chengk/Webpage/xuancw/')
     from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    #logging.config.fileConfig('../xuanciw/consolelogger.conf')
 
 from TaobaoSdk import SimbaInsightWordsanalysisGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
@@ -29,7 +30,7 @@ class SimbaInsightWordsanalysisGet(object):
     """
 
     @classmethod
-    @tao_api_exception()
+    @tao_api_exception(1)
     def get_word_analysis(cls, access_token, nick, keywords, stu='hprice'):
         """
         keywords 最多200个词

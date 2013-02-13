@@ -77,6 +77,44 @@ class SimbaAdgroupOnlineitemsGet(object):
         return item_online_list
 
     @classmethod
+    @tao_api_exception()
+    def get_items_online_with_overview(cls, access_token, nick, max_page = 30):
+        """
+        """
+        item_online_list = []
+
+        req = SimbaAdgroupOnlineitemsGetRequest()
+        req.nick = nick
+        req.page_size = cls.PAGE_SIZE
+
+        #first call
+        req.page_no = 1
+        rsp = taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+
+        if not rsp.page_item.total_item:
+            logger.info("surprise.. , no items online  nick:%s"%nick)
+            return None 
+
+        item_online_list.extend(rsp.page_item.item_list)
+
+        # continue to call if more than one page
+        total_pages = (rsp.page_item.total_item + cls.PAGE_SIZE - 1)/cls.PAGE_SIZE
+        if total_pages > max_page:
+            total_pages = max_page
+        for page_no in range(2,total_pages+1):
+            req.page_no = page_no
+            rsp = taobao_client.execute(req, access_token)[0]
+            if not rsp.isSuccess():
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            item_online_list.extend(rsp.page_item.item_list)
+
+        logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
+
+        return {"item_list":item_online_list, "total_item":rsp.page_item.total_item}
+
+    @classmethod
     @tao_api_exception(3)
     def get_item_count(cls, access_token, nick):
         """
@@ -95,7 +133,7 @@ class SimbaAdgroupOnlineitemsGet(object):
 
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
-
+        
         return rsp.page_item.total_item 
 
 
