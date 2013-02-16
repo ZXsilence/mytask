@@ -9,8 +9,10 @@ import logging.config
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_taobao_client
+    set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
 
 from TaobaoSdk import ItemsListGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
@@ -59,10 +61,11 @@ class ItemsListGet(object):
 
 
 def test():
-    access_token = "6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612"
-    num_iids = [16675583313,16675579321]
+    access_token = "620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117"
+    num_iids = [7794896442,15493508084]
     ItemsListGet.MAX_NUM_IIDS = 20
-    total_item_list = ItemsListGet.get_item_list(access_token, num_iids)
+    fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified'
+    total_item_list = ItemsListGet.get_item_list(access_token, num_iids, fields)
 
     for item in total_item_list:
         print item.toDict()

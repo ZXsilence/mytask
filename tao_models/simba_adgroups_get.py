@@ -42,7 +42,7 @@ class SimbaAdgroupsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_adgroup_list_by_campaign(cls, access_token, nick, campaign_id):
+    def get_adgroup_list_by_campaign(cls, access_token, nick, campaign_id, max_pages=30):
         """
         given a campaign_id, get the adgroup list in this campaign
         """
@@ -58,7 +58,6 @@ class SimbaAdgroupsGet(object):
         #first_call
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            print "campaign_id:", campaign_id, "sub_code:", rsp.sub_msg
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
         if not rsp.adgroups.total_item:
@@ -70,12 +69,13 @@ class SimbaAdgroupsGet(object):
             total_pages = rsp.adgroups.total_item/cls.PAGE_SIZE
         else:
             total_pages = rsp.adgroups.total_item/cls.PAGE_SIZE + 1
+        if total_pages > max_pages:
+            total_pages = max_pages
 
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             rsp = taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                print "sub_code:", rsp.sub_msg
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
@@ -130,6 +130,48 @@ class SimbaAdgroupsGet(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
         return rsp.adgroups.total_item
 
+
+    @classmethod
+    @tao_api_exception()
+    def get_adgroup_list_by_campaign_with_overview(cls, access_token, nick, campaign_id, max_pages=1):
+        """
+        given a campaign_id, get the adgroup list in this campaign
+        """
+
+        adgroup_list = []
+
+        req = SimbaAdgroupsGetRequest()
+        req.page_size = cls.PAGE_SIZE
+        req.nick = nick
+        req.campaign_id = campaign_id
+        req.page_no = 1
+
+        #first_call
+        rsp = taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+        logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
+        if not rsp.adgroups.total_item:
+            logger.debug("no adgroup in campaign:%i"%(campaign_id))
+            return {'total_item':0, 'adgroup_list':adgroup_list}
+        adgroup_list.extend(rsp.adgroups.adgroup_list)
+        # continue to call if more than one page
+        if not rsp.adgroups.total_item%cls.PAGE_SIZE:
+            total_pages = rsp.adgroups.total_item/cls.PAGE_SIZE
+        else:
+            total_pages = rsp.adgroups.total_item/cls.PAGE_SIZE + 1
+        if total_pages > max_pages:
+            total_pages = max_pages
+
+        for page_no in range(2,total_pages+1):
+            req.page_no = page_no
+            rsp = taobao_client.execute(req, access_token)[0]
+            if not rsp.isSuccess():
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            adgroup_list.extend(rsp.adgroups.adgroup_list)
+
+        logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))
+        return {'total_item':rsp.adgroups.total_item, 'adgroup_list':adgroup_list}
 
 
 
