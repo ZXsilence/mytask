@@ -89,14 +89,14 @@ class SimbaRptCampaigneffectGet(object):
         for effect in rpt_effect_list:
             if not(effect.has_key('directpay') and effect.has_key('indirectpay') \
                     and effect.has_key('indirectpaycount') and effect.has_key('directpaycount') \
-                    and effect.has_key('favShopCount') and effect.has_key('favItemCount') \
+                    and effect.has_key('favshopcount') and effect.has_key('favitemcount') \
                     ):  
                 continue
             pay_accumlate += int(effect['indirectpay'])
             pay_accumlate += int(effect['directpay'])
             pay_count_accumlate += int(effect['indirectpaycount'])
             pay_count_accumlate += int(effect['directpaycount'])
-            fav_accumlate += int(effect['favItemCount'])
-            fav_accumlate += int(effect['favShopCount']) 
+            fav_accumlate += int(effect['favitemcount'])
+            fav_accumlate += int(effect['favshopcount']) 
 
         return {'pay':pay_accumlate, 'pay_count':pay_count_accumlate, 'fav':fav_accumlate}
