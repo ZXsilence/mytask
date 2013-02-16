@@ -92,6 +92,9 @@ class SimbaRptCampaigneffectGet(object):
                     and effect.has_key('favshopcount') and effect.has_key('favitemcount') \
                     ):  
                 continue
+            for key in effect.keys():
+                if effect[key] == None:
+                    effect[key] = 0
             pay_accumlate += int(effect['indirectpay'])
             pay_accumlate += int(effect['directpay'])
             pay_count_accumlate += int(effect['indirectpaycount'])
