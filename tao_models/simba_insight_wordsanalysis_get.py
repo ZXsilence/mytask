@@ -28,10 +28,11 @@ class SimbaInsightWordsanalysisGet(object):
     """
     TODO
     """
+    MAX_WORDS = 150
 
     @classmethod
     @tao_api_exception(1)
-    def get_word_analysis(cls, access_token, nick, keywords, stu='hprice'):
+    def _get_word_analysis(cls, access_token, nick, keywords, stu):
         """
         keywords 最多200个词
         不是每个词都返回竞价分布
@@ -47,6 +48,21 @@ class SimbaInsightWordsanalysisGet(object):
 
         return rsp.in_word_analyses
 
+    @classmethod
+    def get_word_analysis(cls, access_token, nick, keywords, stu='hprice'):
+        """
+        get word analysis 
+        """
+        word_list = copy.deepcopy(keywords)
+        total_list = []
+       
+        while word_list:
+            sub_word_list = word_list[:cls.MAX_WORDS]
+            word_list = word_list[cls.MAX_WORDS:]
+            sub_list = cls._get_word_analysis(access_token, nick, sub_word_list, stu)
+            total_list.extend(sub_list)
+
+        return total_list
 
 
 def test():
