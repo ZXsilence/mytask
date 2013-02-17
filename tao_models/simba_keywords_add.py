@@ -29,13 +29,13 @@ class SimbaKeywordsAdd(object):
 
     @classmethod
     @tao_api_exception()
-    def add_keywords(cls, access_token, nick, adgroup_id, word_price_list):
+    def add_keywords(cls, access_token, nick, adgroup_id, word_price_list,batch_match_scope=4):
         """
         args:
             word_price_list: [('key', price),('aa', 33)]
         """
 
-        word_price_list = [word+"^^"+str(price) for word, price in word_price_list]
+        word_price_list = [word+"^^"+str(price)+"^^"+str(batch_match_scope) for word, price in word_price_list]
 
         req = SimbaKeywordsAddRequest()
         req.nick = nick
