@@ -89,7 +89,7 @@ class SimbaKeywordsGet(object):
         """
 
         keyword_id_list = copy.deepcopy(keyword_id_list)
-        MAX_KEYWORD_IDS = 100
+        MAX_KEYWORD_IDS = 50 
 
 
         total_keyword_list = []
