@@ -20,6 +20,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import CampaignBudgetLessThanCostException
 
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,10 @@ class SimbaCampaignBudgetUpdate(object):
 
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
+            logger.error("update budget error nick [%s] campaign_id [%s] msg [%s] sub_msg [%s]" %(nick
+                 , str(campaign_id), rsp.msg, rsp.sub_msg))
+            if "限额不得小于" in rsp.sub_msg:
+                raise CampaignBudgetLessThanCostException
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.campaign_budget
 
