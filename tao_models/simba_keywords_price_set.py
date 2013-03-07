@@ -71,7 +71,6 @@ class SimbaKeywordsPriceSet(object):
         args:
             wordid_price_list: [('keywordid', price),(102232, 33)]
         """
-
         req = SimbaKeywordsPriceSetRequest()
         req.nick = nick
         req.keywordid_prices = keywordid_prices
