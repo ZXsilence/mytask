@@ -5,6 +5,7 @@
 
 import sys
 import os
+import json
 import logging
 import logging.config
 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     set_taobao_client('21065688', '74aecdce10af604343e942a324641891')
 
 
-from TaobaoSdk import SimbaKeywordsAddRequest
+from TaobaoSdk import SimbaKeywordsvonAddRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import  taobao_client
@@ -27,9 +28,10 @@ from tao_models.common.exceptions import KeywordsFullException
 
 logger = logging.getLogger(__name__)
 
-class SimbaKeywordsAdd(object):
+class SimbaKeywordsvonAdd(object):
     """
     TODO
+    [ { "word": "西瓜汁", "maxPrice": 123 ,"isDefaultPrice": 0,"matchScope": 1}, { "word": "苹果汁","maxPrice": 0, "isDefaultPrice": 1 ,"matchScope": 2} ]
     """
 
     @classmethod
@@ -40,19 +42,24 @@ class SimbaKeywordsAdd(object):
             word_price_list: [('key', price),('aa', 33)]
         """
 
-        word_price_list = [word+"^^"+str(price)+"^^"+str(batch_match_scope) for word, price in word_price_list]
+        word_price_dict_list = []
+        for word, price in word_price_list:
+            word_price_dict = {"word":word, "maxPrice":price, "isDefaultPrice":0, "matchScope":batch_match_scope}
+            word_price_dict_list.append(word_price_dict)
 
-        req = SimbaKeywordsAddRequest()
+        req = SimbaKeywordsvonAddRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
         
         keywords = []
-        package_num = len(word_price_list)/100 + 1
-        if len(word_price_list) % 100 == 0:
+        package_num = len(word_price_dict_list)/100 + 1
+        if len(word_price_dict_list) % 100 == 0:
             package_num -= 1
 
         for i in range(package_num):
-            req.keyword_prices = ",".join(word_price_list[i*100:(i+1)*100])
+            keyword_prices_str = json.dumps(word_price_dict_list[i*100:(i+1)*100])
+            print keyword_prices_str
+            req.keyword_prices = keyword_prices_str 
             rsp = taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 if rsp.code == 15 and rsp.sub_msg != None and u'已有关键词已经达到200' in rsp.sub_msg:
@@ -70,8 +77,8 @@ def test():
     access_token = '620181005f776f4b1bdfd5952ec7cfa172e008384c567a2520500325'
     nick = 'chinchinstyle'
     adgroup_id = '169469163'
-    word_price_list = [('chin', 50), ('style', 68)]
-    SimbaKeywordsAdd.add_keywords(access_token, nick, adgroup_id, word_price_list)
+    word_price_list = [('chinzzz', 250), ('styleeee', 168)]
+    SimbaKeywordsvonAdd.add_keywords(access_token, nick, adgroup_id, word_price_list)
 
 if __name__ == '__main__':
     test()

@@ -53,7 +53,7 @@ class ItemsListGet(object):
                 logger.info("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), 0))
                 continue
 
-            logger.info("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), len(rsp.items)))
+            logger.debug("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), len(rsp.items)))
             total_item_list.extend(rsp.items)
 
         return total_item_list

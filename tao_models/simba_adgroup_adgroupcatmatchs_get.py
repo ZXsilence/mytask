@@ -34,9 +34,10 @@ class SimbaAdgroupAdgroupcatmatchsGet(object):
         """
         get adgroup catmatchs
         """
+        adgroup_ids_str = [str(adgroup_id) for adgroup_id in adgroup_ids]
         req = SimbaAdgroupAdgroupcatmatchsGetRequest()
         req.nick = nick
-        req.adgroup_ids = ','.join(adgroup_ids)
+        req.adgroup_ids = ','.join(adgroup_ids_str)
 
         rsp = taobao_client.execute(req, access_token)[0]
 
