@@ -58,7 +58,6 @@ class SimbaKeywordsvonAdd(object):
 
         for i in range(package_num):
             keyword_prices_str = json.dumps(word_price_dict_list[i*100:(i+1)*100])
-            print keyword_prices_str
             req.keyword_prices = keyword_prices_str 
             rsp = taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
@@ -76,7 +75,7 @@ def test():
     #access_token = '6201c01b4ZZdb18b1773873390fe3ff66d1a285add9c10c520500325'
     access_token = '620181005f776f4b1bdfd5952ec7cfa172e008384c567a2520500325'
     nick = 'chinchinstyle'
-    adgroup_id = '169469163'
+    adgroup_id = '169703057'
     word_price_list = [('chinzzz', 250), ('styleeee', 168)]
     SimbaKeywordsvonAdd.add_keywords(access_token, nick, adgroup_id, word_price_list)
 
