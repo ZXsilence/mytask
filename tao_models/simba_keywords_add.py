@@ -69,7 +69,7 @@ def test():
     #access_token = '6201c01b4ZZdb18b1773873390fe3ff66d1a285add9c10c520500325'
     access_token = '620181005f776f4b1bdfd5952ec7cfa172e008384c567a2520500325'
     nick = 'chinchinstyle'
-    adgroup_id = '169469163'
+    adgroup_id = '169703057'
     word_price_list = [('chin', 50), ('style', 68)]
     SimbaKeywordsAdd.add_keywords(access_token, nick, adgroup_id, word_price_list)
 

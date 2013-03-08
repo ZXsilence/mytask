@@ -65,7 +65,7 @@ class SimbaKeywordsPriceSet(object):
 
 
     @classmethod
-    @tao_api_exception(5)
+    @tao_api_exception(20)
     def _set_price(cls, access_token, nick, keywordid_prices):
         """
         args:

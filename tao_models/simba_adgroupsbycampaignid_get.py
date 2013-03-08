@@ -70,32 +70,6 @@ class SimbaAdgroupsbycampaignidGet(object):
         logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))
         return adgroup_list
 
-    @classmethod
-    @tao_api_exception()
-    def get_adgroup_list_by_adgroup_ids(cls, access_token, nick, adgroup_id_list):
-
-        MAX_ADGROUP_IDS = 200
-
-        req = SimbaAdgroupsbycampaignidGetRequest()
-        req.nick = nick
-        #useless page_size, page_no, but required when post the request
-        req.page_size = 200
-        req.page_no = 1
-
-        total_adgroup_list = []
-        while adgroup_id_list:
-            sub_adgroup_id_list = adgroup_id_list[:MAX_ADGROUP_IDS]
-            adgroup_id_list = adgroup_id_list[MAX_ADGROUP_IDS:]
-
-            req.adgroup_ids = ",".join([str(k) for k in sub_adgroup_id_list])
-            logger.debug("get adgroup info adgroup_length:%s nick:%s"%(len(sub_adgroup_id_list), nick))
-            rsp = taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
-
-            total_adgroup_list.extend(rsp.adgroups.adgroup_list)
-
-        return total_adgroup_list
 
     @classmethod
     @tao_api_exception(8)

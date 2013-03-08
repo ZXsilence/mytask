@@ -55,7 +55,6 @@ class SimbaKeywordsPricevonSet(object):
         keywords = []
         for i in range(package_num):
             keyword_price_str = json.dumps(word_price_dict_list[i*100: (i+1)*100])
-            print "pppp:", keyword_price_str
             req.keywordid_prices = keyword_price_str
 
             rsp = taobao_client.execute(req, access_token)[0]
@@ -68,7 +67,7 @@ class SimbaKeywordsPricevonSet(object):
 
 
     @classmethod
-    @tao_api_exception(5)
+    @tao_api_exception(50)
     def _set_price(cls, access_token, nick, keywordid_prices):
         """
         args:
@@ -108,7 +107,6 @@ class SimbaKeywordsPricevonSet(object):
         keywords = []
         for i in range(package_num):
             keywordid_prices = wordid_price_list[i*100:(i+1)*100]
-            print keywordid_prices
             subkeywords = SimbaKeywordsPricevonSet._set_price(access_token, nick, keywordid_prices)
             keywords.append(subkeywords)
         return keywords
