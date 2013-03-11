@@ -93,7 +93,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise 
                         if  e.sub_msg and u'用户未开通主动通知服务' in e.sub_msg:
                             raise 
-                        if e.sub_msg and u'推广计划名称已存在' in e.sub_msg:
+                        if e.sub_msg and u'推广计划名称已经存在' in e.sub_msg:
                             raise TaoApiMaxRetryException(e.sub_msg)
                         if e.sub_msg and u'推广计划数量最多建立4个' in e.sub_msg:
                             raise TaoApiMaxRetryException(e.sub_msg)
