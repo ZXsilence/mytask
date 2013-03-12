@@ -91,8 +91,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise
                         if e.sub_msg and u'无法根据nick获取直通车帐号信息' in e.sub_msg:
                             raise 
-                        if  e.sub_code and u'用户未开通主动通知服' in e.sub_code:
+                        if  e.sub_msg and u'用户未开通主动通知服务' in e.sub_msg:
                             raise 
+                        if e.sub_msg and u'推广计划名称已经存在' in e.sub_msg:
+                            raise TaoApiMaxRetryException(e.sub_msg)
+                        if e.sub_msg and u'推广计划数量最多建立4个' in e.sub_msg:
+                            raise TaoApiMaxRetryException(e.sub_msg)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))

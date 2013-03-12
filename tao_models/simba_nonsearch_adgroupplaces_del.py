@@ -6,6 +6,7 @@ import os
 import logging
 import logging.config
 
+
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     from tao_models.conf.settings import set_taobao_client
     set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
 
-from TaobaoSdk import SimbaCreativesGetRequest
+from TaobaoSdk import SimbaNonsearchAdgroupplacesDeleteRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
@@ -21,41 +22,41 @@ from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
 
-class SimbaCreativesGet(object):
+class SimbaNonsearchAdgroupplacesDel(object):
+    """
+    """
 
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(5)
-    def get_creative_list_by_adgroup(cls, access_token, nick, adgroup_id):
+    @tao_api_exception(3)
+    def del_nonsearch_adgroupplaces(cls, access_token, nick,campaign_id,adgroup_place_list):
         """
-        given a adgroup_id, get the creative list in this adgroup
+        update an adgroup
         """
 
-        creative_list = []
-
-        req = SimbaCreativesGetRequest()
+        req = SimbaNonsearchAdgroupplacesDeleteRequest()
         req.nick = nick
-        req.adgroup_id = adgroup_id
-        #req.creative_ids = ",".join([str(k) for k in creative_ids])
-
+        req.campaign_id = campaign_id
+        req.adgroup_places_json = adgroup_place_list
+        import pdb
+        pdb.set_trace()
         rsp = taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
-            logger.error("get_creative_list_by_adgroup error nick [%s] msg [%s] sub_msg [%s]" %(nick
-                , rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
-        return rsp.creatives
+        return rsp.adgroup_place_list
+
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    access_token = '6200e168f708b8167250268dfhe2555e99ed247caa1cdeb520500325'
-    adgroup_id =164302433 
-    nick = 'chinchinstyle'
-    
-    creatives = SimbaCreativesGet.get_creative_list_by_adgroup(access_token, nick, adgroup_id)
 
-    for creative in creatives:
-        print creative.toDict()
+    access_token = '62017096de6f96daegibf9b4d214c3a07220daeb9d23226520500325'
+    nick = 'chinchinstyle'
+    campaign_id = 3367690
+    adgroup_ids = [{'adgroupId':169471501,'placeId':11},{'adgroupId':169471501,'placeId':31}]
+
+    SimbaNonsearchAdgroupplacesDel.del_nonsearch_adgroupplaces(access_token, nick, campaign_id,adgroup_ids)
+    
+
