@@ -52,6 +52,36 @@ class SimbaInsightWordsbaseGet(object):
 
         return total_list
 
+    @classmethod
+    def get_words_base_one_week_avg(cls, access_token, nick, words_list):
+        'words_list 应该是小写，简体，半角字符串，而且每个word不应该包含逗号'
+        in_word_bases = SimbaInsightWordsbaseGet._get_words_base(access_token, 'WEEK', words_list)
+        word_info_list = []
+        for word_base in in_word_bases:
+            word = word_base.word
+            in_record_base_list = word_base.in_record_base_list
+            word_info = {}
+            word_info['word'] = word
+            word_info['pv'] = 0
+            word_info['click'] = 0
+            word_info['competition'] = 0
+            cost = 0
+            for day_info in in_record_base_list:
+                #print day_info.toDict()
+                word_info['pv'] += day_info.pv
+                word_info['click'] += day_info.click
+                word_info['competition'] += day_info.competition
+                cost += (day_info.avg_price*day_info.click)
+
+            word_info['avg_price'] = cost/(word_info['click']+0.0000001) 
+            word_info['pv'] /= 7.0
+            word_info['click'] /= 7.0
+            word_info['competition'] /= 7.0
+
+            word_info_list.append(word_info)
+
+        return word_info_list
+
 if __name__ == '__main__':
     access_token = "620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117"
     word_info_list = SimbaInsightWordsbaseGet.get_words_base(access_token, 'DAY', ['nifeifie登山鞋','冲锋衣','登山包','户外鞋','徒步鞋'])
