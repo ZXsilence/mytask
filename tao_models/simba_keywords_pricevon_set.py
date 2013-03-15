@@ -49,7 +49,7 @@ class SimbaKeywordsPricevonSet(object):
         req.nick = nick
 
         package_num = len(keyword_price_list)/100 + 1
-        if package_num % 100 == 0:
+        if len(keyword_price_list) % 100 == 0:
             package_num -= 1
 
         keywords = []
