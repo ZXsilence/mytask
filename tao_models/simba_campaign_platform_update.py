@@ -16,7 +16,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaCampaignPlatformUpdateRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import NonsearchNotAllowedException 
 
@@ -43,7 +43,7 @@ class SimbaCampaignPlatformUpdate(object):
             req.nonsearch_channels = nonsearch_channels 
         req.outside_discount = outside_discount 
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.error("update_campaign_channeloptions  error nick [%s] msg [%s] sub_msg [%s]" %(nick

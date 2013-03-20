@@ -18,7 +18,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaCampaignBudgetUpdateRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import CampaignBudgetLessThanCostException
 
@@ -37,7 +37,7 @@ class SimbaCampaignBudgetUpdate(object):
         req.campaign_id = campaign_id 
         req.use_smooth = use_smooth
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             logger.error("update budget error nick [%s] campaign_id [%s] msg [%s] sub_msg [%s]" %(nick
                  , str(campaign_id), rsp.msg, rsp.sub_msg))

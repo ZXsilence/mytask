@@ -16,7 +16,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaCreativesGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ class SimbaCreativesGet(object):
         req.adgroup_id = adgroup_id
         #req.creative_ids = ",".join([str(k) for k in creative_ids])
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.error("get_creative_list_by_adgroup error nick [%s] msg [%s] sub_msg [%s]" %(nick

@@ -17,7 +17,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaAdgroupUpdateRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ class SimbaAdgroupUpdate(object):
         #req.use_nonsearch_default_price = use_nonsearch_default_price 
         req.online_status = online_status 
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.error("update_adgroup error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick, 

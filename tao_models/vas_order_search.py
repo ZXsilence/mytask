@@ -17,7 +17,7 @@ if __name__ == '__main__':
 from TaobaoSdk import VasOrderSearchRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class VasOrderSearch(object):
         req.end_created = end_created 
         req.page_size = VasOrderSearch.PAGE_SIZE 
         req.page_no = page_no 
-        rsp = taobao_client.execute(req, '')[0]
+        rsp = tao_model_settings.taobao_client.execute(req, '')[0]
         if not rsp.isSuccess():
             print rsp.msg
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
