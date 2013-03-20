@@ -21,7 +21,7 @@ from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-‰from tao_models.conf import settings as tao_model_settings
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
 
