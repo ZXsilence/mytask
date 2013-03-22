@@ -41,6 +41,7 @@ class SimbaKeywordsvonAdd(object):
         args:
             word_price_list: [('key', price),('aa', 33)]
         """
+        logger.error("add keywords size [%d]", len(word_price_list)) 
 
         word_price_dict_list = []
         for word, price in word_price_list:
