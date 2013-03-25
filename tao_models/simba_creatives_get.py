@@ -48,6 +48,29 @@ class SimbaCreativesGet(object):
 
         return rsp.creatives
 
+    @classmethod
+    @tao_api_exception(5)
+    def get_creative_list_by_creative_ids(cls, access_token, nick, creative_ids):
+        """
+        given a adgroup_id, get the creative list in this adgroup
+        """
+
+        creative_list = []
+
+        req = SimbaCreativesGetRequest()
+        req.nick = nick
+        #req.adgroup_id = adgroup_id
+        req.creative_ids = ",".join([str(k) for k in creative_ids])
+
+        rsp = taobao_client.execute(req, access_token)[0]
+
+        if not rsp.isSuccess():
+            logger.error("get_creative_list_by_adgroup error nick [%s] msg [%s] sub_msg [%s]" %(nick
+                , rsp.msg, rsp.sub_msg))
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+
+        return rsp.creatives
+
 
 if __name__ == '__main__':
     nick = 'chinchinstyle'
@@ -55,7 +78,7 @@ if __name__ == '__main__':
     adgroup_id =164302433 
     nick = 'chinchinstyle'
     
-    creatives = SimbaCreativesGet.get_creative_list_by_adgroup(access_token, nick, adgroup_id)
-
+    #creatives = SimbaCreativesGet.get_creative_list_by_adgroup(access_token, nick, adgroup_id)
+    creatives = SimbaCreativesGet.get_creative_list_by_creative_ids(access_token, nick, [186891152,196296035])
     for creative in creatives:
         print creative.toDict()
