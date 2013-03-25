@@ -17,7 +17,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaAdgroupsbycampaignidGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.page_no = 1
 
         #first_call
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
@@ -62,7 +62,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
@@ -83,7 +83,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.campaign_id = campaign_id
         req.page_no = 1 
         try:
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         except Exception, data:
             raise ApiExecuteException
 
@@ -109,7 +109,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.page_no = 1
 
         #first_call
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
@@ -127,7 +127,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
             adgroup_list.extend(rsp.adgroups.adgroup_list)

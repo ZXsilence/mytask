@@ -19,7 +19,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaAdgroupOnlineitemsvonGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 
@@ -54,7 +54,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
         #first call
         req.page_no = 1
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
@@ -70,7 +70,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
             total_pages = max_page
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
             item_online_list.extend(rsp.page_item.item_list)
@@ -92,7 +92,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
         #first call
         req.page_no = 1
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
@@ -108,7 +108,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
             total_pages = max_page
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
             item_online_list.extend(rsp.page_item.item_list)
@@ -130,7 +130,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         req.page_no = 1 
 
         try:
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         except Exception, data:
             raise ApiExecuteException
 

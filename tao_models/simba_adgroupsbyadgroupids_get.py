@@ -18,7 +18,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaAdgroupsbyadgroupidsGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class SimbaAdgroupsbyadgroupidsGet(object):
 
             req.adgroup_ids = ",".join([str(k) for k in sub_adgroup_id_list])
             logger.debug("get adgroup info adgroup_length:%s nick:%s"%(len(sub_adgroup_id_list), nick))
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
             result_adgroup_list = rsp.adgroups.adgroup_list

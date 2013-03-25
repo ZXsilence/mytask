@@ -16,7 +16,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaCampaignAddRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ class SimbaCampaignAdd(object):
         req.nick = nick
         req.title = title
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.error("add_campaign error nick [%s] title [%s] msg [%s] sub_msg [%s]" %(nick, 

@@ -34,6 +34,7 @@ class TaoOpenErrorCode(object):
     INSUFFICIENT_SECURITY = 53
     REMOTE_ERROR_700 = 700
 
+
 def tao_api_exception(MAX_RETRY_TIMES = 20):
     def _wrapper_func(func):
         """
@@ -80,7 +81,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
 
-
+                        if e.sub_msg and u'未被授权此操作' in e.sub_msg:
+                            raise
                         if e.sub_code and u'isv.invalid-permission' in e.sub_code:
                             raise
                         if e.sub_msg and u'推广组Id不存在' in e.sub_msg:

@@ -21,7 +21,7 @@ from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
 
@@ -60,7 +60,7 @@ class SimbaRptAdgroupkeywordbaseGet(object):
 
         while True:
 
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             l = json.loads(rsp.rpt_adgroupkeyword_base_list.lower())

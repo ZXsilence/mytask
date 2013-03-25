@@ -20,7 +20,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaKeywordsAddRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import KeywordsFullException
 
@@ -53,7 +53,7 @@ class SimbaKeywordsAdd(object):
 
         for i in range(package_num):
             req.keyword_prices = ",".join(word_price_list[i*100:(i+1)*100])
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 if rsp.code == 15 and rsp.sub_msg != None and u'已有关键词已经达到200' in rsp.sub_msg:
                     return []

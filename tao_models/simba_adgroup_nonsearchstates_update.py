@@ -17,7 +17,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaAdgroupNonsearchstatesUpdateRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class SimbaAdgroupNonsearchstatesUpdate(object):
         req.nick = nick
         req.campaign_id = campaign_id
         req.adgroupid_nonsearchstate_json = adgroupid_nonsearchstate_json
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             logger.error("set_adgroups_nonsearchstates error nick [%s] adgroupid_nonsearchstate_json [%s] msg [%s] sub_msg [%s]" %(nick, adgroupid_nonsearchstate_json, rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)

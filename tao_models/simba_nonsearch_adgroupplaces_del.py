@@ -17,7 +17,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaNonsearchAdgroupplacesDeleteRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class SimbaNonsearchAdgroupplacesDel(object):
         req.adgroup_places_json = adgroup_place_list
         import pdb
         pdb.set_trace()
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
