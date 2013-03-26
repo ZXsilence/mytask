@@ -40,6 +40,36 @@ class ItemcatsGet(object):
 
         return rsp.item_cats
 
+    @classmethod
+    @tao_api_exception()
+    def get_cats_by_cids(cls, cids):
+        req = ItemcatsGetRequest()
+        req.fields = 'cid,parent_cid,name,is_parent'
+        req.cids = ",".join([str(k) for k in cids])
+
+        rsp = tao_model_settings.taobao_client.execute(req, '')[0]
+
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+
+        return rsp.item_cats
+
+
+
+
+
+if __name__ == '__main__':
+
+    item_cats = ItemcatsGet.get_child_cats(0)
+
+    for item_cat in item_cats:
+        print item_cat.cid, item_cat.name
+
+    print '========================='
+    item_cats = ItemcatsGet.get_child_cats(50006842)
+
+    for item_cat in item_cats:
+        print item_cat.cid, item_cat.name
 
 
 
