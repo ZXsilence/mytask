@@ -41,7 +41,7 @@ class ItemImgUpload(object):
         appkey = tao_model_settings.taobao_client.appKey
         secret = tao_model_settings.taobao_client.appSecret
         req = ItemImgUploadRequest()
-        req.set_app_info(top.appinfo(appkey,secret))
+        req.set_app_info({'appkey':appkey,'secret':secret})
 
         req.num_iid = num_iid
         image=FileItem('any.jpg',open(image_path))
