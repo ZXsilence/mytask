@@ -13,7 +13,6 @@ import logging.config
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
-    sys.path.append(os.path.join(os.path.dirname(__file__),'../../top/'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
     from tao_models.conf.settings import set_taobao_client
@@ -25,7 +24,6 @@ from TaobaoSdk.Domain.multipart import ItemImgUploadRequest,FileItem
 
 from tao_models.conf import  settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-import top.api
 
 logger = logging.getLogger(__name__)
 
