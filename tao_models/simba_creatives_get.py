@@ -62,7 +62,7 @@ class SimbaCreativesGet(object):
         #req.adgroup_id = adgroup_id
         req.creative_ids = ",".join([str(k) for k in creative_ids])
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.error("get_creative_list_by_adgroup error nick [%s] msg [%s] sub_msg [%s]" %(nick
