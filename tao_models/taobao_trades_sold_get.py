@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 class TradesSoldGet(object):
 
     PAGE_SIZE = 100
-    DEFAULT_FIELDS = 'seller_nick, buyer_nick, title, type, created, tid, seller_rate, seller_can_rate, buyer_rate, can_rate, status, payment, discount_fee, adjust_fee, post_fee, total_fee, pay_time, end_time, modified, consign_time, buyer_obtain_point_fee, point_fee, real_point_fee, received_payment, pic_path, num_iid, num, price, cod_fee, cod_status, shipping_type, receiver_state, receiver_city, receiver_district, receiver_zip, seller_flag, alipay_no, is_lgtype, is_force_wlb, is_brand_sale, buyer_area, has_buyer_message, credit_card_fee, lg_aging_type, lg_aging, step_trade_status, step_paid_fee, mark_desc, has_yfx, yfx_fee,yfx_id, yfx_type, trade_source, send_time'
+    DEFAULT_FIELDS = 'seller_nick, buyer_nick, title, type, created, tid, seller_rate, seller_can_rate, buyer_rate, can_rate, status, payment, discount_fee, adjust_fee, post_fee, total_fee, pay_time, end_time, modified, consign_time, buyer_obtain_point_fee, point_fee, real_point_fee, received_payment, pic_path, num_iid, num, price, cod_fee, cod_status, shipping_type, receiver_state, receiver_city, receiver_district, receiver_zip, seller_flag, alipay_no, is_lgtype, is_force_wlb, is_brand_sale, buyer_area, has_buyer_message, credit_card_fee, lg_aging_type, lg_aging, step_trade_status, step_paid_fee, mark_desc, has_yfx, yfx_fee,yfx_id, yfx_type, trade_source, send_time, seller_phone'
 
     @classmethod
     @tao_api_exception()
@@ -78,12 +78,14 @@ class TradesSoldGet(object):
 def test_get_trade_list():
     import datetime
     access_token = "6200917df2c6f25102738cd27ZZ8ccc3914d83063c5fd5b925150697"
-    start_created_str = "2013-04-10 00:00:00"
-    end_created_str = "2013-04-11 00:00:00"
+    start_created_str = "2013-04-10"
+    end_created_str = "2013-04-11"
     total_trade_list = TradesSoldGet.get_trades_sold_list(access_token, start_created_str, end_created_str)
     for trade in total_trade_list:
         trade = trade.toDict()
-        for key in trade:
+        keys = trade.keys()
+        keys.sort()
+        for key in keys:
             print key, trade[key]
         break
 
