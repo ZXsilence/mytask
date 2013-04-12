@@ -51,7 +51,7 @@ class VasSubscribeGet(object):
 
 if __name__ == '__main__':
 
-    nick = 'yunfanggz'
+    nick = 'chinchinstyle'
     article_code = 'ts-1796606'
     article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, article_code)
     
