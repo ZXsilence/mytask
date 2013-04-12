@@ -13,14 +13,16 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_taobao_client
+    set_taobao_client('21065688', '74aecdce10af604343e942a324641891')
+    #logging.config.fileConfig('conf/consolelogger.conf')
     
 from TaobaoSdk.Request.SimbaRptCampaigneffectGetRequest import SimbaRptCampaigneffectGetRequest
 from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 
 class SimbaRptCampaigneffectGet(object):
     ''
@@ -103,3 +105,14 @@ class SimbaRptCampaigneffectGet(object):
             fav_accumlate += int(effect['favshopcount']) 
 
         return {'pay':pay_accumlate, 'pay_count':pay_count_accumlate, 'fav':fav_accumlate}
+
+
+if __name__ == "__main__":
+    nick = 'dong笑口常开'
+    access_token = '6201514d95ad5d2ae207fcegc017f3dfdd347661c4ef076314964732'
+    subway_token = '1102875020-14926241-1365325223844-b7c4c660'
+    campaign_id = '3656522'
+    sdate = datetime.datetime.now() - datetime.timedelta(days=18)
+    edate = datetime.datetime.now() - datetime.timedelta(days=1)
+    print SimbaRptCampaigneffectGet.get_campaign_effect_accumulate(nick, campaign_id, 'SEARCH,CAT,NOSEARCH', '1,2'
+            , sdate, edate, access_token, subway_token)
