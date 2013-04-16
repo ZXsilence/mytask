@@ -26,7 +26,7 @@ class SimbaCreativeidsChangedGet(object):
     get adgroups changed since a start_time
     """
 
-    PAGE_SIZE = 1000000
+    PAGE_SIZE = 1000
 
     @classmethod
     @tao_api_exception()

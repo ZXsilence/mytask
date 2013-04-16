@@ -55,7 +55,7 @@ class SimbaCreativeidsDeletedGet(object):
             logger.debug("get_adgroupids_deleted ---nick:%s start_time:%s total_deleted_adgroups:%s"%(nick,
                                                                                                        start_time,
                                                                                                        0))
-            return adgroup_id_list
+            return [] 
 
         creative_id_list.extend(rsp.deleted_creative_ids)
 
