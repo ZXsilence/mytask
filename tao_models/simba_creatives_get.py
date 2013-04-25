@@ -26,7 +26,7 @@ class SimbaCreativesGet(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(25)
+    @tao_api_exception(50)
     def get_creative_list_by_adgroup(cls, access_token, nick, adgroup_id):
         """
         given a adgroup_id, get the creative list in this adgroup
