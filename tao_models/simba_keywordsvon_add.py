@@ -66,6 +66,9 @@ class SimbaKeywordsvonAdd(object):
                     return []
                 if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
                     return []
+                if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
+                    import traceback
+                    logger.error(traceback.format_stack())
                 logger.error("add keywords failed, msg [%s] sub_msg [%s]", rsp.msg, rsp.sub_msg) 
                 raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
             keywords.extend(rsp.keywords) 
