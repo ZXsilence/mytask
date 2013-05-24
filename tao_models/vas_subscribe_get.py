@@ -28,7 +28,7 @@ class VasSubscribeGet(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(30)
     def get_vas_subscribe(cls, nick, article_code):
         """
         given a campaign_id, get the adgroup list in this campaign
