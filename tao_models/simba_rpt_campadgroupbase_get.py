@@ -19,8 +19,12 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaRptCampadgroupbaseGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import  TBDataNotReadyException
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class SimbaRptCampadgroupBaseGet(object):
@@ -39,11 +43,22 @@ class SimbaRptCampadgroupBaseGet(object):
         req.subway_token = subway_token
         req.page_no = page_no
         req.page_size = 500
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
+        logger.debug('nick:[%s] campaign_id [%d], get adgroup base', nick, int(campaign_id))
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return json.loads(rsp.rpt_campadgroup_base_list)
+        l = json.loads(rsp.rpt_campadgroup_base_list.lower())
+
+
+        if isinstance(l, dict):
+            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
+        return l
+
 
     @classmethod
     def get_rpt_adgroupbase_list(cls, nick, campaign_id, start_time, end_time, search_type, source, access_token, subway_token):

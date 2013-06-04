@@ -15,7 +15,7 @@ if __name__ == '__main__':
     set_env.getEnvReady()
     logging.config.fileConfig('conf/consolelogger.conf')
     
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from TaobaoSdk.Request.TopatsSimbaCampkeywordbaseGetRequest import TopatsSimbaCampkeywordbaseGetRequest
 from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
@@ -35,7 +35,7 @@ class TopatsSimbaCampkeywordbaseGet(object):
         req.search_type = 'SEARCH'
         req.source = 'SUMMARY'
         
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             if int(rsp.code) == 700:
                 task_id = re.findall('[\d]+', rsp.sub_msg)

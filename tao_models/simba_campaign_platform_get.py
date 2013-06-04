@@ -16,9 +16,10 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaCampaignPlatformGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
+print "here... simba_campaign_platform_get..... "
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ class SimbaCampaignPlatformGet(object):
         req.nick = nick
         req.campaign_id = campaign_id
 
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)

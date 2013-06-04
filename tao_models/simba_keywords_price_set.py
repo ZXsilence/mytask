@@ -23,7 +23,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaKeywordsPriceSetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 
@@ -55,7 +55,7 @@ class SimbaKeywordsPriceSet(object):
             keyword_price_str = keyword_price_str[:-1]
             req.keywordid_prices = keyword_price_str
 
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
@@ -65,18 +65,17 @@ class SimbaKeywordsPriceSet(object):
 
 
     @classmethod
-    @tao_api_exception(5)
+    @tao_api_exception(20)
     def _set_price(cls, access_token, nick, keywordid_prices):
         """
         args:
             wordid_price_list: [('keywordid', price),(102232, 33)]
         """
-
         req = SimbaKeywordsPriceSetRequest()
         req.nick = nick
         req.keywordid_prices = keywordid_prices
         try:
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         except Exception, data:
             raise ApiExecuteException
 

@@ -18,7 +18,7 @@ if __name__ == '__main__':
 from TaobaoSdk import IncrementItemsGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
 
@@ -76,7 +76,7 @@ class IncrementItemsGet(object):
 
         #first call
         req.page_no = 1
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
@@ -92,7 +92,7 @@ class IncrementItemsGet(object):
 
         for curr_page_no  in range(2, total_pages+1):
             req.page_no = curr_page_no
-            rsp = taobao_client.execute(req, access_token)[0]
+            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 

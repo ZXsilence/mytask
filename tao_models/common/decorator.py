@@ -34,6 +34,7 @@ class TaoOpenErrorCode(object):
     INSUFFICIENT_SECURITY = 53
     REMOTE_ERROR_700 = 700
 
+
 def tao_api_exception(MAX_RETRY_TIMES = 20):
     def _wrapper_func(func):
         """
@@ -51,6 +52,11 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                 try:
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
+                    logger.error('*args:',args)
+                    logger.error('**kwargs:',kwargs)
+                    import traceback
+                    traceback.print_exc()
+                    logger.error('%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
@@ -58,10 +64,10 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         if wait_seconds >= 180:                              
                             raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
     
-                        logger.error(e)
                         sleep(1)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
                     
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
@@ -71,15 +77,16 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise #重试无法解决此类异常
                         if e.sub_code and u'isp.top-mapping-parse-error' in e.sub_code:
                             raise #重试无法解决此类异常
-                        logger.error(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
-                        logger.info(e)
 
+                        if e.sub_msg and u'未被授权此操作' in e.sub_msg:
+                            raise
                         if e.sub_code and u'isv.invalid-permission' in e.sub_code:
                             raise
                         if e.sub_msg and u'推广组Id不存在' in e.sub_msg:
@@ -88,37 +95,41 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise DataOutdateException(str(e))
                         if e.sub_msg and  u'Id不存在' in e.sub_msg:
                             raise
-                        if  e.sub_code and u'用户未开通主动通知服' in e.sub_code:
+                        if e.sub_msg and u'无法根据nick获取直通车帐号信息' in e.sub_msg:
                             raise 
+                        if  e.sub_msg and u'用户未开通主动通知服务' in e.sub_msg:
+                            raise 
+                        if e.sub_msg and u'推广计划名称已经存在' in e.sub_msg:
+                            raise TaoApiMaxRetryException(e.sub_msg)
+                        if e.sub_msg and u'推广计划数量最多建立4个' in e.sub_msg:
+                            raise TaoApiMaxRetryException(e.sub_msg)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            mail_logger.exception(str(e))
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_600:
                         if  e.sub_msg and  'end_modified' in e.sub_msg.encode('utf8'):
                             raise  #在这里重试不合适，到整个任务的地方去重试
 
-                        logger.info(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.SERVICE_TEMP_UNAVAILABLE:
-                        logger.info(e)
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed"%MAX_RETRY_TIMES)
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
                     elif code == TaoOpenErrorCode.INVALID_SESSION_KEY:
-                        logging.exception('got an exception when request taobao api')
                         raise InvalidAccessTokenException("access session expired or invalid")
 
                     else:
-                        logging.exception('got an exception when request taobao api')
                         raise  e
                 else:
                     if retry_times:

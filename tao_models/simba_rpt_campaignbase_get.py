@@ -16,11 +16,13 @@ if __name__ == '__main__':
     set_env.getEnvReady()
     logging.config.fileConfig('conf/consolelogger.conf')
 
-from tao_models.conf.settings import taobao_client
+from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
 from TaobaoSdk.Request.SimbaRptCampaignbaseGetRequest import SimbaRptCampaignbaseGetRequest
 from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
+from tao_models.common.exceptions import  TBDataNotReadyException
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,10 +42,21 @@ class SimbaRptCampaignbaseGet(object):
         req.search_type = search_type   
         req.subway_token = subway_token
         
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        l = json.loads(rsp.rpt_campaign_base_list)
+        l = json.loads(rsp.rpt_campaign_base_list.lower())
+
+        if l == {}:
+            l = []
+
+        if isinstance(l, dict):
+            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
+
         return l
     
     @classmethod
@@ -59,10 +72,20 @@ class SimbaRptCampaignbaseGet(object):
         req.search_type = search_type
         req.subway_token = subway_token
         
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        l = json.loads(rsp.rpt_campaign_base_list)
+        l = json.loads(rsp.rpt_campaign_base_list.lower())
+        
+        if l == {}:
+            l = []
+
+        if isinstance(l, dict):
+            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
         return l
         
     @classmethod

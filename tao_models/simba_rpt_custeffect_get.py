@@ -18,7 +18,7 @@ if __name__ == '__main__':
     set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
 #    logging.config.fileConfig('conf/consolelogger.conf')
     
-from tao_models.conf.settings import  taobao_client
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
 from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
@@ -40,13 +40,20 @@ class SimbaRptCusteffectGet(object):
         req.source = 'SUMMARY'
         req.subway_token = subway_token
         
-        rsp = taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        l = json.loads(rsp.rpt_cust_effect_list)
-        #TODO: 临时处理掉
+        l = json.loads(rsp.rpt_cust_effect_list.lower())
+
+        if l == {}:
+            l = []
+
         if isinstance(l, dict):
-            raise ErrorResponseException(code=l['code'], msg=rsp['msg'], sub_code=rsp['sub_code'], sub_msg=rsp['sub_msg'])
+            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
+
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+
         return l
 
 if __name__ == '__main__':
