@@ -52,8 +52,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                 try:
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
-                    logger.error('*args:',args)
-                    logger.error('**kwargs:',kwargs)
+                    logger.error('*args:',str(args))
+                    logger.error('**kwargs:',str(kwargs))
                     import traceback
                     traceback.print_exc()
                     logger.error('%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
