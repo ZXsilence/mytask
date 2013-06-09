@@ -49,7 +49,7 @@ class SimbaCreativeidsDeletedGet(object):
 
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.deleted_creative_ids:
             logger.debug("get_adgroupids_deleted ---nick:%s start_time:%s total_deleted_adgroups:%s"%(nick,
@@ -64,7 +64,7 @@ class SimbaCreativeidsDeletedGet(object):
             rsp = taobao_client.execute(req, access_token)[0]
 
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             creative_id_list.extend(rsp.deleted_creative_ids)
 
         return creative_id_list

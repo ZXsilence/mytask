@@ -53,7 +53,7 @@ class SimbaAdgroupOnlineitemsGet(object):
         req.page_no = 1
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
@@ -69,7 +69,7 @@ class SimbaAdgroupOnlineitemsGet(object):
             req.page_no = page_no
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             item_online_list.extend(rsp.page_item.item_list)
 
         logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
@@ -91,7 +91,7 @@ class SimbaAdgroupOnlineitemsGet(object):
         req.page_no = 1
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
@@ -107,7 +107,7 @@ class SimbaAdgroupOnlineitemsGet(object):
             req.page_no = page_no
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             item_online_list.extend(rsp.page_item.item_list)
 
         logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
@@ -132,7 +132,7 @@ class SimbaAdgroupOnlineitemsGet(object):
             raise ApiExecuteException
 
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         
         return rsp.page_item.total_item 
 
