@@ -46,7 +46,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         #first_call
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
         if not rsp.adgroups.total_item:
             logger.debug("no adgroup in campaign:%i"%(campaign_id))
@@ -64,7 +64,7 @@ class SimbaAdgroupsbycampaignidGet(object):
             req.page_no = page_no
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
         logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))
@@ -89,7 +89,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
         if not rsp.isSuccess():
             logger.error("get_adgroup_count error nick [%s] msg [%s] sub_msg [%s]" %(nick, rsp.msg, rsp.sub_msg))
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.adgroups.total_item
 
 
@@ -111,7 +111,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         #first_call
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
         if not rsp.adgroups.total_item:
             logger.debug("no adgroup in campaign:%i"%(campaign_id))
@@ -129,7 +129,7 @@ class SimbaAdgroupsbycampaignidGet(object):
             req.page_no = page_no
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
         logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))

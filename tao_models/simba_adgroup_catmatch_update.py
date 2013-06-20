@@ -48,7 +48,7 @@ class SimbaAdgroupCatmatchUpdate(object):
         if not rsp.isSuccess():
             logger.error("update_adgroup_catmatch error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick, 
                 str(adgroup_id), rsp.msg, rsp.sub_msg))
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.adgroupcatmatch
 

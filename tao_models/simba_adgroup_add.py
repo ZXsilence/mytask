@@ -54,7 +54,7 @@ class SimbaAdgroupAdd(object):
             if "类目" in rsp.sub_msg or "商品" in rsp.sub_msg or "推广" in rsp.sub_msg or "创意" in rsp.sub_msg \
                     or "宝贝" in rsp.sub_msg or "knowledge" in rsp.sub_msg:
                 raise ItemForbiddenException(msg=rsp.msg, sub_msg=rsp.sub_msg)
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.adgroup
 

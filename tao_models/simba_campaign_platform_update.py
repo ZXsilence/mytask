@@ -50,7 +50,7 @@ class SimbaCampaignPlatformUpdate(object):
                  , rsp.msg, rsp.sub_msg))
             if "用户无资格投放定向推广" in rsp.sub_msg:
                 raise NonsearchNotAllowedException
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.campaign_platform
 

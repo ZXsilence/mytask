@@ -39,7 +39,7 @@ class SimbaLoginAuthsignGet(object):
 
         if not rsp.isSuccess():
             logger.error("get_subway_token failed, msg [%s] sub_msg [%s]", rsp.msg, rsp.sub_msg) 
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.subway_token
 

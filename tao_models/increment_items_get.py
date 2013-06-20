@@ -78,7 +78,7 @@ class IncrementItemsGet(object):
         req.page_no = 1
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.total_results:
             #logger.debug("IncrementItems no result,  start_modified:%s end_modified:%s nick:%s"%(start_modified.strftime("%Y-%m-%d %H:%M:%S"),
@@ -94,7 +94,7 @@ class IncrementItemsGet(object):
             req.page_no = curr_page_no
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
             notify_item_list.extend(rsp.notify_items)
 
