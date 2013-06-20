@@ -42,7 +42,7 @@ class VasSubscribeGet(object):
 
         if not rsp.isSuccess():
             print rsp.msg, rsp.sub_msg
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.article_user_subscribes
 
