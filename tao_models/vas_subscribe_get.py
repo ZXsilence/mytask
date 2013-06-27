@@ -28,7 +28,7 @@ class VasSubscribeGet(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(30)
     def get_vas_subscribe(cls, nick, article_code):
         """
         given a campaign_id, get the adgroup list in this campaign
@@ -42,7 +42,7 @@ class VasSubscribeGet(object):
 
         if not rsp.isSuccess():
             print rsp.msg, rsp.sub_msg
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.article_user_subscribes
 
@@ -51,7 +51,7 @@ class VasSubscribeGet(object):
 
 if __name__ == '__main__':
 
-    nick = 'yunfanggz'
+    nick = 'chinchinstyle'
     article_code = 'ts-1796606'
     article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, article_code)
     

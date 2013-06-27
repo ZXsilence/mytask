@@ -44,7 +44,7 @@ class SimbaCreativeUpdate(object):
                 , str(adgroup_id), rsp.msg, rsp.sub_msg))
             if '图片不是推广组的图片' in rsp.sub_msg:
                 raise ImgNotBelongToAdgroupException
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.creativerecord
 

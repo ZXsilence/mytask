@@ -23,6 +23,9 @@ from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class SimbaRptCampadgroupBaseGet(object):
     """
@@ -42,6 +45,7 @@ class SimbaRptCampadgroupBaseGet(object):
         req.page_size = 500
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
+        logger.debug('nick:[%s] campaign_id [%d], get adgroup base', nick, int(campaign_id))
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         l = json.loads(rsp.rpt_campadgroup_base_list.lower())

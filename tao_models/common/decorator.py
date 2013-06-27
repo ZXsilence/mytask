@@ -52,6 +52,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                 try:
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
+                    logger.error('*args:%s'%str(args))
+                    logger.error('**kwargs:%s'%str(kwargs))
                     logger.error('%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
@@ -65,7 +67,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
-                    
+                    #isp类型错误，只有三种无法重试
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
                         if e.sub_code and u'isp.null-pointer-exception' in e.sub_code:
                             raise #重试无法解决此类异常
@@ -80,30 +82,16 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         continue
 
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
-
-                        if e.sub_msg and u'未被授权此操作' in e.sub_msg:
+                        if e.sub_code.startswith('isv'):
+                            #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
                             raise
-                        if e.sub_code and u'isv.invalid-permission' in e.sub_code:
-                            raise
-                        if e.sub_msg and u'推广组Id不存在' in e.sub_msg:
-                            raise DataOutdateException(str(e))
-                        if e.sub_msg and u'包含了不属于该客户的关键词Id' in e.sub_msg:
-                            raise DataOutdateException(str(e))
-                        if e.sub_msg and  u'Id不存在' in e.sub_msg:
-                            raise
-                        if e.sub_msg and u'无法根据nick获取直通车帐号信息' in e.sub_msg:
-                            raise 
-                        if  e.sub_msg and u'用户未开通主动通知服务' in e.sub_msg:
-                            raise 
-                        if e.sub_msg and u'推广计划名称已经存在' in e.sub_msg:
-                            raise TaoApiMaxRetryException(e.sub_msg)
-                        if e.sub_msg and u'推广计划数量最多建立4个' in e.sub_msg:
-                            raise TaoApiMaxRetryException(e.sub_msg)
-                        sleep(5)
-                        if retry_times == MAX_RETRY_TIMES:
-                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
-                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
-                        continue
+                        else:
+                            #其他类型异常，可重试
+                            sleep(5)
+                            if retry_times == MAX_RETRY_TIMES:
+                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                            continue
 
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_600:
                         if  e.sub_msg and  'end_modified' in e.sub_msg.encode('utf8'):

@@ -30,7 +30,7 @@ class VasOrderSearch(object):
 
     @classmethod
     @tao_api_exception(3)
-    def _search_vas_order(cls, article_code, start_created, end_created, page_no):
+    def _search_vas_order(cls, article_code, start_created, end_created, page_no, nick=None):
         """
         """
 
@@ -41,20 +41,25 @@ class VasOrderSearch(object):
         req.end_created = end_created 
         req.page_size = VasOrderSearch.PAGE_SIZE 
         req.page_no = page_no 
+        if nick != None:
+            req.nick = nick
+
         rsp = tao_model_settings.taobao_client.execute(req, '')[0]
         if not rsp.isSuccess():
             print rsp.msg
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.article_biz_orders
 
 
     @classmethod
-    def search_vas_order(cls, article_code, start_created, end_created):
+    def search_vas_order(cls, article_code, start_created, end_created, nick=None):
         count = 1
         article_biz_orders_all = []
         while count < 30:
-            article_biz_orders = VasOrderSearch._search_vas_order(article_code, start_created, end_created, count)
+            article_biz_orders = VasOrderSearch._search_vas_order(article_code, start_created, end_created, count, nick)
+            if not article_biz_orders:
+                break 
             article_biz_orders_all.extend(article_biz_orders)
             count += 1
             if len(article_biz_orders) < VasOrderSearch.PAGE_SIZE :
@@ -64,8 +69,8 @@ class VasOrderSearch(object):
 
     @classmethod
     def search_vas_order_yesterday(cls, article_code):
-        yes = datetime.datetime.now() - datetime.timedelta(days=15)
-        today = datetime.datetime.now() - datetime.timedelta(days=14)
+        yes = datetime.datetime.now() - datetime.timedelta(days=1)
+        today = datetime.datetime.now()
         start_created = yes.strftime("%Y-%m-%d 00:00:00") 
         end_created = today.strftime("%Y-%m-%d 00:00:00") 
         return VasOrderSearch.search_vas_order(article_code, start_created, end_created)
@@ -78,10 +83,18 @@ class VasOrderSearch(object):
         end_created = today.strftime("%Y-%m-%d 00:00:00") 
         return VasOrderSearch.search_vas_order(article_code, start_created, end_created)
 
+    @classmethod
+    def search_vas_order_by_nick(cls, article_code, sdate, edate, nick):
+        start_created = sdate.strftime("%Y-%m-%d 00:00:00") 
+        end_created = edate.strftime("%Y-%m-%d 00:00:00") 
+        return VasOrderSearch.search_vas_order(article_code, start_created, end_created, nick)
+
 if __name__ == '__main__':
 
     article_code = 'ts-1796606'
-    result = VasOrderSearch.search_vas_order_yesterday(article_code)
-    #result = VasOrderSearch.search_vas_order_all(article_code)
+    #result = VasOrderSearch.search_vas_order_yesterday(article_code)
+    start = datetime.datetime.now() - datetime.timedelta(300)
+    today = datetime.datetime.now()
+    result = VasOrderSearch.search_vas_order_by_nick(article_code, start, today, 'chinchinstyle')
     for element in result:
         print element.toDict()

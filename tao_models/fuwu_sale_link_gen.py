@@ -5,6 +5,7 @@ import sys
 import os
 import logging
 import logging.config
+import datetime
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
@@ -13,49 +14,41 @@ if __name__ == '__main__':
     from tao_models.conf.settings import set_taobao_client
     set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
 
-from TaobaoSdk import SimbaCampaignAddRequest
+from TaobaoSdk import FuwuSaleLinkGenRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.conf import settings as tao_model_settings
 
 logger = logging.getLogger(__name__)
 
-class SimbaCampaignAdd(object):
+class FuwuSaleLinkGen(object):
     """
     """
-
-    PAGE_SIZE = 200
 
     @classmethod
     @tao_api_exception(3)
-    def add_campaign(cls, access_token, nick, title):
+    def fuwu_sale_link_gen(cls, nick, param_str):
         """
-        创建一个计划 
         """
 
-        req = SimbaCampaignAddRequest()
-        req.nick = nick
-        req.title = title
+        req = FuwuSaleLinkGenRequest()
+        req.nick = nick 
+        req.param_str = param_str 
 
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
+        rsp = tao_model_settings.taobao_client.execute(req, '')[0]
         if not rsp.isSuccess():
-            logger.error("add_campaign error nick [%s] title [%s] msg [%s] sub_msg [%s]" %(nick, 
-                title, rsp.msg, rsp.sub_msg))
+            print rsp.msg
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
-        return rsp.campaign
-
-
+        return rsp.url
 
 
 if __name__ == '__main__':
 
-    access_token = '6201011016ade5298c4ZZ0c4bff2e7b98fcad8ebcf11d58520500325'
     nick = 'chinchinstyle'
-    title = '麦苗省油宝计划'
-
-    campaign = SimbaCampaignAdd.add_campaign(access_token, nick, title)
-    
-    print campaign.toDict()
+    param_str = """
+        {"param":{"aCode":"ACT_847721042_130517115127","itemList":["ts-1796606-3"],"promIds":[10058712],"type":2},"sign":"E2896D1E94845D1B82FFE9FBF8A9D18E"}
+        """
+    url = FuwuSaleLinkGen.fuwu_sale_link_gen(nick, param_str)
+    print url

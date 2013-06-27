@@ -26,7 +26,7 @@ class SimbaCreativeidsChangedGet(object):
     get adgroups changed since a start_time
     """
 
-    PAGE_SIZE = 1000000
+    PAGE_SIZE = 1000
 
     @classmethod
     @tao_api_exception()
@@ -51,7 +51,7 @@ class SimbaCreativeidsChangedGet(object):
 
         rsp = taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.changed_creative_ids
 
 

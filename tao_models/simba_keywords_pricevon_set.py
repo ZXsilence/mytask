@@ -59,7 +59,7 @@ class SimbaKeywordsPricevonSet(object):
 
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
             keywords.extend(rsp.keywords)
 
@@ -94,6 +94,8 @@ class SimbaKeywordsPricevonSet(object):
         if not rsp.isSuccess():
             logger.error("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 ,rsp.msg, rsp.sub_msg))
+            if rsp.sub_msg and '关键词不能为空' in rsp.sub_msg:
+                return []
             raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
         return rsp.keywords
 
