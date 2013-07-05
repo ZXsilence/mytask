@@ -39,7 +39,7 @@ class ItemsOnsaleGet(object):
         req.order_by = "modified:desc" 
         req.page_size = 200
         req.page_no = 1 
-        access_token = ''
+#        access_token = ''
 
         while True:
 
