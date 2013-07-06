@@ -62,14 +62,15 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                 try:
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
-                    logger.error('*args:%s'%str(args))
-                    logger.error('**kwargs:%s'%str(kwargs))
-                    logger.error('%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
+                    logger.info('exception:*args:%s'%str(args))
+                    logger.info('exception:**kwargs:%s'%str(kwargs))
+                    logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
                         wait_seconds = int(e.sub_msg.split(' ')[5])
                         if wait_seconds >= 180:                              
+                            logger.error("app call limit [%d] seconds"%wait_seconds)
                             raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
     
                         sleep(1)
