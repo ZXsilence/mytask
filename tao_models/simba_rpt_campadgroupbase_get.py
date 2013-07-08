@@ -1,4 +1,4 @@
-'''
+﻿'''
 Created on 2012-9-4
 
 @author: dk
@@ -49,7 +49,8 @@ class SimbaRptCampadgroupBaseGet(object):
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         l = json.loads(rsp.rpt_campadgroup_base_list.lower())
-
+        if l == {}:
+            l = []
 
         if isinstance(l, dict):
             raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
@@ -78,13 +79,14 @@ class SimbaRptCampadgroupBaseGet(object):
 
 
 if __name__ == '__main__':
-    try_list = SimbaRptCampadgroupBaseGet.get_rpt_adgroupbase_list('chinchinstyle',\
-                                                                    3442512, \
-                                                                    datetime.date(2012,12,9), \
-                                                                    datetime.date(2013,1,8), \
+    try_list = SimbaRptCampadgroupBaseGet.get_rpt_adgroupbase_list(u'色色淑女',\
+                                                                    9903616, \
+                                                                    datetime.date(2013,6,26), \
+                                                                    datetime.date(2013,6,26), \
                                                                    'SUMMARY', \
                                                                    '1,2', \
-                                                '62011283186b5a5aa2bdec6d3be40595421ceg3e8a210bd520500325',\
-                                                '1103075437-19809948-1357710778622-0f91a51a')
+                                                '6201b202c4d6f7487d76a9014a8dfh1d5ba75c56ed7125a354435780',\
+                                                '1102671513-15490633-1372141182065-7f41b9bb')
+    print 
     for item in try_list:
         print item
