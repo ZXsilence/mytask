@@ -45,6 +45,7 @@ class TaoOpenErrorCode(object):
     REMOTE_ERROR_700 = 700
 
 
+DEBUG_MODE=False
 def tao_api_exception(MAX_RETRY_TIMES = 20):
     def _wrapper_func(func):
         """
@@ -60,6 +61,18 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
             res = None
             while True:
                 try:
+                    if (DEBUG_MODE and (len(args) >= 1) and (
+                                cmp(args[0].__class__.__name__, 'SimbaKeywordsvonAdd') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaKeywordsPricevonSet') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaKeywordsDelete') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaCreativeUpdate') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaCreativeAdd') == 0 
+                                )
+
+                            ):
+                        logger.info(args[0].__class__.__name__ + "return None")
+                        return None
+
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
                     logger.info('exception:*args:%s'%str(args))
