@@ -53,12 +53,12 @@ class SimbaKeywordsvonAdd(object):
         req.adgroup_id = adgroup_id
         
         keywords = []
-        package_num = len(word_price_dict_list)/100 + 1
-        if len(word_price_dict_list) % 100 == 0:
+        package_num = len(word_price_dict_list)/200 + 1
+        if len(word_price_dict_list) % 200 == 0:
             package_num -= 1
 
         for i in range(package_num):
-            keyword_prices_str = json.dumps(word_price_dict_list[i*100:(i+1)*100])
+            keyword_prices_str = json.dumps(word_price_dict_list[i*200:(i+1)*200])
             req.keyword_prices = keyword_prices_str 
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
