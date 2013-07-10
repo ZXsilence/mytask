@@ -15,7 +15,17 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  InvalidAccessTokenException, TaoApiMaxRetryException, InsufficientSecurityException, AppCallLimitedAllDayException
-
+from api_records.services.api_records_service import inc_api_call_times, get_api_call_times, update_api_call_times, QueueName
+api_call_infos = [ 
+        ['syb_auto_campaign_optimize_job.py',QueueName.SYB_AUTO_CAMPAIGN_OPTIMIZE],
+        ['syb_auto_creative_optimize_job.py',QueueName.SYB_AUTO_CREATIVE_OPTIMIZE],
+        ['syb_key_campaign_optimize_job.py',QueueName.SYB_KEY_CAMPAIGN_OPTIMIZE]
+]
+api_call_requests = [
+    'SimbaKeywordsvonAdd',
+    'SimbaKeywordsPricevonSet',
+    'SimbaKeywordsDelete'
+]
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
 
@@ -35,6 +45,7 @@ class TaoOpenErrorCode(object):
     REMOTE_ERROR_700 = 700
 
 
+DEBUG_MODE=False
 def tao_api_exception(MAX_RETRY_TIMES = 20):
     def _wrapper_func(func):
         """
@@ -50,16 +61,29 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
             res = None
             while True:
                 try:
+                    if (DEBUG_MODE and (len(args) >= 1) and (
+                                cmp(args[0].__class__.__name__, 'SimbaKeywordsvonAdd') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaKeywordsPricevonSet') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaKeywordsDelete') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaCreativeUpdate') == 0 or
+                                cmp(args[0].__class__.__name__, 'SimbaCreativeAdd') == 0 
+                                )
+
+                            ):
+                        logger.info(args[0].__class__.__name__ + "return None")
+                        return None
+
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
-                    logger.error('*args:%s'%str(args))
-                    logger.error('**kwargs:%s'%str(kwargs))
-                    logger.error('%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
+                    logger.info('exception:*args:%s'%str(args))
+                    logger.info('exception:**kwargs:%s'%str(kwargs))
+                    logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
                         wait_seconds = int(e.sub_msg.split(' ')[5])
                         if wait_seconds >= 180:                              
+                            logger.error("app call limit [%d] seconds"%wait_seconds)
                             raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
     
                         sleep(1)
@@ -118,6 +142,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                 else:
                     if retry_times:
                         logger.info("retry success, total_retry time:%i"%retry_times)
+                    if (len(args) >= 1):
+                        update_api_call_times(args[0].__class__.__name__, api_call_requests, api_call_infos)
                     return res
         return __wrapped_func
 

@@ -24,6 +24,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import KeywordsFullException
+from tao_models.common.page_size import PageSize
 
 
 logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ class SimbaKeywordsvonAdd(object):
             word_price_list: [('key', price),('aa', 33)] or word_price_list: [('key', price,match_scope),('aa', 33,2)]
             if custom_match_scope is True look up batch_match_scope from  word_price_list first
         """
-        logger.error("add keywords size [%d]", len(word_price_list)) 
+        logger.info("add keywords size [%d]", len(word_price_list)) 
 
         word_price_dict_list = []
         for add_tuple in word_price_list:
@@ -57,12 +58,13 @@ class SimbaKeywordsvonAdd(object):
         req.adgroup_id = adgroup_id
         
         keywords = []
-        package_num = len(word_price_dict_list)/100 + 1
-        if len(word_price_dict_list) % 100 == 0:
+        size = PageSize.KEYWORDS_ADD
+        package_num = len(word_price_dict_list)/size + 1
+        if len(word_price_dict_list) % size== 0:
             package_num -= 1
 
         for i in range(package_num):
-            keyword_prices_str = json.dumps(word_price_dict_list[i*100:(i+1)*100])
+            keyword_prices_str = json.dumps(word_price_dict_list[i*size:(i+1)*size])
             req.keyword_prices = keyword_prices_str 
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
