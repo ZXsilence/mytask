@@ -56,7 +56,7 @@ class VasOrderSearch(object):
     def search_vas_order(cls, article_code, start_created, end_created, nick=None):
         count = 1
         article_biz_orders_all = []
-        while count < 30:
+        while True:
             article_biz_orders = VasOrderSearch._search_vas_order(article_code, start_created, end_created, count, nick)
             if not article_biz_orders:
                 break 
