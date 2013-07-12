@@ -14,6 +14,7 @@ import simplejson as json
 from TaobaoSdk.Exceptions import ErrorResponseException
 
 from tao_models.common.exceptions import   DataOutdateException
+from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.exceptions import  InvalidAccessTokenException, TaoApiMaxRetryException, InsufficientSecurityException, AppCallLimitedAllDayException
 from api_records.services.api_records_service import inc_api_call_times, get_api_call_times, update_api_call_times, QueueName
 api_call_infos = [ 
@@ -143,7 +144,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     if retry_times:
                         logger.info("retry success, total_retry time:%i"%retry_times)
                     if (len(args) >= 1):
-                        update_api_call_times(args[0].__class__.__name__, api_call_requests, api_call_infos)
+                        update_api_call_times(tao_model_settings.taobao_client.appKey, args[0].__name__, api_call_requests, api_call_infos)
                     return res
         return __wrapped_func
 
