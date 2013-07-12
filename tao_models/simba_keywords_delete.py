@@ -20,6 +20,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.page_size import  PageSize 
 
 
 logger = logging.getLogger(__name__)
@@ -60,12 +61,13 @@ class SimbaKeywordsDelete(object):
     @classmethod
     def delete_keywords(cls, access_token, nick, campaign_id, keyword_id_list):
         keywords = []
-        package_num = len(keyword_id_list)/100 + 1
-        if len(keyword_id_list) % 100 == 0:
+        size = PageSize.KEYWORDS_DEL
+        package_num = len(keyword_id_list)/size + 1
+        if len(keyword_id_list) % size == 0:
             package_num -= 1
         for i in range(package_num):
             subkeywords = SimbaKeywordsDelete._delete_keywords(access_token, nick, \
-                    campaign_id, keyword_id_list[i*100: (i+1)*100])
+                    campaign_id, keyword_id_list[i*size: (i+1)*size])
             keywords.extend(subkeywords)
 
         return keywords

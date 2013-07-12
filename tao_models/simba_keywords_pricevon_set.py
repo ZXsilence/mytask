@@ -24,6 +24,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.page_size import  PageSize
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ class SimbaKeywordsPricevonSet(object):
     def set_keywords_price(cls, access_token, nick, keyword_price_list):
         if not keyword_price_list:
             return []
-
+        size = PageSize.KEYWORDS_SET
         word_price_dict_list = []
         for element in keyword_price_list:
             word_price_dict = {
@@ -48,13 +49,13 @@ class SimbaKeywordsPricevonSet(object):
         req = SimbaKeywordsPricevonSetRequest()
         req.nick = nick
 
-        package_num = len(keyword_price_list)/100 + 1
-        if len(keyword_price_list) % 100 == 0:
+        package_num = len(keyword_price_list)/size+ 1
+        if len(keyword_price_list) % size== 0:
             package_num -= 1
 
         keywords = []
         for i in range(package_num):
-            keyword_price_str = json.dumps(word_price_dict_list[i*100: (i+1)*100])
+            keyword_price_str = json.dumps(word_price_dict_list[i*size: (i+1)*size])
             req.keywordid_prices = keyword_price_str
 
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
@@ -101,14 +102,14 @@ class SimbaKeywordsPricevonSet(object):
 
     @classmethod
     def set_price(cls, access_token, nick, wordid_price_list):
-        
-        package_num = len(wordid_price_list)/100 + 1
-        if len(wordid_price_list) % 100 == 0:
+        size = PageSize.KEYWORDS_SET
+        package_num = len(wordid_price_list)/size+ 1
+        if len(wordid_price_list) % size== 0:
             package_num -= 1
 
         keywords = []
         for i in range(package_num):
-            keywordid_prices = wordid_price_list[i*100:(i+1)*100]
+            keywordid_prices = wordid_price_list[i*size:(i+1)*size]
             subkeywords = SimbaKeywordsPricevonSet._set_price(access_token, nick, keywordid_prices)
             keywords.append(subkeywords)
         return keywords
