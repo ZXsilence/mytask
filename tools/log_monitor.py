@@ -59,7 +59,7 @@ class SpeedLimiter:
 #2013-07-03 16:38:04,261 INFO mylogger.<module>:12    message info
 #[2013-07-03 14:03:11,909: DEBUG/MainProcess] request SimbaRptAdgroupbaseGetRequest
 class LogMonitor:
-    def __init__(self, file, before_second, phone, email, secret, min_interval, tag_name):
+    def __init__(self, file, before_second, phone, email, secret, min_interval, tag_name, filter_file_name=None):
         self.file = file
         self.before_second = before_second
         self.logger = getLogger()
@@ -69,6 +69,30 @@ class LogMonitor:
         self.limiter_error = SpeedLimiter(min_interval)
         self.limiter_warn = SpeedLimiter(min_interval)
         self.tag_name = tag_name
+        self.filter = self.get_filter(filter_file_name)
+
+    def get_filter(self, filter_file_name):
+        filter = []
+        if filter_file_name :
+            filter_file = open(filter_file_name)
+            while True:
+                filter_word = filter_file.readline()
+                if not filter_word:
+                    return filter
+                if filter_word[0] == '#':
+                    continue
+                strlen = len(filter_word)
+                filter_word = filter_word[:strlen-1]
+                filter.append(filter_word)
+            for filter_word in filter:
+                print filter_word
+        return filter
+
+    def do_match_filter(self, line):
+        for filter_word in self.filter:
+            if line.find(filter_word) != -1:
+                return True
+        return False
 
     def parse_line(self, line):
         time_content = None
@@ -124,12 +148,12 @@ class LogMonitor:
 #            message = line[(24 + len(level)):]
             #print "level ["+ str(level) + "] message [" + str(message) + "]"
             if cmp(level, "ERROR") == 0:
-                if not self.limiter_error.need_limit(log_timestamp):
+                if not self.do_match_filter(message) and not self.limiter_error.need_limit(log_timestamp):
                     subject = level + " log at " + time_content + " in " + self.tag_name + " " + self.limiter_error.info()
                     send_email = True
                     send_sms = True
             elif cmp(level, "WARNING") == 0:
-                if not self.limiter_warn.need_limit(log_timestamp):
+                if not self.do_match_filter(message) and not self.limiter_warn.need_limit(log_timestamp):
                     subject = level + " log at " + time_content + " in " + self.tag_name + " " + self.limiter_warn.info()
                     send_email = True
 
@@ -162,11 +186,12 @@ class LogMonitor:
                 
 
 if __name__ == '__main__':
-    opts, args = getopt.getopt(sys.argv[1:], "f:b:t:i:h", ['file=', "before=", "tag=", 'interval=', 'help'])
+    opts, args = getopt.getopt(sys.argv[1:], "f:b:t:i:F:h", ['file=', "before=", "tag=", 'interval=', 'filter=', 'help'])
     before_second = 0
     file_name = None
     tag_name = "demo"
     interval = 10
+    filter_file_name = None
     for key,value in opts:
         if key in ('-f', '--file'):
             file_name = value
@@ -176,6 +201,8 @@ if __name__ == '__main__':
             tag_name = value
         elif key in ('-i', '--interval'):
             interval = int(value)
+        elif key in ('-F', '--filter'):
+            filter_file_name = value
         elif key in ('-h', '--help'):
             usage(argv[0])
             sys.exit(1)
@@ -183,5 +210,5 @@ if __name__ == '__main__':
         log_file = open(file_name, "r")
     else:
         log_file = sys.stdin
-    monitor = LogMonitor(log_file, before_second, '18658837169', 'luoyan@maimiaotech.com', '62717038', interval, tag_name)
+    monitor = LogMonitor(log_file, before_second, '18658837169', 'luoyan@maimiaotech.com', '62717038', interval, tag_name, filter_file_name)
     monitor.monitor()
