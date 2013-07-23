@@ -134,6 +134,34 @@ class LogMonitorTestCase(unittest.TestCase):
         self.assertEquals(send_sms, False)
         self.assertEquals(send_email, False)
 
+    def test_send_message_with_filter(self):
+        now_timestamp = float(datetime.now().strftime("%s"))
+        log_timestamp = time.mktime(time.strptime("2013-07-04 10:42:12", "%Y-%m-%d %H:%M:%S"))
+        before_second = now_timestamp - log_timestamp + 1000
+        filter_file_name = "test_filter"
+        filter_file = file(filter_file_name, "w")
+        filter_file.write("info\n")
+        filter_file.write("warning\n")
+        filter_file.write("#error\n")
+        filter_file.close()
+        monitor = LogMonitor(sys.stdin, before_second, phone, email, secret, 10, "testcase", filter_file_name)
+        self.assertEquals(True, monitor.do_match_filter("2013-07-04 10:42:12,045 INFO mylogger.<module>:12    message info"))
+        self.assertEquals(True, monitor.do_match_filter("2013-07-04 10:42:12,045 WARNING mylogger.<module>:14    message warning"))
+        self.assertEquals(False, monitor.do_match_filter("2013-07-04 10:42:12,045 ERROR mylogger.<module>:13    message error"))
+
+        subject, text, send_sms, send_email = monitor.send_message("2013-07-04 10:42:12,045 WARNING mylogger.<module>:14    message warning")
+        self.assertEquals(subject, None)
+        self.assertEquals(text, None)
+        self.assertEquals(send_sms, False)
+        self.assertEquals(send_email, False)
+
+        subject, text, send_sms, send_email = monitor.send_message("2013-07-04 10:42:12,045 ERROR mylogger.<module>:13    message error")
+        self.assertEquals(subject, "ERROR log at 2013-07-04 10:42:12 in testcase ")
+        self.assertEquals(text, " mylogger.<module>:13    message error")
+        self.assertEquals(send_sms, True)
+        self.assertEquals(send_email, True)
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod(log_monitor)
