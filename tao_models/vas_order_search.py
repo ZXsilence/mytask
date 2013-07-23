@@ -54,16 +54,16 @@ class VasOrderSearch(object):
 
     @classmethod
     def search_vas_order(cls, article_code, start_created, end_created, nick=None):
-        count = 1
+        """ 从最后一页开始获取订购记录,防止翻页时丢单"""
+        order_count=cls.get_var_orders_count(article_code, start_created, end_created)
+        page_count=(order_count-1)/VasOrderSearch.PAGE_SIZE+1
         article_biz_orders_all = []
-        while True:
-            article_biz_orders = VasOrderSearch._search_vas_order(article_code, start_created, end_created, count, nick)
+        while page_count>0:
+            article_biz_orders = VasOrderSearch._search_vas_order(article_code, start_created, end_created, page_count, nick)
             if not article_biz_orders:
                 break 
             article_biz_orders_all.extend(article_biz_orders)
-            count += 1
-            if len(article_biz_orders) < VasOrderSearch.PAGE_SIZE :
-                break
+            page_count -= 1
 
         return article_biz_orders_all
 
@@ -88,6 +88,28 @@ class VasOrderSearch(object):
         start_created = sdate.strftime("%Y-%m-%d 00:00:00") 
         end_created = edate.strftime("%Y-%m-%d 00:00:00") 
         return VasOrderSearch.search_vas_order(article_code, start_created, end_created, nick)
+
+    @classmethod
+    @tao_api_exception(3)
+    def get_var_orders_count(cls,article_code, start_created, end_created,nick=None):
+        """
+        article_code 应用id 
+        start_created ,end_created 为字符格式时间 eg: start_created="2013-07-14 00:00:00"
+        """
+        req = VasOrderSearchRequest()
+        req.article_code = article_code
+        req.start_created = start_created
+        req.end_created = end_created
+        req.page_size =1
+        if nick is not None:
+            req.nick=nick
+        rsp = tao_model_settings.taobao_client.execute(req, '')[0]
+        if not rsp.isSuccess():
+            print rsp.msg
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        return rsp.total_item
+
+
 
 if __name__ == '__main__':
 
