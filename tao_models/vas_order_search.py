@@ -56,7 +56,7 @@ class VasOrderSearch(object):
     def search_vas_order(cls, article_code, start_created, end_created, nick=None):
         """ 从最后一页开始获取订购记录,防止翻页时丢单"""
         order_count=cls.get_var_orders_count(article_code, start_created, end_created)
-        page_count=(order_count-1)/VasOrderSearch.PAGE_SIZEVasOrderSearch.PAGE_SIZE+1
+        page_count=(order_count-1)/VasOrderSearch.PAGE_SIZE+1
         article_biz_orders_all = []
         while page_count>0:
             article_biz_orders = VasOrderSearch._search_vas_order(article_code, start_created, end_created, page_count, nick)
