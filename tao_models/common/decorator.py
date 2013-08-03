@@ -76,7 +76,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
-                    logger.info('exception:*args:%s'%str(args))
+                    logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
