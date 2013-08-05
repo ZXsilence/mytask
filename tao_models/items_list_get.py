@@ -26,12 +26,50 @@ logger = logging.getLogger(__name__)
 
 class ItemsListGet(object):
 
-    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time'
+    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias'
     MAX_NUM_IIDS = 20
+
+    @classmethod
+    def __reverse_props_name(cls, props_name, property_alias):
+        alias_kvs = property_alias.split(';')
+        if len(alias_kvs) == 0:
+            return props_name
+
+        alias_dict = {}
+        for kv in alias_kvs:
+            spliter = kv.split(':')
+            if len(spliter) != 3:
+                continue
+            keyid = spliter[0]
+            valueid = spliter[1]
+            value = spliter[2]
+            if not alias_dict.has_key(keyid):
+                alias_dict[keyid] = {}
+            alias_dict[keyid][valueid] = value
+
+        props_kvs = props_name.split(';')
+        props_name_alias = ''
+        for props_kv in props_kvs:
+            spliter = props_kv.split(':')
+            if len(spliter) != 4:
+                continue
+            keyid = spliter[0]
+            valueid = spliter[1]
+            key = spliter[2]
+            value = spliter[3]
+            if alias_dict.has_key(keyid) and alias_dict[keyid].has_key(valueid):
+                value = alias_dict[keyid][valueid]
+            props_name_alias += keyid + ":" + valueid + ":" + key + ":" + value + ";"
+
+        if len(props_name_alias) >= 1:
+            props_name_alias = props_name_alias[:-1]
+        return props_name_alias
 
     @classmethod
     @tao_api_exception()
     def get_item_list(cls, access_token, num_iids, fields=DEFAULT_FIELDS):
+        if 'props_name' in fields and not 'property_alias' in fields:
+            fields += ',property_alias'
 
         num_iid_list = copy.deepcopy(num_iids)
         total_item_list = []
@@ -55,6 +93,11 @@ class ItemsListGet(object):
 
             logger.debug("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), len(rsp.items)))
             total_item_list.extend(rsp.items)
+
+        if 'props_name' in fields and 'property_alias' in fields:
+            for item in total_item_list:
+                props_name_alias = ItemsListGet.__reverse_props_name(item.props_name, item.property_alias)
+                item.props_name = props_name_alias
 
         return total_item_list
 

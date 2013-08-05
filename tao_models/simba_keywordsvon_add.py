@@ -37,16 +37,20 @@ class SimbaKeywordsvonAdd(object):
 
     @classmethod
     @tao_api_exception()
-    def add_keywords(cls, access_token, nick, adgroup_id, word_price_list,batch_match_scope=4):
+    def add_keywords(cls, access_token, nick, adgroup_id, word_price_list,batch_match_scope=4,  custom_match_scope=False):
         """
         args:
-            word_price_list: [('key', price),('aa', 33)]
+            word_price_list: [('key', price),('aa', 33)] or word_price_list: [('key', price,match_scope),('aa', 33,2)]
+            if custom_match_scope is True look up batch_match_scope from  word_price_list first
         """
-        logger.error("add keywords size [%d]", len(word_price_list)) 
+        logger.info("add keywords size [%d]", len(word_price_list)) 
 
         word_price_dict_list = []
-        for word, price in word_price_list:
-            word_price_dict = {"word":word, "maxPrice":price, "isDefaultPrice":0, "matchScope":batch_match_scope}
+        for add_tuple in word_price_list:
+            if custom_match_scope and len(add_tuple)>=3:
+                word_price_dict = {"word":add_tuple[0], "maxPrice":add_tuple[1], "isDefaultPrice":0, "matchScope":add_tuple[2]}
+            else:
+                word_price_dict = {"word":add_tuple[0], "maxPrice":add_tuple[1], "isDefaultPrice":0, "matchScope":batch_match_scope}
             word_price_dict_list.append(word_price_dict)
 
         req = SimbaKeywordsvonAddRequest()
