@@ -30,6 +30,15 @@ class ItemsOnsaleGet(object):
 
     @classmethod
     @tao_api_exception()
+    def _get_page_items(cls,req,access_token):
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        return rsp
+
+
+    @classmethod
+    @tao_api_exception()
     def get_item_list(cls, access_token, max_pages=30, fields=DEFAULT_FIELDS):
 
         total_item_list = []
@@ -41,15 +50,10 @@ class ItemsOnsaleGet(object):
         req.page_no = 1 
 
         while True:
-
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+            rsp = cls._get_page_items(req,access_token)
             if rsp.items is None:
                 logger.info("get item info, but none return")
                 break 
-
             logger.info("get item info, actually return: %s"%(len(rsp.items)))
             total_item_list.extend(rsp.items)
 
