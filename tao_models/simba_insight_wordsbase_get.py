@@ -95,9 +95,9 @@ class SimbaInsightWordsbaseGet(object):
             word_info['pv'] = 0
             word_info['click'] = 0
             word_info['competition'] = 0
-            word_info['pv_array'] = []
-            word_info['click_array'] = []
-            word_info['competition_array'] = []
+            pv_array = []
+            click_array = []
+            competition_array = []
             cost = 0
             for day_info in in_record_base_list:
                 #print day_info.toDict()
@@ -105,10 +105,13 @@ class SimbaInsightWordsbaseGet(object):
                 word_info['click'] += day_info.click
                 word_info['competition'] += day_info.competition
                 cost += (day_info.avg_price*day_info.click)
-                word_info['pv_array'].append(day_info.pv)
-                word_info['click_array'].append(day_info.click)
-                word_info['competition_array'].append(day_info.competition)
-
+                pv_array.append(day_info.pv)
+                click_array.append(day_info.click)
+                competition_array.append(day_info.competition)
+            word_info['week_data_hash'] = hash(str(pv_array) + str(click_array) + str(competition_array))
+            word_info['pv_array'] = pv_array
+            word_info['click_array'] = click_array
+            word_info['competition_array'] = competition_array
             word_info['avg_price'] = cost/(word_info['click']+0.0000001) 
             word_info['pv'] /= 7.0
             word_info['click'] /= 7.0
