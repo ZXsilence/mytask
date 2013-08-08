@@ -4,6 +4,7 @@ __author__ = 'lym liyangmin@maimiaotech.com'
 import sys
 import os
 import copy
+import datetime
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
@@ -17,6 +18,15 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day):
+    week_data_hash_array=[]
+    for i in xrange(7-compare_days):
+        local_pv_array = pv_array[i:i+compare_days]
+        local_click_array = click_array[i:i+compare_days]
+        local_competition_array = competition_array[i:i+compare_days]
+        week_data_hash_item = hash(day + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
+        week_data_hash_array.append(week_data_hash_item)
+    return week_data_hash_array
 
 class SimbaInsightWordsbaseGet(object):
     
@@ -83,7 +93,7 @@ class SimbaInsightWordsbaseGet(object):
         return word_info_list
 
     @classmethod
-    def get_words_base_one_week_avg_accurate(cls, access_token, nick, words_list):
+    def get_words_base_one_week_avg_accurate(cls, access_token, nick, words_list, compare_days=4):
         'words_list 应该是小写，简体，半角字符串，而且每个word不应该包含逗号'
         in_word_bases = SimbaInsightWordsbaseGet._get_words_base(access_token, 'WEEK', words_list)
         word_info_list = []
@@ -116,7 +126,7 @@ class SimbaInsightWordsbaseGet(object):
             word_info['pv'] /= 7.0
             word_info['click'] /= 7.0
             word_info['competition'] /= 7.0
-
+            word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(datetime.datetime.now().date()))
             word_info_list.append(word_info)
 
         return word_info_list
@@ -133,4 +143,10 @@ if __name__ == '__main__':
             print x.toDict()
             print type(x.date)
             print x.date, x.pv
-
+    week_data_hash_array = get_week_data_hash_array([1,2,3,4,5,6,7], [1,2,3,4,5,6,7], [1,2,3,4,5,6,7], 2, str(datetime.datetime.now().date()))
+    for item in week_data_hash_array:
+        print "hash " + str(item)
+    print "============================="
+    week_data_hash_array = get_week_data_hash_array([1,1,1,2,2,2,2], [1,1,1,2,2,2,2], [1,1,1,2,2,2,2], 2, str(datetime.datetime.now().date()))
+    for item in week_data_hash_array:
+        print "hash " + str(item)
