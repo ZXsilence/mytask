@@ -111,7 +111,7 @@ class SimbaKeywordsPricevonSet(object):
         for i in range(package_num):
             keywordid_prices = wordid_price_list[i*size:(i+1)*size]
             subkeywords = SimbaKeywordsPricevonSet._set_price(access_token, nick, keywordid_prices)
-            keywords.append(subkeywords)
+            keywords.extend(subkeywords)
         return keywords
 
 def test():
