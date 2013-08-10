@@ -76,7 +76,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     res =  func(*args, **kwargs)
                 except ErrorResponseException,e:
-                    logger.info('exception:*args:%s'%str(args))
+                    logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
@@ -116,6 +116,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
                         if e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
+                            raise
+                        elif e.sub_code == "6001":
+                            #user not exist
                             raise
                         else:
                             #其他类型异常，可重试
