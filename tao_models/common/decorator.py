@@ -89,15 +89,18 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         print '重试！'
                         continue
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
-                        wait_seconds = int(e.sub_msg.split(' ')[5])
-                        if wait_seconds >= 180:                              
-                            logger.error("app call limit [%d] seconds"%wait_seconds)
-                            raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
-    
-                        sleep(1)
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+
+                        wait_seconds = int(e.sub_msg.split(' ')[5])
+                        if wait_seconds > 60:
+                            logger.error("app call limit [%d] seconds"%wait_seconds)
+                            raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
+                        else: 
+                            if wait_seconds >= 2:
+                                logger.error("app call limit [%d] seconds, need sleep"%wait_seconds)
+                            sleep(wait_seconds)
                         continue
                     #isp类型错误，只有三种无法重试
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
