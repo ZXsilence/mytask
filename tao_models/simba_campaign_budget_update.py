@@ -39,7 +39,7 @@ class SimbaCampaignBudgetUpdate(object):
 
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
-            logger.error("update budget error nick [%s] campaign_id [%s] msg [%s] sub_msg [%s]" %(nick
+            logger.debug("update budget error nick [%s] campaign_id [%s] msg [%s] sub_msg [%s]" %(nick
                  , str(campaign_id), rsp.msg, rsp.sub_msg))
             if "限额不得小于" in rsp.sub_msg:
                 raise CampaignBudgetLessThanCostException
