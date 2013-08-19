@@ -20,6 +20,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+import traceback
 
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,9 @@ class SimbaKeywordsbyadgroupidGet(object):
         get keyword list for some specific adgroup id
         """
 
+        stack = traceback.extract_stack()
+        logger.info(stack[0])
+        #print stack[0]
         req = SimbaKeywordsbyadgroupidGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
