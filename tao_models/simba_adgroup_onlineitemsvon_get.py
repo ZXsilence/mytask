@@ -32,7 +32,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_items_online(cls, access_token, nick, max_page = 30):
+    def get_items_online(cls, access_token, nick, max_page = 50):
         """
         get items online
 

@@ -39,10 +39,10 @@ class SimbaKeywordsbyadgroupidGet(object):
         req.nick = nick
         req.adgroup_id = adgroup_id
 
-        logger.debug('get keywords info by adgroup_id nick:%s adgroup_id:%s access_token:%s'%(nick, adgroup_id, access_token))
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        logger.info('TARGET get keywords info by adgroup_id nick:%s adgroup_id:%s access_token:%s'%(nick, adgroup_id, access_token))
         return rsp.keywords
 
 
