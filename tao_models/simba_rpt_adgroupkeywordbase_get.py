@@ -46,13 +46,14 @@ class SimbaRptAdgroupkeywordbaseGet(object):
         try:
             i = 0
             stack = traceback.extract_stack()
-            while True:
-                str = stack[i][0]
-                if 'celery' in str:
-                    i += 1
-                    continue
-                logger.info('%s [%s]'%(stack[i],cls))
-                break
+            #while True:
+            #    str = stack[i][0]
+            #    if 'celery' in str:
+            #        i += 1
+            #        continue
+            #    logger.info('%s [%s]'%(stack[i],cls))
+            #    break
+            logger.info('%s [%s]'%(stack,cls))
         except Exception,e:
             logger.info('%s is error ...'%cls)
         req = SimbaRptAdgroupkeywordbaseGetRequest()
