@@ -25,7 +25,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
-
+import traceback
 
 
 
@@ -47,7 +47,11 @@ class SimbaRptAdgroupkeywordeffectGet(object):
     @classmethod
     @tao_api_exception(40)
     def get_rpt_adgroupkeywordeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type, access_token, subway_token):
-        
+        try:
+            stack = traceback.extract_stack()
+            logger.info('%s [%s]'%(stack[0],cls))
+        except Exception,e:
+            logger.info('%s is error ...'%cls)
         req = SimbaRptAdgroupkeywordeffectGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id

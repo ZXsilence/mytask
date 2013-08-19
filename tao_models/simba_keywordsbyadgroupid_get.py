@@ -36,9 +36,11 @@ class SimbaKeywordsbyadgroupidGet(object):
         get keyword list for some specific adgroup id
         """
 
-        stack = traceback.extract_stack()
-        logger.info(stack[0])
-        #print stack[0]
+        try:
+            stack = traceback.extract_stack()
+            logger.info('%s [%s]'%(stack[0],cls))
+        except Exception,e:
+            logger.info('%s is error ...'%cls)
         req = SimbaKeywordsbyadgroupidGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id

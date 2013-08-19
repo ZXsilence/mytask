@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    #logging.config.fileConfig('conf/consolelogger.conf')
 
 from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
@@ -24,6 +24,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.exceptions import  TBDataNotReadyException
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,11 @@ class SimbaRptAdgroupkeywordbaseGet(object):
     @classmethod
     @tao_api_exception(40)
     def get_rpt_adgroupkeywordbase_list(cls, nick, campaingn_id, adgroup_id, start_time, end_time, source, search_type, access_token, subway_token):
-        
+        try:
+            stack = traceback.extract_stack()
+            logger.info('%s [%s]'%(stack[0],cls))
+        except Exception,e:
+            logger.info('%s is error ...'%cls)
         req = SimbaRptAdgroupkeywordbaseGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
@@ -87,7 +92,7 @@ class SimbaRptAdgroupkeywordbaseGet(object):
         
 if __name__ == '__main__':
     #搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH
-    try_list = SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list(3208321, \
+    try_list = SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list('chinchinstyle',3208321, \
                                                                                         99196734, \
                                                                              datetime.date(2012,8,21), \
                                                                              datetime.date(2012,8,21), \
