@@ -57,7 +57,11 @@ class SimbaRptAdgroupkeywordeffectGet(object):
             #        continue
             #    logger.info('%s [%s]'%(stack[i],cls))
             #    break
-            logger.info('%s [%s]'%(stack,cls))
+            stack = traceback.extract_stack()
+            for line in stack:
+                if 'celery' in line or '/usr/lib' in line:
+                    continue
+                logger.info('STACK:%s %s'%(cls,line))
         except Exception,e:
             logger.info('%s is error ...'%cls)
         req = SimbaRptAdgroupkeywordeffectGetRequest()

@@ -39,14 +39,12 @@ class SimbaKeywordsbyadgroupidGet(object):
         try:
             i = 0
             stack = traceback.extract_stack()
-            #while True:
-            #    str = stack[i][0]
-            #    if 'celery' in str:
-            #        i += 1
-            #        continue
-            #    logger.info('%s [%s]'%(stack[i],cls))
-            #    break
-            logger.info('%s [%s]'%(stack,cls))
+            for line in stack:
+                if 'celery' in line or '/usr/lib' in line:
+                    continue
+                #logger.info('STACK:%s [%s]'%(line,cls))
+                #print 'STACK:%s [%s]'%(cls,line)
+                logger.info('STACK:%s %s'%(cls,line))
         except Exception,e:
             print '>>>>>>>>>>>>>>>>>.'
             logger.info('%s is error ...'%cls)
