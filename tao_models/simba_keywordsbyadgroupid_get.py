@@ -37,9 +37,17 @@ class SimbaKeywordsbyadgroupidGet(object):
         """
 
         try:
+            i = 0
             stack = traceback.extract_stack()
-            logger.info('%s [%s]'%(stack[0],cls))
+            while True:
+                str = stack[i][0]
+                if 'celery' in str:
+                    i += 1
+                    continue
+                logger.info('%s [%s]'%(stack[i],cls))
+                break
         except Exception,e:
+            print '>>>>>>>>>>>>>>>>>.'
             logger.info('%s is error ...'%cls)
         req = SimbaKeywordsbyadgroupidGetRequest()
         req.nick = nick

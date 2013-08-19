@@ -44,8 +44,15 @@ class SimbaRptAdgroupkeywordbaseGet(object):
     @tao_api_exception(40)
     def get_rpt_adgroupkeywordbase_list(cls, nick, campaingn_id, adgroup_id, start_time, end_time, source, search_type, access_token, subway_token):
         try:
+            i = 0
             stack = traceback.extract_stack()
-            logger.info('%s [%s]'%(stack[0],cls))
+            while True:
+                str = stack[i][0]
+                if 'celery' in str:
+                    i += 1
+                    continue
+                logger.info('%s [%s]'%(stack[i],cls))
+                break
         except Exception,e:
             logger.info('%s is error ...'%cls)
         req = SimbaRptAdgroupkeywordbaseGetRequest()
