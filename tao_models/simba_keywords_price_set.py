@@ -80,7 +80,7 @@ class SimbaKeywordsPriceSet(object):
             raise ApiExecuteException
 
         if not rsp.isSuccess():
-            logger.error("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
+            logger.debug("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 ,rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
         return rsp.keywords

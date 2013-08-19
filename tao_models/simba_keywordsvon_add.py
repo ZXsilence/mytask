@@ -74,7 +74,7 @@ class SimbaKeywordsvonAdd(object):
                     return []
                 if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
                     return []
-                logger.error("add keywords failed, msg [%s] sub_msg [%s]", rsp.msg, rsp.sub_msg) 
+                logger.debug("add keywords failed, msg [%s] sub_msg [%s]", rsp.msg, rsp.sub_msg) 
                 raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
             keywords.extend(rsp.keywords) 
         return keywords

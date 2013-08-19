@@ -49,7 +49,7 @@ class SimbaAdgroupUpdate(object):
         if not rsp.isSuccess():
             if rsp.sub_msg and u'审核下线的推广组不能手工上下线' in rsp.sub_msg:
                 raise AdgroupAudictFailedException
-            logger.error("update_adgroup error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick, 
+            logger.debug("update_adgroup error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick, 
                 str(adgroup_id), rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 

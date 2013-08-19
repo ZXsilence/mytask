@@ -40,7 +40,7 @@ class SimbaCreativeUpdate(object):
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
-            logger.error("update_creative error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick
+            logger.debug("update_creative error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick
                 , str(adgroup_id), rsp.msg, rsp.sub_msg))
             if '图片不是推广组的图片' in rsp.sub_msg:
                 raise ImgNotBelongToAdgroupException
