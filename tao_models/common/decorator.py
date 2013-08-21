@@ -99,7 +99,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
                         else: 
                             if wait_seconds >= 2:
-                                logger.error("app call limit [%d] seconds, need sleep"%wait_seconds)
+                                logger.debug("app call limit [%d] seconds, need sleep"%wait_seconds)
                             sleep(wait_seconds)
                         continue
                     #isp类型错误，只有三种无法重试
