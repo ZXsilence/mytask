@@ -36,18 +36,18 @@ class SimbaKeywordsbyadgroupidGet(object):
         get keyword list for some specific adgroup id
         """
 
-        try:
-            i = 0
-            stack = traceback.extract_stack()
-            for line in stack:
-                if 'celery' in line or '/usr/lib' in line:
-                    continue
-                #logger.info('STACK:%s [%s]'%(line,cls))
-                #print 'STACK:%s [%s]'%(cls,line)
-                logger.info('STACK:%s %s'%(cls,line))
-        except Exception,e:
-            print '>>>>>>>>>>>>>>>>>.'
-            logger.info('%s is error ...'%cls)
+        #try:
+        #    i = 0
+        #    stack = traceback.extract_stack()
+        #    for line in stack:
+        #        if 'celery' in line or '/usr/lib' in line:
+        #            continue
+        #        #logger.info('STACK:%s [%s]'%(line,cls))
+        #        #print 'STACK:%s [%s]'%(cls,line)
+        #        logger.info('STACK:%s %s'%(cls,line))
+        #except Exception,e:
+        #    print '>>>>>>>>>>>>>>>>>.'
+        #    logger.info('%s is error ...'%cls)
         req = SimbaKeywordsbyadgroupidGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
