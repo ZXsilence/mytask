@@ -46,9 +46,9 @@ class SimbaCampaignPlatformUpdate(object):
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
-            logger.error("update_campaign_channeloptions  error nick [%s] msg [%s] sub_msg [%s]" %(nick
+            logger.debug("update_campaign_channeloptions  error nick [%s] msg [%s] sub_msg [%s]" %(nick
                  , rsp.msg, rsp.sub_msg))
-            if "用户无资格投放定向推广" in rsp.sub_msg:
+            if rsp.sub_msg and "用户无资格投放定向推广" in rsp.sub_msg:
                 raise NonsearchNotAllowedException
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 

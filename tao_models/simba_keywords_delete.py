@@ -53,7 +53,7 @@ class SimbaKeywordsDelete(object):
         if not rsp.isSuccess():
             if rsp.code == 15 and rsp.sub_msg == u'没有属于该客户下指定推广计划的有效关键词可删除':
                 return []
-            logger.error("delete_keywords error nick [%s] msg [%s] sub_msg [%s]" %(nick
+            logger.debug("delete_keywords error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 , rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
         return rsp.keywords

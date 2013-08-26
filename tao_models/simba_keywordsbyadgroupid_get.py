@@ -20,6 +20,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+import traceback
 
 
 logger = logging.getLogger(__name__)
@@ -35,14 +36,26 @@ class SimbaKeywordsbyadgroupidGet(object):
         get keyword list for some specific adgroup id
         """
 
+        #try:
+        #    i = 0
+        #    stack = traceback.extract_stack()
+        #    for line in stack:
+        #        if 'celery' in line or '/usr/lib' in line:
+        #            continue
+        #        #logger.info('STACK:%s [%s]'%(line,cls))
+        #        #print 'STACK:%s [%s]'%(cls,line)
+        #        logger.info('STACK:%s %s'%(cls,line))
+        #except Exception,e:
+        #    print '>>>>>>>>>>>>>>>>>.'
+        #    logger.info('%s is error ...'%cls)
         req = SimbaKeywordsbyadgroupidGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
 
-        logger.debug('get keywords info by adgroup_id nick:%s adgroup_id:%s access_token:%s'%(nick, adgroup_id, access_token))
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        logger.info('TARGET get keywords info by adgroup_id nick:%s adgroup_id:%s access_token:%s'%(nick, adgroup_id, access_token))
         return rsp.keywords
 
 

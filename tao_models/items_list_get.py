@@ -97,9 +97,7 @@ class ItemsListGet(object):
         if 'props_name' in fields and 'property_alias' in fields:
             for item in total_item_list:
                 props_name_alias = ItemsListGet.__reverse_props_name(item.props_name, item.property_alias)
-                print "a:", item.props_name
                 item.props_name = props_name_alias
-                print "b:", item.props_name
 
         return total_item_list
 

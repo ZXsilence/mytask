@@ -81,16 +81,26 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
+                    if code == 530 and 'isp.top-remote-connection-timeout' in e.sub_code:
+                        if retry_times == MAX_RETRY_TIMES:
+                            print '530 timeout重试失败！'
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        print '重试！'
+                        continue
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
-                        wait_seconds = int(e.sub_msg.split(' ')[5])
-                        if wait_seconds >= 180:                              
-                            logger.error("app call limit [%d] seconds"%wait_seconds)
-                            raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
-    
-                        sleep(1)
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+
+                        wait_seconds = int(e.sub_msg.split(' ')[5])
+                        if wait_seconds > 60:
+                            logger.error("app call limit [%d] seconds"%wait_seconds)
+                            raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
+                        else: 
+                            if wait_seconds >= 2:
+                                logger.debug("app call limit [%d] seconds, need sleep"%wait_seconds)
+                            sleep(wait_seconds)
                         continue
                     #isp类型错误，只有三种无法重试
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
@@ -109,6 +119,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
                         if e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
+                            raise
+                        elif e.sub_code == "6001":
+                            #user not exist
                             raise
                         else:
                             #其他类型异常，可重试

@@ -93,7 +93,7 @@ class SimbaKeywordsPricevonSet(object):
             raise ApiExecuteException
 
         if not rsp.isSuccess():
-            logger.error("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
+            logger.debug("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 ,rsp.msg, rsp.sub_msg))
             if rsp.sub_msg and '关键词不能为空' in rsp.sub_msg:
                 return []
@@ -111,7 +111,7 @@ class SimbaKeywordsPricevonSet(object):
         for i in range(package_num):
             keywordid_prices = wordid_price_list[i*size:(i+1)*size]
             subkeywords = SimbaKeywordsPricevonSet._set_price(access_token, nick, keywordid_prices)
-            keywords.append(subkeywords)
+            keywords.extend(subkeywords)
         return keywords
 
 def test():
