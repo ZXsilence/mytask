@@ -18,13 +18,22 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day):
+def get_avg(array):
+    sum = 0
+    for a in array:
+        sum = sum + a
+    return sum/len(array)
+def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day, pv_threshold):
     week_data_hash_array=[]
     for i in xrange(7-compare_days):
         local_pv_array = pv_array[i:i+compare_days]
         local_click_array = click_array[i:i+compare_days]
         local_competition_array = competition_array[i:i+compare_days]
-        week_data_hash_item = hash(day + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
+        local_pv = get_avg(local_pv_array)
+        if local_pv <= pv_threshold:
+            week_data_hash_item = 0
+        else:
+            week_data_hash_item = hash(day + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
         week_data_hash_array.append(week_data_hash_item)
     return week_data_hash_array
 
@@ -93,10 +102,15 @@ class SimbaInsightWordsbaseGet(object):
         return word_info_list
 
     @classmethod
-    def get_words_base_one_week_avg_accurate(cls, access_token, nick, words_list, compare_days=4):
+    def get_words_base_one_week_avg_accurate(cls, access_token, nick, words_list, compare_days=5, pv_threshold=5, time = 'WEEK'):
         'words_list 应该是小写，简体，半角字符串，而且每个word不应该包含逗号'
-        in_word_bases = SimbaInsightWordsbaseGet._get_words_base(access_token, 'WEEK', words_list)
+        in_word_bases = SimbaInsightWordsbaseGet._get_words_base(access_token, time, words_list)
         word_info_list = []
+        total_days = 0
+        if time == 'WEEK':
+            total_days = 7.0
+        else: #time == 'MONTH':
+            total_days = 30.0
         for word_base in in_word_bases:
             word = word_base.word
             in_record_base_list = word_base.in_record_base_list
@@ -122,11 +136,15 @@ class SimbaInsightWordsbaseGet(object):
             word_info['pv_array'] = pv_array
             word_info['click_array'] = click_array
             word_info['competition_array'] = competition_array
+            #now = datetime.datetime.now()
+            #word_info['week_data_date'] = now
+            word_info['week_last_date'] = in_record_base_list[0].date
             word_info['avg_price'] = cost/(word_info['click']+0.0000001) 
-            word_info['pv'] /= 7.0
-            word_info['click'] /= 7.0
-            word_info['competition'] /= 7.0
-            word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(datetime.datetime.now().date()))
+            word_info['pv'] /= total_days
+            word_info['click'] /= total_days
+            word_info['competition'] /= total_days
+            if time == 'WEEK':
+                word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(word_info['week_last_date'].date()), pv_threshold)
             word_info_list.append(word_info)
 
         return word_info_list
