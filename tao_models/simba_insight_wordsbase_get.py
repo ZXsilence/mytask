@@ -52,13 +52,13 @@ def check_words_same(item):
     same = 0
     if is_same(item['pv_array'], item['click_array']):
         same = same + 1
-        logger.info("pv == click " + item['_id'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
+        logger.info("pv == click " + item['word'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
     if is_same(item['click_array'], item['competition_array']):
         same = same + 1
-        logger.info("click == competition " + item['_id'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
+        logger.info("click == competition " + item['word'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
     if is_same(item['competition_array'], item['pv_array']):
         same = same + 1
-        logger.info("competition == pv " + item['_id'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
+        logger.info("competition == pv " + item['word'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
     if same > 0:
         error_msg=traceback.format_exc()
         logger.info("bad data %s", error_msg)
@@ -172,6 +172,8 @@ class SimbaInsightWordsbaseGet(object):
             word_info['competition'] /= total_days
             if time == 'WEEK':
                 word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(word_info['week_last_date'].date()), pv_threshold)
+            if check_words_same(word_info) > 0 :
+                logger.info("error in SimbaInsightWordsbaseGet")
             word_info_list.append(word_info)
 
         return word_info_list
