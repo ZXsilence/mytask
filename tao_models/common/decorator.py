@@ -81,7 +81,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
-                    if code == 530 and 'isp.top-remote-connection-timeout' in e.sub_code:
+                    if code == 530 and \
+                       ('isp.top-remote-connection-timeout' in e.sub_code or 'isp.remote-connection-error' in e.sub_code):
                         if retry_times == MAX_RETRY_TIMES:
                             print '530 timeout重试失败！'
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
