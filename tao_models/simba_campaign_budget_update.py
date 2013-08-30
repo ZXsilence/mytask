@@ -41,8 +41,8 @@ class SimbaCampaignBudgetUpdate(object):
         if not rsp.isSuccess():
             logger.debug("update budget error nick [%s] campaign_id [%s] msg [%s] sub_msg [%s]" %(nick
                  , str(campaign_id), rsp.msg, rsp.sub_msg))
-            if "限额不得小于" in rsp.sub_msg:
-                raise CampaignBudgetLessThanCostException
+            if "Invalid arguments:budget"  in rsp.responseBody or (rsp.sub_msg and  "限额不得小于" in rsp.sub_msg):
+                raise CampaignBudgetLessThanCostException(msg="ttt",sub_msg="bbb")
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.campaign_budget
 
