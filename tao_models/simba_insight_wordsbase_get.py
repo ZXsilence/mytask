@@ -174,8 +174,8 @@ class SimbaInsightWordsbaseGet(object):
             word_info['competition'] /= total_days
             if time == 'WEEK':
                 word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(word_info['week_last_date'].date()), pv_threshold)
-            if check_words_same(word_info) > 0 :
-                logger.info("error in SimbaInsightWordsbaseGet")
+            #if check_words_same(word_info) > 0 :
+            #    logger.info("error in SimbaInsightWordsbaseGet")
             word_info_list.append(word_info)
 
         return word_info_list
