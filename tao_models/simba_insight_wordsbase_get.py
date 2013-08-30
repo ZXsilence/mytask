@@ -23,9 +23,9 @@ def get_avg(array):
     for a in array:
         sum = sum + a
     return sum/len(array)
-def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day, pv_threshold):
+def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day, pv_threshold, total_days = 7):
     week_data_hash_array=[]
-    for i in xrange(7-compare_days):
+    for i in xrange(total_days - compare_days + 1):
         local_pv_array = pv_array[i:i+compare_days]
         local_click_array = click_array[i:i+compare_days]
         local_competition_array = competition_array[i:i+compare_days]
