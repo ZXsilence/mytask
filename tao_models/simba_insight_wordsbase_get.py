@@ -50,6 +50,8 @@ def is_same(list1, list2):
 
 def check_words_same(item):
     same = 0
+    if item['pv'] < 5:
+        return same
     if is_same(item['pv_array'], item['click_array']):
         same = same + 1
         logger.info("comm_lib pv == click " + item['word'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
