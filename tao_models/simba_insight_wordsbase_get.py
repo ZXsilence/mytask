@@ -18,6 +18,9 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+import traceback
+import logging
+logger = logging.getLogger(__name__)
 def get_avg(array):
     sum = 0
     for a in array:
@@ -36,6 +39,30 @@ def get_week_data_hash_array(pv_array, click_array, competition_array, compare_d
             week_data_hash_item = hash(day + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
         week_data_hash_array.append(week_data_hash_item)
     return week_data_hash_array
+
+def is_same(list1, list2):
+    if len(list1) != len(list2):
+        return False
+    for i in xrange(len(list1)):
+        if list1[i] != list2[i]:
+            return False
+    return True
+
+def check_words_same(item):
+    same = 0
+    if is_same(item['pv_array'], item['click_array']):
+        same = same + 1
+        logger.info("pv == click " + item['_id'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
+    if is_same(item['click_array'], item['competition_array']):
+        same = same + 1
+        logger.info("click == competition " + item['_id'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
+    if is_same(item['competition_array'], item['pv_array']):
+        same = same + 1
+        logger.info("competition == pv " + item['_id'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
+    if same > 0:
+        error_msg=traceback.format_exc()
+        logger.info("bad data %s", error_msg)
+    return same
 
 class SimbaInsightWordsbaseGet(object):
     
