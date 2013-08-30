@@ -52,16 +52,13 @@ def check_words_same(item):
     same = 0
     if is_same(item['pv_array'], item['click_array']):
         same = same + 1
-        logger.info("pv == click " + item['word'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
-        print ("pv == click " + item['word'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
+        logger.info("comm_lib pv == click " + item['word'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
     if is_same(item['click_array'], item['competition_array']):
         same = same + 1
-        logger.info("click == competition " + item['word'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
-        print ("click == competition " + item['word'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
+        logger.info("comm_lib click == competition " + item['word'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
     if is_same(item['competition_array'], item['pv_array']):
         same = same + 1
-        logger.info("competition == pv " + item['word'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
-        print ("competition == pv " + item['word'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
+        logger.info("comm_lib competition == pv " + item['word'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
     if same > 0:
         error_msg=traceback.format_exc()
         logger.info("bad data %s", error_msg)
