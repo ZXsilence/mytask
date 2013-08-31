@@ -168,7 +168,7 @@ class SimbaInsightWordsbaseGet(object):
             #now = datetime.datetime.now()
             #word_info['week_data_date'] = now
             word_info['week_last_date'] = in_record_base_list[0].date
-            end_date = datetime.datetime.now() - datetime.timedelta(0, 3600*24*2)
+            end_date = datetime.datetime.now() - datetime.timedelta(0, 3600*24*3)
             if in_record_base_list[0].date < end_date:
                 for i in xrange(len(in_record_base_list)):
                     logger.info("old_date %s : %s", str(in_record_base_list[i].date), word_info['word'])
