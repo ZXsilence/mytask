@@ -29,6 +29,7 @@ def get_avg(array):
 def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day, pv_threshold = 5, total_days = 7):
     week_data_hash_array=[]
     for i in xrange(total_days - compare_days + 1):
+        real_day = day - datetime.timedelta(days=i)
         local_pv_array = pv_array[i:i+compare_days]
         local_click_array = click_array[i:i+compare_days]
         local_competition_array = competition_array[i:i+compare_days]
@@ -36,7 +37,7 @@ def get_week_data_hash_array(pv_array, click_array, competition_array, compare_d
         if local_pv <= pv_threshold:
             week_data_hash_item = 0
         else:
-            week_data_hash_item = hash(day + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
+            week_data_hash_item = hash(str(real_day) + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
         week_data_hash_array.append(week_data_hash_item)
     return week_data_hash_array
 
@@ -177,7 +178,7 @@ class SimbaInsightWordsbaseGet(object):
             word_info['click'] /= total_days
             word_info['competition'] /= total_days
             if time == 'WEEK':
-                word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(word_info['week_last_date'].date()), pv_threshold)
+                word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, word_info['week_last_date'], pv_threshold)
             #if check_words_same(word_info) > 0 :
             #    logger.info("error in SimbaInsightWordsbaseGet")
             word_info_list.append(word_info)
@@ -196,10 +197,10 @@ if __name__ == '__main__':
             print x.toDict()
             print type(x.date)
             print x.date, x.pv
-    week_data_hash_array = get_week_data_hash_array([1,2,3,4,5,6,7], [1,2,3,4,5,6,7], [1,2,3,4,5,6,7], 2, str(datetime.datetime.now().date()))
+    week_data_hash_array = get_week_data_hash_array([1,2,3,4,5,6,7], [1,2,3,4,5,6,7], [1,2,3,4,5,6,7], 2, datetime.datetime.now())
     for item in week_data_hash_array:
         print "hash " + str(item)
     print "============================="
-    week_data_hash_array = get_week_data_hash_array([1,1,1,2,2,2,2], [1,1,1,2,2,2,2], [1,1,1,2,2,2,2], 2, str(datetime.datetime.now().date()))
+    week_data_hash_array = get_week_data_hash_array([1,1,1,2,2,2,2], [1,1,1,2,2,2,2], [1,1,1,2,2,2,2], 2, datetime.datetime.now())
     for item in week_data_hash_array:
         print "hash " + str(item)
