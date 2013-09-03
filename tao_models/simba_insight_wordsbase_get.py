@@ -18,14 +18,17 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+import traceback
+import logging
+logger = logging.getLogger(__name__)
 def get_avg(array):
     sum = 0
     for a in array:
         sum = sum + a
     return sum/len(array)
-def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day, pv_threshold):
+def get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, day, pv_threshold = 5, total_days = 7):
     week_data_hash_array=[]
-    for i in xrange(7-compare_days):
+    for i in xrange(total_days - compare_days + 1):
         local_pv_array = pv_array[i:i+compare_days]
         local_click_array = click_array[i:i+compare_days]
         local_competition_array = competition_array[i:i+compare_days]
@@ -36,6 +39,32 @@ def get_week_data_hash_array(pv_array, click_array, competition_array, compare_d
             week_data_hash_item = hash(day + str(local_pv_array) + str(local_click_array) + str(local_competition_array))
         week_data_hash_array.append(week_data_hash_item)
     return week_data_hash_array
+
+def is_same(list1, list2):
+    if len(list1) != len(list2):
+        return False
+    for i in xrange(len(list1)):
+        if list1[i] != list2[i]:
+            return False
+    return True
+
+def check_words_same(item):
+    same = 0
+    if item['pv'] < 5:
+        return same
+    if is_same(item['pv_array'], item['click_array']):
+        same = same + 1
+        logger.info("comm_lib pv == click " + item['word'] + " " + str(id(item['pv_array'])) + " " + str(id(item['click_array'])))
+    if is_same(item['click_array'], item['competition_array']):
+        same = same + 1
+        logger.info("comm_lib click == competition " + item['word'] + " " + str(id(item['click_array'])) + " " + str(id(item['competition_array'])))
+    if is_same(item['competition_array'], item['pv_array']):
+        same = same + 1
+        logger.info("comm_lib competition == pv " + item['word'] + " " + str(id(item['competition_array'])) + " " + str(id(item['pv_array'])))
+    if same > 0:
+        error_msg=traceback.format_exc()
+        logger.info("bad data %s", error_msg)
+    return same
 
 class SimbaInsightWordsbaseGet(object):
     
@@ -139,12 +168,18 @@ class SimbaInsightWordsbaseGet(object):
             #now = datetime.datetime.now()
             #word_info['week_data_date'] = now
             word_info['week_last_date'] = in_record_base_list[0].date
+            end_date = datetime.datetime.now() - datetime.timedelta(0, 3600*24*3)
+            #if in_record_base_list[0].date < end_date:
+            #    for i in xrange(len(in_record_base_list)):
+            #        logger.info("old_date %s : %s", str(in_record_base_list[i].date), word_info['word'])
             word_info['avg_price'] = cost/(word_info['click']+0.0000001) 
             word_info['pv'] /= total_days
             word_info['click'] /= total_days
             word_info['competition'] /= total_days
             if time == 'WEEK':
                 word_info['week_data_hash_array'] = get_week_data_hash_array(pv_array, click_array, competition_array, compare_days, str(word_info['week_last_date'].date()), pv_threshold)
+            #if check_words_same(word_info) > 0 :
+            #    logger.info("error in SimbaInsightWordsbaseGet")
             word_info_list.append(word_info)
 
         return word_info_list
