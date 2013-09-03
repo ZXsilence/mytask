@@ -88,7 +88,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         continue
                     if code == TaoOpenErrorCode.APP_CALL_LIMIT :
                         if retry_times == MAX_RETRY_TIMES:
-                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            logger.warning('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
 
                         wait_seconds = int(e.sub_msg.split(' ')[5])
