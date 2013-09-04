@@ -51,6 +51,7 @@ class SimbaKeywordsbyadgroupidGet(object):
         req = SimbaKeywordsbyadgroupidGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
+        print "adgroup_id:", adgroup_id
 
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
