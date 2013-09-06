@@ -102,6 +102,26 @@ class IncrementItemsGet(object):
 
 
     @classmethod
+    @tao_api_exception()
+    def _get_items_increment_count(cls, access_token, nick, start_modified, end_modified):
+
+        notify_item_list = []
+
+        req = IncrementItemsGetRequest()
+        req.nick = nick
+        req.page_size =1
+        req.page_no = 1
+        if start_modified:
+            req.start_modified = start_modified.strftime("%Y-%m-%d %H:%M:%S")
+        if end_modified:
+            req.end_modified = end_modified.strftime("%Y-%m-%d %H:%M:%S")
+
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        return  rsp.total_results
+
+    @classmethod
     def get_items_incremental_changed(cls, access_token, nick, start_time, end_time):
         notify_item_list = []
 
@@ -113,6 +133,14 @@ class IncrementItemsGet(object):
         return notify_item_list
 
 
+    @classmethod
+    def get_items_incremental_changed_count(cls, access_token, nick, start_time, end_time):
+        notify_item_count =0
+        time_range = cls._split_time(start_time, end_time)
+        for s,e in time_range:
+            sub_count = cls._get_items_increment_count(access_token, nick, s, e)
+            notify_item_count += sub_count
+        return notify_item_count
 
 
 def test_split_time():
