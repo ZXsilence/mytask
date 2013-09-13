@@ -74,10 +74,7 @@ class SimbaKeywordsPriceSet(object):
         req = SimbaKeywordsPriceSetRequest()
         req.nick = nick
         req.keywordid_prices = keywordid_prices
-        try:
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        except Exception, data:
-            raise ApiExecuteException
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.debug("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
