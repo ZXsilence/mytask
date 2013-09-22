@@ -100,8 +100,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                                 logger.debug("app call limit [%d] seconds, need sleep"%wait_seconds)
                             sleep(wait_seconds)
                         continue
-                    #isp类型错误，只有三种无法重试
-                    elif code == TaoOpenErrorCode.REMOTE_ERROR_700:
+                    #isp为开头的错误，只有三种无法重试
+                    elif code == TaoOpenErrorCode.REMOTE_ERROR_700 or (e.sub_code and e.sub_code.startswith('isp')):
                         if e.sub_code and u'isp.null-pointer-exception' in e.sub_code:
                             raise #重试无法解决此类异常
                         if e.sub_code and u'isp.top-parse-error' in e.sub_code:

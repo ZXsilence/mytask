@@ -120,11 +120,7 @@ class SimbaAdgroupsGet(object):
         req.nick = nick
         req.campaign_id = campaign_id
         req.page_no = 1 
-        try:
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        except Exception, data:
-            raise ApiExecuteException
-
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         if not rsp.isSuccess():
             logger.debug("get_adgroup_count error nick [%s] msg [%s] sub_msg [%s]" %(nick, rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
