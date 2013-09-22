@@ -127,8 +127,8 @@ class SimbaInsightCatsforecastGet(object):
     @classmethod
     def get_words_cat_forecast_2(cls, access_token, words_list):
         'words_list 应该是小写，简体，半角字符串，而且每个word不应该包含逗号, 数组不小于50'
-        if len(words_list) < 50:
-            return None 
+        #if len(words_list) < 50:
+        #    return None 
 
         words_list_tmp = []
         for i in range(len(words_list)):
@@ -168,6 +168,41 @@ class SimbaInsightCatsforecastGet(object):
         
         return cat_forecast_list 
 
+    @classmethod
+    def get_words_cat_forecast_3(cls, access_token, words_list_in):
+        'words_list 应该是小写，简体，半角字符串，而且每个word不应该包含逗号, 数组不小于50'
+        words_list = []
+        for word in words_list_in:
+            if type(word) == type(''):
+                word = word.decode('utf8')
+            word = word.lower()
+            words_list.append(word)
+
+        words_list_tmp = []
+        for i in range(len(words_list)):
+            words_list_tmp.append(words_list[i])
+            words_list_tmp.append(cls.special_word_list[i])
+
+        words_str = ','.join(words_list_tmp)
+        in_category_tops = SimbaInsightCatsforecastGet._get_words_cat_forecast(access_token, words_str)
+
+        cat_forecast_list = []
+        cat_forecast_dict = {}
+        for i_n_category_top in in_category_tops:
+            word_cat_forecast_list = []
+            categroy_word = i_n_category_top.categroy_word
+            if i_n_category_top:
+                i_n_category_top_dict = i_n_category_top.toDict()
+                if i_n_category_top_dict.has_key('category_child_top_list'):
+                    for element in i_n_category_top_dict['category_child_top_list']:
+                        word_cat_forecast_list.append(element.category_id)
+            cat_forecast_dict[categroy_word] = word_cat_forecast_list
+
+        for word in words_list:
+            cat_forecast_list.append(cat_forecast_dict.get(word, []))
+
+        return cat_forecast_list 
+
 if __name__ == '__main__':
     access_token = '620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117' 
     words = ['Mp3', 'mp4播放器', '手机', '减肥茶', 'mp5', '播放器mp4', '手机电池', '电池手机', '新款女装连衣裙笔记本', '你好']
@@ -175,8 +210,11 @@ if __name__ == '__main__':
     #cat_forecast_list  = SimbaInsightCatsforecastGet.get_words_cat_forecast_1(access_token, words)
     #for i in range(len(words)):
     #    print words[i], cat_forecast_list[i]
-    print "============="
 
     cat_forecast_list = SimbaInsightCatsforecastGet.get_words_cat_forecast_2(access_token, words) 
+    for i in range(len(words)):
+        print words[i], cat_forecast_list[i]
+    print "============="
+    cat_forecast_list = SimbaInsightCatsforecastGet.get_words_cat_forecast_3(access_token, words) 
     for i in range(len(words)):
         print words[i], cat_forecast_list[i]
