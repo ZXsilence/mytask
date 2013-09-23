@@ -37,8 +37,6 @@ class SimbaCampaignUpdate(object):
         req = SimbaCampaignUpdateRequest()
         req.nick = nick
         req.campaign_id = campaign_id
-        if len(title)>20:
-            title = title[0:19]
         req.title = title
         req.online_status = online_status
 
