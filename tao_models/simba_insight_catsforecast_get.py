@@ -178,12 +178,7 @@ class SimbaInsightCatsforecastGet(object):
             word = word.lower()
             words_list.append(word)
 
-        words_list_tmp = []
-        for i in range(len(words_list)):
-            words_list_tmp.append(words_list[i])
-            words_list_tmp.append(cls.special_word_list[i])
-
-        words_str = ','.join(words_list_tmp)
+        words_str = ','.join(words_list)
         in_category_tops = SimbaInsightCatsforecastGet._get_words_cat_forecast(access_token, words_str)
 
         cat_forecast_list = []
