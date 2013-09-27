@@ -44,10 +44,7 @@ class SimbaAdgroupAdd(object):
         req.img_url = img_url
 
         #first_call
-        try:
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        except Exception, data:
-            raise ApiExecuteException
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
             logger.debug("nick [%s] add adgroup failed, msg [%s] sub_msg [%s]", nick, rsp.msg, rsp.sub_msg) 

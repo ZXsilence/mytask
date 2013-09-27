@@ -67,6 +67,20 @@ class ItemsListGet(object):
 
     @classmethod
     @tao_api_exception()
+    def _get_sub_items(cls,access_token,sub_num_iid_list,fields):
+        req = ItemsListGetRequest()
+        req.fields = fields
+        req.num_iids = ",".join([str(num_iid) for num_iid in sub_num_iid_list])
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        if rsp.items is None:
+            logger.info("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), 0))
+            return None 
+        return rsp
+
+    @classmethod
+    @tao_api_exception()
     def get_item_list(cls, access_token, num_iids, fields=DEFAULT_FIELDS):
         if 'props_name' in fields and not 'property_alias' in fields:
             fields += ',property_alias'
@@ -74,23 +88,19 @@ class ItemsListGet(object):
         num_iid_list = copy.deepcopy(num_iids)
         total_item_list = []
 
-        req = ItemsListGetRequest()
-        req.fields = fields
-
         while num_iid_list:
             sub_num_iid_list = num_iid_list[:cls.MAX_NUM_IIDS]
             num_iid_list = num_iid_list[cls.MAX_NUM_IIDS:]
-
-            req.num_iids = ",".join([str(num_iid) for num_iid in sub_num_iid_list])
-
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-            if rsp.items is None:
-                logger.info("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), 0))
+            try:
+                rsp = ItemsListGet._get_sub_items(access_token,sub_num_iid_list,fields)
+            except Exception,e:
+                if 'isp.top-remote-connection-timeout-tmall' in str(e) or 'isp.top-remote-service-unavailable-tmall' in str(e):
+                    print 'continue!',str(e)
+                    continue
+                else:
+                    raise e
+            if rsp is None:
                 continue
-
             logger.debug("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), len(rsp.items)))
             total_item_list.extend(rsp.items)
 
@@ -100,7 +110,6 @@ class ItemsListGet(object):
                 item.props_name = props_name_alias
 
         return total_item_list
-
 
 
 def test():

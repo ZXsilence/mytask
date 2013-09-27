@@ -17,3 +17,5 @@ class WordDeleteType(object):
     LOW_PV_MAX_PRICE = 11
     LOW_PV_BEST_POSITION = 12
     
+    FILTER_WORDS = 13
+    LOW_RELEVANCE = 14
