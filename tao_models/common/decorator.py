@@ -93,7 +93,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                         wait_seconds = int(e.sub_msg.split(' ')[5])
                         if wait_seconds > 60:
-                            logger.error("app call limit [%d] seconds"%wait_seconds)
+                            logger.warning("app call limit [%d] seconds"%wait_seconds)
                             raise AppCallLimitedAllDayException("app call limit [%d] seconds"%wait_seconds)
                         else: 
                             if wait_seconds >= 2:
