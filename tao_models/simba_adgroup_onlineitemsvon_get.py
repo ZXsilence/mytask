@@ -65,7 +65,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         item_online_list.extend(rsp.page_item.item_list)
 
         # continue to call if more than one page
-        total_pages = (rsp.page_item.total_item + cls.PAGE_SIZE - 1)/cls.PAGE_SIZE
+        total_pages = (rsp.page_item.total_item - 1)/cls.PAGE_SIZE + 1
         if total_pages > max_page:
             total_pages = max_page
         for page_no in range(2,total_pages+1):
@@ -74,6 +74,8 @@ class SimbaAdgroupOnlineitemsvonGet(object):
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             item_online_list.extend(rsp.page_item.item_list)
+            if len(item_online_list)>=10000:
+                break
 
         logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
 
@@ -103,7 +105,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         item_online_list.extend(rsp.page_item.item_list)
 
         # continue to call if more than one page
-        total_pages = (rsp.page_item.total_item + cls.PAGE_SIZE - 1)/cls.PAGE_SIZE
+        total_pages = (rsp.page_item.total_item  - 1)/cls.PAGE_SIZE + 1
         if total_pages > max_page:
             total_pages = max_page
         for page_no in range(2,total_pages+1):
@@ -113,6 +115,8 @@ class SimbaAdgroupOnlineitemsvonGet(object):
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
             item_online_list.extend(rsp.page_item.item_list)
 
+            if len(item_online_list)>=10000:
+                break
         logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
 
         return {"item_list":item_online_list, "total_item":rsp.page_item.total_item}
