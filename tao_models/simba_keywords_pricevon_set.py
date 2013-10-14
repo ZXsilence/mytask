@@ -9,6 +9,7 @@ import  copy
 import json
 import logging
 import logging.config
+import copy
 
 if __name__ == '__main__':
     #logging.config.fileConfig('conf/consolelogger.conf')
@@ -96,9 +97,26 @@ class SimbaKeywordsPricevonSet(object):
                 return []
             raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
         return rsp.keywords
+   
+    @classmethod
+    def _del_duplicates(cls,wordid_price_list):
+        #去重
+        kids_list = []
+        return_list = []
+        for item in wordid_price_list:
+            keyword_id = item[0]
+            if keyword_id in kids_list:
+                continue
+            else:
+                kids_list.append(keyword_id)
+                return_list.append(item)
+        return return_list 
+
 
     @classmethod
     def set_price(cls, access_token, nick, wordid_price_list):
+        wordid_price_list = SimbaKeywordsPricevonSet._del_duplicates(wordid_price_list)
+
         size = PageSize.KEYWORDS_SET
         package_num = len(wordid_price_list)/size+ 1
         if len(wordid_price_list) % size== 0:
