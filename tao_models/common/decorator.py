@@ -81,12 +81,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
-                    if code == 530 and e.sub_code.startswith('isp'): 
+                    if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
-                    if code == TaoOpenErrorCode.APP_CALL_LIMIT :
+                    elif code == TaoOpenErrorCode.APP_CALL_LIMIT :
                         if retry_times == MAX_RETRY_TIMES:
                             logger.warning('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
