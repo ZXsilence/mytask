@@ -61,6 +61,9 @@ class SimbaKeywordsPricevonSet(object):
 
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
+                if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
+                    logger.warning('[%s] keywords_add failed,keywordid_prices:%s  :%s,%s'%(nick,keyword_price_str,rsp.msg,rsp.sub_msg))
+                    continue
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
             keywords.extend(rsp.keywords)
@@ -89,11 +92,11 @@ class SimbaKeywordsPricevonSet(object):
         req.nick = nick
         req.keywordid_prices = json.dumps(word_price_dict_list) 
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
         if not rsp.isSuccess():
             logger.debug("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 ,rsp.msg, rsp.sub_msg))
-            if rsp.sub_msg and '关键词不能为空' in rsp.sub_msg:
+            if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
+                logger.warning('[%s] keywords_add failed,keywordid_prices:%s  :%s,%s'%(nick,word_price_dict_list,rsp.msg,rsp.sub_msg))
                 return []
             raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
         return rsp.keywords
@@ -139,10 +142,10 @@ def test():
 def test2():
     access_token = '620181005f776f4b1bdfd5952ec7cfa172e008384c567a2520500325'
     nick = 'chinchinstyle'
-    word_price_list = [{'kid':24497482990, 'price':254, 'match_scope':1}
+    word_price_list = [{'kid':1111111, 'price':254, 'match_scope':1}
             ,{'kid':24497482994, 'price':450, 'match_scope':4}]
     SimbaKeywordsPricevonSet.set_keywords_price(access_token, nick, word_price_list)
 
 if __name__ == '__main__':
-    #test()
-    test2()
+    test()
+    #test2()
