@@ -86,6 +86,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
+                    #掌中宝接口存在时间戳参数无效的情况，进行重试
+                    elif code == 31 and e.msg and 'Invalid timestamp' in e.msg:
+                        if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        continue
                     elif code == TaoOpenErrorCode.APP_CALL_LIMIT :
                         if retry_times == MAX_RETRY_TIMES:
                             logger.warning('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
