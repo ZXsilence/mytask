@@ -29,7 +29,7 @@ class SimbaAdgroupAdd(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(5)
+    @tao_api_exception(20)
     def add_adgroup(cls, access_token, nick, campaign_id, item_id, default_price, title, img_url):
         """
         add adgroup to campaign
