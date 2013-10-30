@@ -26,7 +26,7 @@ class SimbaLoginAuthsignGet(object):
     """
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(20)
     def get_subway_token(cls, access_token, nick):
         """
         given a campaign_id, get the adgroup list in this campaign
