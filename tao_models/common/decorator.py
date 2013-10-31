@@ -81,12 +81,31 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
-                    if code == 530 and e.sub_code.startswith('isp'): 
+                    if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
-                    if code == TaoOpenErrorCode.APP_CALL_LIMIT :
+                    #存在“未找到指定商品”的问题，经测试部分接口可以重试解决
+                    elif code == 15 and e.sub_msg and '未找到指定商品' in e.sub_msg:
+                        sleep(5)
+                        if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        continue
+                    #掌中宝接口存在时间戳参数无效的情况，进行重试
+                    elif code == 31 and e.msg and 'Invalid timestamp' in e.msg:
+                        if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        continue
+                    elif code == 520 and e.sub_msg and '3分钟后再查询' in e.sub_msg:
+                        if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        sleep(180)
+                        continue
+                    elif code == TaoOpenErrorCode.APP_CALL_LIMIT :
                         if retry_times == MAX_RETRY_TIMES:
                             logger.warning('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))

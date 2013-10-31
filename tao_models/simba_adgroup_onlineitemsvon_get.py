@@ -122,7 +122,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         return {"item_list":item_online_list, "total_item":rsp.page_item.total_item}
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(10)
     def get_item_count(cls, access_token, nick):
         """
         """
