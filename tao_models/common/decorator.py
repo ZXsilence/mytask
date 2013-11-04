@@ -150,7 +150,11 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             #其他类型异常，可重试
                             sleep(5)
                             if retry_times == MAX_RETRY_TIMES:
-                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                #isp.internal-error 错误不打印error
+                                if e.sub_code and 'isp.internal-error' in e.sub_code:
+                                    logger.info('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                else:
+                                    logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                                 raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                             continue
 
