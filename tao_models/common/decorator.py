@@ -86,6 +86,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
+                    #ShopGet.get_shop偶尔会出现用户对应店铺不存在的错误，重试可以解决
+                    elif code == 560 and e.sub_msg == '用户对应的店铺不存在':
+                        if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        continue
                     #存在“未找到指定商品”的问题，经测试部分接口可以重试解决
                     elif code == 15 and e.sub_msg and '未找到指定商品' in e.sub_msg:
                         sleep(5)
