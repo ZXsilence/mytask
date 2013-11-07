@@ -133,9 +133,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise #重试无法解决此类异常
                         if e.sub_code and u'isp.top-mapping-parse-error' in e.sub_code:
                             raise #重试无法解决此类异常
-                        sleep(5)
+                        sleep(3)
                         if retry_times == MAX_RETRY_TIMES:
-                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            if e.sub_code and 'isp.internal-error' in e.sub_code:
+                                logger.warning('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            else:
+                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
