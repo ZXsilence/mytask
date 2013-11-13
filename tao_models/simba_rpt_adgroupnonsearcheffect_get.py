@@ -53,10 +53,10 @@ class SimbaRptAdgroupnonsearchEffectGet(object):
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-            if not rsp.rpt_adgroup_nonsearch_effect:
+            if not rsp.rpt_nonsearch_effect_list:
                 l = {}
             else:
-                l = json.loads(rsp.rpt_adgroup_nonsearch_effect.lower())
+                l = json.loads(rsp.rpt_nonsearch_effect_list.lower())
             if l == {}:
                 l = []
 
