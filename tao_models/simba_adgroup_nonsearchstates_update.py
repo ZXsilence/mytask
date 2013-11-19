@@ -24,10 +24,25 @@ logger = logging.getLogger(__name__)
 
 class SimbaAdgroupNonsearchstatesUpdate(object):
 
+    PAGESIZE = 200
 
     @classmethod
-    @tao_api_exception(3)
     def set_adgroups_nonsearchstates(cls,access_token,nick,campaign_id,adgroupid_nonsearchstate_json):
+        return_list = []
+        size = cls.PAGESIZE
+        page_num = len(adgroupid_nonsearchstate_json)/size+ 1
+        if len(adgroupid_nonsearchstate_json) % size== 0:
+            page_num -= 1
+        for i in range(page_num):
+            sub_json_list= adgroupid_nonsearchstate_json[i*size: (i+1)*size]
+            adgroup_list = SimbaAdgroupNonsearchstatesUpdate.sub_set_adgroups_nonsearchstates(access_token,nick,campaign_id,sub_json_list)
+            return_list.extend(adgroup_list)
+        return return_list
+
+
+    @classmethod
+    @tao_api_exception(10)
+    def sub_set_adgroups_nonsearchstates(cls,access_token,nick,campaign_id,adgroupid_nonsearchstate_json):
         req = SimbaAdgroupNonsearchstatesUpdateRequest()
         req.nick = nick
         req.campaign_id = campaign_id
