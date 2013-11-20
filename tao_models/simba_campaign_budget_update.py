@@ -42,7 +42,7 @@ class SimbaCampaignBudgetUpdate(object):
             logger.debug("update budget error nick [%s] campaign_id [%s] msg [%s] sub_msg [%s]" %(nick
                  , str(campaign_id), rsp.msg, rsp.sub_msg))
             if "Invalid arguments:budget"  in rsp.responseBody or (rsp.sub_msg and  "限额不得小于" in rsp.sub_msg):
-                raise CampaignBudgetLessThanCostException(msg="计划日限额过低",sub_msg="计划花费日限额不能低于最低标准(30元)且日限额不得小于推广计划实时扣款金额")
+                raise CampaignBudgetLessThanCostException(msg="计划日限额过低",sub_msg="限额不能低于最低标准(30元)且日限额不得小于推广计划实时扣款金额")
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.campaign_budget
 

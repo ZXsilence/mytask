@@ -34,13 +34,15 @@ class SimbaCampaignPlatformUpdate(object):
         """
         更新一个计划的推广平台设置 
         """
-
+        nonsearch_channels = ','.join([str(e) for e in nonsearch_channels]) 
+        search_channels = ','.join([str(e) for e in search_channels]) 
         req = SimbaCampaignPlatformUpdateRequest()
         req.nick = nick
         req.campaign_id = campaign_id
         req.search_channels = search_channels 
-        if nonsearch_channels != '':
-            req.nonsearch_channels = nonsearch_channels 
+        #if nonsearch_channels != '':
+        #    req.nonsearch_channels = nonsearch_channels 
+        req.nonsearch_channels = nonsearch_channels 
         req.outside_discount = outside_discount 
 
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
@@ -62,8 +64,8 @@ if __name__ == '__main__':
     nick = 'chinchinstyle'
     access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
     campaign_id = '3328400'
-    search_channels = '1,2,4'
-    nonsearch_channels = ''
+    search_channels = [1,2,4]
+    nonsearch_channels = [1,2]
     outside_discount = 100 
     
 
