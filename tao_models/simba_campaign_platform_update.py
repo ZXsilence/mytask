@@ -40,9 +40,9 @@ class SimbaCampaignPlatformUpdate(object):
         req.nick = nick
         req.campaign_id = campaign_id
         req.search_channels = search_channels 
-        #if nonsearch_channels != '':
-        #    req.nonsearch_channels = nonsearch_channels 
-        req.nonsearch_channels = nonsearch_channels 
+        if nonsearch_channels != '':
+            req.nonsearch_channels = nonsearch_channels 
+        #req.nonsearch_channels = nonsearch_channels 
         req.outside_discount = outside_discount 
 
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
     campaign_id = '3328400'
     search_channels = [1,2,4]
-    nonsearch_channels = [1,2]
+    nonsearch_channels = []
     outside_discount = 100 
     
 
