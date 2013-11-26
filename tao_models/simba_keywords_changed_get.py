@@ -33,7 +33,6 @@ class SimbaKeywordsChangedGet(object):
     PAGE_SIZE = 1000
 
     @classmethod
-    @tao_api_exception()
     def get_keywords_changed(cls, access_token, nick, start_time):
         """
         注意: start_time 改成datetime 传入
@@ -52,7 +51,8 @@ class SimbaKeywordsChangedGet(object):
         req.page_no = 1
 
         #first_call
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(access_token,req)
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
@@ -75,7 +75,7 @@ class SimbaKeywordsChangedGet(object):
                                                                                                                 ))
         for curr_page_no in range(2, total_pages+1):
             req.page_no = curr_page_no
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+            rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(access_token,req)
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
@@ -83,6 +83,11 @@ class SimbaKeywordsChangedGet(object):
 
         return keyword_list
 
+    @classmethod
+    @tao_api_exception()
+    def _get_sub_keywords_changed(cls, access_token, req):
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        return rsp
 
 def test():
     access_token = "6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612"

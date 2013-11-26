@@ -26,9 +26,12 @@ class SimbaKeywordidsDeletedGet(object):
     """
     PAGE_SIZE = 1000
 
-
     @classmethod
     @tao_api_exception()
+    def _get_sub_keywordids_deleted(cls, access_token, req):
+        return tao_model_settings.taobao_client.execute(req, access_token)[0]
+
+    @classmethod
     def get_keywordids_deleted(cls, access_token, nick, start_time):
 
 
@@ -41,7 +44,8 @@ class SimbaKeywordidsDeletedGet(object):
         req.page_no = 1
 
         #first_call
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        rsp = SimbaKeywordidsDeletedGet._get_sub_keywordids_deleted(access_token, req)
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
@@ -55,7 +59,8 @@ class SimbaKeywordidsDeletedGet(object):
 
         while len(rsp.deleted_keyword_ids) == cls.PAGE_SIZE:
             req.page_no += 1
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+            #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+            rsp = SimbaKeywordidsDeletedGet._get_sub_keywordids_deleted(access_token, req)
 
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
