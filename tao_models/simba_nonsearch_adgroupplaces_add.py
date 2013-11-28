@@ -29,24 +29,36 @@ class SimbaNonsearchAdgroupplacesAdd(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(3)
-    def add_nonsearch_adgroupplaces(cls, access_token, nick,campaign_id,adgroup_place_list):
+    def add_nonsearch_adgroupplaces(cls, access_token, nick,campaign_id,adgroup_places_json):
         """
         update an adgroup
         """
-
+        return_list = []
         req = SimbaNonsearchAdgroupplacesAddRequest()
         req.nick = nick
         req.campaign_id = campaign_id
-        req.adgroup_places_json = adgroup_place_list
+        req.adgroup_places_json = adgroup_places_json
 
+        while adgroup_places_json:
+            sub_list = adgroup_places_json[:cls.PAGE_SIZE]
+            adgroup_places_json = adgroup_places_json[cls.PAGE_SIZE:]
+            req.adgroup_places_json = sub_list
+            try:
+                rsp = SimbaNonsearchAdgroupplacesAdd._add_sub_adgroup_places(access_token,req)
+            except Exception,e:
+                print str(e)+'>>>>>>>'
+                continue
+
+            return_list.extend(rsp.adgroup_place_list)
+        return return_list
+
+    @classmethod
+    @tao_api_exception(8)
+    def _add_sub_adgroup_places(cls, access_token,req): 
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
         if not rsp.isSuccess():
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-        return rsp.adgroup_place_list
-
+        return rsp
 
 
 if __name__ == '__main__':
