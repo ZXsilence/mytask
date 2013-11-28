@@ -32,7 +32,7 @@ class SimbaKeywordidsDeletedGet(object):
         return tao_model_settings.taobao_client.execute(req, access_token)[0]
 
     @classmethod
-    def get_keywordids_deleted(cls, access_token, nick, start_time):
+    def get_keywordids_deleted(cls, access_token, nick, start_time,total_calls=1000):
 
 
         keyword_id_list = []
@@ -59,7 +59,8 @@ class SimbaKeywordidsDeletedGet(object):
 
         while len(rsp.deleted_keyword_ids) == cls.PAGE_SIZE:
             req.page_no += 1
-            #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+            if req.page_no== total_calls:
+                break
             rsp = SimbaKeywordidsDeletedGet._get_sub_keywordids_deleted(access_token, req)
 
             if not rsp.isSuccess():
