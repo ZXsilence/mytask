@@ -36,7 +36,7 @@ class SimbaNonsearchAdgroupplacesAdd(object):
         return_list = []
         req = SimbaNonsearchAdgroupplacesAddRequest()
         req.nick = nick
-        req.campaign_id = campaign_id
+        req.campaign_id = int(campaign_id)
         req.adgroup_places_json = adgroup_places_json
 
         while adgroup_places_json:
@@ -47,7 +47,7 @@ class SimbaNonsearchAdgroupplacesAdd(object):
                 rsp = SimbaNonsearchAdgroupplacesAdd._add_sub_adgroup_places(access_token,req)
             except Exception,e:
                 print str(e)+'>>>>>>>'
-                continue
+                raise e
 
             return_list.extend(rsp.adgroup_place_list)
         return return_list

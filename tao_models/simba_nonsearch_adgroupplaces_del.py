@@ -39,8 +39,6 @@ class SimbaNonsearchAdgroupplacesDel(object):
         req.nick = nick
         req.campaign_id = campaign_id
         req.adgroup_places_json = adgroup_place_list
-        import pdb
-        pdb.set_trace()
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
 
         if not rsp.isSuccess():
