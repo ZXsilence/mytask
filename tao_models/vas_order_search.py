@@ -90,6 +90,12 @@ class VasOrderSearch(object):
         return VasOrderSearch.search_vas_order(article_code, start_created, end_created, nick)
 
     @classmethod
+    def search_vas_order_by_nick_new(cls, article_code, sdate, edate, nick):
+        start_created = sdate.strftime("%Y-%m-%d %H:%M:%S") 
+        end_created = edate.strftime("%Y-%m-%d %H:%M:%S") 
+        return VasOrderSearch.search_vas_order(article_code, start_created, end_created, nick)
+
+    @classmethod
     @tao_api_exception(3)
     def get_var_orders_count(cls,article_code, start_created, end_created,nick=None):
         """
