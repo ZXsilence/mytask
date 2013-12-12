@@ -69,7 +69,7 @@ class SimbaKeywordsvonAdd(object):
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
                 if rsp.code == 15 and rsp.sub_msg != None and u'已有关键词已经达到200' in rsp.sub_msg:
-                    return []
+                    return keywords
                 if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
                     return []
                 if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':

@@ -19,6 +19,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.exceptions import NonsearchNotOpenException 
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,8 @@ class SimbaNonsearchAdgroupplacesGet(object):
         if not rsp.isSuccess():
             logger.debug("get_Adgroupplaces error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick, 
                 str(adgroup_ids), rsp.msg, rsp.sub_msg))
+            if rsp.sub_msg and "当前推广计划不支持该操作" in rsp.sub_msg:
+                raise NonsearchNotOpenException
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         return rsp.adgroup_place_list

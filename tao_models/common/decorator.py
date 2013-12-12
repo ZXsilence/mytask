@@ -151,7 +151,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise
                         else:
                             #其他类型异常，可重试
-                            sleep(5)
+                            sleep(1)
                             if retry_times == MAX_RETRY_TIMES:
                                 #isp.internal-error 错误不打印error
                                 if e.sub_code and 'isp.internal-error' in e.sub_code:

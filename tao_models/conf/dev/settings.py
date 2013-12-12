@@ -10,7 +10,7 @@ sys.path.append(APISDK)
 sys.path.append(BACKENDS)
 
 #taobao open platform info
-SERVER_URL = "http://gw.api.taobao.com/router/rest"
+SERVER_URL = "http://223.5.20.253:8002/router/rest"
 import inspect
 from  TaobaoSdk import  TaobaoClient
 taobao_client = None
