@@ -52,11 +52,13 @@ class SimbaCampaignPlatformGet(object):
 
 if __name__ == '__main__':
 
-    nick = 'chinchinstyle'
-    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
-    campaign_id = '3328400'
+    #nick = 'chinchinstyle'
+    #access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
+    #campaign_id = '3328400'
+    nick = '麦苗科技001'
+    access_token = '620101596aa3061088d586fhj98d8fe6b9eec82911548c6871727117'
+    campaign_id = '9214487'
     
-
     result = SimbaCampaignPlatformGet.get_campaign_platform(access_token, nick, campaign_id)
     
     print result.toDict()

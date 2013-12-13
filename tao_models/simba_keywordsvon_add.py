@@ -68,16 +68,13 @@ class SimbaKeywordsvonAdd(object):
             req.keyword_prices = keyword_prices_str 
             rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             if not rsp.isSuccess():
+                logger.info("add keywords failed, total size [%d] package num [%d] msg [%s] sub_msg [%s] code [%s] sub_code [%s]", len(word_price_dict_list), i, str(rsp.msg), str(rsp.sub_msg), str(rsp.code), str(rsp.sub_code)) 
                 if rsp.code == 15 and rsp.sub_msg != None and u'已有关键词已经达到200' in rsp.sub_msg:
                     return keywords
                 if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
                     return []
                 if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
                     return []
-                logger.info("add keywords failed, msg [%s] sub_msg [%s]", rsp.msg, rsp.sub_msg) 
-                for i in word_price_list:
-                    logger.info('%s,%s'%(i[0],i[1]))
-                logger.info("%s,%s,%s"%(adgroup_id,nick,access_token))
                 raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
             keywords.extend(rsp.keywords) 
         return keywords

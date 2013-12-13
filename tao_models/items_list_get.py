@@ -116,7 +116,7 @@ def test():
     access_token = "620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117"
     #access_token = '111'
     #num_iids = [7794896442,15493508084]
-    num_iids = [23221560872]
+    num_iids = [26796368149]
     ItemsListGet.MAX_NUM_IIDS = 20
     fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified'
     total_item_list = ItemsListGet.get_item_list(access_token, num_iids, fields)
