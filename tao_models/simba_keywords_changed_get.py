@@ -53,8 +53,6 @@ class SimbaKeywordsChangedGet(object):
         #first_call
         #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(access_token,req)
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.keywords.total_item:
             logger.debug("get_keywords_changed ---nick:%s start_time:%s total_changed_keywords:%s "%(nick,
@@ -76,8 +74,6 @@ class SimbaKeywordsChangedGet(object):
         for curr_page_no in range(2, total_pages+1):
             req.page_no = curr_page_no
             rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(access_token,req)
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
             keyword_list.extend(rsp.keywords.keyword_list)
 
@@ -87,6 +83,8 @@ class SimbaKeywordsChangedGet(object):
     @tao_api_exception()
     def _get_sub_keywords_changed(cls, access_token, req):
         rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp
 
 def test():

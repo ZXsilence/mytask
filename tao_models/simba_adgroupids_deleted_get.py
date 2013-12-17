@@ -29,7 +29,10 @@ class SimbaAdgroupidsDeletedGet(object):
     @classmethod
     @tao_api_exception()
     def _get_sub_adgroupids_deleted(cls, access_token, req):
-        return tao_model_settings.taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        return rsp
 
     @classmethod
     def get_adgroupids_deleted(cls, access_token, nick, start_time):
@@ -45,8 +48,6 @@ class SimbaAdgroupidsDeletedGet(object):
         #first_call
         #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         rsp = SimbaAdgroupidsDeletedGet._get_sub_adgroupids_deleted(access_token, req)
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.deleted_adgroup_ids:
             logger.debug("get_adgroupids_deleted ---nick:%s start_time:%s total_deleted_adgroups:%s"%(nick,

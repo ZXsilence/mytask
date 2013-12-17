@@ -31,7 +31,11 @@ class SimbaAdgroupsChangedGet(object):
     @classmethod
     @tao_api_exception()
     def _get_sub_adgroups_changed(cls, access_token, req):
-        return tao_model_settings.taobao_client.execute(req, access_token)[0]
+        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        return rsp
+
 
     @classmethod
     def get_adgroups_changed(cls, access_token, nick, start_time):
@@ -51,8 +55,6 @@ class SimbaAdgroupsChangedGet(object):
         #first_call
         #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
         rsp = SimbaAdgroupsChangedGet._get_sub_adgroups_changed(access_token, req)
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
         if not rsp.adgroups.total_item:
             logger.debug("get_adgroups_changed ---nick:%s start_time:%s total_changed_adgroups:%s "%(nick,
@@ -74,9 +76,6 @@ class SimbaAdgroupsChangedGet(object):
             req.page_no = curr_page_no
             #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
             rsp = SimbaAdgroupsChangedGet._get_sub_adgroups_changed(access_token, req)
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
         return adgroup_list
