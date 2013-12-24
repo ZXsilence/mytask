@@ -33,6 +33,7 @@ class OperationType(object):
     DELETE_FILTER_WORDS = 10
     DELETE_LOW_RELEVANCE = 11
     DELETE_DIRECTOR = 12
+    DELETE_HISTORY_NORMAL = 13
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
     UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE = 102
@@ -45,6 +46,7 @@ class OperationType(object):
     UPDATE_PRICE_TO_DECREASE_COST = 109
     UPDATE_PRICE_TO_APPROVE_ROI = 110
     UPDATE_PRICE_DIRECTOR = 111
+    UPDATE_PRICE_HISTORY_NORMAL = 112 
 
     
     KEEP_NORMAL = 201
@@ -62,10 +64,12 @@ class OperationType(object):
     ADD_KEYWORD_NORMAL = 402 
     ADD_KEYWORD_INITIAL = 403
     ADD_KEYWORD_DIRECTOR = 404
+    ADD_KEYWORD_HISTORY_NORMAL = 405
     
     ADD_ADGROUP_NORMAL = 501
     DELETE_ADGROUP_NORMAL = 502
     DELETE_ADGROUP_INITIAL = 503
+    DELETE_ADGROUP_HISTORY_NORMAL = 504
 
 
 OPTTYPE_COMMENT = {
@@ -80,9 +84,10 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_PV_MAX_PRICE : "关键词已经达到用户设置的最高出价，仍然没有展现，已经删除"
     , OperationType.DELETE_LOW_PV_BEST_POSITION : "关键词已经排在首页，仍然没有展现，已经删除"
     
-    , OperationType.DELETE_FILTER_WORDS : "根据用户设置的过滤词，该关键词已经删除"
-    , OperationType.DELETE_LOW_RELEVANCE : "由于该关键词相关性不佳，已经删除"
+    , OperationType.DELETE_FILTER_WORDS : "根据用户设置的过滤词，关键词已经删除"
+    , OperationType.DELETE_LOW_RELEVANCE : "由于关键词相关性不佳，已经删除"
     , OperationType.DELETE_DIRECTOR : "加力计划优化，发现关键词表现不佳，已经删除"
+    , OperationType.DELETE_HISTORY_NORMAL : "关键词已经被删除(历史记录未区分类型)"
 
     , OperationType.UPDATE_PRICE_ROI_GOOD_INCRE_PRICE : "关键词最近一段时间效果好于计划整体，加大投入"
     , OperationType.UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE : "系统预估关键词ROI潜力较大，适当加大投入"
@@ -95,6 +100,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_TO_DECREASE_COST : "为了减小计划投入，关键词进行价格调整"
     , OperationType.UPDATE_PRICE_TO_APPROVE_ROI : "为了提高计划效果，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_DIRECTOR : "为了优化加力计划效果，关键词价格进行调整"
+    , OperationType.UPDATE_PRICE_HISTORY_NORMAL: "关键词价格进行调整(历史记录未区分类型)"
     
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
@@ -111,8 +117,10 @@ OPTTYPE_COMMENT = {
     , OperationType.ADD_KEYWORD_NORMAL: "新增关键词"
     , OperationType.ADD_KEYWORD_INITIAL: "新增关键词"
     , OperationType.ADD_KEYWORD_DIRECTOR: "新增关键词"
+    , OperationType.ADD_KEYWORD_HISTORY_NORMAL: "新增关键词(历史记录未区分类型)"
     
     , OperationType.ADD_ADGROUP_NORMAL: "新增推广组"
     , OperationType.DELETE_ADGROUP_NORMAL: "用户删除推广组"
     , OperationType.DELETE_ADGROUP_INITIAL: "计划初始化，删除推广组"
+    , OperationType.DELETE_ADGROUP_HISTORY_NORMAL: "删除推广组(历史记录未区分类型)"
 }
