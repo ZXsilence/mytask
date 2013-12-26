@@ -48,6 +48,7 @@ class OperationType(object):
     UPDATE_PRICE_TO_APPROVE_ROI = 110
     UPDATE_PRICE_DIRECTOR = 111
     UPDATE_PRICE_HISTORY_NORMAL = 112 
+    UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE = 113 
 
     
     KEEP_NORMAL = 201
@@ -102,6 +103,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_TO_APPROVE_ROI : "为了提高计划效果，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_DIRECTOR : "为了优化加力计划效果，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_HISTORY_NORMAL: "关键词价格进行调整(历史记录未区分类型)"
+    , OperationType.UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE: "计划花费未达到最低花费设置，关键词加大投入"
     
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
