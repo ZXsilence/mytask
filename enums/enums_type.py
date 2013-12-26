@@ -21,7 +21,7 @@ class WordDeleteType(object):
     LOW_RELEVANCE = 14
 
 class OperationType(object):
-    DELETE_AUDICT_UNPASS = 1
+    DELETE_AUDIT_UNPASS = 1
     DELETE_LOW_QSCORE = 2
     DELETE_LOW_PV_OLD = 3
     DELETE_DELETE_PERCENT = 4
@@ -74,7 +74,7 @@ class OperationType(object):
 
 
 OPTTYPE_COMMENT = {
-    OperationType.DELETE_AUDICT_UNPASS: "关键词审核未通过，已经删除"
+    OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
     , OperationType.DELETE_LOW_QSCORE : "关键词质量分过低，已经删除"
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PERCENT : "关键词在计划中相对表现较差，已经删除"
