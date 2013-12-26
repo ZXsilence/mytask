@@ -79,7 +79,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PRECENT : "关键词在计划中相对表现较差，已经删除"
     , OperationType.DELETE_LOW_CLICK_OLD : "关键词最近一段时间点击量过低，已经删除"
-    , OperationType.DELETE_IS_GARGABE : "关键词被淘宝判断为垃圾词，已经删除"
+    , OperationType.DELETE_IS_GARBAGE : "关键词被淘宝判断为垃圾词，已经删除"
     , OperationType.DELETE_USER_DELETE : "关键词被用户手工删除"
     
     , OperationType.DELETE_LOW_PV_MAX_PRICE : "关键词已经达到用户设置的最高出价，仍然没有展现，已经删除"
