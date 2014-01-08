@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 class ItemsListGet(object):
 
-    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias'
+    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias,seller_cids'
     MAX_NUM_IIDS = 20
 
     @classmethod
