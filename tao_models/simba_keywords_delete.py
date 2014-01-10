@@ -21,6 +21,7 @@ from TaobaoSdk.Exceptions import  ErrorResponseException
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 from tao_models.common.page_size import  PageSize 
+import traceback
 
 
 logger = logging.getLogger(__name__)
@@ -49,9 +50,11 @@ class SimbaKeywordsDelete(object):
 
         if not rsp.isSuccess():
             if rsp.code == 15 and rsp.sub_msg == u'没有属于该客户下指定推广计划的有效关键词可删除':
+                logger.info('[%s] keywords_delete failed,没有属于该客户下指定推广计划的有效关键词可删除,word_list:%s  :%s,%s'%(nick,word_list,rsp.msg,rsp.sub_msg))
+                logger.info(traceback.format_stack())
                 return []
             if rsp.sub_msg and  '包含了不属于该客户的关键词Id' in rsp.sub_msg:
-                logger.warning('[%s] keywords_delete failed,word_list:%s  :%s,%s'%(nick,word_list,rsp.msg,rsp.sub_msg))
+                logger.info('[%s] keywords_delete failed,word_list:%s  :%s,%s'%(nick,word_list,rsp.msg,rsp.sub_msg))
                 return []
             logger.debug("delete_keywords error nick [%s] msg [%s] sub_msg [%s]" %(nick
                 , rsp.msg, rsp.sub_msg))

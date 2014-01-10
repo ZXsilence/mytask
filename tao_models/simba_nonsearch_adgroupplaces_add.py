@@ -44,12 +44,7 @@ class SimbaNonsearchAdgroupplacesAdd(object):
             sub_list = adgroup_places_json[:cls.PAGE_SIZE]
             adgroup_places_json = adgroup_places_json[cls.PAGE_SIZE:]
             req.adgroup_places_json = sub_list
-            try:
-                rsp = SimbaNonsearchAdgroupplacesAdd._add_sub_adgroup_places(access_token,req)
-            except Exception,e:
-                print str(e)+'>>>>>>>'
-                raise e
-
+            rsp = SimbaNonsearchAdgroupplacesAdd._add_sub_adgroup_places(access_token,req)
             return_list.extend(rsp.adgroup_place_list)
         return return_list
 
