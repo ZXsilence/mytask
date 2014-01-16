@@ -94,7 +94,8 @@ class OperationType(object):
         DELETE_FILTER_WORDS,
         DELETE_LOW_RELEVANCE,
         DELETE_DIRECTOR,
-        DELETE_HISTORY_NORMAL
+        DELETE_HISTORY_NORMAL,
+        DELETE_LOW_PV_BY_ADGROUP_CPC
     ]
 
     ALL_UPDATE_TYPES = [
