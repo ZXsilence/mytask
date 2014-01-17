@@ -6,19 +6,23 @@ import os
 import logging
 import logging.config
 
-from TaobaoSdk import SimbaCampaignsGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
-from tao_models.conf import settings as tao_model_settings
+from TaobaoSdk import SimbaCampaignsGetRequest
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
-
 
 class SimbaCampaignsGet(object):
 
     """
-
     campaign_format:
     {
 	"online_status" : "online",
@@ -31,20 +35,16 @@ class SimbaCampaignsGet(object):
     }
 
     """
-
     @classmethod
     @tao_api_exception()
-    def get_campaign_list(cls, access_token, nick):
-        """
-        get campaign list for a shop.
-
-        return: campaign _list (type:http://api.taobao.com/apidoc/dataStruct.htm?path=cid:46-dataStructId:10141-apiId:10557-invokePath:campaigns)
-        """
+    def get_campaign_list(cls, nick):
         req = SimbaCampaignsGetRequest()
         req.nick = nick
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.campaigns)
 
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return rsp.campaigns
-
+if __name__ == '__main__':
+    campaigns = SimbaCampaignsGet.get_campaign_list('chinchinstyle')
+    for campaign in campaigns:
+        print campaign

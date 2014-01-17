@@ -10,16 +10,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaCampaignPlatformGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-
-print "here... simba_campaign_platform_get..... "
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +28,7 @@ class SimbaCampaignPlatformGet(object):
 
     @classmethod
     @tao_api_exception(5)
-    def get_campaign_platform(cls, access_token, nick, campaign_id):
+    def get_campaign_platform(cls, nick, campaign_id):
         """
         获得一个计划的推广平台设置 
         """
@@ -39,26 +36,15 @@ class SimbaCampaignPlatformGet(object):
         req = SimbaCampaignPlatformGetRequest()
         req.nick = nick
         req.campaign_id = campaign_id
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-        return rsp.campaign_platform
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.campaign_platform)
 
 
 
 
 if __name__ == '__main__':
-
-    #nick = 'chinchinstyle'
-    #access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
-    #campaign_id = '3328400'
-    nick = '麦苗科技001'
-    access_token = '620101596aa3061088d586fhj98d8fe6b9eec82911548c6871727117'
-    campaign_id = '9214487'
-    
-    result = SimbaCampaignPlatformGet.get_campaign_platform(access_token, nick, campaign_id)
-    
-    print result.toDict()
+    nick = 'chinchinstyle'
+    campaign_id = '3328400'
+    result = SimbaCampaignPlatformGet.get_campaign_platform(nick, campaign_id)
+    print result

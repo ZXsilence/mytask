@@ -18,17 +18,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import TradesSoldGetRequest 
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-
-
-
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -39,56 +35,40 @@ class TradesSoldGet(object):
 
     @classmethod
     @tao_api_exception(3)
-    def get_trades_sold_list(cls, access_token, start_created=None, end_created=None, fields=DEFAULT_FIELDS, flag=False):
+    def get_trades_sold_list(cls, nick, start_created=None, end_created=None, fields=DEFAULT_FIELDS, flag=False):
         """搜索当前会话用户作为卖家已卖出的交易数据（只能获取到三个月以内的交易信息）
         1.返回的数据结果是以订单的创建时间倒序排列的。
         2.返回的数据结果只包含了订单的部分数据，可通过taobao.trade.fullinfo.get获取订单详情。
         """
-        
         req = TradesSoldGetRequest()
         req.fields = fields
         req.start_created = start_created
         req.end_created = end_created
         req.page_size = cls.PAGE_SIZE
         req.page_no = 1
-        
         total_trade_list = []
         while True:
-
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             if rsp.trades is None:
                 logger.info("get trade sold, but none return")
                 break 
-
             logger.info("get trades sold info, actually return: %s"%(len(rsp.trades)))
             total_trade_list.extend(rsp.trades)
-
             if len(rsp.trades) != req.page_size or req.use_has_next:
                 break
             if flag:
                 break
             req.page_no += 1
-
-        return total_trade_list
-
-
+        return change_obj_to_dict_deeply(total_trade_list)
 
 def test_get_trade_list():
-    import datetime
-    access_token = "6200917df2c6f25102738cd27ZZ8ccc3914d83063c5fd5b925150697"
-    start_created_str = "2013-04-10"
-    end_created_str = "2013-04-11"
-    total_trade_list = TradesSoldGet.get_trades_sold_list(access_token, start_created_str, end_created_str)
+    nick = '麦苗科技001'
+    start_created_str = "2014-01-01"
+    end_created_str = "2014-01-15"
+    total_trade_list = TradesSoldGet.get_trades_sold_list(nick, start_created_str, end_created_str)
     for trade in total_trade_list:
-        trade = trade.toDict()
-        keys = trade.keys()
-        keys.sort()
-        for key in keys:
-            print key, trade[key]
-        break
+        print trade
 
 if __name__ == '__main__':
     test_get_trade_list()

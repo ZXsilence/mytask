@@ -12,10 +12,12 @@ from datetime import datetime
 import simplejson as json
 
 from TaobaoSdk.Exceptions import ErrorResponseException
+from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
+from db_exceptions.exceptions import  MongodbException
 
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.conf import    settings as tao_model_settings
-from tao_models.common.exceptions import  InvalidAccessTokenException, TaoApiMaxRetryException, InsufficientSecurityException, AppCallLimitedAllDayException
+from tao_models.common.exceptions import  *
 from api_records.services.api_records_service import inc_api_call_times, get_api_call_times, update_api_call_times, QueueName
 api_call_infos = [ 
         ['syb_auto_campaign_optimize_job.py',QueueName.SYB_AUTO_CAMPAIGN_OPTIMIZE],
@@ -81,6 +83,38 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                     logger.info('exception:%s meet tao api exception :%s, retry_times:%s'%(func.__name__, e, retry_times))
                     retry_times += 1
                     code =  e.code
+
+                    '''
+                        异常处理分两块：
+                        1、保留自定义业务异常处理，兼容上层的代码
+                        2、异常的重试处理,不扔出自定义的业务异常
+                    '''
+                     
+                    #扔出自定义异常
+                    api_method = e.req.method
+                    if api_method == 'taobao.simba.adgroup.update' and e.sub_msg \
+                            and u'审核下线的推广组不能手工上下线' in e.sub_msg:
+                        raise AdgroupAudictFailedException
+                    elif api_method == 'taobao.simba.campaign.budget.get' and e.sub_msg \
+                            and u'未找到指定客户' in e.sub_msg:
+                        raise CampaignIdNotBelongToUserException
+                    elif api_method == 'taobao.simba.campaign.budget.update' and e.sub_msg \
+                            and u'限额不得小于' in e.sub_msg:
+                        raise CampaignBudgetLessThanCostException
+                    elif api_method == 'taobao.simba.campaign.platform.update' and e.sub_msg \
+                            and u'用户无资格投放定向推广' in e.sub_msg:
+                        raise NonsearchNotAllowedException
+                    elif api_method == 'taobao.simba.creative.update' and e.sub_msg \
+                            and u'图片不是推广组的图片' in e.sub_msg:
+                        raise ImgNotBelongToAdgroupException
+                    elif api_method == 'taobao.simba.nonsearch.adgroupplaces.add' and e.sub_msg \
+                            and u'当前推广计划不支持该操作' in e.sub_msg:
+                        raise NonsearchNotOpenException
+                    elif api_method == 'taobao.simba.nonsearch.adgroupplaces.delete' and e.sub_msg \
+                            and u'当前推广计划不支持该操作' in e.sub_msg:
+                        raise NonsearchNotOpenException
+
+                    #异常状态的重试处理,不扔出自定义的业务异常
                     if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
@@ -115,7 +149,6 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         if retry_times == MAX_RETRY_TIMES:
                             logger.warning('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
-
                         wait_seconds = int(e.sub_msg.split(' ')[5])
                         if wait_seconds > 60:
                             logger.warning("app call limit [%d] seconds"%wait_seconds)
@@ -141,7 +174,6 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                                 logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
-
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
                         if e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
@@ -160,11 +192,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                                     logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                                 raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                             continue
-
                     elif code == TaoOpenErrorCode.REMOTE_ERROR_600:
                         if  e.sub_msg and  'end_modified' in e.sub_msg.encode('utf8'):
                             raise  #在这里重试不合适，到整个任务的地方去重试
-
                         sleep(5)
                         if retry_times == MAX_RETRY_TIMES:
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
@@ -180,19 +210,49 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     elif code == TaoOpenErrorCode.INVALID_SESSION_KEY:
                         raise InvalidAccessTokenException("access session expired or invalid")
-
                     else:
                         raise  e
                 else:
                     if retry_times:
                         logger.info("retry success, total_retry time:%i"%retry_times)
-                    if (len(args) >= 1):
-                        update_api_call_times(tao_model_settings.taobao_client.appKey, args[0].__name__, api_call_requests, api_call_infos)
                     return res
         return __wrapped_func
 
     return _wrapper_func
 
+
+def mongo_exception(func):
+    """
+    decorator to catch and deal with mongodb exception in a uniform way.
+
+    example:
+    if AutoReconnect exception occurs, we will catch it and retry the last mongodb operation.
+
+    NOTICE:
+    this  decorator can be only used for **transaction**, if not, data maybe in a mess.
+
+    """
+
+    def wrapped_func(*args, **kwargs):
+        retry_times = 0
+        while True:
+            try:
+                return func(*args, **kwargs)
+            except AutoReconnect, e:
+                retry_times+=1
+                if retry_times > 5:
+                    logging.exception("got an exception when operate on mongodb")
+                    raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
+                sleep(2)
+
+            except  OperationFailure, e:
+                logging.exception("got an exception when operate on mongodb")
+                raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
+
+            except PyMongoError,e:
+                logging.exception("got an exception when operate on mongodb")
+                raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
+    return wrapped_func
 
 
 

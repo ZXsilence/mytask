@@ -15,16 +15,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    #logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
-from TaobaoSdk.Request.SimbaRptAdgroupkeywordbaseGetRequest import SimbaRptAdgroupkeywordbaseGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.common.exceptions import  TBDataNotReadyException
-import traceback
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -42,79 +39,44 @@ class SimbaRptAdgroupkeywordbaseGet(object):
     """
     @classmethod
     @tao_api_exception(40)
-    def get_rpt_adgroupkeywordbase_list(cls, nick, campaingn_id, adgroup_id, start_time, end_time, source, search_type, access_token, subway_token):
-        #try:
-        #    i = 0
-        #    stack = traceback.extract_stack()
-        #    #while True:
-        #    #    str = stack[i][0]
-        #    #    if 'celery' in str:
-        #    #        i += 1
-        #    #        continue
-        #    #    logger.info('%s [%s]'%(stack[i],cls))
-        #    #    break
-        #    stack = traceback.extract_stack()
-        #    for line in stack:
-        #        if 'celery' in line or '/usr/lib' in line:
-        #            continue
-        #        #logger.info('STACK:%s [%s]'%(line,cls))
-        #        #print 'STACK:%s [%s]'%(cls,line)
-        #        logger.info('STACK:%s %s'%(cls,line))
-        #except Exception,e:
-        #    print e
-        #    logger.info('%s is error ...'%cls)
+    def get_rpt_adgroupkeywordbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type):
         req = SimbaRptAdgroupkeywordbaseGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
-        req.campaign_id = campaingn_id
+        req.campaign_id = campaign_id
         req.start_time = datetime.datetime.strftime(start_time, '%Y-%m-%d')
         req.end_time = datetime.datetime.strftime(end_time, '%Y-%m-%d')
         req.search_type = search_type
         req.source = source
-        req.subway_token = subway_token
         req.page_no = 1
         req.page_size = 500
         base_list = []
-
-        logger.debug("start get_rpt_adgroupkeywordbase_list, adgroup_id:%s"%(adgroup_id))
-
         while True:
-
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             l = json.loads(rsp.rpt_adgroupkeyword_base_list.lower())
-
             if l == {}:
                 l = []
             if isinstance(l, dict):
                 raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
-
             for rpt in l:
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-
-
             base_list.extend(l)
             if len(l) < 500:
                 break
             req.page_no += 1
-
-
         logger.debug("get_rpt_adgroupkeywordbase_list, adgroup_id:%s"%(adgroup_id))
-        return base_list
+        return change_obj_to_dict_deeply(base_list)
             
             
         
 if __name__ == '__main__':
     #搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH
-    try_list = SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list('chinchinstyle',3208321, \
-                                                                                        99196734, \
-                                                                             datetime.date(2012,8,21), \
-                                                                             datetime.date(2012,8,21), \
-                                                                             'SUMMARY', \
-                                                                             'SEARCH,CAT,NOSEARCH', \
-                                                                             '6200602c34ZZ144de0952fb59aef3051c4e1d4af0a010e7106852162', \
-                                                                             '1103016634-15007742-1346597966921-d7d35029')
-    for item in try_list:
-        print item
-        print 'word:%s searchtype:%s impressions:%s click:%s'%(item[u'keywordstr'], item[u'searchtype'], item[u'impressions'], item[u'click'])
+    nick = 'chinchinstyle'
+    campaign_id = 3367748
+    adgroup_id = 336844923
+    search_type = 'SEARCH,CAT'
+    source = '1,2'
+    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    end_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    print SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)

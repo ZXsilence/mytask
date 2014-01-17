@@ -12,19 +12,18 @@ import datetime as dt
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import IncrementItemsGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService 
+from tao_models.common.util import change_obj_to_dict_deeply
 
 
 logger = logging.getLogger(__name__)
-
-
 
 class IncrementItemsGet(object):
 
@@ -55,7 +54,7 @@ class IncrementItemsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _get_items_increment(cls, access_token, nick, start_modified, end_modified):
+    def _get_items_increment(cls, nick, start_modified, end_modified):
         """
         this method should only be called by get_items_incremental_changed
 
@@ -76,14 +75,9 @@ class IncrementItemsGet(object):
 
         #first call
         req.page_no = 1
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         if not rsp.total_results:
-            #logger.debug("IncrementItems no result,  start_modified:%s end_modified:%s nick:%s"%(start_modified.strftime("%Y-%m-%d %H:%M:%S"),
-                                                                                                # end_modified.strftime("%Y-%m-%d %H:%M:%S"),
-                                                                                               #  nick))
             return notify_item_list
 
         notify_item_list.extend(rsp.notify_items)
@@ -92,10 +86,8 @@ class IncrementItemsGet(object):
 
         for curr_page_no  in range(2, total_pages+1):
             req.page_no = curr_page_no
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             notify_item_list.extend(rsp.notify_items)
 
         return notify_item_list
@@ -103,7 +95,7 @@ class IncrementItemsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _get_items_increment_count(cls, access_token, nick, start_modified, end_modified):
+    def _get_items_increment_count(cls, nick, start_modified, end_modified):
 
         notify_item_list = []
 
@@ -115,32 +107,30 @@ class IncrementItemsGet(object):
             req.start_modified = start_modified.strftime("%Y-%m-%d %H:%M:%S")
         if end_modified:
             req.end_modified = end_modified.strftime("%Y-%m-%d %H:%M:%S")
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         return  rsp.total_results
 
     @classmethod
-    def get_items_incremental_changed(cls, access_token, nick, start_time, end_time):
+    def get_items_incremental_changed(cls, nick, start_time, end_time):
         notify_item_list = []
 
         time_range = cls._split_time(start_time, end_time)
         for s,e in time_range:
-            sub_list = cls._get_items_increment(access_token, nick, s, e)
+            sub_list = cls._get_items_increment(nick, s, e)
             notify_item_list.extend(sub_list)
 
-        return notify_item_list
+        return change_obj_to_dict_deeply(notify_item_list)
 
 
     @classmethod
-    def get_items_incremental_changed_count(cls, access_token, nick, start_time, end_time):
+    def get_items_incremental_changed_count(cls, nick, start_time, end_time):
         notify_item_count =0
         time_range = cls._split_time(start_time, end_time)
         for s,e in time_range:
-            sub_count = cls._get_items_increment_count(access_token, nick, s, e)
+            sub_count = cls._get_items_increment_count(nick, s, e)
             notify_item_count += sub_count
-        return notify_item_count
+        return change_obj_to_dict_deeply(notify_item_count)
 
 
 def test_split_time():
@@ -155,20 +145,15 @@ def test_split_time():
 
 
 def test_get_items_incremental_changed():
-    access_token = "6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612"
-    sid = 71506259
-    nick = '密多帮巴'
-    start_time = "2012-08-06 12:40:32"
-    end_time = "2012-08-09 14:35:33"
+    nick = 'chinchinstyle'
+    start_time = "2014-01-10 12:40:32"
+    end_time = "2014-01-15 14:35:33"
     format = "%Y-%m-%d %H:%M:%S"
     s = datetime.strptime(start_time, format)
     e = datetime.strptime(end_time, format)
 
-    notify_list = IncrementItemsGet.get_items_incremental_changed(access_token, nick, s, e)
-
-    for notify in  notify_list:
-        print notify.toDict()
-
+    print IncrementItemsGet.get_items_incremental_changed(nick, s, e)
+    print IncrementItemsGet.get_items_incremental_changed_count(nick, s, e)
 
 if __name__ == '__main__':
     test_get_items_incremental_changed()

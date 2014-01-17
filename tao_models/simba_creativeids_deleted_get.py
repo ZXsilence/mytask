@@ -10,13 +10,15 @@ from datetime import datetime
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    sys.path.append(os.path.join(os.path.dirname(__file__),'../../TaobaoOpenPythonSDK/'))
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaCreativeidsDeletedGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf.settings import  taobao_client
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -29,55 +31,33 @@ class SimbaCreativeidsDeletedGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_creativeids_deleted(cls, access_token, nick, start_time):
-
-        #from  TaobaoSdk import  TaobaoClient
-        #SERVER_URL = "http://gw.api.taobao.com/router/rest"
-        #APP_KEY='12651461'
-        #APP_SECRET = '80a15051c411f9ca52d664ebde46a9da'
-        #taobao_client = TaobaoClient(SERVER_URL,APP_KEY , APP_SECRET)
-        #creative_ids = []
-
-
+    def get_creativeids_deleted(cls, nick, start_time):
         creative_id_list = []
-
         req = SimbaCreativeidsDeletedGetRequest()
         req.nick = nick
         req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
         req.page_size = cls.PAGE_SIZE
         req.page_no = 1
-
-        rsp = taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         if not rsp.deleted_creative_ids:
             logger.debug("get_adgroupids_deleted ---nick:%s start_time:%s total_deleted_adgroups:%s"%(nick,
                                                                                                        start_time,
                                                                                                        0))
             return [] 
-
         creative_id_list.extend(rsp.deleted_creative_ids)
-
         while len(rsp.deleted_creative_ids) == cls.PAGE_SIZE:
             req.page_no += 1
-            rsp = taobao_client.execute(req, access_token)[0]
-
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             creative_id_list.extend(rsp.deleted_creative_ids)
-
-        return creative_id_list
-
+        return change_obj_to_dict_deeply(creative_id_list)
 
 def test():
-    access_token = "6200024c9db582ca7525fecccbce550cegb5a89cd51492a520500325"
     nick = 'chinchinstyle'
-    #start_time = "2013-03-01 03:00:00"
-    start_time = datetime(2013,3,8) 
+    start_time = datetime(2014,1,1) 
     SimbaCreativeidsDeletedGet.PAGE_SIZE = 1
-    creative_ids = SimbaCreativeidsDeletedGet.get_creativeids_deleted(access_token,nick,start_time)
-
+    creative_ids = SimbaCreativeidsDeletedGet.get_creativeids_deleted(nick,start_time)
     print 'creative_ids ',creative_ids
 
 if __name__ == '__main__':

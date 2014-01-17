@@ -12,16 +12,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    #set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
-    set_taobao_client('21065688', '74aecdce10af604343e942a324641891')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaAdgroupOnlineitemsvonGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +29,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_items_online(cls, access_token, nick, max_page = 50):
+    def get_items_online(cls, nick, max_page = 50):
         """
         get items online
 
@@ -51,104 +48,79 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         req = SimbaAdgroupOnlineitemsvonGetRequest()
         req.nick = nick
         req.page_size = cls.PAGE_SIZE
-
-        #first call
         req.page_no = 1
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
             return item_online_list
-
         item_online_list.extend(rsp.page_item.item_list)
-
         # continue to call if more than one page
         total_pages = (rsp.page_item.total_item - 1)/cls.PAGE_SIZE + 1
         if total_pages > max_page:
             total_pages = max_page
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             item_online_list.extend(rsp.page_item.item_list)
             if len(item_online_list)>=10000:
                 break
 
         logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
 
-        return item_online_list
+        return change_obj_to_dict_deeply(item_online_list)
 
     @classmethod
     @tao_api_exception()
-    def get_items_online_with_overview(cls, access_token, nick, max_page = 3):
-        """
-        """
+    def get_items_online_with_overview(cls, nick, max_page = 3):
         item_online_list = []
-
         req = SimbaAdgroupOnlineitemsvonGetRequest()
         req.nick = nick
         req.page_size = cls.PAGE_SIZE
-
-        #first call
         req.page_no = 1
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
 
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
             return None 
 
         item_online_list.extend(rsp.page_item.item_list)
-
-        # continue to call if more than one page
         total_pages = (rsp.page_item.total_item  - 1)/cls.PAGE_SIZE + 1
         if total_pages > max_page:
             total_pages = max_page
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             item_online_list.extend(rsp.page_item.item_list)
-
             if len(item_online_list)>=10000:
                 break
         logger.debug("actually get %i items online in for nick:%s"%(len(item_online_list), nick))
 
-        return {"item_list":item_online_list, "total_item":rsp.page_item.total_item}
+        return {"item_list":change_obj_to_dict_deeply(item_online_list), "total_item":change_obj_to_dict_deeply(rsp.page_item.total_item)}
 
     @classmethod
     @tao_api_exception(10)
-    def get_item_count(cls, access_token, nick):
-        """
-        """
+    def get_item_count(cls, nick):
         req = SimbaAdgroupOnlineitemsvonGetRequest()
         req.nick = nick
         req.page_size = cls.PAGE_SIZE
         req.order_field = 'bidCount'
         req.order_by = 'true'
         req.page_no = 1 
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        
-        return rsp.page_item.total_item 
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.page_item.total_item)
 
 
 def test():
-    #access_token = '6201c01b4ZZdb18b1773873390fe3ff66d1a285add9c10c520500325'
-    access_token = '620181005f776f4b1bdfd5952ec7cfa172e008384c567a2520500325'
     nick = 'chinchinstyle'
-    campaign_id = 3367690 
-    items = SimbaAdgroupOnlineitemsvonGet.get_items_online(access_token, nick)
-    for item in items:
-        print item.toDict()
+    #items = SimbaAdgroupOnlineitemsvonGet.get_items_online(nick)
+    #items = SimbaAdgroupOnlineitemsvonGet.get_item_count(nick)
+    items = SimbaAdgroupOnlineitemsvonGet.get_items_online_with_overview(nick)
+    print items
 
 
 if __name__ == '__main__':

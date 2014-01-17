@@ -12,25 +12,29 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
     
-from tao_models.conf import    settings as tao_model_settings
-from tao_models.common.decorator import  tao_api_exception
 from TaobaoSdk.Request.TopatsResultGetRequest import TopatsResultGetRequest
-from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
+from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
 class TopatsResultGet(object):
-    ''
+    
     @classmethod
     @tao_api_exception()
-    def get_task_result(cls, task_id, access_token):
-
+    def get_task_result(cls, task_id,soft_code,nick):
         req = TopatsResultGetRequest()
         req.task_id = task_id
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.task)
 
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return rsp.task
+
+if __name__ == '__main__':
+    nick = 'chinchinstyle'
+    soft_code = 'SYB'
+    task_id = 215621102
+    print TopatsResultGet.get_task_result(task_id,soft_code,nick)

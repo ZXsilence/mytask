@@ -10,15 +10,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaCreativeUpdateRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.common.exceptions import ImgNotBelongToAdgroupException
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +24,7 @@ class SimbaCreativeUpdate(object):
 
     @classmethod
     @tao_api_exception(5)
-    def update_creative(cls, access_token, nick, adgroup_id, creative_id, img_url, title):
+    def update_creative(cls, nick, adgroup_id, creative_id, img_url, title):
         """
         update a creative in adgroup
         """
@@ -36,29 +34,18 @@ class SimbaCreativeUpdate(object):
         req.creative_id = creative_id
         req.img_url = img_url
         req.title = title
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
-        if not rsp.isSuccess():
-            logger.debug("update_creative error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick
-                , str(adgroup_id), rsp.msg, rsp.sub_msg))
-            if '图片不是推广组的图片' in rsp.sub_msg:
-                raise ImgNotBelongToAdgroupException
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-        return rsp.creativerecord
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.creativerecord)
 
 
 if __name__ == '__main__':
-    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/T1VM64Xk0jXXcYck3T_012555.jpg'
-    title = '你好新世界'
-    
-    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
-    campaign_id = '3328400'
-    adgroup_id = '155729255'
-    creative_id = '165335144' 
     nick = 'chinchinstyle'
-    creativerecord = SimbaCreativeUpdate.update_creative(access_token, nick, adgroup_id, creative_id, img_url, title)
-
-    print creativerecord.toDict()
+    campaign_id = 3367748
+    adgroup_id = 345679857
+    creative_id = 373504976 
+    title = '你好新世界'
+    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/T1VM64Xk0jXXcYck3T_012555.jpg'
+    creativerecord = SimbaCreativeUpdate.update_creative(nick, adgroup_id, creative_id, img_url, title)
+    print creativerecord
 

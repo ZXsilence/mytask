@@ -18,17 +18,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import TradeFullinfoGetRequest 
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-
-
-
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +80,7 @@ class TradeFullinfoGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_trade_info(cls, access_token, tid, fields=DEFAULT_FIELDS):
+    def get_trade_info(cls, nick, tid, fields=DEFAULT_FIELDS):
         """获取单笔交易的详细信息
         1. 只有在交易成功的状态下才能取到交易佣金，其它状态下取到的都是零或空值 
         2. 只有单笔订单的情况下Trade数据结构中才包含商品相关的信息 
@@ -95,22 +91,15 @@ class TradeFullinfoGet(object):
         req = TradeFullinfoGetRequest()
         req.fields = fields
         req.tid = tid
-        
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        
-        return rsp.trade
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.trade)
 
 def test_get_trade():
-    access_token = "6200917df2c6f25102738cd27ZZ8ccc3914d83063c5fd5b925150697"
+    nick = 'chinchinstyle'
     tid = 208981498818570
-    trade = TradeFullinfoGet.get_trade_info(access_token, tid)
-    trade = trade.toDict()
-    keys = trade.keys()
-    keys.sort()
-    for key in keys:
-        print key, trade[key]
+    trade = TradeFullinfoGet.get_trade_info(nick, tid)
+    print trade
 
 if __name__ == '__main__':
     test_get_trade()

@@ -11,14 +11,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaAdgroupCatmatchUpdateRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +29,7 @@ class SimbaAdgroupCatmatchUpdate(object):
 
     @classmethod
     @tao_api_exception(3)
-    def update_adgroup_catmatch(cls, access_token, nick, adgroup_id, catmatch_id, max_price, use_default_price, online_status ):
-        """
-        update an adgroup catmatch
-        """
+    def update_adgroup_catmatch(cls, nick, adgroup_id, catmatch_id, max_price, use_default_price, online_status ):
 
         req = SimbaAdgroupCatmatchUpdateRequest()
         req.nick = nick
@@ -42,29 +38,22 @@ class SimbaAdgroupCatmatchUpdate(object):
         req.max_price = max_price 
         req.use_default_price = use_default_price
         req.online_status = online_status 
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
-        if not rsp.isSuccess():
-            logger.debug("update_adgroup_catmatch error nick [%s] adgroup_id [%s] msg [%s] sub_msg [%s]" %(nick, 
-                str(adgroup_id), rsp.msg, rsp.sub_msg))
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-        return rsp.adgroupcatmatch
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.adgroupcatmatch)
 
 
 
 if __name__ == '__main__':
 
-    access_token = '6200b16f59ac4c0501c11e7fhj59b5b50bfc9591c98afe2520500325'
     nick = 'chinchinstyle'
-    adgroup_id = '162709345'
-    catmatch_id = '23393436505'
-    max_price = '15'
+    adgroup_id = 346064835
+    catmatch_id = 52521930069
+    max_price = 17
     use_default_price = 'false' 
     online_status = 'online'
 
     adgroup_catmatch = SimbaAdgroupCatmatchUpdate.update_adgroup_catmatch(
-            access_token, nick, adgroup_id, catmatch_id, max_price, use_default_price, online_status )
+             nick, adgroup_id, catmatch_id, max_price, use_default_price, online_status )
     
-    print adgroup_catmatch.toDict()
+    print adgroup_catmatch

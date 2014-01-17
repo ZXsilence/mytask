@@ -11,61 +11,55 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaNonsearchAdgroupplacesAddRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.common.exceptions import NonsearchNotOpenException 
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
 class SimbaNonsearchAdgroupplacesAdd(object):
-    """
-    """
 
     PAGE_SIZE = 200
 
     @classmethod
-    def add_nonsearch_adgroupplaces(cls, access_token, nick,campaign_id,adgroup_places_json):
-        """
-        update an adgroup
-        """
+    def add_nonsearch_adgroupplaces(cls, nick,campaign_id,origin_jsons):
+        if not origin_jsons:
+            return []
         return_list = []
         req = SimbaNonsearchAdgroupplacesAddRequest()
         req.nick = nick
         req.campaign_id = int(campaign_id)
+        adgroup_places_json = []
+        for origin_dict in origin_jsons:
+            adgroup_place = {}
+            adgroup_place['adgroupId'] = origin_dict['adgroup_id']
+            adgroup_place['placeId'] = origin_dict['place_id']
+            adgroup_places_json.append(adgroup_place)
         req.adgroup_places_json = adgroup_places_json
-
         while adgroup_places_json:
             sub_list = adgroup_places_json[:cls.PAGE_SIZE]
             adgroup_places_json = adgroup_places_json[cls.PAGE_SIZE:]
             req.adgroup_places_json = sub_list
-            rsp = SimbaNonsearchAdgroupplacesAdd._add_sub_adgroup_places(access_token,req)
+            rsp = SimbaNonsearchAdgroupplacesAdd._add_sub_adgroup_places(nick,req)
             return_list.extend(rsp.adgroup_place_list)
-        return return_list
+        return change_obj_to_dict_deeply(return_list)
 
     @classmethod
     @tao_api_exception(8)
-    def _add_sub_adgroup_places(cls, access_token,req): 
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            if rsp.sub_msg and "当前推广计划不支持该操作" in rsp.sub_msg:
-                raise NonsearchNotOpenException
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+    def _add_sub_adgroup_places(cls, nick,req): 
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         return rsp
 
 
 if __name__ == '__main__':
-
-    access_token = '62017096de6f96daegibf9b4d214c3a07220daeb9d23226520500325'
     nick = 'chinchinstyle'
-    campaign_id = 3367690
-    adgroup_ids = [{'adgroupId':169471501,'placeId':11},{'adgroupId':169471501,'placeId':31}]
-
-    SimbaNonsearchAdgroupplacesAdd.add_nonsearch_adgroupplaces(access_token, nick, campaign_id,adgroup_ids)
+    campaign_id = 3367748
+    adgroup_ids = [{'adgroup_id':336844923,'place_id':11},{'adgroup_id':336844923,'place_id':31}]
+    print SimbaNonsearchAdgroupplacesAdd.add_nonsearch_adgroupplaces(nick, campaign_id,adgroup_ids)
     
 

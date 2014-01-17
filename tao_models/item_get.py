@@ -12,50 +12,40 @@ import logging.config
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import ItemGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService 
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
-
 class ItemGet(object):
-    """
-    TODO
-    """
 
     @classmethod
     @tao_api_exception()
-    def get_cid(cls, access_token, num_iid):
+    def get_cid(cls, num_iid):
         req = ItemGetRequest()
         req.num_iid = num_iid
         req.fields = 'cid'
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg,sub_code=rsp.sub_code,sub_msg =rsp.sub_msg)
-
-        return rsp.item.cid
+        rsp = ApiService.execute(req)
+        item = change_obj_to_dict_deeply(rsp.item)
+        return item['cid']
     
     @classmethod
     @tao_api_exception()
-    def get_item_info(cls, access_token, num_iid):
+    def get_item_info(cls,num_iid):
         req = ItemGetRequest()
         req.num_iid = num_iid
         req.fields = 'created,num_iid,title,list_time,price,item_img,pic_url,seller_cids'
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg,sub_code=rsp.sub_code,sub_msg =rsp.sub_msg)
-
-        return rsp.item
+        rsp = ApiService.execute(req)
+        return change_obj_to_dict_deeply(rsp.item)
 
 if __name__ == '__main__':
-    access_token = ''
     num_iid = 15493508084
-    item = ItemGet.get_item_info(access_token,num_iid)
-    print item.toDict()
+    print ItemGet.get_cid(num_iid)
+    print ItemGet.get_item_info(num_iid)

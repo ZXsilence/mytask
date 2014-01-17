@@ -15,25 +15,21 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaRptAdgroupeffectGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.common.exceptions import  TBDataNotReadyException
-
-
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
 class SimbaRptAdgroupEffectGet(object):
-    """
-    """
+
     @classmethod
     @tao_api_exception(40)
-    def get_rpt_adgroupeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source, access_token, subway_token):
+    def get_rpt_adgroupeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
                 because of taobao API access-times limit,so we recommend that (end_time - start_time) do not more than a day
@@ -46,22 +42,18 @@ class SimbaRptAdgroupEffectGet(object):
         req.end_time = datetime.datetime.strftime(end_time, '%Y-%m-%d')
         req.search_type = search_type
         req.source = source
-        req.subway_token = subway_token
         req.page_no = 1
         req.page_size = 500
         effect_list = []
         
         while True:
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             l = json.loads(rsp.rpt_adgroup_effect_list.lower())
             if l == {}:
                 l = []
-
             if isinstance(l, dict):
                 raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
-
             for rpt in l:
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
 
@@ -76,18 +68,15 @@ class SimbaRptAdgroupEffectGet(object):
         source: the data source in {1,2}
         date: the report date
         """
-        return effect_list
-    
-    @classmethod
-    @tao_api_exception()
-    def get_yesterday_rpt_adgroupeffect_list(cls, campaign_id, adgroup_id, search_type, source, access_token, subway_token):
-        'get yesterday adgroup effect rpt list'
-        yes = datetime.date.today() - datetime.timedelta(days=1)
-        effect_list = cls.get_rpt_adgroupeffect_list(campaign_id, adgroup_id, str(yes), str(yes), search_type, source, access_token, subway_token)
-        return effect_list
+        return change_obj_to_dict_deeply(effect_list)
     
 if __name__ == '__main__':
-#    try_list = SimbaRptAdgroupEffectGet.get_rpt_adgroupeffect_list(7266464, 122016166, '2012-08-09', '2012-08-09', 'SEARCH,CAT', '1,2', '6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612', '1104314334-31146703-1343962127197-c876e57d')
-    try_list = SimbaRptAdgroupEffectGet.get_yesterday_rpt_adgroupeffect_list(7266464, 122016166, 'SEARCH,CAT', '1,2', '6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612', '1104314334-31146703-1343962127197-c876e57d')
-    for item in try_list:
-        print item    
+    nick = 'chinchinstyle'
+    campaign_id = 3367748
+    adgroup_id = 336844923
+    search_type = 'SEARCH,CAT'
+    source = '1,2'
+    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    end_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    try_list = SimbaRptAdgroupEffectGet.get_rpt_adgroupeffect_list(nick, campaign_id, adgroup_id, start_time, end_time, search_type, source)
+    print try_list

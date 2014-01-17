@@ -11,15 +11,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import ItemsOnsaleGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -30,16 +28,15 @@ class ItemsOnsaleGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _get_page_items(cls,req,access_token):
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+    def _get_page_items(cls,req,nick):
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         return rsp
 
 
     @classmethod
     @tao_api_exception()
-    def get_item_list(cls, access_token, max_pages=50, fields=DEFAULT_FIELDS):
+    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS):
 
         total_item_list = []
 
@@ -50,7 +47,7 @@ class ItemsOnsaleGet(object):
         req.page_no = 1 
 
         while True:
-            rsp = cls._get_page_items(req,access_token)
+            rsp = cls._get_page_items(req,nick)
             if rsp.items is None:
                 logger.info("get item info, but none return")
                 break 
@@ -61,14 +58,13 @@ class ItemsOnsaleGet(object):
                 break
             if req.page_no == max_pages:
                 break
-
             req.page_no += 1
 
-        return total_item_list
+        return change_obj_to_dict_deeply(total_item_list)
 
     @classmethod
     @tao_api_exception()
-    def get_item_list_with_overview(cls, access_token, max_pages=1, fields=DEFAULT_FIELDS):
+    def get_item_list_with_overview(cls, nick, max_pages=1, fields=DEFAULT_FIELDS):
 
         total_item_list = []
 
@@ -79,11 +75,8 @@ class ItemsOnsaleGet(object):
         req.page_no = 1 
 
         while True:
-
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
+            soft_code = None
+            rsp = ApiService.execute(req,nick,soft_code)
             if rsp.items is None:
                 logger.info("get item info, but none return")
                 return {'total_results':0, 'item_list':total_item_list} 
@@ -98,26 +91,23 @@ class ItemsOnsaleGet(object):
 
             req.page_no += 1
 
-        return {'total_results':rsp.total_results, 'item_list':total_item_list} 
+        return {'total_results':change_obj_to_dict_deeply(rsp.total_results), 'item_list':change_obj_to_dict_deeply(total_item_list)} 
 
 def test():
-    access_token = "620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117"
-    #fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified'
-    total_item_list = ItemsOnsaleGet.get_item_list(access_token)
+    nick = 'chinchinstyle'
+    total_item_list = ItemsOnsaleGet.get_item_list(nick)
 
     print len(total_item_list)
     for item in total_item_list:
-        print item.toDict()
+        print item
 
 def test_overview():
-    access_token = "620260146ZZc0465e1b4185f7b4ca8ba1c7736c28d1c675871727117"
-    #fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified'
-    items_overview = ItemsOnsaleGet.get_item_list_with_overview(access_token)
-    
+    nick = 'chinchinstyle'
+    items_overview = ItemsOnsaleGet.get_item_list_with_overview(nick)
     print items_overview['total_results']
     for item in items_overview['item_list']:
-        print item.toDict()
+        print item
 
 if __name__ == '__main__':
-    #test()
-    test_overview()
+    test()
+    #test_overview()

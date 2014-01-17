@@ -11,8 +11,8 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import VasSubscSearchRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
@@ -23,8 +23,7 @@ from tao_models.common.decorator import  tao_api_exception
 logger = logging.getLogger(__name__)
 
 class VasSubscSearch(object):
-    '''
-    '''
+
     PAGE_SIZE = 200
     
     @classmethod

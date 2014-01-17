@@ -11,44 +11,30 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    set_taobao_client('12651461', '80a15051c411f9ca52d664ebde46a9da')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import ItemcatsAuthorizeGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
+
 
 logger = logging.getLogger(__name__)
 
 class ItemcatsAuthorizeGet(object):
-    """
-    """
 
     @classmethod
     @tao_api_exception()
-    def get_itemcats_authorize(cls, access_token, fields):
+    def get_itemcats_authorize(cls, nick, fields):
         req = ItemcatsAuthorizeGetRequest()
         req.fields = fields
-
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-        return rsp.seller_authorize
-
-
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.seller_authorize)
 
 if __name__ == '__main__':
-
+    nick = 'chinchinstyle'
     fields = 'brand.vid, brand.name, item_cat.cid, item_cat.name'
-
-    auth = ItemcatsAuthorizeGet.get_itemcats_authorize(fields)
-
-    print auth.item_cats
-    print auth.brands
-
+    print ItemcatsAuthorizeGet.get_itemcats_authorize(nick,fields)
 

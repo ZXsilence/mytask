@@ -13,16 +13,13 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaKeywordsQscoreGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-
-
-
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -30,13 +27,16 @@ class SimbaKeywordsQscoreGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_keywords_qscore(cls, access_token, nick, adgroup_id):
+    def get_keywords_qscore(cls, nick, adgroup_id):
         req = SimbaKeywordsQscoreGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.keyword_qscore_list)
 
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+if __name__ == '__main__':
+    nick = 'chinchinstyle'
+    adgroup_id = 336844923
+    print SimbaKeywordsQscoreGet.get_keywords_qscore(nick,adgroup_id)
 
-        return rsp.keyword_qscore_list

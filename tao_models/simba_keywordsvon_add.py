@@ -13,31 +13,26 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_taobao_client
-    #set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
-    set_taobao_client('21065688', '74aecdce10af604343e942a324641891')
-
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaKeywordsvonAddRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.common.exceptions import KeywordsFullException
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 from tao_models.common.page_size import PageSize
-
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
 class SimbaKeywordsvonAdd(object):
     """
-    TODO
     [ { "word": "西瓜汁", "maxPrice": 123 ,"isDefaultPrice": 0,"matchScope": 1}, { "word": "苹果汁","maxPrice": 0, "isDefaultPrice": 1 ,"matchScope": 2} ]
     """
 
     @classmethod
     @tao_api_exception()
-    def add_keywords(cls, access_token, nick, adgroup_id, word_price_list,batch_match_scope=4,  custom_match_scope=False):
+    def add_keywords(cls, nick, adgroup_id, word_price_list,batch_match_scope=4,  custom_match_scope=False):
         """
         args:
             word_price_list: [('key', price),('aa', 33)] or word_price_list: [('key', price,match_scope),('aa', 33,2)]
@@ -66,27 +61,29 @@ class SimbaKeywordsvonAdd(object):
         for i in range(package_num):
             keyword_prices_str = json.dumps(word_price_dict_list[i*size:(i+1)*size])
             req.keyword_prices = keyword_prices_str 
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                logger.info("add keywords failed, total size [%d] package num [%d] msg [%s] sub_msg [%s] code [%s] sub_code [%s]", len(word_price_dict_list), i, str(rsp.msg), str(rsp.sub_msg), str(rsp.code), str(rsp.sub_code)) 
-                if rsp.code == 15 and rsp.sub_msg != None and u'已有关键词已经达到200' in rsp.sub_msg:
-                    return keywords
-                if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
-                    return []
-                if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
-                    return []
-                raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
+            soft_code = None
+            try:
+                rsp = ApiService.execute(req,nick,soft_code)
+            except ErrorResponseException,e:
+                rsp = e.rsp
+                if not rsp.isSuccess():
+                    logger.info("add keywords failed, total size [%d] package num [%d] msg [%s] sub_msg [%s] code [%s] sub_code [%s]", len(word_price_dict_list), i, str(rsp.msg), str(rsp.sub_msg), str(rsp.code), str(rsp.sub_code)) 
+                    if rsp.code == 15 and rsp.sub_msg != None and u'已有关键词已经达到200' in rsp.sub_msg:
+                        return change_obj_to_dict_deeply(keywords)
+                    if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
+                        return []
+                    if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
+                        return []
+                    raise e
             keywords.extend(rsp.keywords) 
-        return keywords
+        return change_obj_to_dict_deeply(keywords)
 
 
 def test():
-    #access_token = '6201c01b4ZZdb18b1773873390fe3ff66d1a285add9c10c520500325'
-    access_token = '620181005f776f4b1bdfd5952ec7cfa172e008384c567a2520500325'
     nick = 'chinchinstyle'
-    adgroup_id = '169703057'
-    word_price_list = [('chinzzz', 250), ('styleeee', 168)]
-    SimbaKeywordsvonAdd.add_keywords(access_token, nick, adgroup_id, word_price_list)
+    adgroup_id = 336844923
+    word_price_list = [('test', 250), ('test1', 168)]
+    print SimbaKeywordsvonAdd.add_keywords(nick, adgroup_id, word_price_list)
 
 if __name__ == '__main__':
     test()

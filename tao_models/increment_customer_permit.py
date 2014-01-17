@@ -10,45 +10,37 @@ import datetime as dt
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import IncrementCustomerPermitRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService 
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
 
 class IncrementCustomerPermit(object):
 
-
     @classmethod
     @tao_api_exception()
-    def set_customer_permit(cls, access_token):
+    def set_customer_permit(cls, nick,soft_code):
         logger.info("set customer permit request")
         req = IncrementCustomerPermitRequest()
         req.type = 'get'
         req.topics = 'item'
         req.status = 'all'
-
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-
-        return rsp.app_customer
-
-
-
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.app_customer)
 
 def test():
-    access_token = "6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612"
-    app_customer = IncrementCustomerPermit.set_customer_permit(access_token)
-    print app_customer.toDict()
-    for sub in app_customer.subscriptions:
-        print sub.toDict()
+    nick = 'chinchinstyle'
+    soft_code = 'BD'
+    app_customer = IncrementCustomerPermit.set_customer_permit(nick,soft_code)
+    print app_customer
 
 if __name__ == '__main__':
     test()

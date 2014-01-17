@@ -9,14 +9,15 @@ import logging.config
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from xuanciw.settings import  trigger_envReady
-    logging.config.fileConfig('../xuanciw/consolelogger.conf')
+    from tao_models.conf import set_env
+    set_env.getEnvReady()
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
 
 from TaobaoSdk import SimbaAdgroupsChangedGetRequest
-from TaobaoSdk.Exceptions import  ErrorResponseException
-
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -30,68 +31,49 @@ class SimbaAdgroupsChangedGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _get_sub_adgroups_changed(cls, access_token, req):
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+    def _get_sub_adgroups_changed(cls, nick, req):
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
         return rsp
 
 
     @classmethod
-    def get_adgroups_changed(cls, access_token, nick, start_time):
-        """
-
-        return format:
-
-        """
+    def get_adgroups_changed(cls, nick, start_time):
         adgroup_list = []
-
         req = SimbaAdgroupsChangedGetRequest()
         req.nick = nick
         req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
         req.page_size = cls.PAGE_SIZE
         req.page_no = 1
 
-        #first_call
-        #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        rsp = SimbaAdgroupsChangedGet._get_sub_adgroups_changed(access_token, req)
+        rsp = SimbaAdgroupsChangedGet._get_sub_adgroups_changed(nick, req)
 
         if not rsp.adgroups.total_item:
-            logger.debug("get_adgroups_changed ---nick:%s start_time:%s total_changed_adgroups:%s "%(nick,
-                                                                                                     start_time,
-                                                                                                     rsp.adgroups.total_item,
-                ))
             return adgroup_list
 
         adgroup_list.extend(rsp.adgroups.adgroup_list)
 
         #continue to call if more than one page
         total_pages = (rsp.adgroups.total_item + cls.PAGE_SIZE - 1)/cls.PAGE_SIZE
-        logger.debug("get_adgroups_changed ---nick:%s start_time:%s total_changed_adgroups:%s total_pages:%s "%(nick,
-                                                                                                                start_time,
-                                                                                                                rsp.adgroups.total_item,
-                                                                                                                total_pages
-            ))
         for curr_page_no in range(2, total_pages+1):
             req.page_no = curr_page_no
-            #rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            rsp = SimbaAdgroupsChangedGet._get_sub_adgroups_changed(access_token, req)
+            rsp = SimbaAdgroupsChangedGet._get_sub_adgroups_changed(nick, req)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
-        return adgroup_list
+        return change_obj_to_dict_deeply(adgroup_list)
 
 
 
 def test():
-    access_token = "6200b26ad6dde0735bc63c45618ca4f8bdfhfc1dfd08854100160612"
-    sid = 71506259
-    nick = '密多帮巴'
-    start_time = "2012-08-06 03:00:00"
+    nick = 'chinchinstyle'
+    from datetime import datetime,timedelta
+    curr_time = datetime.now()
+    start_time = curr_time - timedelta(days=20)
     SimbaAdgroupsChangedGet.PAGE_SIZE = 30
-    adgroup_list = SimbaAdgroupsChangedGet.get_adgroups_changed(access_token,nick,start_time)
+    adgroup_list = SimbaAdgroupsChangedGet.get_adgroups_changed(nick,start_time)
 
     for adgroup in adgroup_list:
-        print adgroup.toDict()
+        print adgroup
 
 
 if __name__ == '__main__':

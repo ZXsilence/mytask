@@ -13,34 +13,44 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
     set_env.getEnvReady()
-    logging.config.fileConfig('conf/consolelogger.conf')
+    from tao_models.conf.settings import set_api_source
+    set_api_source('api_test')
     
-from tao_models.conf import    settings as tao_model_settings
+from TaobaoSdk import TopatsSimbaCampkeywordeffectGetRequest
 from tao_models.common.decorator import  tao_api_exception
-from TaobaoSdk.Request.TopatsSimbaCampkeywordeffectGetRequest import TopatsSimbaCampkeywordeffectGetRequest
-from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
+from tao_models.services.api_service import ApiService
+from tao_models.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
-
 class TopatsSimbaCampkeywordeffectGet(object):
-    ''
+    
     @classmethod
     @tao_api_exception()
-    def get_camp_keywordeffect_task(cls, nick, campaign_id, time_slot, access_token):
-        ''
+    def get_camp_keywordeffect_task(cls, nick, campaign_id, time_slot, soft_code):
         req = TopatsSimbaCampkeywordeffectGetRequest()
         req.nick = nick
         req.campaign_id = campaign_id
         req.time_slot = time_slot
         req.search_type = 'SEARCH'
         req.source = 'SUMMARY'
-        
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            if int(rsp.code) == 700:
-                task_id = re.findall('[\d]+', rsp.sub_msg)
-                return int(task_id[0])
-            else:
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return rsp.task.task_id
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            rsp = e.rsp
+            if not rsp.isSuccess():
+                if int(rsp.code) == 700:
+                    task_id = re.findall('[\d]+', rsp.sub_msg)
+                    return int(task_id[0])
+                else:
+                    raise e
+        return change_obj_to_dict_deeply(rsp.task.task_id)
+
+if __name__ == '__main__':
+    nick = 'chinchinstyle'    
+    campaign_id = 3367748
+    time_slot = '7DAY'
+    soft_code = 'SYB'
+    print TopatsSimbaCampkeywordeffectGet.get_camp_keywordeffect_task(nick, campaign_id, time_slot, soft_code)
+
