@@ -2,7 +2,12 @@
 __author__ = 'chenke'
 
 
-
+class ExtendType(object):
+    DEFAULT = 0
+    PV_FIRST = 1
+    CONV_FIRST = 2
+    MONEY_FIRST = 3
+    REL_AND_PV = 4
 
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
@@ -36,6 +41,7 @@ class OperationType(object):
     DELETE_LOW_RELEVANCE = 11
     DELETE_DIRECTOR = 12
     DELETE_HISTORY_NORMAL = 13
+    DELETE_LOW_PV_BY_ADGROUP_CPC = 15
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
     UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE = 102
@@ -88,7 +94,8 @@ class OperationType(object):
         DELETE_FILTER_WORDS,
         DELETE_LOW_RELEVANCE,
         DELETE_DIRECTOR,
-        DELETE_HISTORY_NORMAL
+        DELETE_HISTORY_NORMAL,
+        DELETE_LOW_PV_BY_ADGROUP_CPC
     ]
 
     ALL_UPDATE_TYPES = [
@@ -133,6 +140,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_RELEVANCE : "由于关键词相关性不佳，已经删除"
     , OperationType.DELETE_DIRECTOR : "加力计划优化，发现关键词表现不佳，已经删除"
     , OperationType.DELETE_HISTORY_NORMAL : "关键词已经被删除(历史记录未区分类型)"
+    , OperationType.DELETE_LOW_PV_BY_ADGROUP_CPC : "关键词已经超出推广组cpc较多，仍然没有展现，已经删除"
 
     , OperationType.UPDATE_PRICE_ROI_GOOD_INCRE_PRICE : "关键词最近一段时间效果好于计划整体，加大投入"
     , OperationType.UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE : "系统预估关键词ROI潜力较大，适当加大投入"
