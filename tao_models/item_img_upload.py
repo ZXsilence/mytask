@@ -24,7 +24,7 @@ from TaobaoSdk.Domain.multipart import ItemImgUploadRequest,FileItem
 
 from tao_models.conf import  settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from shop_db.services.shop_db_service import ShopDBService
+from shop_db.services.shop_info_service import ShopInfoService
 from tao_models.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ class ItemImgUpload(object):
     @tao_api_exception()
     def upload_img(cls,nick,num_iid,image_path):
         soft_code = None
-        shop_infos = ShopDBService.get_shop_infos(nick,soft_code,False)
+        shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,False)
         soft_code = shop_infos[0]['soft_code']
         access_token = shop_infos[0]['access_token']
         appkey = APP_SETTINGS[soft_code]['app_key']

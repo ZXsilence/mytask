@@ -6,17 +6,6 @@ import sys
 import os
 import logging
 
-from shop_db.services.shop_db_service import ShopDBService
-from tao_models.common.exceptions import  InvalidAccessTokenException
-from tao_models.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
-from TaobaoSdk.Exceptions import ErrorResponseException
-from TaobaoSdk import  TaobaoClient
-
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.path.dirname(__file__),'../..'))
-    from tao_models.conf import set_env
-    set_env.getEnvReady()
-    
 logger = logging.getLogger(__name__)
 
 def change_obj_to_dict_deeply(obj):

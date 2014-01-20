@@ -7,7 +7,7 @@ import os
 import logging
 from datetime import datetime
 
-from shop_db.services.shop_db_service import ShopDBService
+from shop_db.services.shop_info_service import ShopInfoService
 from tao_models.common.exceptions import  InvalidAccessTokenException,ApiSourceError
 from tao_models.db_models.api_record import ApiRecord
 from tao_models.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_SOURCE,api_source
@@ -26,10 +26,10 @@ class ApiService(object):
     @staticmethod
     def execute(req,nick=None,soft_code=None):
         if not nick and not soft_code:
-            shop_infos = ShopDBService.get_shop_infos_by_num(10)
+            shop_infos = ShopInfoService.get_shop_infos_by_num(10)
         else:
             session_expired = False
-            shop_infos = ShopDBService.get_shop_infos(nick,soft_code,False)
+            shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,False)
         return ApiService.execute_with_shop_infos(req,shop_infos)
 
     @staticmethod
@@ -52,7 +52,7 @@ class ApiService(object):
             ApiRecordService.mark_record(req,rsp)
             if rsp.code == 27:
                 #错误码27即是InvalidAccessToken,跳过，用其他shop_info进行调用
-                ShopDBService.update_shop_info(soft_code,sid,{'session_expired':True})
+                ShopInfoService.update_shop_info(soft_code,sid,{'session_expired':True})
                 continue
             if not rsp.isSuccess():
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg,req=req,rsp=rsp)

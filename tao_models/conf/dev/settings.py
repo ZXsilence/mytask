@@ -40,40 +40,46 @@ api_conn = Connection(host=MGDBS['api_conn']['HOST'],port=MGDBS['api_conn']['POR
 APP_SETTINGS = {
 
         'SYB':{
+            'name':'省油宝',
             'app_key':'12685542',
             'app_secret':'6599a8ba3455d0b2a043ecab96dfa6f9',
             'article_code':'ts-1796606',
             'soft_code':'SYB'
         },
         'BD':{
+            'name':'北斗',
             'app_key':'21065688',
             'app_secret':'74aecdce10af604343e942a324641891',
             'article_code':'ts-1797607',
             'soft_code':'BD'
         },
         'ZZB':{
+            'name':'无线省油宝',
             'app_key':'21402298',
             'app_secret':'4f36c8581d344f344b1b98104f5d006e',
             'article_code':'FW_GOODS-1886206',
             'soft_code':'ZZB'
         },
         'JX':{
+            'name':'车手绩效',
             'app_key':'21569590',
             'app_secret':'2505da58f14cae10cbe9d2e651f2dbe4',
             'article_code':'FW_GOODS-1886294',
             'soft_code':'JX'
         },
         'TC':{
+            'name':'淘词',
             'app_key':'21185579',
             'app_secret':'048978dcef7e423d5b3a8dff8b22265e',
             'article_code':'ts-1817244',
             'soft_code':'TC'
         }
         #'WY':{
+        #    'name':'微页',
         #    'app_key':'',
         #    'app_secret':'',
         #    'article_code':'',
-        #    'soft_code':'XQ'
+        #    'soft_code':'WY'
         #},
 }
 
