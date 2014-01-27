@@ -12,7 +12,7 @@ from datetime import  datetime
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../..'))
 
-from tao_models.conf import settings 
+from api_server.conf import settings 
 if __name__ == '__main__':
     coll = (settings.api_conn)['api_record']['api_record']
     coll.ensure_index('source')

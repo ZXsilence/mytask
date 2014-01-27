@@ -12,15 +12,15 @@ import datetime as dt
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from tao_models.conf import set_env
+    from api_server.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_api_source
+    from api_server.conf.settings import set_api_source
     set_api_source('api_test')
 
 from TaobaoSdk import IncrementItemsGetRequest
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.services.api_service import ApiService 
-from tao_models.common.util import change_obj_to_dict_deeply
+from api_server.services.api_service import ApiService 
+from api_server.common.util import change_obj_to_dict_deeply
 
 
 logger = logging.getLogger(__name__)
@@ -146,8 +146,8 @@ def test_split_time():
 
 def test_get_items_incremental_changed():
     nick = 'chinchinstyle'
-    start_time = "2014-01-10 12:40:32"
-    end_time = "2014-01-15 14:35:33"
+    start_time = "2014-01-21 12:40:32"
+    end_time = "2014-01-27 14:35:33"
     format = "%Y-%m-%d %H:%M:%S"
     s = datetime.strptime(start_time, format)
     e = datetime.strptime(end_time, format)

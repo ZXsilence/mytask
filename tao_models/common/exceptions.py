@@ -184,18 +184,3 @@ class AdgroupAudictFailedException(Exception):
     def __str__(self):
         return "AdgroupAudictFailedException:msg [%s] sub_msg [%s]" % (self.msg, self.sub_msg)
 
-
-class ApiSourceError(Exception):
-    """
-    raise this exception when taobao_client excute error  
-    """
-    def __init__(self, source , sub_msg = None):
-        self.msg = source
-        self.sub_msg = sub_msg
-    
-    def __str__(self):
-        return "ApiSourceError:source is %s"%self.msg
-
-
-
-

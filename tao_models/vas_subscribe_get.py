@@ -8,16 +8,16 @@ import logging.config
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from tao_models.conf import set_env
+    from api_server.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_api_source
+    from api_server.conf.settings import set_api_source
     set_api_source('api_test')
 
 from TaobaoSdk import VasSubscribeGetRequest
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.services.api_service import ApiService
-from tao_models.common.util import change_obj_to_dict_deeply
-from tao_models.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
+from api_server.services.api_service import ApiService
+from api_server.common.util import change_obj_to_dict_deeply
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +38,8 @@ class VasSubscribeGet(object):
         return change_obj_to_dict_deeply(rsp.article_user_subscribes)
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    soft_code = 'BD'
+    nick = '麦苗科技001'
+    soft_code = 'SYB'
     article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, soft_code)
     for article_user_subscribe in article_user_subscribes:
         print article_user_subscribe

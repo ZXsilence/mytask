@@ -1,0 +1,51 @@
+#encoding=utf8
+"""doc string for module"""
+__author__ = 'lym liyangmin@maimiaotech.com'
+
+import sys
+import logging
+import traceback
+import inspect
+
+from time import  sleep
+from datetime import datetime
+import simplejson as json
+
+from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
+from db_exceptions.exceptions import  MongodbException
+
+def mongo_exception(func):
+    """
+    decorator to catch and deal with mongodb exception in a uniform way.
+
+    example:
+    if AutoReconnect exception occurs, we will catch it and retry the last mongodb operation.
+
+    NOTICE:
+    this  decorator can be only used for **transaction**, if not, data maybe in a mess.
+
+    """
+
+    def wrapped_func(*args, **kwargs):
+        retry_times = 0
+        while True:
+            try:
+                return func(*args, **kwargs)
+            except AutoReconnect, e:
+                retry_times+=1
+                if retry_times > 5:
+                    logging.exception("got an exception when operate on mongodb")
+                    raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
+                sleep(2)
+
+            except  OperationFailure, e:
+                logging.exception("got an exception when operate on mongodb")
+                raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
+
+            except PyMongoError,e:
+                logging.exception("got an exception when operate on mongodb")
+                raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
+    return wrapped_func
+
+
+

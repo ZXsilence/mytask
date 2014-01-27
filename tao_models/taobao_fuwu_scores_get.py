@@ -19,15 +19,15 @@ from datetime import datetime
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
-    from tao_models.conf import set_env
+    from api_server.conf import set_env
     set_env.getEnvReady()
-    from tao_models.conf.settings import set_api_source
+    from api_server.conf.settings import set_api_source
     set_api_source('api_test')
 
 from TaobaoSdk import FuwuScoresGetRequest 
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.services.api_service import ApiService
-from tao_models.common.util import change_obj_to_dict_deeply
+from api_server.services.api_service import ApiService
+from api_server.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 

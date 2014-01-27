@@ -23,9 +23,3 @@ def getEnvReady():
     sys.path.insert(0,PROJECT_PAR)
     sys.path.insert(0,BACKENDS)
 
-api_source = None
-def set_api_source(source):
-    global api_source
-    api_source = source
-
-

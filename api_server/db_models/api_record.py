@@ -10,8 +10,8 @@
 
 """
 from datetime import datetime
-from tao_models.conf import settings 
-from tao_models.common.decorator import  mongo_exception
+from api_server.conf import settings 
+from api_server.common.decorator import  mongo_exception
 
 class ApiRecord(object):
 
@@ -26,6 +26,7 @@ class ApiRecord(object):
             total_times:调用API总次数
             success_times:调用API成功次数
             error_times:调用API失败次数
+            all_day_limit:标识API全天被限
     '''
     @classmethod
     @mongo_exception
@@ -50,4 +51,12 @@ class ApiRecord(object):
     def insert_record(cls,record_dict):
         filter = {'date':record_dict['date'],'method':record_dict['method'],'source':record_dict['source']}
         cls.coll.update(filter,record_dict,upsert=True)
+
+
+    @classmethod
+    @mongo_exception
+    def set_all_day_limit(cls,date,method,source,flag):
+        filter = {'date':date,'method':method,'source':source}
+        cls.coll.update(filter,{'all_day_limit':flag},upsert=False)
+
 

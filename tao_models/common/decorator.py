@@ -16,8 +16,8 @@ from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
 from db_exceptions.exceptions import  MongodbException
 
 from tao_models.common.exceptions import   DataOutdateException
-from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.exceptions import  *
+from api_server.common.exceptions import ApiSourceError
 from api_records.services.api_records_service import inc_api_call_times, get_api_call_times, update_api_call_times, QueueName
 api_call_infos = [ 
         ['syb_auto_campaign_optimize_job.py',QueueName.SYB_AUTO_CAMPAIGN_OPTIMIZE],
@@ -89,9 +89,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         1、保留自定义业务异常处理，兼容上层的代码
                         2、异常的重试处理,不扔出自定义的业务异常
                     '''
+
+                    if e.code == 1000.1:
+                        raise ApiSourceError(e.code,e.sub_code,e.msg,e.sub_msg)
                      
                     #扔出自定义异常
-                    api_method = e.req.method
+                    api_method = e.params['method']
                     if api_method == 'taobao.simba.adgroup.update' and e.sub_msg \
                             and u'审核下线的推广组不能手工上下线' in e.sub_msg:
                         raise AdgroupAudictFailedException
