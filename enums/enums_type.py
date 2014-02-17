@@ -179,3 +179,28 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_ADGROUP_INITIAL: "计划初始化，删除推广组"
     , OperationType.DELETE_ADGROUP_HISTORY_NORMAL: "删除推广组(历史记录未区分类型)"
 }
+
+class LoginFailType(object):
+    UN_BUY = 1
+    USER_NOT_EXIST = 2
+    MERCHANT_TEST = 3
+    DRAWBACK = 4
+    SUBWAY_TOKEN_ERROR = 5
+    NO_ITEM_CODE = 6
+    NEED_MANAGER = 7
+    ACCESS_TOKEN_ERROR = 8
+    HTTP_ERROR = 9
+
+
+LOGFAILTYPE_COMMENT= {
+        LoginFailType.UN_BUY:'授权失败，当前用户未购买该软件，请切换淘宝帐号并重新登录，<a href="http://login.taobao.com/member/logout.jhtml?spm=1.1000386.5982201.5.qQ0uFL&f=top&out=true&redirectURL=http%3A%2F%2Fwww.taobao.com%2F">退出当前淘宝帐号</a>'
+        ,LoginFailType.USER_NOT_EXIST:'用户不存在'
+        ,LoginFailType.MERCHANT_TEST:'商家测试帐号无法登录'
+        ,LoginFailType.DRAWBACK:'对不起, 该账户已经后台退款，不能继续使用软件'
+        ,LoginFailType.SUBWAY_TOKEN_ERROR:'亲，无法查询到您的直通车帐号信息，请核对您的直通车帐号名和淘宝帐号名是否一致'
+        ,LoginFailType.NO_ITEM_CODE:'系统暂时查不到您的订购记录，请尝试重新登录'
+        ,LoginFailType.NEED_MANAGER:'进入后台失败，请先登录管理员账户'
+        ,LoginFailType.ACCESS_TOKEN_ERROR:'授权失败，淘宝的access_token解析错误，请尝试重新登录'
+        ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
+        
+}
