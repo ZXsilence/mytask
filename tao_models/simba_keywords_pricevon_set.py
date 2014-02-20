@@ -36,6 +36,7 @@ class SimbaKeywordsPricevonSet(object):
     def set_keywords_price(cls, access_token, nick, keyword_price_list):
         if not keyword_price_list:
             return []
+        keyword_price_list = SimbaKeywordsPricevonSet._del_duplicates2(keyword_price_list)
         size = PageSize.KEYWORDS_SET
         word_price_dict_list = []
         for element in keyword_price_list:
@@ -100,6 +101,21 @@ class SimbaKeywordsPricevonSet(object):
                 return []
             raise ErrorResponseException(code=rsp.code,msg=rsp.msg, sub_msg=rsp.sub_msg, sub_code=rsp.sub_code)
         return rsp.keywords
+
+    @classmethod
+    def _del_duplicates2(cls,wordid_price_list):
+        #去重
+        kids_list = []
+        return_list = []
+        for item in wordid_price_list:
+            keyword_id = item['kid']
+            if keyword_id in kids_list:
+                continue
+            else:
+                kids_list.append(keyword_id)
+                return_list.append(item)
+        return return_list 
+
    
     @classmethod
     def _del_duplicates(cls,wordid_price_list):

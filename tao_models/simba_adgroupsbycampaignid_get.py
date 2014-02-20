@@ -87,7 +87,11 @@ class SimbaAdgroupsbycampaignidGet(object):
         if not rsp.isSuccess():
             logger.debug("get_adgroup_count error nick [%s] msg [%s] sub_msg [%s]" %(nick, rsp.msg, rsp.sub_msg))
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return rsp.adgroups.total_item
+        total_item = rsp.adgroups.total_item
+        if total_item:
+            return total_item
+        else:
+            return 0
 
 
     @classmethod
