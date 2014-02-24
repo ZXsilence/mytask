@@ -30,6 +30,8 @@ class SellercatsListGet(object):
         req.nick = nick 
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
+        if not rsp.seller_cats:
+            return []
         return change_obj_to_dict_deeply(rsp.seller_cats)
 
 if __name__ == '__main__':
