@@ -28,6 +28,7 @@ class ApiCenterHandle(object):
         params = simplejson.loads(params)
         method = params['method']
         api_record = ApiRecordService.get_record(api_source,method)
+        nick = nick.decode('utf8')
         logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                 %(api_source,method,soft_code,nick,params.get('nick',None)))
         if not api_source or api_source not in API_SOURCE:
@@ -126,7 +127,7 @@ class ApiCenterHandle(object):
     def get_invalid_session_rsp():
         rsp = {'error_response':{}}
         rsp['error_response']['code'] = 27
-        rsp['error_response']['sub_code'] = 'valid-shop_info-not-found'
+        rsp['error_response']['sub_code'] = 'invalid-shop_info'
         rsp['error_response']['msg'] = 'can not find valid shop_info'
         rsp['error_response']['sub_msg'] = 'can not find valid shop_info'
         return rsp

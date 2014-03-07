@@ -97,18 +97,30 @@ APP_SETTINGS = {
 }
 
 API_SOURCE = [
+              'normal_test',                    #普通测试
+              'check_shop_infos',               #check_shop_infos脚本
+
+              #省油宝
               'syb_webpage',                    #省油宝页面请求
               'syb_auto_campaign_optimize',     #省油宝长尾优化
               'syb_auto_non_campaign_optimize', #省油宝定向优化
               'syb_key_campaign_optimize',      #省油宝加力优化
               'syb_auto_creative_optimize',     #省油宝标题优化
               'syb_deal_keyword_update',        #省油宝成交词抓取脚本
-              'syb_check_shop_status',          #省油宝店铺状态检查脚本
               'syb_user_alert',                 #省油宝用户到期提醒脚本
-              'api_test',                       #api测试
 
               #北斗
+              'bd_webpage',
+              'bd_auto_campaign_optimize',      #北斗长尾优化
+              'bd_deal_keyword_update',         #北斗成交词抓取脚本
+              'bd_user_alert',                  #北斗用户到期提醒脚本
+
               #掌中宝
+              'zzb_webpage',                    #无线省油宝页面请求
+              'zzb_auto_campaign_optimize',     #无线省油宝长尾优化
+              'zzb_deal_keyword_update',        #无线成交词抓取脚本
+              'zzb_user_alert',                 #无线省油宝用户到期提醒脚本
+
               #query_db
               #report_db
               #短信通知脚本

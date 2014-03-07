@@ -30,6 +30,8 @@ class ApiCenterClient(object):
         transport.open()
 
     def execute(self,params,nick,soft_code,api_source):
-        return self.client.execute(params,nick,soft_code,api_source) 
+        print nick,type(nick)
+        #nick = nick.encode('utf8')
+        return self.client.execute(params,nick.encode('utf8'),soft_code,api_source) 
 
 
