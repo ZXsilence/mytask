@@ -34,7 +34,11 @@ class SellercatsListGet(object):
         req.nick = nick 
         rsp = tao_model_settings.taobao_client.execute(req, '')[0]
         if not rsp.isSuccess():
+            if rsp.sub_msg and '根据用户ID找不到店铺' in rsp.sub_msg:
+                return []
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        if not rsp.seller_cats:
+            return []
         return rsp.seller_cats
 
 
