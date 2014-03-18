@@ -29,7 +29,7 @@ class FuwuSaleLinkGen(object):
         req = FuwuSaleLinkGenRequest()
         req.nick = nick 
         req.param_str = param_str 
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,None,soft_code)
         return change_obj_to_dict_deeply(rsp.url)
 
 

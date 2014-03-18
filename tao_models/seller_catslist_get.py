@@ -18,6 +18,7 @@ from TaobaoSdk import SellercatsListGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,14 @@ class SellercatsListGet(object):
         req = SellercatsListGetRequest()
         req.nick = nick 
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            rsp = e.rsp
+            if not rsp.isSuccess():
+                if rsp.sub_msg and '根据用户ID找不到店铺' in rsp.sub_msg:
+                    return []
+            raise e
         if not rsp.seller_cats:
             return []
         return change_obj_to_dict_deeply(rsp.seller_cats)

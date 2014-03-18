@@ -25,6 +25,8 @@ class WordDeleteType(object):
     FILTER_WORDS = 13
     LOW_RELEVANCE = 14
 
+    USER_DELETE_TAOBAO = 15
+
 class OperationType(object):
 
     DELETE_AUDIT_UNPASS = 1
@@ -42,6 +44,7 @@ class OperationType(object):
     DELETE_DIRECTOR = 12
     DELETE_HISTORY_NORMAL = 13
     DELETE_LOW_PV_BY_ADGROUP_CPC = 15
+    DELETE_USER_DELETE_TAOBAO = 16
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
     UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE = 102
@@ -95,7 +98,8 @@ class OperationType(object):
         DELETE_LOW_RELEVANCE,
         DELETE_DIRECTOR,
         DELETE_HISTORY_NORMAL,
-        DELETE_LOW_PV_BY_ADGROUP_CPC
+        DELETE_LOW_PV_BY_ADGROUP_CPC,
+        DELETE_USER_DELETE_TAOBAO 
     ]
 
     ALL_UPDATE_TYPES = [
@@ -132,6 +136,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_CLICK_OLD : "关键词最近一段时间点击量过低，已经删除"
     , OperationType.DELETE_IS_GARBAGE : "关键词被淘宝判断为垃圾词，已经删除"
     , OperationType.DELETE_USER_DELETE : "关键词被用户手工删除"
+    , OperationType.DELETE_USER_DELETE_TAOBAO : "关键词被用户在直通车手工删除"
     
     , OperationType.DELETE_LOW_PV_MAX_PRICE : "关键词已经达到用户设置的最高出价，仍然没有展现，已经删除"
     , OperationType.DELETE_LOW_PV_BEST_POSITION : "关键词已经排在首页，仍然没有展现，已经删除"
