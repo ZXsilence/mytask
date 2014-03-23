@@ -14,7 +14,6 @@ import urllib
 import urllib2
 import time
 import hashlib 
-import md5 
 import simplejson as json
 import datetime
 
@@ -29,10 +28,11 @@ class OpenTaobao:
         params['format'] = 'json' 
         params.update({'app_key':self.app_key,'timestamp':self.get_time(),'v':'2.0'})
         src = self.sercet_code + ''.join(["%s%s" % (k, v) for k, v in sorted(params.iteritems())])
-        return md5.new(src).hexdigest().upper()
+        return hashlib.md5(src).hexdigest().upper()
     def get_result(self,params):
         params['sign'] = self.get_sign(params)
         form_data = urllib.urlencode(params)
+        #return urllib2.urlopen('http://223.5.20.253:8002/router/rest', form_data).read()
         return urllib2.urlopen('http://gw.api.taobao.com/router/rest', form_data).read()
 
 
