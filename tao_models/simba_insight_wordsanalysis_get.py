@@ -28,7 +28,7 @@ class SimbaInsightWordsanalysisGet(object):
     MAX_WORDS = 150
 
     @classmethod
-    @tao_api_exception(1)
+    @tao_api_exception(6)
     def _get_word_analysis(cls, keywords, stu,nick=None):
         """
         keywords 最多200个词
