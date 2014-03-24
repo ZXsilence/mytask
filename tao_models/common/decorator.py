@@ -14,6 +14,7 @@ import simplejson as json
 from TaobaoSdk.Exceptions import ErrorResponseException
 from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
 from db_exceptions.exceptions import  MongodbException
+from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
@@ -75,8 +76,10 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             ):
                         logger.info(args[0].__class__.__name__ + "return None")
                         return None
-
                     res =  func(*args, **kwargs)
+                except SDKRetryException,e:
+                    logger.error('sdk retry error:%s,*args:%s **kwargs:%s'%(func.__name__, str(args),str(kwargs)))
+                    raise e
                 except ErrorResponseException,e:
                     logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))

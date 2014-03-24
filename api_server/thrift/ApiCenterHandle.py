@@ -81,13 +81,24 @@ class ApiCenterHandle(object):
             app_secret = APP_SETTINGS[soft_code]['app_secret']
             access_token = shop_info['access_token']
             api_method = params['method']
+
+            #报表相关接口需要subway_token
             if api_method in API_NEED_SUBWAY_TOKEN:
                 subway_token = shop_info['subway_token']
                 params['subway_token'] = subway_token
+
+            #掌中宝的非open平台access_token，需要加上header
+            if soft_code == 'ZZB' and not shop_info.get('is_open_access_token',False): 
+                params.update(shop_info.get('header',{}))
+
+            #发送请求
             taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
             rsp_dict = taobao_client.execute(params, access_token)
+
             #记录API调用
             ApiCenterHandle.mark_record(params,rsp_dict,api_source)
+
+            #异常处理
             if rsp_dict.has_key('error_response') and rsp_dict['error_response'].get('code',0)== 27:
                 #错误码27即是InvalidAccessToken,跳过，用其他shop_info进行调用
                 ShopInfoService.update_shop_info(soft_code,nick,{'session_expired':True})

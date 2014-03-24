@@ -17,6 +17,7 @@ APISDK = os.path.normpath(os.path.join(currDir,'../../../TaobaoOpenPythonSDK'))
 BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
+#SERVER_URL = "http://223.5.20.253:8002/router/rest"
 SERVER_URL = "http://223.5.20.253:8002/router/rest"
 
 API_THRIFT = {
