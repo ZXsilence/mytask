@@ -58,23 +58,41 @@ class SimbaKeywordKeywordforecastGet(object):
                 logger.debug("未获取到排名预估nick:%s,min_price:%s,max_price:%s,keyword_id:%s" %(nick,min_price,max_price,keyword_id)) 
                 break
             if num >max_num:
-                logger.debug("获取到排名预估nick:%s,min_price:%s,max_price,keyword_id:%s,已经达到max_num:%s 退出" %(nick,min_price,max_price,keyword_id,max_num))
+                logger.debug("获取到排名预估nick:%s,min_price:%s,max_price:%s,keyword_id:%s,已经达到max_num:%s 退出" %(nick,min_price,max_price,keyword_id,max_num))
                 break
             #当前出价比最大出价还低
             if max(temp_rank_dict.keys()) < max_price:
                 bid_price = max(temp_rank_dict.keys()) 
         return rank_dict
 
+
     @classmethod
     def _get_keywordforecast(cls,keyword_id,price,access_token,nick=None):
         """获取价格排名分布"""
         data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
+        cost_dict = {}
+        click_dict = {}
+        if data_dict and data_dict.get("price_click"):
+            l = data_dict["price_click"].split(",")
+            for obj in l:
+                a_list = obj.split(":")
+                click_dict[int(a_list[0])] = int(a_list[1])
+        if data_dict and data_dict.get("price_cust"):
+            l = data_dict["price_cust"].split(",")
+            for obj in l:
+                a_list = obj.split(":")
+                cost_dict[int(a_list[0])] = int(a_list[1])
         ret_dict ={}
         if data_dict and data_dict.get("price_rank"):
             l = data_dict["price_rank"].split(",")
             for obj in l:
                 a_list = obj.split(":")
-                ret_dict[int(a_list[0])] = int(a_list[1])
+                key = int(a_list[0])
+                if not ret_dict.has_key(int(a_list[0])):
+                    ret_dict[key] = {}
+                ret_dict[key]['rank'] = int(a_list[1])
+                ret_dict[key]['click'] = click_dict[key/10*10]
+                ret_dict[key]['cost'] = cost_dict[key/10*10]
         return ret_dict
 
 if __name__ =="__main__":
