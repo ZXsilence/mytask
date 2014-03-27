@@ -40,6 +40,43 @@ class SimbaKeywordKeywordforecastGet(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         return rsp.keyword_forecast.toDict()
 
+    @classmethod
+    def get_keywordforecast_by_price_range(cls,keyword_id,min_price,max_price,access_token,nick=None):
+        """价格段内的排名分布"""
+        num = 0
+        max_num = 20
+        rank_dict ={}
+        bid_price = min_price
+        while True:
+            num += 1
+            temp_rank_dict = cls._get_keywordforecast(keyword_id,bid_price,access_token,nick)
+            rank_dict.update(temp_rank_dict)
+            if max(temp_rank_dict.keys()) >= max_price:
+                logger.debug("经过num:%s次排名预估找到价格区间预估min_price:%s,max_price:%s,nick:%s,keyword_id:%s" %(num,min_price,max_price,nick,keyword_id))
+                break
+            if not temp_rank_dict:
+                logger.debug("未获取到排名预估nick:%s,min_price:%s,max_price:%s,keyword_id:%s" %(nick,min_price,max_price,keyword_id)) 
+                break
+            if num >max_num:
+                logger.debug("获取到排名预估nick:%s,min_price:%s,max_price,keyword_id:%s,已经达到max_num:%s 退出" %(nick,min_price,max_price,keyword_id,max_num))
+                break
+            #当前出价比最大出价还低
+            if max(temp_rank_dict.keys()) < max_price:
+                bid_price = max(temp_rank_dict.keys()) 
+        return rank_dict
+
+    @classmethod
+    def _get_keywordforecast(cls,keyword_id,price,access_token,nick=None):
+        """获取价格排名分布"""
+        data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
+        ret_dict ={}
+        if data_dict and data_dict.get("price_rank"):
+            l = data_dict["price_rank"].split(",")
+            for obj in l:
+                a_list = obj.split(":")
+                ret_dict[int(a_list[0])] = int(a_list[1])
+        return ret_dict
+
 if __name__ =="__main__":
     tao_model_settings.set_taobao_client('21065688','74aecdce10af604343e942a324641891')
     keyword_id = 54849998072
@@ -54,3 +91,4 @@ if __name__ =="__main__":
     rsp = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
     for key ,v in rsp.iteritems():
         print key,v
+    #print SimbaKeywordKeywordforecastGet.get_keywordforecast_by_price_range(keyword_id,10,300,access_token,nick)
