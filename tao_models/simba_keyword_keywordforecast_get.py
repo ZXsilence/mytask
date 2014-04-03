@@ -10,6 +10,8 @@ import datetime
 import logging
 import logging.config
 import json
+from time import sleep
+from tao_models.common.exceptions import  TaoApiMaxRetryException 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from tao_models.conf import set_env
@@ -69,7 +71,18 @@ class SimbaKeywordKeywordforecastGet(object):
     @classmethod
     def _get_keywordforecast(cls,keyword_id,price,access_token,nick=None):
         """获取价格排名分布"""
-        data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
+        i = 0
+        while(True):
+            if i == 20:
+                raise TaoApiMaxRetryException("retry 20 times ,but still failed")
+            data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
+            if not data_dict:
+                i += 1
+                sleep(0.5)
+                print 'retry get keywordforecast',i
+                continue
+            else:
+                break
         cost_dict = {}
         click_dict = {}
         if data_dict and data_dict.get("price_click"):
