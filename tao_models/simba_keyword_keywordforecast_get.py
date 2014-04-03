@@ -78,7 +78,7 @@ class SimbaKeywordKeywordforecastGet(object):
             data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
             if not data_dict:
                 i += 1
-                sleep(0.5)
+                sleep(1)
                 print 'retry get keywordforecast',i
                 continue
             else:
