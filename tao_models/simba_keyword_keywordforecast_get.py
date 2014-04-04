@@ -52,6 +52,8 @@ class SimbaKeywordKeywordforecastGet(object):
         while True:
             num += 1
             temp_rank_dict = cls._get_keywordforecast(keyword_id,bid_price,access_token,nick)
+            if not temp_rank_dict.keys():
+                raise TaoApiMaxRetryException("api error")
             rank_dict.update(temp_rank_dict)
             if max(temp_rank_dict.keys()) >= max_price:
                 logger.debug("经过num:%s次排名预估找到价格区间预估min_price:%s,max_price:%s,nick:%s,keyword_id:%s" %(num,min_price,max_price,nick,keyword_id))
