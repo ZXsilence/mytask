@@ -78,7 +78,7 @@ class SimbaKeywordKeywordforecastGet(object):
             if i == 20:
                 raise TaoApiMaxRetryException("retry 20 times ,but still failed")
             data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
-            if not data_dict:
+            if not data_dict or not data_dict.has_key('price_rank'):
                 i += 1
                 sleep(1)
                 print 'retry get keywordforecast',i
