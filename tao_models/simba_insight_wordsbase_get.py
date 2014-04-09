@@ -106,7 +106,7 @@ class SimbaInsightWordsbaseGet(object):
     @classmethod
     def get_words_base_one_week_avg(cls, words_list,nick=None):
         'words_list 应该是小写，简体，半角字符串，而且每个word不应该包含逗号'
-        in_word_bases = SimbaInsightWordsbaseGet._get_words_base('WEEK', words_list,nick)
+        in_word_bases = SimbaInsightWordsbaseGet.get_words_base('WEEK', words_list,nick)
         word_info_list = []
         for word_base in in_word_bases:
             word = word_base.word
