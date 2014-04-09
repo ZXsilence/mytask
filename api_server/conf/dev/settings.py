@@ -50,7 +50,6 @@ logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
 
-
 APP_SETTINGS = {
 
         'SYB':{
@@ -67,19 +66,12 @@ APP_SETTINGS = {
             'article_code':'ts-1797607',
             'soft_code':'BD'
         },
-        'ZZB':{
-            'name':'无线省油宝',
+        'QN':{
+            'name':'省油宝千牛插件',
             'app_key':'21402298',
             'app_secret':'4f36c8581d344f344b1b98104f5d006e',
             'article_code':'FW_GOODS-1886206',
-            'soft_code':'ZZB'
-        },
-        'JX':{
-            'name':'车手绩效',
-            'app_key':'21569590',
-            'app_secret':'2505da58f14cae10cbe9d2e651f2dbe4',
-            'article_code':'FW_GOODS-1886294',
-            'soft_code':'JX'
+            'soft_code':'QN'
         },
         'TC':{
             'name':'淘词',
@@ -95,8 +87,17 @@ APP_SETTINGS = {
         #    'article_code':'',
         #    'soft_code':'WY'
         #},
+        #'JX':{
+        #    'name':'车手绩效',
+        #    'app_key':'21569590',
+        #    'app_secret':'2505da58f14cae10cbe9d2e651f2dbe4',
+        #    'article_code':'FW_GOODS-1886294',
+        #    'soft_code':'JX'
+        #},
 }
 
+
+#API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
               'normal_test',                    #普通测试
               'check_shop_infos',               #check_shop_infos脚本
@@ -110,17 +111,20 @@ API_SOURCE = [
               'syb_deal_keyword_update',        #省油宝成交词抓取脚本
               'syb_user_alert',                 #省油宝用户到期提醒脚本
 
+              #千牛插件
+              'qn_webpage',                    #千牛插件页面请求
+              'qn_auto_campaign_optimize',     #千牛插件长尾优化
+              'qn_auto_non_campaign_optimize', #千牛插件定向优化
+              'qn_key_campaign_optimize',      #千牛插件加力优化
+              'qn_auto_creative_optimize',     #千牛插件标题优化
+              'qn_deal_keyword_update',        #千牛插件成交词抓取脚本
+              'qn_user_alert',                 #千牛插件用户到期提醒脚本
+
               #北斗
               'bd_webpage',
               'bd_auto_campaign_optimize',      #北斗长尾优化
               'bd_deal_keyword_update',         #北斗成交词抓取脚本
               'bd_user_alert',                  #北斗用户到期提醒脚本
-
-              #掌中宝
-              'zzb_webpage',                    #无线省油宝页面请求
-              'zzb_auto_campaign_optimize',     #无线省油宝长尾优化
-              'zzb_deal_keyword_update',        #无线成交词抓取脚本
-              'zzb_user_alert',                 #无线省油宝用户到期提醒脚本
 
               #query_db
               #report_db
@@ -150,3 +154,5 @@ API_NEED_SUBWAY_TOKEN = [
         ]
 
 
+#from api_server.thrift.ApiCenterClient import ApiCenterClient
+#api_client  = ApiCenterClient('localhost',9090)

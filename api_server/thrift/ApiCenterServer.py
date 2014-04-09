@@ -30,8 +30,8 @@ if __name__ == '__main__':
     transport = TSocket.TServerSocket(API_THRIFT['host'], API_THRIFT['port'])
     tfactory = TTransport.TBufferedTransportFactory()
     pfactory = TBinaryProtocol.TBinaryProtocolFactory()
-    server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
-    print "Starting api thrift server ..."
+    server = TServer.TThreadedServer(processor, transport, tfactory, pfactory)
+    print "Starting api thrift server ."
     server.serve()
 
 

@@ -25,6 +25,7 @@ class ApiCenterHandle(object):
             nick为空字符串，表示该API请求和用户无关，可取任意有效的access_token
             soft_code为空字符串 ，表示该API请求和APP无关，可任取app_key
         """
+
         params = simplejson.loads(params)
         method = params['method']
         api_record = ApiRecordService.get_record(api_source,method)
@@ -88,7 +89,7 @@ class ApiCenterHandle(object):
                 params['subway_token'] = subway_token
 
             #掌中宝的非open平台access_token，需要加上header
-            if soft_code == 'ZZB' and not shop_info.get('is_open_access_token',False): 
+            if soft_code == 'QN' and not shop_info.get('is_open_access_token',False): 
                 params.update(shop_info.get('header',{}))
 
             #发送请求

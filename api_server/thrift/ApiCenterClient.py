@@ -25,13 +25,14 @@ class ApiCenterClient(object):
         self.port = int(port)
         transport = TSocket.TSocket(self.host, self.port)
         transport = TTransport.TBufferedTransport(transport)
+        self.transport = transport
         protocol = TBinaryProtocol.TBinaryProtocol(transport)
         self.client = ApiCenter.Client(protocol)
         transport.open()
 
     def execute(self,params,nick,soft_code,api_source):
-        print nick,type(nick)
-        #nick = nick.encode('utf8')
-        return self.client.execute(params,nick.encode('utf8'),soft_code,api_source) 
+        result = self.client.execute(params,nick.encode('utf8'),soft_code,api_source) 
+        self.transport.close()
+        return result
 
 

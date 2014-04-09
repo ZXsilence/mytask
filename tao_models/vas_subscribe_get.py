@@ -14,10 +14,11 @@ if __name__ == '__main__':
     set_api_source('api_test')
 
 from TaobaoSdk import VasSubscribeGetRequest
+from TaobaoSdk import TaobaoClient
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_SOURCE
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,21 @@ class VasSubscribeGet(object):
         req.nick = nick
         req.article_code = APP_SETTINGS[soft_code]['article_code']
         rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.article_user_subscribes)
+
+    @classmethod
+    @tao_api_exception(20)
+    def get_vas_subscribe_by_sdk(cls, nick,soft_code):
+        req = VasSubscribeGetRequest()
+        req.nick = nick
+        req.article_code = APP_SETTINGS[soft_code]['article_code']
+        app_key = APP_SETTINGS[soft_code]['app_key']
+        app_secret = APP_SETTINGS[soft_code]['app_secret']
+        params = ApiService.getReqParameters(req)
+        taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
+        rsp = ApiService.getResponseObj(taobao_client.execute(params, ''))
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg,req=params,rsp=rsp)
         return change_obj_to_dict_deeply(rsp.article_user_subscribes)
 
 if __name__ == '__main__':
