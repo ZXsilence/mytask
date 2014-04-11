@@ -20,9 +20,9 @@ if __name__ == '__main__':
     
 from tao_models.conf import    settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
-from tao_models.common.exceptions import  TBDataNotReadyException
-from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
 from TaobaoSdk.Request.SimbaKeywordKeywordforecastGetRequest import SimbaKeywordKeywordforecastGetRequest
+from api_server.services.api_service import ApiService
+from api_server.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
@@ -30,20 +30,19 @@ class SimbaKeywordKeywordforecastGet(object):
     ''
     @classmethod
     @tao_api_exception()
-    def get_keywordforecast(cls,keyword_id,bidword_price,access_token,nick=None):
+    def get_keywordforecast(cls,keyword_id,bidword_price,nick=None):
         """词预估"""
         req = SimbaKeywordKeywordforecastGetRequest()
         req.keyword_id = keyword_id
         req.bidword_price = bidword_price
         if nick:
             req.nick= nick
-        rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        return rsp.keyword_forecast.toDict()
+        soft_code = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.keyword_forecast)
 
     @classmethod
-    def get_keywordforecast_by_price_range(cls,keyword_id,min_price,max_price,access_token,nick=None):
+    def get_keywordforecast_by_price_range(cls,keyword_id,min_price,max_price,nick=None):
         """价格段内的排名分布"""
         num = 0
         max_num = 20
@@ -51,7 +50,7 @@ class SimbaKeywordKeywordforecastGet(object):
         bid_price = min_price
         while True:
             num += 1
-            temp_rank_dict = cls._get_keywordforecast(keyword_id,bid_price,access_token,nick)
+            temp_rank_dict = cls._get_keywordforecast(keyword_id,bid_price,nick)
             if not temp_rank_dict.keys():
                 raise TaoApiMaxRetryException("api error")
             rank_dict.update(temp_rank_dict)
@@ -71,13 +70,13 @@ class SimbaKeywordKeywordforecastGet(object):
 
 
     @classmethod
-    def _get_keywordforecast(cls,keyword_id,price,access_token,nick=None):
+    def _get_keywordforecast(cls,keyword_id,price,nick=None):
         """获取价格排名分布"""
         i = 0
         while(True):
             if i == 20:
                 raise TaoApiMaxRetryException("retry 20 times ,but still failed")
-            data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
+            data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,nick)
             if not data_dict or not data_dict.has_key('price_rank') or not data_dict['price_rank']:
                 i += 1
                 sleep(1)
@@ -121,7 +120,7 @@ if __name__ =="__main__":
     #access_token = "620200488562ZZ4711a5a8f32852f2b81bfcc1954015c7e816221524"
     #nick ="康诺宜家家居旗舰店"
     nick = "栾氏茶业"
-    rsp = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,access_token,nick)
+    rsp = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,nick)
     for key ,v in rsp.iteritems():
         print key,v
     #print SimbaKeywordKeywordforecastGet.get_keywordforecast_by_price_range(keyword_id,10,300,access_token,nick)
