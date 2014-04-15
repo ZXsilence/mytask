@@ -23,15 +23,28 @@ from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 from api_server.conf.settings import API_THRIFT
 from api_server.thrift.ApiCenterHandle import ApiCenterHandle
+
+def useage():
+    print 'python ApiCenterServer \n python ApiCenterServer ip port'
    
 if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        ip = '0.0.0.0'
+        port = API_THRIFT['port']
+    elif len(sys.argv) == 3:
+        ip = sys.argv[1]
+        port = sys.argv[2]
+    else:
+        useage()
+        sys.exit(0)
     handler = ApiCenterHandle()
     processor = ApiCenter.Processor(handler)
-    transport = TSocket.TServerSocket(API_THRIFT['host'], API_THRIFT['port'])
+    transport = TSocket.TServerSocket(ip, port)
     tfactory = TTransport.TBufferedTransportFactory()
     pfactory = TBinaryProtocol.TBinaryProtocolFactory()
     server = TServer.TThreadedServer(processor, transport, tfactory, pfactory)
-    print "Starting api thrift server ."
+    print 'bind_ip:',ip,' port:',port
+    print "Start api thrift server successfully ..."
     server.serve()
 
 
