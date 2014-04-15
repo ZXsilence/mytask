@@ -42,7 +42,7 @@ if __name__ == '__main__':
     transport = TSocket.TServerSocket(ip, port)
     tfactory = TTransport.TBufferedTransportFactory()
     pfactory = TBinaryProtocol.TBinaryProtocolFactory()
-    server = TServer.TThreadedServer(processor, transport, tfactory, pfactory)
+    server = TServer.TForkingServer(processor, transport, tfactory, pfactory)
     print 'bind_ip:',ip,' port:',port
     print "Start api thrift server successfully ..."
     server.serve()
