@@ -32,7 +32,7 @@ def set_api_source(source):
 
 API_MAIN_DB = {
         #'HOST':'syb.maimiaotech.com',
-            'HOST':'mm_246',
+            'HOST':'mm_254',
             'PORT':2300,
             'USER':'',
             'PASSWORD':''
