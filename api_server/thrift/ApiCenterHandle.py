@@ -89,12 +89,13 @@ class ApiCenterHandle(object):
                 params['subway_token'] = subway_token
 
             #掌中宝的非open平台access_token，需要加上header
-            #if soft_code == 'QN' and not shop_info.get('is_open_access_token',False): 
-            #    params.update(shop_info.get('header',{}))
+            header = {}
+            if soft_code == 'QN' and not shop_info.get('is_open_access_token',False) and shop_info.has_key('header'): 
+                header = shop_info['header']
 
             #发送请求
             taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
-            rsp_dict = taobao_client.execute(params, access_token)
+            rsp_dict = taobao_client.execute(params, access_token,header)
 
             #记录API调用
             ApiCenterHandle.mark_record(params,rsp_dict,api_source)
