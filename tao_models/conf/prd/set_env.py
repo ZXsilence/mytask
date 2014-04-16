@@ -17,8 +17,10 @@ PROJECT_ROOT = os.path.normpath(os.path.join(currDir,os.path.pardir))
 PROJECT_PAR = os.path.normpath(os.path.join(PROJECT_ROOT, os.path.pardir))
 PYTHON_SDK = os.path.normpath(os.path.join(currDir, '../../../TaobaoOpenPythonSDK/'))
 BACKENDS = os.path.normpath(os.path.join(currDir, '../../../backends/'))
+API_GEN = os.path.normpath(os.path.join(currDir, '../../../comm_lib/api_server/thrift/gen-py/'))
     
 def getEnvReady():
     sys.path.insert(0,PYTHON_SDK)
     sys.path.insert(0,PROJECT_PAR)
+    sys.path.insert(0,API_GEN)
 
