@@ -15,7 +15,7 @@ if __name__ == '__main__':
     from api_server.conf import set_env
     set_env.getEnvReady()
     from api_server.conf.settings import set_api_source
-    set_api_source('api_test')
+    set_api_source('normal_test')
     
 from TaobaoSdk import SimbaRptCusteffectGetRequest
 from tao_models.common.decorator import  tao_api_exception

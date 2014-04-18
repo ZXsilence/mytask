@@ -10,6 +10,7 @@
 
 """
 import simplejson
+from datetime import datetime
 from shop_db.services.shop_info_service import ShopInfoService
 from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_SOURCE,API_THRIFT
 from TaobaoSdk import  TaobaoClient
@@ -28,7 +29,8 @@ class ApiCenterHandle(object):
 
         params = simplejson.loads(params)
         method = params['method']
-        api_record = ApiRecordService.get_record(api_source,method)
+        date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
+        api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
         nick = nick.decode('utf8')
         logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                 %(api_source,method,soft_code,nick,params.get('nick',None)))
@@ -70,6 +72,7 @@ class ApiCenterHandle(object):
             对shop_infos循环调用，避免下面的特殊情况：
             一个用户订购多款软件，shop_info_list的session_expired全为False，但是其中一个订购已退款或失效
         """
+        date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
         rsp_dict = {}
         invalid_session_count = 0
         call_limit_count = 0
@@ -98,7 +101,7 @@ class ApiCenterHandle(object):
             rsp_dict = taobao_client.execute(params, access_token,header)
 
             #记录API调用
-            ApiCenterHandle.mark_record(params,rsp_dict,api_source)
+            ApiCenterHandle.mark_record(params,rsp_dict,soft_code,api_source,date_str)
 
             #异常处理
             if rsp_dict.has_key('error_response') and rsp_dict['error_response'].get('code',0)== 27:
@@ -112,7 +115,7 @@ class ApiCenterHandle(object):
                 #API全天被限
                 wait_seconds = int(rsp_dict['error_response']['sub_msg'].split(' ')[5])
                 if wait_seconds > 60:
-                    ApiRecordService.set_all_day_limit(api_method,api_source,True)
+                    ApiRecordService.set_all_day_limit(soft_code,api_source,api_method,date_str,True)
                     logger.error("API ALL DAY LIMITS , wait_seconds:%s , source:%s , method:%s , nick:%s , soft_code:%s"%(wait_seconds,api_source,api_method,shop_info['nick'],shop_info['soft_code']))
                     call_limit_count += 1
                     #切换app_key
@@ -125,16 +128,20 @@ class ApiCenterHandle(object):
             return ApiCenterHandle.get_invalid_session_rsp()
 
     @staticmethod
-    def mark_record(params,rsp,source):
+    def mark_record(params,rsp,soft_code,source,date_str):
         method = params['method']
         if not rsp.has_key('error_response'):
-            ApiRecordService.inc_success_record(source,method)
-        elif rsp['error_response']['sub_code'] and (rsp['error_response']['sub_code'].startswith('isp.') \
-                or rsp['error_response']['sub_code'] == 'accesscontrol.limited-by-api-access-count'):
-            #无需记录的错误:  流控，isp错误等
-            pass
+            ApiRecordService.inc_success_record(soft_code,source,method,date_str)
         else:
-            ApiRecordService.inc_fail_record(source,method)
+            if rsp['error_response']['sub_code']:
+                sub_code = rsp['error_response']['sub_code']
+            else:
+                sub_code = 'unknow_sub_code'
+            ApiRecordService.inc_fail_record(soft_code,source,method,date_str,sub_code)
+        #elif rsp['error_response']['sub_code'] and (rsp['error_response']['sub_code'].startswith('isp.') \
+        #        or rsp['error_response']['sub_code'] == 'accesscontrol.limited-by-api-access-count'):
+        #    #无需记录的错误:  流控，isp错误等
+        #    pass
 
     @staticmethod
     def get_invalid_session_rsp():

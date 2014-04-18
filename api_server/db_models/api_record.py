@@ -27,21 +27,35 @@ class ApiRecord(object):
             success_times:调用API成功次数
             error_times:调用API失败次数
             all_day_limit:标识API全天被限
+            soft_code:应用名
+            fail_detail_info:错误的详细记录
     '''
     @classmethod
     @mongo_exception
-    def inc_success_record(cls,date_str,source,method):
-        cls.coll.update({'date':date_str,'source':source,'method':method},{'$inc':{'success_times':1,'total_times':1}})
+    def inc_success_record(cls,soft_code,source,method,date_str):
+        cls.coll.update({'date':date_str,'source':source,'method':method,'soft_code':soft_code},\
+                {'$inc':{'success_times':1,'total_times':1}})
 
     @classmethod
     @mongo_exception
-    def inc_fail_record(cls,date_str,source,method):
-        cls.coll.update({'date':date_str,'source':source,'method':method},{'$inc':{'fail_times':1,'total_times':1}})
+    def inc_fail_record(cls,soft_code,source,method,date_str,sub_code):
+        cls.coll.update({'date':date_str,'source':source,'method':method,'soft_code':soft_code},\
+                {'$inc':{'fail_times':1,'total_times':1,'fail_detail_info.%s'%sub_code:1}})
 
     @classmethod
     @mongo_exception
-    def find_api_record(cls,date_str,source,method):
-        doc = cls.coll.find_one({'source':source,'method':method,'date':date_str})
+    def inc_fail_record_new(cls,soft_code,source,method,date_str,sub_code):
+        cls.coll.update({'date':date_str,'source':source,'method':method,'soft_code':soft_code},\
+                {'$inc':{'fail_times':1,'total_times':1},'$set':{'fail_detail_info.%s'%sub_code:1}})
+
+    @classmethod
+    @mongo_exception
+    def find_api_record(cls,soft_code,source,method,date_str):
+        if soft_code:
+            filter = {'source':source,'method':method,'date':date_str,'soft_code':soft_code}
+        else:
+            filter = {'source':source,'method':method,'date':date_str}
+        doc = cls.coll.find_one(filter)
         if not doc:
             return None
         return doc
@@ -49,14 +63,14 @@ class ApiRecord(object):
     @classmethod
     @mongo_exception
     def insert_record(cls,record_dict):
-        filter = {'date':record_dict['date'],'method':record_dict['method'],'source':record_dict['source']}
+        filter = {'soft_code':record_dict['soft_code'],'date':record_dict['date'],'method':record_dict['method'],'source':record_dict['source']}
         cls.coll.update(filter,record_dict,upsert=True)
 
 
     @classmethod
     @mongo_exception
-    def set_all_day_limit(cls,date,method,source,flag):
-        filter = {'date':date,'method':method,'source':source}
+    def set_all_day_limit(cls,soft_code,source,method,date_str,flag):
+        filter = {'soft_code':soft_code,'date':date_str,'method':method,'source':source}
         cls.coll.update(filter,{'all_day_limit':flag},upsert=False)
 
 

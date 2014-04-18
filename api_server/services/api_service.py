@@ -14,6 +14,7 @@ from api_server.conf.settings import API_THRIFT
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
 from api_server.conf.settings import api_source,API_SOURCE
+from api_server.common.decorator import sdk_exception
 
 logger = logging.getLogger(__name__)
 
@@ -30,14 +31,21 @@ class ApiService(object):
             soft_code = ''
         if api_source is None:
             api_source = ''
-        #调用thrift
+        #调用sdk
+        rsp_obj = ApiService.call_sdk(params_str,nick,soft_code,api_source)
+        if not rsp_obj.isSuccess():
+            raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
+        return rsp_obj 
+
+    @staticmethod
+    @sdk_exception(20)
+    def call_sdk(params_str,nick,soft_code,api_source):
+        #sdk调用函数，有重试机制
         api_client = ApiCenterClient(API_THRIFT['host'],API_THRIFT['port'])
         rsp_str = api_client.execute(params_str,nick,soft_code,api_source)
         rsp_dict = simplejson.loads(rsp_str)
         rsp_obj = ApiService.getResponseObj(rsp_dict)
-        if not rsp_obj.isSuccess():
-            raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
-        return rsp_obj 
+        return rsp_obj
 
     @staticmethod
     def getReqParameters(req):
@@ -88,4 +96,4 @@ class ApiService(object):
                     responses.append(response)
                 return (tuple(responses))[0]
 
-
+    

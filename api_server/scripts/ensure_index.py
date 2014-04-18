@@ -16,6 +16,7 @@ from api_server.conf import settings
 if __name__ == '__main__':
     coll = (settings.api_conn)['api_record']['api_record']
     coll.ensure_index('source')
+    coll.ensure_index('soft_code')
     coll.ensure_index('date')
     coll.ensure_index('method')
     coll.ensure_index('total_times')

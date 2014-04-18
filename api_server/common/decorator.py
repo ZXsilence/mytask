@@ -13,6 +13,10 @@ import simplejson as json
 
 from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
 from db_exceptions.exceptions import  MongodbException
+from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
+import simplejson as json
+
+logger = logging.getLogger(__name__)
 
 def mongo_exception(func):
     """
@@ -46,6 +50,33 @@ def mongo_exception(func):
                 logging.exception("got an exception when operate on mongodb")
                 raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
     return wrapped_func
+
+def sdk_exception(MAX_RETRY_TIMES = 20):
+    def _wrapper_func(func,*args,**kwargs):
+
+        def __wrapped_func(*args, **kwargs):
+            retry_times = 0
+            res = None
+            while True:
+                try:
+                    res =  func(*args, **kwargs)
+                except (ImportError,ValueError),e:
+                    if retry_times == MAX_RETRY_TIMES:
+                        logger.error('SDK ERROR,retry %s times,but still failed'%MAX_RETRY_TIMES)
+                        raise SDKRetryException
+                    retry_times += 1
+                    continue
+                except Exception,e:
+                    logger.exception('sdk error:%s'%e)
+                    raise e
+                else:
+                    if retry_times:
+                        logger.info("retry success, total_retry time:%i"%retry_times)
+                    return res
+        return __wrapped_func
+
+    return _wrapper_func
+
 
 
 
