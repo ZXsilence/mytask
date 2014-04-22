@@ -46,6 +46,10 @@ class SimbaAdgroupNonsearchstatesUpdate(object):
     @classmethod
     @tao_api_exception(10)
     def sub_set_adgroups_nonsearchstates(cls,access_token,nick,campaign_id,adgroupid_nonsearchstate_json):
+        if type(adgroupid_nonsearchstate_json) == list:
+            for obj in adgroupid_nonsearchstate_json:
+                if "adgroupId" in obj:
+                    obj["adgroupId"] = int(obj["adgroupId"])
         req = SimbaAdgroupNonsearchstatesUpdateRequest()
         req.nick = nick
         req.campaign_id = campaign_id
@@ -56,5 +60,4 @@ class SimbaAdgroupNonsearchstatesUpdate(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
         
         return rsp.adgroup_list
-
 

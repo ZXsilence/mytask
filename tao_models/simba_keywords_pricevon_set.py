@@ -33,7 +33,7 @@ class SimbaKeywordsPricevonSet(object):
 
     @classmethod
     @tao_api_exception()
-    def set_keywords_price(cls, access_token, nick, keyword_price_list):
+    def set_keywords_price(cls, access_token, nick, keyword_price_list,safe=True):
         if not keyword_price_list:
             return []
         keyword_price_list = SimbaKeywordsPricevonSet._del_duplicates2(keyword_price_list)
@@ -57,15 +57,21 @@ class SimbaKeywordsPricevonSet(object):
 
         keywords = []
         for i in range(package_num):
-            keyword_price_str = json.dumps(word_price_dict_list[i*size: (i+1)*size])
-            req.keywordid_prices = keyword_price_str
+            try:
+                keyword_price_str = json.dumps(word_price_dict_list[i*size: (i+1)*size])
+                req.keywordid_prices = keyword_price_str
 
-            rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
-            if not rsp.isSuccess():
-                if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
-                    logger.warning('[%s] keywords_add failed,keywordid_prices:%s  :%s,%s'%(nick,keyword_price_str,rsp.msg,rsp.sub_msg))
+                rsp = tao_model_settings.taobao_client.execute(req, access_token)[0]
+                if not rsp.isSuccess():
+                    if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
+                        logger.warning('[%s] keywords_add failed,keywordid_prices:%s  :%s,%s'%(nick,keyword_price_str,rsp.msg,rsp.sub_msg))
+                        continue
+                    raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            except Exception,e:
+                if safe is True:
+                    raise
+                else:
                     continue
-                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
 
             keywords.extend(rsp.keywords)
 
@@ -133,7 +139,7 @@ class SimbaKeywordsPricevonSet(object):
 
 
     @classmethod
-    def set_price(cls, access_token, nick, wordid_price_list):
+    def set_price(cls, access_token, nick, wordid_price_list,safe=True):
         wordid_price_list = SimbaKeywordsPricevonSet._del_duplicates(wordid_price_list)
 
         size = PageSize.KEYWORDS_SET
@@ -143,8 +149,15 @@ class SimbaKeywordsPricevonSet(object):
 
         keywords = []
         for i in range(package_num):
+            
             keywordid_prices = wordid_price_list[i*size:(i+1)*size]
-            subkeywords = SimbaKeywordsPricevonSet._set_price(access_token, nick, keywordid_prices)
+            try:
+                subkeywords = SimbaKeywordsPricevonSet._set_price(access_token, nick, keywordid_prices)
+            except Exception:
+                if safe:
+                    raise
+                else:
+                    continue
             keywords.extend(subkeywords)
         return keywords
 
