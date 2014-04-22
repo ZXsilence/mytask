@@ -51,9 +51,10 @@ class SimbaCampaignScheduleGet(object):
 
 if __name__ == '__main__':
 
-    nick = 'chinchinstyle'
-    access_token = '6201616c8a94a43419fef76dfh8bbba34c4f2ec3ffadb3b520500325'
-    campaign_id = 3367690 
+    nick = '麦苗科技001'
+    access_token = '6202108d1d8cf9e2ZZ253366904ba8dfe57f094b3bd6ae4871727117'
+    campaign_id = 9329401
+    #campaign_id = 9843625
 
     result = SimbaCampaignScheduleGet.get_campaign_schedule(access_token, nick, campaign_id)
     
