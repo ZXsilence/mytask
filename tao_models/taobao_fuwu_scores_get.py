@@ -33,13 +33,14 @@ logger = logging.getLogger(__name__)
 
 class FuwuScoresGet(object):
     """应用评价"""
+    PAGE_SIZE = 100
 
     @classmethod
-    @tao_api_exception(1)
-    def get_fuwu_scores(cls,date_time,soft_code):
+    @tao_api_exception(3)
+    def get_fuwu_scores(cls,date_time,soft_code,page_no=1):
         result_list = []
         req = FuwuScoresGetRequest()
-        req.current_page =1
+        req.current_page = page_no
         req.date = date_time
         req.page_size = 100
         while (True):
@@ -56,6 +57,22 @@ class FuwuScoresGet(object):
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.score_result
 
+    @classmethod
+    def get_all_fuwu_scores(cls,date_time):
+        """获取所有评价"""
+        page_no = 1
+        data_list = []
+        flag = True
+        while flag:
+            page_data = cls.get_fuwu_scores(date_time,page_no)
+            if not page_data or len(page_data) < cls.PAGE_SIZE:
+                flag = False
+            page_no += 1
+            if page_data:
+                data_list.extend(page_data)
+        return data_list
+
+            
 if __name__ == "__main__":
     d = datetime.combine(datetime.today(),dt.time()) - dt.timedelta(3)
     soft_code = 'SYB'
