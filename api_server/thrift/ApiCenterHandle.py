@@ -133,7 +133,7 @@ class ApiCenterHandle(object):
         if not rsp.has_key('error_response'):
             ApiRecordService.inc_success_record(soft_code,source,method,date_str)
         else:
-            if rsp['error_response']['sub_code']:
+            if rsp['error_response'].has_key('sub_code') and rsp['error_response']['sub_code']:
                 sub_code = rsp['error_response']['sub_code']
             else:
                 sub_code = 'unknow_sub_code'
