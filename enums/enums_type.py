@@ -79,6 +79,7 @@ class OperationType(object):
     ADD_KEYWORD_INITIAL = 403
     ADD_KEYWORD_DIRECTOR = 404
     ADD_KEYWORD_HISTORY_NORMAL = 405
+    ADD_KEYWORD_EXTRA_INFO = 406
     
     ADD_ADGROUP_NORMAL = 501
     DELETE_ADGROUP_NORMAL = 502
@@ -100,7 +101,8 @@ class OperationType(object):
         DELETE_DIRECTOR,
         DELETE_HISTORY_NORMAL,
         DELETE_LOW_PV_BY_ADGROUP_CPC,
-        DELETE_USER_DELETE_TAOBAO 
+        DELETE_USER_DELETE_TAOBAO,
+        DELETE_GARBAGE_MAX_PRICE
     ]
 
     ALL_UPDATE_TYPES = [
@@ -126,7 +128,8 @@ class OperationType(object):
         ADD_KEYWORD_NORMAL,
         ADD_KEYWORD_INITIAL,
         ADD_KEYWORD_DIRECTOR,
-        ADD_KEYWORD_HISTORY_NORMAL
+        ADD_KEYWORD_HISTORY_NORMAL,
+        ADD_KEYWORD_EXTRA_INFO
     ]
 
 OPTTYPE_COMMENT = {
@@ -180,6 +183,7 @@ OPTTYPE_COMMENT = {
     , OperationType.ADD_KEYWORD_INITIAL: "新增关键词"
     , OperationType.ADD_KEYWORD_DIRECTOR: "新增关键词"
     , OperationType.ADD_KEYWORD_HISTORY_NORMAL: "新增关键词(历史记录未区分类型)"
+    , OperationType.ADD_KEYWORD_EXTRA_INFO: "根据附加词信息新增关键词"
     
     , OperationType.ADD_ADGROUP_NORMAL: "新增推广组"
     , OperationType.DELETE_ADGROUP_NORMAL: "用户删除推广组"
