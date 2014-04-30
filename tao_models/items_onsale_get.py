@@ -18,6 +18,9 @@ from TaobaoSdk import ItemsOnsaleGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk import TaobaoClient
+from TaobaoSdk.Exceptions import ErrorResponseException
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_SOURCE
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +95,28 @@ class ItemsOnsaleGet(object):
             req.page_no += 1
 
         return {'total_results':change_obj_to_dict_deeply(rsp.total_results), 'item_list':change_obj_to_dict_deeply(total_item_list)} 
+
+
+    @classmethod
+    @tao_api_exception()
+    def get_item_list_overview_with_access_token(cls,soft_code,access_token,fields=DEFAULT_FIELDS):
+        req = ItemsOnsaleGetRequest()
+        req.fields = fields
+        req.order_by = "modified:desc" 
+        req.page_size = 2
+        req.page_no = 1 
+ 
+        app_key = APP_SETTINGS[soft_code]['app_key']
+        app_secret = APP_SETTINGS[soft_code]['app_secret']
+        params = ApiService.getReqParameters(req)
+        taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
+        params['method'] = 'taobao.items.onsale.get'
+        rsp = ApiService.getResponseObj(taobao_client.execute(params, access_token))
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg,params=params,rsp=rsp)
+        return {'total_results':change_obj_to_dict_deeply(rsp.total_results), 'item_list':change_obj_to_dict_deeply(rsp.items)} 
+
+
 
 def test():
     nick = 'chinchinstyle'
