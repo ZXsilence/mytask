@@ -26,43 +26,46 @@ class ApiCenterHandle(object):
             nick为空字符串，表示该API请求和用户无关，可取任意有效的access_token
             soft_code为空字符串 ，表示该API请求和APP无关，可任取app_key
         """
-
-        params = simplejson.loads(params)
-        method = params['method']
-        date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
-        api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
-        nick = nick.decode('utf8')
-        logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
-                %(api_source,method,soft_code,nick,params.get('nick',None)))
-        if not api_source or api_source not in API_SOURCE:
-            #API调用源检查
-            rsp = ApiCenterHandle.get_source_error_rsp(api_source)
-            logger.error('api source error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
+        try:
+            params = simplejson.loads(params)
+            method = params['method']
+            date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
+            api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
+            nick = nick.decode('utf8')
+            logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                     %(api_source,method,soft_code,nick,params.get('nick',None)))
-            return simplejson.dumps(rsp)
-        if api_record and api_record['all_day_limit']:
-            #API全天流控检查
-            rsp = ApiCenterHandle.get_call_limit_rsp()
-            logger.error('api limit error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
-                    %(api_source,method,soft_code,nick,params.get('nick',None)))
-            return simplejson.dumps(rsp)
+            if not api_source or api_source not in API_SOURCE:
+                #API调用源检查
+                rsp = ApiCenterHandle.get_source_error_rsp(api_source)
+                logger.error('api source error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
+                        %(api_source,method,soft_code,nick,params.get('nick',None)))
+                return simplejson.dumps(rsp)
+            if api_record and api_record['all_day_limit']:
+                #API全天流控检查
+                rsp = ApiCenterHandle.get_call_limit_rsp()
+                logger.error('api limit error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
+                        %(api_source,method,soft_code,nick,params.get('nick',None)))
+                return simplejson.dumps(rsp)
 
-        #根据入参的情况，获取相应的shop_infos列表
-        session_expired = False
-        if not nick and not soft_code:
-            shop_infos = ShopInfoService.get_shop_infos_by_num(10,session_expired)
-        else:
-            shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
-        #根据shop_infos列表调用API
-        rsp_dict = ApiCenterHandle.execute_with_shop_infos(params,shop_infos,api_source)
+            #根据入参的情况，获取相应的shop_infos列表
+            session_expired = False
+            if not nick and not soft_code:
+                shop_infos = ShopInfoService.get_shop_infos_by_num(10,session_expired)
+            else:
+                shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
+            #根据shop_infos列表调用API
+            rsp_dict = ApiCenterHandle.execute_with_shop_infos(params,shop_infos,api_source)
 
-        #调用失败的api需记录详细的调用信息 
-        if rsp_dict.has_key('error_response'):
-            logger.warning('api exception,source:%s , method:%s , soft_code:%s , nick:%s , params:%s , responseBody:%s'\
-                    %(api_source,method,soft_code,nick,params,rsp_dict['error_response']))
-        else:
-            logger.info('api end , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
-                            %(api_source,method,soft_code,nick,params.get('nick',None)))
+            #调用失败的api需记录详细的调用信息 
+            if rsp_dict.has_key('error_response'):
+                logger.warning('api exception,source:%s , method:%s , soft_code:%s , nick:%s , params:%s , responseBody:%s'\
+                        %(api_source,method,soft_code,nick,params,rsp_dict['error_response']))
+            else:
+                logger.info('api end , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
+                                %(api_source,method,soft_code,nick,params.get('nick',None)))
+        except Exception,e:
+            logger.exception('api error, params:%s,nick:%s,soft_code:%s,api_source:%s'%(params,nick,soft_code,api_source))
+            raise e
 
         return simplejson.dumps(rsp_dict)
 
