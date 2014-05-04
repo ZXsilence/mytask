@@ -72,6 +72,7 @@ class OperationType(object):
     IGNORE_KEYWORD_REPORT_NONE = 306
     IGNORE_CAMPAIGN_REPORT_NONE = 307
     IGNORE_CAMPAIGN_STOPPED = 308
+    IGNORE_ADGROUP_REPORT_NONE = 309
 
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
@@ -171,6 +172,7 @@ OPTTYPE_COMMENT = {
     , OperationType.IGNORE_MODIFIED_TIME_SHORT : "关键词修改时间太短，无需处理"
     , OperationType.IGNORE_KEYWORD_REPORT_NONE : "关键词报表未能获取，无需处理"
     , OperationType.IGNORE_CAMPAIGN_REPORT_NONE : "关键词所在计划报表未能获取，无需处理"
+    , OperationType.IGNORE_ADGROUP_REPORT_NONE: "关键词所在推广组报表未能获取，无需处理"
     , OperationType.IGNORE_CAMPAIGN_STOPPED: "关键词所在计划展现过低，无需处理"
     
     , OperationType.ADD_NORMAL: "新增关键词"
