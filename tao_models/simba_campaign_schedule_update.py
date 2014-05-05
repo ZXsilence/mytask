@@ -13,7 +13,7 @@ if __name__ == '__main__':
     from tao_models.conf.settings import set_taobao_client
     set_taobao_client('12685542', '6599a8ba3455d0b2a043ecab96dfa6f9')
 
-from TaobaoSdk import SimbaCampaignScheduleGetRequest
+from TaobaoSdk import SimbaCampaignScheduleUpdateRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
 
 from tao_models.conf.settings import taobao_client
@@ -22,7 +22,7 @@ from tao_models.common.decorator import  tao_api_exception
 
 logger = logging.getLogger(__name__)
 
-class SimbaCampaignScheduleGet(object):
+class SimbaCampaignScheduleUpdate(object):
     """
     """
 
@@ -30,14 +30,15 @@ class SimbaCampaignScheduleGet(object):
 
     @classmethod
     @tao_api_exception(5)
-    def get_campaign_schedule(cls, access_token, nick, campaign_id):
+    def update_campaign_schedule(cls, access_token, nick, campaign_id,schedule):
         """
 
         """
 
-        req = SimbaCampaignScheduleGetRequest()
+        req = SimbaCampaignScheduleUpdateRequest()
         req.nick = nick
         req.campaign_id = campaign_id
+        req.schedule = schedule
 
         rsp = taobao_client.execute(req, access_token)[0]
 
@@ -54,8 +55,8 @@ if __name__ == '__main__':
     nick = '麦苗科技001'
     access_token = '6202108d1d8cf9e2ZZ253366904ba8dfe57f094b3bd6ae4871727117'
     campaign_id = 9329401
-    #campaign_id = 9843625
-
-    result = SimbaCampaignScheduleGet.get_campaign_schedule(access_token, nick, campaign_id)
-    
+    campaign_id = 9843625
+    schedule ='00:00-07:30:100,07:30-14:30:40,14:30-24:00:100;00:00-24:00:100;00:00-24:00:100;00:00-24:00:100;00:00-07:30:100,07:30-14:00:200,14:00-24:00:100;00:00-07:30:100,07:30-14:00:200,14:00-24:00:100;00:00-24:00:100' 
+    result = SimbaCampaignScheduleUpdate.update_campaign_schedule(access_token, nick, campaign_id,schedule)
     print result.toDict()
+    
