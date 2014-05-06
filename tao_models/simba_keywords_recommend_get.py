@@ -68,6 +68,8 @@ class SimbaKeywordsRecommendGet(object):
         while True:
             sub_keywords_recommend = SimbaKeywordsRecommendGet.__get_keywords_recommend_by_adgroup(access_token, nick, adgroup_id, page_no)
             keywords_recommend.extend(sub_keywords_recommend)
+            '''api每次返回的类容相同，获取一次就行'''
+            break;
             if len(sub_keywords_recommend) <= 100:
                 break
             page_no += 1
@@ -77,10 +79,8 @@ class SimbaKeywordsRecommendGet(object):
 def test():
     access_token = "6202a15148e3e8130586bbfhj7010db194b655fce05bb5a871727117"
     sid = 101240238 
-    #nick = '麦苗科技001'
-    #adgroup_id = 230551157
-    nick = '蓝天碧游'
-    adgroup_id = 232499295 
+    nick = '麦苗科技001'
+    adgroup_id = 403621301
     keyword_list = SimbaKeywordsRecommendGet.get_keywords_recommend_by_adgroup(access_token, nick, adgroup_id)
     for keyword in keyword_list:
         print keyword.toDict()['word']
