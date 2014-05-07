@@ -121,8 +121,13 @@ if __name__ == '__main__':
 
     article_code = 'ts-1796606'
     #result = VasOrderSearch.search_vas_order_yesterday(article_code)
-    start = datetime.datetime.now() - datetime.timedelta(300)
+    start = datetime.datetime.now() - datetime.timedelta(days=89)
     today = datetime.datetime.now()
-    result = VasOrderSearch.search_vas_order_by_nick(article_code, start, today, 'chinchinstyle')
+    nick = '恽海阁旗舰店'
+    #nick = 'chinchinstyle'
+    result = VasOrderSearch.search_vas_order_by_nick_new(article_code, start, today, nick)
     for element in result:
         print element.toDict()
+        start_time = datetime.datetime(2014,04,30,0,0,0)
+        today_start_time = datetime.datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        print element.toDict()['order_cycle_start'] >= today_start_time 
