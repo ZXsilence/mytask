@@ -61,6 +61,7 @@ class OperationType(object):
     UPDATE_PRICE_HISTORY_NORMAL = 112 
     UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE = 113 
     UPDATE_PRICE_CUSTOM = 114 
+    UPDATE_PRICE_FOR_CPC_MAX = 115 
 
     
     KEEP_NORMAL = 201
@@ -119,7 +120,8 @@ class OperationType(object):
         UPDATE_PRICE_DIRECTOR,
         UPDATE_PRICE_HISTORY_NORMAL,
         UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE,
-        UPDATE_PRICE_CUSTOM
+        UPDATE_PRICE_CUSTOM,
+        UPDATE_PRICE_FOR_CPC_MAX
     ]
 
 
@@ -166,6 +168,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_HISTORY_NORMAL: "关键词价格进行调整(历史记录未区分类型)"
     , OperationType.UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE: "计划花费未达到最低花费设置，关键词加大投入"
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
+    , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
     
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
