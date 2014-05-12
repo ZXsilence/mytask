@@ -45,6 +45,8 @@ class SimbaKeywordsRecommendGet(object):
         while True:
             sub_keywords_recommend = SimbaKeywordsRecommendGet.__get_keywords_recommend_by_adgroup(nick, adgroup_id, page_no)
             keywords_recommend.extend(sub_keywords_recommend)
+            '''api每次返回的类容相同，获取一次就行'''
+            break;
             if len(sub_keywords_recommend) <= 100:
                 break
             page_no += 1
@@ -54,8 +56,6 @@ def test():
     nick = 'chinchinstyle'
     adgroup_id = 336844923
     keyword_list = SimbaKeywordsRecommendGet.get_keywords_recommend_by_adgroup(nick, adgroup_id)
-    for keyword in keyword_list:
-        print keyword['word']
 
 if __name__ == '__main__':
     test()

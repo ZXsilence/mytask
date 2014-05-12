@@ -41,7 +41,7 @@ class ItemGet(object):
     def get_item_info(cls,num_iid):
         req = ItemGetRequest()
         req.num_iid = num_iid
-        req.fields = 'created,num_iid,title,list_time,price,item_img,pic_url,seller_cids'
+        req.fields = 'created,num_iid,title,list_time,price,item_img,pic_url,seller_cids,cid,freight_payer,props_name'
         rsp = ApiService.execute(req)
         return change_obj_to_dict_deeply(rsp.item)
 

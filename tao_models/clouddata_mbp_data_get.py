@@ -57,7 +57,7 @@ def decode_clouddata(str_res):
         elements.append(element)
     return elements
     
-def _get_query_list_by_sid(sid, sql_id):
+def _get_data_list_by_sid(sid, sql_id):
     n = datetime.datetime.now()
     elements = []
     
@@ -86,7 +86,7 @@ class ClouddataMbpDataGet(object):
     @classmethod
     def get_query_list_by_sid(cls, sid):
         elements = []
-        elements.extend(_get_query_list_by_sid(sid, '3378'))
+        elements.extend(_get_data_list_by_sid(sid, '3378'))
         elements_uniq = []
         signatures = {}
         for e in elements:
@@ -98,12 +98,29 @@ class ClouddataMbpDataGet(object):
         print len(elements),len(elements_uniq)
         return elements_uniq
 
+    @classmethod
+    def get_shop_rpt_hour(cls,sid):
+        rpt_list = _get_data_list_by_sid(sid,'3939')
+        return rpt_list
+    
+    @classmethod
+    def get_shop_rpt_region(cls,sid):
+        rpt_list = _get_data_list_by_sid(sid,'3941')
+        return rpt_list
+
+
 
 if __name__ == "__main__":
     sid = int(sys.argv[1])
-    query_list = ClouddataMbpDataGet.get_query_list_by_sid(sid)
-    for e in query_list:
-        if int(e['alipay_trade_num']) >= 1:
-            res = "%s\t%s\t%s\t%s\t%s" % (e['query'], e['auction_id'], e['click'], e['alipay_trade_num'], e['thedate'])
-            print res.encode('utf8')
+    #query_list = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    #print len(query_list)
+    #for e in query_list:
+        #if int(e['alipay_trade_num']) >= 1:
+            #res = "%s\t%s\t%s\t%s\t%s" % (e['query'], e['auction_id'], e['click'], e['alipay_trade_num'], e['thedate'])
+            #print res
     ###############################################
+
+
+    rpt_list_hour = ClouddataMbpDataGet.get_shop_rpt_region(sid)
+    for item in rpt_list_hour:
+        print item 
