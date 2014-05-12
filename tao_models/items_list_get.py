@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 class ItemsListGet(object):
 
-    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias,seller_cids'
+    DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias,seller_cids,freight_payer'
     MAX_NUM_IIDS = 20
 
     @classmethod
@@ -118,7 +118,7 @@ def test():
     #num_iids = [7794896442,15493508084]
     num_iids = [26796368149]
     ItemsListGet.MAX_NUM_IIDS = 20
-    fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified'
+    fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified,freight_payer'
     total_item_list = ItemsListGet.get_item_list(access_token, num_iids, fields)
 
     for item in total_item_list:
