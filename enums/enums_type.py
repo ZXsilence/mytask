@@ -62,6 +62,10 @@ class OperationType(object):
     UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE = 113 
     UPDATE_PRICE_CUSTOM = 114 
     UPDATE_PRICE_FOR_CPC_MAX = 115 
+    UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE = 120
+    UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE = 121
+    UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE = 122
+    UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE = 123
 
     
     KEEP_NORMAL = 201
@@ -74,6 +78,7 @@ class OperationType(object):
     IGNORE_KEYWORD_REPORT_NONE = 306
     IGNORE_CAMPAIGN_REPORT_NONE = 307
     IGNORE_CAMPAIGN_STOPPED = 308
+    IGNORE_ADGROUP_REPORT_NONE = 309
 
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
@@ -121,6 +126,10 @@ class OperationType(object):
         UPDATE_PRICE_HISTORY_NORMAL,
         UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE,
         UPDATE_PRICE_CUSTOM,
+        UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE,
+        UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE,
+        UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
+        UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
         UPDATE_PRICE_FOR_CPC_MAX
     ]
 
@@ -170,6 +179,11 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
     
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '通过加价获得一个好的排名'
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '通过减价获得一个好的排名'
+    , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划增加流量'
+    , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划较少流量'
+
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
     , OperationType.IGNORE_KEYWORD_NOT_EXIST: "关键词不存在"
@@ -179,6 +193,7 @@ OPTTYPE_COMMENT = {
     , OperationType.IGNORE_MODIFIED_TIME_SHORT : "关键词修改时间太短，无需处理"
     , OperationType.IGNORE_KEYWORD_REPORT_NONE : "关键词报表未能获取，无需处理"
     , OperationType.IGNORE_CAMPAIGN_REPORT_NONE : "关键词所在计划报表未能获取，无需处理"
+    , OperationType.IGNORE_ADGROUP_REPORT_NONE: "关键词所在推广组报表未能获取，无需处理"
     , OperationType.IGNORE_CAMPAIGN_STOPPED: "关键词所在计划展现过低，无需处理"
     
     , OperationType.ADD_NORMAL: "新增关键词"
