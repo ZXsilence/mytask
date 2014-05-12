@@ -26,8 +26,11 @@ class ClouddataQueryRptGet(object):
         op = OpenTaobao('12685542','6599a8ba3455d0b2a043ecab96dfa6f9')
         ret = json.loads(op.get_result(params))
         column_list = ret["clouddata_mbp_data_get_response"]["column_list"]["string"]
-        query_rows = ret["clouddata_mbp_data_get_response"]["row_list"]["query_row"]
+        query_rows = ret["clouddata_mbp_data_get_response"]["row_list"]
         rpt_list = []
+        if "query_row" not in query_rows:
+            return rpt_list
+        query_rows =query_rows["query_row"]
         for query_row in query_rows:
             row = query_row["values"]["string"]
             rpt = dict(zip(column_list, row))
