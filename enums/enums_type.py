@@ -45,6 +45,7 @@ class OperationType(object):
     DELETE_HISTORY_NORMAL = 13
     DELETE_LOW_PV_BY_ADGROUP_CPC = 15
     DELETE_USER_DELETE_TAOBAO = 16
+    DELETE_GARBAGE_MAX_PRICE = 17
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
     UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE = 102
@@ -60,6 +61,7 @@ class OperationType(object):
     UPDATE_PRICE_HISTORY_NORMAL = 112 
     UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE = 113 
     UPDATE_PRICE_CUSTOM = 114 
+    UPDATE_PRICE_FOR_CPC_MAX = 115 
 
     
     KEEP_NORMAL = 201
@@ -78,6 +80,7 @@ class OperationType(object):
     ADD_KEYWORD_INITIAL = 403
     ADD_KEYWORD_DIRECTOR = 404
     ADD_KEYWORD_HISTORY_NORMAL = 405
+    ADD_KEYWORD_EXTRA_INFO = 406
     
     ADD_ADGROUP_NORMAL = 501
     DELETE_ADGROUP_NORMAL = 502
@@ -99,7 +102,8 @@ class OperationType(object):
         DELETE_DIRECTOR,
         DELETE_HISTORY_NORMAL,
         DELETE_LOW_PV_BY_ADGROUP_CPC,
-        DELETE_USER_DELETE_TAOBAO 
+        DELETE_USER_DELETE_TAOBAO,
+        DELETE_GARBAGE_MAX_PRICE
     ]
 
     ALL_UPDATE_TYPES = [
@@ -116,7 +120,8 @@ class OperationType(object):
         UPDATE_PRICE_DIRECTOR,
         UPDATE_PRICE_HISTORY_NORMAL,
         UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE,
-        UPDATE_PRICE_CUSTOM
+        UPDATE_PRICE_CUSTOM,
+        UPDATE_PRICE_FOR_CPC_MAX
     ]
 
 
@@ -125,7 +130,8 @@ class OperationType(object):
         ADD_KEYWORD_NORMAL,
         ADD_KEYWORD_INITIAL,
         ADD_KEYWORD_DIRECTOR,
-        ADD_KEYWORD_HISTORY_NORMAL
+        ADD_KEYWORD_HISTORY_NORMAL,
+        ADD_KEYWORD_EXTRA_INFO
     ]
 
 OPTTYPE_COMMENT = {
@@ -137,6 +143,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_IS_GARBAGE : "关键词被淘宝判断为垃圾词，已经删除"
     , OperationType.DELETE_USER_DELETE : "关键词被用户手工删除"
     , OperationType.DELETE_USER_DELETE_TAOBAO : "关键词被用户在直通车手工删除"
+    , OperationType.DELETE_GARBAGE_MAX_PRICE : "7天无展现关键词，已经删除"
     
     , OperationType.DELETE_LOW_PV_MAX_PRICE : "关键词已经达到用户设置的最高出价，仍然没有展现，已经删除"
     , OperationType.DELETE_LOW_PV_BEST_POSITION : "关键词已经排在首页，仍然没有展现，已经删除"
@@ -161,6 +168,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_HISTORY_NORMAL: "关键词价格进行调整(历史记录未区分类型)"
     , OperationType.UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE: "计划花费未达到最低花费设置，关键词加大投入"
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
+    , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
     
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
@@ -178,6 +186,7 @@ OPTTYPE_COMMENT = {
     , OperationType.ADD_KEYWORD_INITIAL: "新增关键词"
     , OperationType.ADD_KEYWORD_DIRECTOR: "新增关键词"
     , OperationType.ADD_KEYWORD_HISTORY_NORMAL: "新增关键词(历史记录未区分类型)"
+    , OperationType.ADD_KEYWORD_EXTRA_INFO: "根据附加词信息新增关键词"
     
     , OperationType.ADD_ADGROUP_NORMAL: "新增推广组"
     , OperationType.DELETE_ADGROUP_NORMAL: "用户删除推广组"
