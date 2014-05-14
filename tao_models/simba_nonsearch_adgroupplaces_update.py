@@ -30,14 +30,15 @@ class SimbaNonsearchAdgroupplacesUpdate(object):
     def update_nonsearch_adgroupplaces(cls, nick,campaign_id,origin_jsons):
         if not origin_jsons:
             return []
-        adgroup_places_json = []
-        for origin_dict in origin_jsons:
-            adgroup_place = {}
-            adgroup_place['adgroupId'] = origin_dict['adgroup_id']
-            adgroup_place['placeId'] = origin_dict['place_id']
-            adgroup_place['maxPrice'] = origin_dict['max_price']
-            adgroup_place['isDefaultPrice'] = origin_dict['is_defaultprice']
-            adgroup_places_json.append(adgroup_place)
+        adgroup_places_json = origin_jsons
+        #adgroup_places_json = []
+        #for origin_dict in origin_jsons:
+        #    adgroup_place = {}
+        #    adgroup_place['adgroupId'] = origin_dict['adgroup_id']
+        #    adgroup_place['placeId'] = origin_dict['place_id']
+        #    adgroup_place['maxPrice'] = origin_dict['max_price']
+        #    adgroup_place['isDefaultPrice'] = origin_dict['is_defaultprice']
+        #    adgroup_places_json.append(adgroup_place)
 
         return_list = []
         req = SimbaNonsearchAdgroupplacesUpdateRequest()

@@ -33,12 +33,13 @@ class SimbaNonsearchAdgroupplacesDel(object):
         req = SimbaNonsearchAdgroupplacesDeleteRequest()
         req.nick = nick
         req.campaign_id = campaign_id
-        adgroup_places_json = []
-        for origin_dict in origin_jsons:
-            adgroup_place = {}
-            adgroup_place['adgroupId'] = origin_dict['adgroup_id']
-            adgroup_place['placeId'] = origin_dict['place_id']
-            adgroup_places_json.append(adgroup_place)
+        adgroup_places_json = origin_jsons
+        #adgroup_places_json = []
+        #for origin_dict in origin_jsons:
+        #    adgroup_place = {}
+        #    adgroup_place['adgroupId'] = origin_dict['adgroup_id']
+        #    adgroup_place['placeId'] = origin_dict['place_id']
+        #    adgroup_places_json.append(adgroup_place)
         req.adgroup_places_json = adgroup_places_json
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
