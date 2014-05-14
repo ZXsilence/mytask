@@ -33,12 +33,13 @@ class SimbaNonsearchAdgroupplacesAdd(object):
         req = SimbaNonsearchAdgroupplacesAddRequest()
         req.nick = nick
         req.campaign_id = int(campaign_id)
-        adgroup_places_json = []
-        for origin_dict in origin_jsons:
-            adgroup_place = {}
-            adgroup_place['adgroupId'] = origin_dict['adgroup_id']
-            adgroup_place['placeId'] = origin_dict['place_id']
-            adgroup_places_json.append(adgroup_place)
+        adgroup_places_json = origin_jsons
+        #adgroup_places_json = []
+        #for origin_dict in origin_jsons:
+        #    adgroup_place = {}
+        #    adgroup_place['adgroupId'] = origin_dict['adgroup_id']
+        #    adgroup_place['placeId'] = origin_dict['place_id']
+        #    adgroup_places_json.append(adgroup_place)
         req.adgroup_places_json = adgroup_places_json
         while adgroup_places_json:
             sub_list = adgroup_places_json[:cls.PAGE_SIZE]
