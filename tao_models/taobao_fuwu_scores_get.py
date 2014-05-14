@@ -58,13 +58,13 @@ class FuwuScoresGet(object):
         return rsp.score_result
 
     @classmethod
-    def get_all_fuwu_scores(cls,date_time):
+    def get_all_fuwu_scores(cls,date_time,soft_code):
         """获取所有评价"""
         page_no = 1
         data_list = []
         flag = True
         while flag:
-            page_data = cls.get_fuwu_scores(date_time,page_no)
+            page_data = cls.get_fuwu_scores(date_time,soft_code,page_no)
             if not page_data or len(page_data) < cls.PAGE_SIZE:
                 flag = False
             page_no += 1
@@ -76,5 +76,6 @@ class FuwuScoresGet(object):
 if __name__ == "__main__":
     d = datetime.combine(datetime.today(),dt.time()) - dt.timedelta(3)
     soft_code = 'SYB'
-    print FuwuScoresGet.get_fuwu_scores(d,soft_code)
+    #print FuwuScoresGet.get_fuwu_scores(d,soft_code)
+    print FuwuScoresGet.get_all_fuwu_scores(d,soft_code)
 
