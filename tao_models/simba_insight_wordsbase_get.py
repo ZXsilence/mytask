@@ -121,7 +121,7 @@ class SimbaInsightWordsbaseGet(object):
                 word_info['pv'] += day_info['pv']
                 word_info['click'] += day_info['click']
                 word_info['competition'] += day_info['competition']
-                cost += (day_info.avg_price*day_info['click'])
+                cost += (day_info['avg_price']*day_info['click'])
 
             word_info['avg_price'] = cost/(word_info['click']+0.0000001) 
             word_info['pv'] /= 7.0
