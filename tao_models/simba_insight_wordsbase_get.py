@@ -109,8 +109,8 @@ class SimbaInsightWordsbaseGet(object):
         in_word_bases = SimbaInsightWordsbaseGet.get_words_base('WEEK', words_list,nick)
         word_info_list = []
         for word_base in in_word_bases:
-            word = word_base.word
-            in_record_base_list = word_base.in_record_base_list
+            word = word_base['word']
+            in_record_base_list = word_base['in_record_base_list']
             word_info = {}
             word_info['word'] = word
             word_info['pv'] = 0
@@ -118,10 +118,10 @@ class SimbaInsightWordsbaseGet(object):
             word_info['competition'] = 0
             cost = 0
             for day_info in in_record_base_list:
-                word_info['pv'] += day_info.pv
-                word_info['click'] += day_info.click
-                word_info['competition'] += day_info.competition
-                cost += (day_info.avg_price*day_info.click)
+                word_info['pv'] += day_info['pv']
+                word_info['click'] += day_info['click']
+                word_info['competition'] += day_info['competition']
+                cost += (day_info.avg_price*day_info['click'])
 
             word_info['avg_price'] = cost/(word_info['click']+0.0000001) 
             word_info['pv'] /= 7.0

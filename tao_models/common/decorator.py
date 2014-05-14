@@ -97,28 +97,29 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         raise ApiSourceError(e.code,e.sub_code,e.msg,e.sub_msg)
                      
                     #扔出自定义异常
-                    api_method = e.params['method']
-                    if api_method == 'taobao.simba.adgroup.update' and e.sub_msg \
-                            and u'审核下线的推广组不能手工上下线' in e.sub_msg:
-                        raise AdgroupAudictFailedException
-                    elif api_method == 'taobao.simba.campaign.budget.get' and e.sub_msg \
-                            and u'未找到指定客户' in e.sub_msg:
-                        raise CampaignIdNotBelongToUserException
-                    elif api_method == 'taobao.simba.campaign.budget.update' and e.sub_msg \
-                            and u'限额不得小于' in e.sub_msg:
-                        raise CampaignBudgetLessThanCostException
-                    elif api_method == 'taobao.simba.campaign.platform.update' and e.sub_msg \
-                            and u'用户无资格投放定向推广' in e.sub_msg:
-                        raise NonsearchNotAllowedException
-                    elif api_method == 'taobao.simba.creative.update' and e.sub_msg \
-                            and u'图片不是推广组的图片' in e.sub_msg:
-                        raise ImgNotBelongToAdgroupException
-                    elif api_method == 'taobao.simba.nonsearch.adgroupplaces.add' and e.sub_msg \
-                            and u'当前推广计划不支持该操作' in e.sub_msg:
-                        raise NonsearchNotOpenException
-                    elif api_method == 'taobao.simba.nonsearch.adgroupplaces.delete' and e.sub_msg \
-                            and u'当前推广计划不支持该操作' in e.sub_msg:
-                        raise NonsearchNotOpenException
+                    if e.params:
+                        api_method = e.params['method']
+                        if api_method == 'taobao.simba.adgroup.update' and e.sub_msg \
+                                and u'审核下线的推广组不能手工上下线' in e.sub_msg:
+                            raise AdgroupAudictFailedException
+                        elif api_method == 'taobao.simba.campaign.budget.get' and e.sub_msg \
+                                and u'未找到指定客户' in e.sub_msg:
+                            raise CampaignIdNotBelongToUserException
+                        elif api_method == 'taobao.simba.campaign.budget.update' and e.sub_msg \
+                                and u'限额不得小于' in e.sub_msg:
+                            raise CampaignBudgetLessThanCostException
+                        elif api_method == 'taobao.simba.campaign.platform.update' and e.sub_msg \
+                                and u'用户无资格投放定向推广' in e.sub_msg:
+                            raise NonsearchNotAllowedException
+                        elif api_method == 'taobao.simba.creative.update' and e.sub_msg \
+                                and u'图片不是推广组的图片' in e.sub_msg:
+                            raise ImgNotBelongToAdgroupException
+                        elif api_method == 'taobao.simba.nonsearch.adgroupplaces.add' and e.sub_msg \
+                                and u'当前推广计划不支持该操作' in e.sub_msg:
+                            raise NonsearchNotOpenException
+                        elif api_method == 'taobao.simba.nonsearch.adgroupplaces.delete' and e.sub_msg \
+                                and u'当前推广计划不支持该操作' in e.sub_msg:
+                            raise NonsearchNotOpenException
 
                     #异常状态的重试处理,不扔出自定义的业务异常
                     if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 

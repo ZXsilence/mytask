@@ -27,6 +27,9 @@ API_THRIFT = {
 api_source = None
 def set_api_source(source):
     global api_source
+    if api_source:
+        print 'api_source has already been set:',api_source
+        return 
     api_source = source
     print 'set api_source:',api_source
 
@@ -110,11 +113,17 @@ APP_SETTINGS = {
 API_SOURCE = [
               'normal_test',                    #普通测试
               'check_shop_infos',               #check_shop_infos脚本
+              'crm_scripts',                    #crm脚本
+              'queryall',                       #queryall脚本
+              'user_center',                    #user_center
+              'data_center',                    #data_center
+              'analysis',                       #analysis
 
               #省油宝
               'syb_webpage',                    #省油宝页面请求
               'syb_auto_campaign_optimize',     #省油宝长尾优化
               'syb_auto_non_campaign_optimize', #省油宝定向优化
+              'syb_hot_campaign_optimize',      #省油宝测款优化
               'syb_key_campaign_optimize',      #省油宝加力优化
               'syb_auto_creative_optimize',     #省油宝标题优化
               'syb_deal_keyword_update',        #省油宝成交词抓取脚本
@@ -135,7 +144,15 @@ API_SOURCE = [
               'bd_deal_keyword_update',         #北斗成交词抓取脚本
               'bd_user_alert',                  #北斗用户到期提醒脚本
 
-              #query_db
+              #淘词
+              'tc_webpage',                     #淘词页面请求
+
+              #strategy
+              'st_webpage',                     #strategy页面请求
+
+              #strategy
+              'crm_webpage',                     #crm页面请求
+
               #report_db
               #短信通知脚本
               #邮件统计脚本

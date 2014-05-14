@@ -10,7 +10,7 @@ import time
 import simplejson
 from datetime import datetime
 from TaobaoSdk.Exceptions import ErrorResponseException
-from api_server.conf.settings import API_THRIFT
+from api_server.conf.settings import API_THRIFT,APP_SETTINGS
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
 from api_server.conf.settings import api_source,API_SOURCE
@@ -96,4 +96,16 @@ class ApiService(object):
                     responses.append(response)
                 return (tuple(responses))[0]
 
-    
+    @staticmethod
+    def get_app_settings_by_soft_code(soft_code):
+        if not APP_SETTINGS.has_key(soft_code):
+            return {}
+        return APP_SETTINGS[soft_code]
+
+    @staticmethod
+    def get_app_settings_by_article_code(article_code):
+        for soft_code,app_settings in APP_SETTINGS.iteritems():
+            if article_code == app_settings['article_code']:
+                return app_settings
+        return {}
+
