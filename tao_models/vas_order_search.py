@@ -39,6 +39,7 @@ class VasOrderSearch(object):
         req.page_no = page_no 
         if nick != None:
             req.nick = nick
+        nick = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.article_biz_orders
 
@@ -100,6 +101,7 @@ class VasOrderSearch(object):
         if nick is not None:
             req.nick=nick
         soft_code = None
+        nick = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.total_item)
 
