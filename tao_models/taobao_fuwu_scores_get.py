@@ -43,11 +43,7 @@ class FuwuScoresGet(object):
         req.current_page = page_no
         req.date = date_time
         req.page_size = 100
-        while (True):
-            sub_list = FuwuScoresGet.sub_get_fuwu_scores(req,soft_code)
-            result_list.extend(sub_list)
-            if len(sub_list) <100:
-                break
+        result_list = FuwuScoresGet.sub_get_fuwu_scores(req,soft_code)
         return change_obj_to_dict_deeply(result_list)
 
     @classmethod
@@ -76,6 +72,6 @@ class FuwuScoresGet(object):
 if __name__ == "__main__":
     d = datetime.combine(datetime.today(),dt.time()) - dt.timedelta(3)
     soft_code = 'SYB'
-    #print FuwuScoresGet.get_fuwu_scores(d,soft_code)
-    print FuwuScoresGet.get_all_fuwu_scores(d,soft_code)
+    print FuwuScoresGet.get_fuwu_scores(d,soft_code)
+    #print FuwuScoresGet.get_all_fuwu_scores('2014-05-14',soft_code)
 
