@@ -63,7 +63,7 @@ class ApiCenterHandle(object):
             else:
                 call_shop_infos = shop_infos
             #根据shop_infos列表调用API
-            rsp_dict = ApiCenterHandle.execute_with_shop_infos(params,shop_infos,api_source)
+            rsp_dict = ApiCenterHandle.execute_with_shop_infos(params,call_shop_infos,api_source)
 
             #调用失败的api需记录详细的调用信息 
             if rsp_dict.has_key('error_response'):
