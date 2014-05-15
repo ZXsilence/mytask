@@ -53,6 +53,15 @@ class ApiCenterHandle(object):
                 shop_infos = ShopInfoService.get_shop_infos_by_num(10,session_expired)
             else:
                 shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
+            #去除QN的shop_info
+            call_shop_infos = []
+            if len(shop_infos) >= 2:
+                for shop_info in shop_infos:
+                    if shop_info['soft_code'] == 'QN':
+                        continue
+                    call_shop_infos.append(shop_info)
+            else:
+                call_shop_infos = shop_infos
             #根据shop_infos列表调用API
             rsp_dict = ApiCenterHandle.execute_with_shop_infos(params,shop_infos,api_source)
 
