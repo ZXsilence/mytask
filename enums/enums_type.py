@@ -66,7 +66,7 @@ class OperationType(object):
     UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE = 121
     UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE = 122
     UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE = 123
-
+    UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE = 124 
     
     KEEP_NORMAL = 201
 
@@ -130,6 +130,7 @@ class OperationType(object):
         UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE,
         UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
         UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
+        UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE,
         UPDATE_PRICE_FOR_CPC_MAX
     ]
 
@@ -179,11 +180,11 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
     
-    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '通过加价获得一个好的排名'
-    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '通过减价获得一个好的排名'
-    , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划增加流量'
-    , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划较少流量'
-
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好的排名'
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好的排名'
+    , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划通过加价增加流量'
+    , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划通过减价较少流量'
+    , OperationType.UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE : '测款计划花费接近预算上限,关键词减价'
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
     , OperationType.IGNORE_KEYWORD_NOT_EXIST: "关键词不存在"
