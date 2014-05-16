@@ -18,6 +18,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import SimbaRptCampaignbaseGetRequest
+from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
