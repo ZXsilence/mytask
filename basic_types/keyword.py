@@ -30,7 +30,6 @@ class Keyword(object):
 
     def __getitem__(self, key):
         index = self.__get_index_by_field(key)
-        print self.data
         return self.data[index]
 
     #def __setitem__(self, key,val):
@@ -67,5 +66,8 @@ class Keyword(object):
         if key == "modified_time":
             return 13
 
-
+if __name__== '__main__':
+    keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_pass', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))
+    print keyword['word']
+    print keyword['audit_status']
 
