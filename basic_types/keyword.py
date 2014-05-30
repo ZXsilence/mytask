@@ -35,6 +35,24 @@ class Keyword(object):
     #def __setitem__(self, key,val):
     #    index = self.__get_index_by_field(key)
     #    self.data[index] = val
+    
+    def toDict(self):
+        return {
+                'keyword_id':self.data[0],
+                'adgroup_id':self.data[1],
+                'campaign_id':self.data[2],
+                'sid':self.data[3],
+                'nick':self.data[4],
+                'word':self.data[5],
+                'audit_pass':self.data[6],
+                'qscore':self.data[7],
+                'match_scope':self.data[8],
+                'max_price':self.data[9],
+                'is_default_price':self.data[10],
+                'is_garbage':self.data[11],
+                'create_time':self.data[12],
+                'modified_time':self.data[13]
+                }
 
     def __get_index_by_field(self,key):
         if key == "keyword_id":
