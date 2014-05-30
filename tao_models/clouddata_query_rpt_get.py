@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from datetime import datetime
-
+import datetime as dt
 
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))   
@@ -20,7 +20,7 @@ class ClouddataQueryRptGet(object):
             'method':'taobao.clouddata.mbp.data.get',
             'session':"620151603c6d2a15d18f0996ZZ0e51a14d1d47350f7c375520500325",
             'sql_id':'3472' ,
-            'parameter':'shop_id=%s,sdate=%s,edate=%s,sub_offset=%s,sub_limit=%s' % (sid, edate, edate, offset, limit)
+            'parameter':'shop_id=%s,sdate=%s,edate=%s,sub_offset=%s,sub_limit=%s' % (sid, sdate, edate, offset, limit)
 	}
 
         op = OpenTaobao('12685542','6599a8ba3455d0b2a043ecab96dfa6f9')
@@ -75,7 +75,8 @@ class ClouddataQueryRptGet(object):
 
 if __name__ == "__main__":
     sid = 103535615
-    sdate = datetime(2014, 3, 10) 
-    edate = datetime(2014, 3, 26) 
+ 
+    edate = datetime(2014,5,29) 
+    sdate = datetime(2014,3,13)
     rpt_list = ClouddataQueryRptGet.get_query_rpt(sid, sdate, edate)
     print rpt_list

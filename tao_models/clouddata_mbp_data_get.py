@@ -57,7 +57,7 @@ def decode_clouddata(str_res):
         elements.append(element)
     return elements
     
-def _get_data_list_by_sid(sid, sql_id):
+def _get_data_list_by_sid(sid, sql_id,sub_offset,sub_limit):
     n = datetime.datetime.now()
     elements = []
     
@@ -67,7 +67,8 @@ def _get_data_list_by_sid(sid, sql_id):
     dt_str = dt.strftime("%Y%m%d")
     sdate_str = sdate.strftime("%Y%m%d")
     edate_str = edate.strftime("%Y%m%d")
-    parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str
+    parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+
     print parameter
     params = {
         'method':'taobao.clouddata.mbp.data.get',
@@ -104,10 +105,19 @@ class ClouddataMbpDataGet(object):
         return rpt_list
     
     @classmethod
+    def get_shop_rpt_hour_30d(cls,sid,sub_offset,sub_limit):
+        rpt_list = _get_data_list_by_sid(sid,'3971',sub_offset,sub_limit)
+        return rpt_list
+
+    @classmethod
     def get_shop_rpt_region(cls,sid):
         rpt_list = _get_data_list_by_sid(sid,'3941')
         return rpt_list
 
+    @classmethod
+    def get_shop_rpt_region_30d(cls,sid,sub_offset,sub_limit):
+        rpt_list = _get_data_list_by_sid(sid,'3973',sub_offset,sub_limit)
+        return rpt_list
 
 
 if __name__ == "__main__":
@@ -121,6 +131,10 @@ if __name__ == "__main__":
     ###############################################
 
 
-    rpt_list_hour = ClouddataMbpDataGet.get_shop_rpt_region(sid)
+    rpt_list_hour = ClouddataMbpDataGet.get_shop_rpt_hour_30d(sid,0,5000)
+    date_list = []
     for item in rpt_list_hour:
-        print item 
+        if item['thedate'] not in date_list:
+            date_list.append(item['thedate'])
+    print len(date_list)
+
