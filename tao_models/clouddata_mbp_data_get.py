@@ -57,7 +57,7 @@ def decode_clouddata(str_res):
         elements.append(element)
     return elements
     
-def _get_data_list_by_sid(sid, sql_id,sub_offset,sub_limit):
+def _get_data_list_by_sid(sid, sql_id,sub_offset=0,sub_limit=0):
     n = datetime.datetime.now()
     elements = []
     
