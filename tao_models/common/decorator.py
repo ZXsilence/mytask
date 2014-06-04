@@ -97,7 +97,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         raise ApiSourceError(e.code,e.sub_code,e.msg,e.sub_msg)
                      
                     #扔出自定义异常
-                    if e.params:
+                    if hasattr(e,'params') and e.params:
                         api_method = e.params['method']
                         if api_method == 'taobao.simba.adgroup.update' and e.sub_msg \
                                 and u'审核下线的推广组不能手工上下线' in e.sub_msg:
