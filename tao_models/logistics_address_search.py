@@ -29,14 +29,15 @@ class LogisticsAddressSearch(object):
 
     @classmethod
     @tao_api_exception()
-    def get_logistics_address(cls, nick):
+    def get_logistics_address(cls, nick,soft_code):
         req =LogisticsAddressSearchRequest()
-        soft_code = None
+        req.nick = nick
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.addresses)
    
 if __name__=="__main__":
-    nick = 'chinchinstyle'
-    addresses=LogisticsAddressSearch.get_logistics_address(nick)
+    nick = '麦苗科技001'
+    soft_code = 'SYB'
+    addresses=LogisticsAddressSearch.get_logistics_address(nick,soft_code)
     for address in addresses:
         print address

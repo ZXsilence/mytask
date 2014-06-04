@@ -35,7 +35,7 @@ class TradesSoldGet(object):
 
     @classmethod
     @tao_api_exception(3)
-    def get_trades_sold_list(cls, nick, start_created=None, end_created=None, fields=DEFAULT_FIELDS, flag=False):
+    def get_trades_sold_list(cls, nick, start_created=None, end_created=None, fields=DEFAULT_FIELDS, flag=False,soft_code = 'SYB'):
         """搜索当前会话用户作为卖家已卖出的交易数据（只能获取到三个月以内的交易信息）
         1.返回的数据结果是以订单的创建时间倒序排列的。
         2.返回的数据结果只包含了订单的部分数据，可通过taobao.trade.fullinfo.get获取订单详情。
@@ -48,7 +48,6 @@ class TradesSoldGet(object):
         req.page_no = 1
         total_trade_list = []
         while True:
-            soft_code = None
             rsp = ApiService.execute(req,nick,soft_code)
             if rsp.trades is None:
                 logger.info("get trade sold, but none return")
