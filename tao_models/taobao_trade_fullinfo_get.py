@@ -80,7 +80,7 @@ class TradeFullinfoGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_trade_info(cls, nick, tid, fields=DEFAULT_FIELDS):
+    def get_trade_info(cls, nick, tid, fields=DEFAULT_FIELDS,soft_code = 'SYB'):
         """获取单笔交易的详细信息
         1. 只有在交易成功的状态下才能取到交易佣金，其它状态下取到的都是零或空值 
         2. 只有单笔订单的情况下Trade数据结构中才包含商品相关的信息 
@@ -91,7 +91,6 @@ class TradeFullinfoGet(object):
         req = TradeFullinfoGetRequest()
         req.fields = fields
         req.tid = tid
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.trade)
 
