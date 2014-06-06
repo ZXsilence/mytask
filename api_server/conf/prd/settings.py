@@ -20,8 +20,8 @@ sys.path.append(BACKENDS)
 SERVER_URL = "http://gw.api.taobao.com/router/rest"
 
 API_THRIFT = {
-        'host':'mm_245',
-        'port':9090
+        'host':'api.maimiaotech.com',
+        'port':30005
     }
 
 api_source = None
