@@ -54,7 +54,7 @@ print 'api_db:',host_url
 api_conn = pymongo.MongoReplicaSetClient(host=host_url, replicaSet='api_db_replset')
 
 logger = logging.getLogger("api_server")
-hdlr = logging.FileHandler('/tmp/api_server.log')
+hdlr = logging.FileHandler('/alidata1/logs/api_server.log')
 hdlr.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)s:%(lineno)-15d %(message)s')
 hdlr.setFormatter(formatter)
