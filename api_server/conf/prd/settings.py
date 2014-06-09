@@ -20,8 +20,8 @@ sys.path.append(BACKENDS)
 SERVER_URL = "http://gw.api.taobao.com/router/rest"
 
 API_THRIFT = {
-        'host':'mm_245',
-        'port':9090
+        'host':'api.maimiaotech.com',
+        'port':30005
     }
 
 api_source = None
@@ -54,7 +54,7 @@ print 'api_db:',host_url
 api_conn = pymongo.MongoReplicaSetClient(host=host_url, replicaSet='api_db_replset')
 
 logger = logging.getLogger("api_server")
-hdlr = logging.FileHandler('/tmp/api_server.log')
+hdlr = logging.FileHandler('/alidata1/logs/api_server.log')
 hdlr.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)s:%(lineno)-15d %(message)s')
 hdlr.setFormatter(formatter)
