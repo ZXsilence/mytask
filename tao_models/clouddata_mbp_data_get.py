@@ -68,8 +68,6 @@ class ClouddataMbpDataGet(object):
         dt_str = dt.strftime("%Y%m%d")
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        sub_offset = 0
-        sub_limit = 5000
         parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
         req = ClouddataMbpDataGetRequest() 
         req.sid = sid
@@ -83,13 +81,15 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '3472'
+        sql_id = '4439'
         while True:
             rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+            print rpt_sub_list[0]
             rpt_list.extend(rpt_sub_list)
             if len(rpt_sub_list) < limit:
                 break
             offset = offset + limit
+        print len(rpt_list)
         return rpt_list
     
     @classmethod
@@ -123,11 +123,12 @@ class ClouddataMbpDataGet(object):
 
 
 if __name__ == '__main__':
-    sid = 70774620 
+    sid = 70774620  
     sql_id = 3472 
     edate = datetime.datetime.now()
-    sdate = edate - datetime.timedelta(days=3)
-    #rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
-    rpt_list_1 = ClouddataMbpDataGet.get_query_list_by_sid(sid)
-    #print rpt_list[0]
-    print rpt_list_1[0]
+    sdate = edate - datetime.timedelta(days=15)
+    rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
+    #rpt_list_1 = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    print len(rpt_list)
+    print rpt_list[0]
+    #print rpt_list_1[0]
