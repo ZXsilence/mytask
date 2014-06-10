@@ -80,6 +80,14 @@ class OperationType(object):
     IGNORE_CAMPAIGN_STOPPED = 308
     IGNORE_ADGROUP_REPORT_NONE = 309
 
+    IGNORE_CAMPAIGN_OFFLINE = 310
+    IGNORE_CAMPAIGN_SETTINGS_NONE = 311
+    IGNORE_CAMPAIGN_INIT_FAILED = 312
+    IGNORE_CAMPAIGN_CANCEL_OPTIMIZE = 313
+    IGNORE_CAMPAIGN_LOW_IMPRESSIONS = 314
+    IGNORE_ADGROUP_TOO_MUCH = 315
+
+
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
     ADD_KEYWORD_INITIAL = 403
@@ -91,6 +99,19 @@ class OperationType(object):
     DELETE_ADGROUP_NORMAL = 502
     DELETE_ADGROUP_INITIAL = 503
     DELETE_ADGROUP_HISTORY_NORMAL = 504
+
+    START_ADGROUP= 510
+    START_OPTIMIZE_ADGROUP = 511
+    STOP_ADGROUP = 512
+    STOP_OPTIMIZE_ADGROUP = 513
+
+
+    ADD_CAMPAIGN_NORMAL = 601
+
+    START_CAMPAIGN = 610
+    START_OPTIMIZE_CAMPAIGN = 611
+    STOP_CAMPAIGN = 612
+    STOP_OPTIMIZE_CAMPAIGN = 613
 
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
@@ -135,7 +156,17 @@ class OperationType(object):
         UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
         UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
         UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE,
-        UPDATE_PRICE_FOR_CPC_MAX
+        UPDATE_PRICE_FOR_CPC_MAX,
+
+        START_ADGROUP,
+        START_OPTIMIZE_ADGROUP,
+        STOP_ADGROUP,
+        STOP_OPTIMIZE_ADGROUP,
+
+        START_CAMPAIGN,
+        START_OPTIMIZE_CAMPAIGN,
+        STOP_CAMPAIGN,
+        STOP_OPTIMIZE_CAMPAIGN
     ]
 
 
@@ -147,7 +178,29 @@ class OperationType(object):
         ADD_KEYWORD_HISTORY_NORMAL,
         ADD_KEYWORD_EXTRA_INFO,
 
-        ADD_ADGROUP_NORMAL
+        ADD_ADGROUP_NORMAL,
+
+        ADD_CAMPAIGN_NORMAL
+    ]
+
+    ALL_IGNORE_TYPES = [
+        KEEP_NORMAL,
+        IGNORE_KEYWORD_NOT_EXIST,
+        IGNORE_KEYWORD_NOT_HANDLE,
+        IGNORE_NOT_MANAGE_BY_SOFT,
+        IGNORE_CREATE_TIME_SHORT,
+        IGNORE_MODIFIED_TIME_SHORT,
+        IGNORE_KEYWORD_REPORT_NONE,
+        IGNORE_CAMPAIGN_REPORT_NONE,
+        IGNORE_CAMPAIGN_STOPPED,
+        IGNORE_ADGROUP_REPORT_NONE,
+
+        IGNORE_CAMPAIGN_OFFLINE,
+        IGNORE_CAMPAIGN_SETTINGS_NONE,
+        IGNORE_CAMPAIGN_INIT_FAILED,
+        IGNORE_CAMPAIGN_CANCEL_OPTIMIZE,
+        IGNORE_CAMPAIGN_LOW_IMPRESSIONS,
+        IGNORE_ADGROUP_TOO_MUCH
     ]
 
 OPTTYPE_COMMENT = {
@@ -202,6 +255,13 @@ OPTTYPE_COMMENT = {
     , OperationType.IGNORE_CAMPAIGN_REPORT_NONE : "关键词所在计划报表未能获取，无需处理"
     , OperationType.IGNORE_ADGROUP_REPORT_NONE: "关键词所在推广组报表未能获取，无需处理"
     , OperationType.IGNORE_CAMPAIGN_STOPPED: "关键词所在计划展现过低，无需处理"
+
+    , OperationType.IGNORE_CAMPAIGN_OFFLINE: "计划已暂停,不处理"
+    , OperationType.IGNORE_CAMPAIGN_SETTINGS_NONE: "计划设置为空,不处理"
+    , OperationType.IGNORE_CAMPAIGN_INIT_FAILED: "计划初始化失败,不处理" 
+    , OperationType.IGNORE_CAMPAIGN_CANCEL_OPTIMIZE: "计划已经取消托管,不进行优化"
+    , OperationType.IGNORE_CAMPAIGN_LOW_IMPRESSIONS: "计划展现太低,不处理"
+    , OperationType.IGNORE_ADGROUP_TOO_MUCH: "推广组太多,需减少一些再优化"
     
     , OperationType.ADD_NORMAL: "新增关键词"
     , OperationType.ADD_KEYWORD_NORMAL: "新增关键词"
@@ -214,6 +274,18 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_ADGROUP_NORMAL: "用户删除推广组"
     , OperationType.DELETE_ADGROUP_INITIAL: "计划初始化，删除推广组"
     , OperationType.DELETE_ADGROUP_HISTORY_NORMAL: "删除推广组(历史记录未区分类型)"
+
+    , OperationType.START_ADGROUP: "推广组开启推广"
+    , OperationType.START_OPTIMIZE_ADGROUP: "推广组加入托管" 
+    , OperationType.STOP_ADGROUP: "推广组取消推广"
+    , OperationType.STOP_OPTIMIZE_ADGROUP: "推广组取消托管"
+
+    , OperationType.ADD_CAMPAIGN_NORMAL: "新建计划" 
+    , OperationType.START_CAMPAIGN: "计划开启推广" 
+    , OperationType.START_OPTIMIZE_CAMPAIGN: "计划加入托管"
+    , OperationType.STOP_CAMPAIGN: "计划暂停推广"
+    , OperationType.STOP_OPTIMIZE_CAMPAIGN: "计划取消托管"
+
 }
 
 class LoginFailType(object):
