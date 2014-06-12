@@ -54,7 +54,10 @@ API_SECOND_DB={
 
 host_url = '%s:%i,%s:%i'%(API_MAIN_DB['HOST'],API_MAIN_DB['PORT'],API_SECOND_DB['HOST'],API_SECOND_DB['PORT'])
 print 'api_db:',host_url
-api_conn = pymongo.MongoReplicaSetClient(host=host_url, replicaSet='api_db_replset')
+try:
+    api_conn = pymongo.MongoReplicaSetClient(host=host_url, replicaSet='api_db_replset')
+except Exception,e:
+    api_conn = None
 
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/alidata1/logs/api_server.log')
