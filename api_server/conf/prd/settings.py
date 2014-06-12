@@ -3,6 +3,8 @@ import os, sys
 import pymongo
 from pymongo import Connection
 import logging
+import MySQLdb
+from DBUtils.PooledDB import PooledDB
 
 if pymongo.version.startswith("2.5"):
     import bson.objectid
@@ -62,6 +64,23 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
+
+API_DB = {
+         'NAME': 'api_record',
+         'HOST':'hzn01.rds.aliyuncs.com',
+         'PORT':3306,
+         'USER':'api',
+         'PASSWD':'maimiaoadmin2014' }
+
+
+api_pool = PooledDB(creator = MySQLdb, 
+                maxusage=600,
+                host=API_DB['HOST'],
+                port=API_DB['PORT'],
+                user=API_DB['USER'],
+                passwd=API_DB['PASSWD'], 
+                db=API_DB['NAME'],
+                charset="utf8")
 
 APP_SETTINGS = {
 
