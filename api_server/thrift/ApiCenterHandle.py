@@ -30,7 +30,6 @@ class ApiCenterHandle(object):
             params = simplejson.loads(params)
             method = params['method']
             date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
-            api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
             nick = nick.decode('utf8')
             logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                     %(api_source,method,soft_code,nick,params.get('nick',None)))
@@ -40,12 +39,13 @@ class ApiCenterHandle(object):
                 logger.error('api source error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                         %(api_source,method,soft_code,nick,params.get('nick',None)))
                 return simplejson.dumps(rsp)
-            if api_record and api_record['all_day_limit']:
-                #API全天流控检查
-                rsp = ApiCenterHandle.get_call_limit_rsp()
-                logger.error('api limit error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
-                        %(api_source,method,soft_code,nick,params.get('nick',None)))
-                return simplejson.dumps(rsp)
+            #api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
+            #if api_record and api_record['all_day_limit']:
+            #    #API全天流控检查
+            #    rsp = ApiCenterHandle.get_call_limit_rsp()
+            #    logger.error('api limit error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
+            #            %(api_source,method,soft_code,nick,params.get('nick',None)))
+            #    return simplejson.dumps(rsp)
 
             #根据入参的情况，获取相应的shop_infos列表
             session_expired = False
@@ -127,7 +127,8 @@ class ApiCenterHandle(object):
                 #API全天被限
                 wait_seconds = int(rsp_dict['error_response']['sub_msg'].split(' ')[5])
                 if wait_seconds > 60:
-                    ApiRecordService.set_all_day_limit(soft_code,api_source,api_method,date_str,True)
+                    api_record_tmp = ApiRecordService.get_record(shop_info['soft_code'],api_source,api_method,date_str)
+                    ApiRecordService.set_all_day_limit(api_record_tmp['id'],True)
                     logger.error("API ALL DAY LIMITS , wait_seconds:%s , source:%s , method:%s , nick:%s , soft_code:%s"%(wait_seconds,api_source,api_method,shop_info['nick'],shop_info['soft_code']))
                     call_limit_count += 1
                     #切换app_key
