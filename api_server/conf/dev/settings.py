@@ -3,6 +3,8 @@ import os, sys
 import pymongo
 from pymongo import Connection
 import logging
+import MySQLdb
+from DBUtils.PooledDB import PooledDB
 
 if pymongo.version.startswith("2.5"):
     import bson.objectid
@@ -34,16 +36,34 @@ def set_api_source(source):
     api_source = source
     print 'set api_source:',api_source
 
-MGDBS = {
-        'api_conn':{
-            'HOST':'app.maimiaotech.com',
-            'PORT':2201,
-            'USER':'',
-            'PASSWORD':''
-        }
-    }
-#利用mongodb 自带的connection poll 来管理数据库连接
-api_conn = Connection(host=MGDBS['api_conn']['HOST'],port=MGDBS['api_conn']['PORT'])
+#MGDBS = {
+#        'api_conn':{
+#            'HOST':'app.maimiaotech.com',
+#            'PORT':2201,
+#            'USER':'',
+#            'PASSWORD':''
+#        }
+#    }
+##利用mongodb 自带的connection poll 来管理数据库连接
+#api_conn = Connection(host=MGDBS['api_conn']['HOST'],port=MGDBS['api_conn']['PORT'])
+
+API_DB = {
+         'NAME': 'api_record',
+         'HOST':'localhost',
+         'PORT':3306,
+         'USER':'root',
+         'PASSWD':'123456' }
+
+
+api_pool = PooledDB(creator = MySQLdb, 
+                maxusage=600,
+                host=API_DB['HOST'],
+                port=API_DB['PORT'],
+                user=API_DB['USER'],
+                passwd=API_DB['PASSWD'], 
+                db=API_DB['NAME'],
+                charset="utf8")
+
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/tmp/api_server.log')
 hdlr.setLevel(logging.DEBUG)
