@@ -55,7 +55,7 @@ class ApiCenterHandle(object):
                 shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
             #去除QN的shop_info
             call_shop_infos = []
-            if len(shop_infos) >= 2:
+            if soft_code !='QN' and len(shop_infos) >= 2:
                 for shop_info in shop_infos:
                     if shop_info['soft_code'] == 'QN':
                         continue
