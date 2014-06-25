@@ -70,7 +70,7 @@ logger.propagate = False
 
 API_DB = {
          'NAME': 'api_record',
-         'HOST':'hzn01.rds.aliyuncs.com',
+         'HOST':'jconn2thvf8ua.mysql.rds.aliyuncs.com',
          'PORT':3306,
          'USER':'api',
          'PASSWD':'maimiaoadmin2014' }
