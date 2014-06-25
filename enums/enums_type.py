@@ -395,6 +395,10 @@ class LoginFailType(object):
     ACCESS_TOKEN_ERROR = 8
     HTTP_ERROR = 9
 
+class AdgroupHandleStatus(object):
+    UNDEAL = 0
+    AUTO_DEAL = 1
+    ONLY_PRICE = 2
 
 LOGFAILTYPE_COMMENT = {
         LoginFailType.UN_BUY:'授权失败，当前用户未购买该软件，请切换淘宝帐号并重新登录，<a href="http://login.taobao.com/member/logout.jhtml?spm=1.1000386.5982201.5.qQ0uFL&f=top&out=true&redirectURL=http%3A%2F%2Fwww.taobao.com%2F">退出当前淘宝帐号</a>'
