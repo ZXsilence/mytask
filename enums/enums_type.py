@@ -29,6 +29,7 @@ class WordDeleteType(object):
 
 class OperationType(object):
 
+    DELETE_UNEXPECT = -1
     DELETE_AUDIT_UNPASS = 1
     DELETE_LOW_QSCORE = 2
     DELETE_LOW_PV_OLD = 3
@@ -238,6 +239,7 @@ class OperationType(object):
 
 
     ALL_KEYWORD_DELETE_TYPES = [
+        DELETE_UNEXPECT,
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
         DELETE_LOW_PV_OLD,
@@ -291,6 +293,7 @@ class OperationType(object):
 
 OPTTYPE_COMMENT = {
     OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
+    , OperationType.DELETE_UNEXPECT: "关键词删除时未记录原因"
     , OperationType.DELETE_LOW_QSCORE : "关键词质量分过低，已经删除"
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PERCENT : "关键词在计划中相对表现较差，已经删除"
