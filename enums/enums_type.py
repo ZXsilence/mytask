@@ -116,6 +116,7 @@ class OperationType(object):
     START_OPTIMIZE_ADGROUP = 511
     STOP_ADGROUP = 512
     STOP_OPTIMIZE_ADGROUP = 513
+    START_OPTIMIZE_ADGROUP_ONLY_PRICE = 514
 
 
     ADD_CAMPAIGN_NORMAL = 601
@@ -174,6 +175,7 @@ class OperationType(object):
         START_OPTIMIZE_ADGROUP,
         STOP_ADGROUP,
         STOP_OPTIMIZE_ADGROUP,
+        START_OPTIMIZE_ADGROUP_ONLY_PRICE,
 
         START_CAMPAIGN,
         START_OPTIMIZE_CAMPAIGN,
@@ -368,6 +370,7 @@ OPTTYPE_COMMENT = {
     , OperationType.START_OPTIMIZE_ADGROUP: "推广组加入托管" 
     , OperationType.STOP_ADGROUP: "推广组取消推广"
     , OperationType.STOP_OPTIMIZE_ADGROUP: "推广组取消托管"
+    , OperationType.START_OPTIMIZE_ADGROUP_ONLY_PRICE: "推广组开启价格优化"
 
     , OperationType.ADD_CAMPAIGN_NORMAL: "新建计划" 
     , OperationType.START_CAMPAIGN: "计划开启推广" 
