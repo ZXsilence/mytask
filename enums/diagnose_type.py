@@ -25,7 +25,7 @@ class CampaignType(object):
 　　CAMPAIGN_PLATFORM_LOW_ROI = 113
 　　
 　　CAMPAIGN_SCHEDULE_LOW_DISCOUNT = 121
-　　CAMPAIGN_SCHEDULE_LOW_ROI = 122
+　　CAMPAIGN_SCHEDULE_ROI_DIFF = 122
 　　
 　　CAMPAIGN_AREA_LESS_CITY = 131
 　　CAMPAIGN_AREA_LOW_ROI = 132
@@ -38,7 +38,7 @@ class CampaignType(object):
     CAMPAIGN_STOP = 203
     CAMPAIGN_NO_HANDLE = 204
     
-    SHOP_IN_DEBT = 301
+    SHOP_IN_DEBT = 301     
     SHOP_BE_PUNISH = 302
 
 
@@ -93,7 +93,7 @@ CAMPAIGN_LOW_TRAFFIC_REASON = {
 CAMPAIGN_LOW_ROI_REASON = {
         CampaignType.CAMPAIGN_OFF_LINE:"计划提前下线"
         ,CampaignType.CAMPAIGN_PLATFORM_LOW_ROI:"计划站外或无线ROI过低"
-        ,CampaignType.CAMPAIGN_SCHEDULE_LOW_ROI:"计划分时折扣设置不合理"
+        ,CampaignType.CAMPAIGN_SCHEDULE_ROI_DIFF:"计划分时折扣设置不合理"
         ,CampaignType.CAMPAIGN_AREA_LOW_ROI:"计划地域设置不合理"
         ,CampaignType.CAMPAIGN_NONSEARCH_LOW_ROI:"计划定向设置不合理"
         
