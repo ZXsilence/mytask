@@ -75,7 +75,8 @@ class ClouddataMbpDataGet(object):
         req.parameter = parameter
         rsp = ApiService.execute(req)
         return cls._decode_clouddata(rsp)
-    
+
+    '''有点击词'''
     @classmethod
     def get_query_rpt(cls,sid,sdate,edate):
         rpt_list = []
@@ -83,13 +84,17 @@ class ClouddataMbpDataGet(object):
         offset = 0
         sql_id = '4439'
         while True:
-            rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
-            rpt_list.extend(rpt_sub_list)
-            if len(rpt_sub_list) < limit:
-                break
-            offset = offset + limit
+            try:
+                rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception:
+                return []
         return rpt_list
-    
+
+    '''获取用户90天成交词'''    
     @classmethod
     def get_query_list_by_sid(cls, sid):
         rpt_list = []
