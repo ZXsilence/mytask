@@ -23,7 +23,7 @@ class Keyword(object):
 
     def get(self,key,value):
         index = self.__get_index_by_field(key)
-        if not self.data[index]:
+        if index or not self.data[index]:
             return value
         else:
             return self.data[index]
@@ -44,7 +44,7 @@ class Keyword(object):
                 'sid':self.data[3],
                 'nick':self.data[4],
                 'word':self.data[5],
-                'audit_pass':self.data[6],
+                'audit_status':self.data[6],
                 'qscore':self.data[7],
                 'match_scope':self.data[8],
                 'max_price':self.data[9],
@@ -85,7 +85,7 @@ class Keyword(object):
             return 13
 
 if __name__== '__main__':
-    keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_pass', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))
+    keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_status', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))
     print keyword['word']
     print keyword['audit_status']
 

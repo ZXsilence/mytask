@@ -16,6 +16,7 @@ from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOK
 from TaobaoSdk import  TaobaoClient
 from api_server.services.api_record_service import ApiRecordService
 from api_server.conf.settings import logger
+from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
    
 class ApiCenterHandle(object):
 
@@ -109,8 +110,12 @@ class ApiCenterHandle(object):
                 header = shop_info['header']
 
             #发送请求
-            taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
-            rsp_dict = taobao_client.execute(params, access_token,header)
+            try:
+                taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
+                rsp_dict = taobao_client.execute(params, access_token,header)
+            except SDKRetryException:
+                logger.exception('api error, sdk retry failed, params:%s,nick:%s,soft_code:%s,api_source:%s'%(params,nick,soft_code,api_source))
+                return ApiCenterHandle.get_sdk_retry_rsp()
 
             #记录API调用
             ApiCenterHandle.mark_record(params,rsp_dict,soft_code,api_source,date_str)
@@ -181,6 +186,15 @@ class ApiCenterHandle(object):
         rsp['error_response']['msg'] = 'App Call Limited'
         rsp['error_response']['sub_msg'] = 'This ban will last for 123456 more seconds'
         rsp['error_response']['sub_code'] = 'accesscontrol.limited-by-api-access-count'
+        return rsp
+
+    @staticmethod
+    def get_sdk_retry_rsp():
+        rsp = {'error_response':{}}
+        rsp['error_response']['code'] = 1000.2
+        rsp['error_response']['msg'] = 'SDK Retry Error'
+        rsp['error_response']['sub_msg'] = '淘宝返回非json数据，sdk重试失败，具体返回可查看/home/ops/TaobaoOpenPythonSDK/TaobaoSdk/error_api.txt'
+        rsp['error_response']['sub_code'] = 'sdk-retry-error'
         return rsp
 
     def say(self, msg):
