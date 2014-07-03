@@ -13,7 +13,8 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from api_server.conf.settings import API_THRIFT,APP_SETTINGS
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
-from api_server.conf.settings import api_source,API_SOURCE
+from api_server.conf.settings import API_SOURCE
+from api_server.conf.settings import get_api_source 
 from api_server.common.decorator import sdk_exception
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class ApiService(object):
 
     @staticmethod
     def execute(req,nick=None,soft_code=None):
-        global api_source
+        api_source = get_api_source()
         params_dict = ApiService.getReqParameters(req)
         params_str = simplejson.dumps(params_dict)
         if nick is None:
