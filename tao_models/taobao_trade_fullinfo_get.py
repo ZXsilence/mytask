@@ -91,6 +91,7 @@ class TradeFullinfoGet(object):
         req = TradeFullinfoGetRequest()
         req.fields = fields
         req.tid = tid
+        req.nick = nick 
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.trade)
 
