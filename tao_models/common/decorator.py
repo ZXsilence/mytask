@@ -77,9 +77,6 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         logger.info(args[0].__class__.__name__ + "return None")
                         return None
                     res =  func(*args, **kwargs)
-                except SDKRetryException,e:
-                    logger.error('sdk retry error:%s,*args:%s **kwargs:%s'%(func.__name__, str(args),str(kwargs)))
-                    raise e
                 except ErrorResponseException,e:
                     logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))
@@ -95,6 +92,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     if e.code == 1000.1:
                         raise ApiSourceError(e.code,e.sub_code,e.msg,e.sub_msg)
+                    if e.code == 1000.2:
+                        raise SDKRetryException(code=e.code,sub_code=e.sub_code\
+                                ,msg=e.msg,sub_msg=e.sub_msg)
                      
                     #扔出自定义异常
                     if hasattr(e,'params') and e.params:
