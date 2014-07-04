@@ -170,8 +170,7 @@ class ApiRecord(object):
 
             extend_field1 varchar(32),
             extend_field2 varchar(32),
-            descr text,
-            INDEX(date)
+            descr text
             ) ENGINE = InnoDB
         """ % cls._table
         cursor.execute(query)
