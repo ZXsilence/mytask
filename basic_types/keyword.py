@@ -23,7 +23,7 @@ class Keyword(object):
 
     def get(self,key,value):
         index = self.__get_index_by_field(key)
-        if index or not self.data[index]:
+        if not index or not self.data[index]:
             return value
         else:
             return self.data[index]
