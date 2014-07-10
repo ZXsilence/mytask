@@ -34,20 +34,20 @@ class ClouddataMbpDataGet(object):
 
     @classmethod
     def _decode_clouddata(cls,rsp):
-
-        dict_column = json.loads(rsp.column_list)
-        dict_row = json.loads(rsp.row_list)
-        columns = dict_column.get('string', [])
-        rows = dict_row.get('query_row', []) 
+        
+        column_list = rsp.__dict__.get('column_list',[])
+        row_list =  rsp.__dict__.get('row_list',[]) 
         elements = []
+        if column_list == [] or row_list == []:
+            return elements
         int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num"]
         date_fields = ["thedate", "dt"]
         float_fields = ["alipay_trade_amt"]
-        for row in rows:
-            values = row.get('values', {}).get('string', [])
+        for row in row_list:
+            values = row.values
             rpt = {}
             for i in range(len(values)):
-                key = columns[i]
+                key = column_list[i]
                 if key in int_fields:
                     rpt[key] = int(values[i]) 
                 elif key in date_fields:
@@ -126,12 +126,6 @@ class ClouddataMbpDataGet(object):
 
 
 if __name__ == '__main__':
-    sid = 70774620 
-    sql_id = 3472 
-    edate = datetime.datetime.now()
-    sdate = edate - datetime.timedelta(days=15)
-    rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
-    #rpt_list_1 = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    sid = 108064949
+    rpt_list = ClouddataMbpDataGet.get_query_list_by_sid(sid)
     print len(rpt_list)
-    print rpt_list[0]
-    #print rpt_list_1[0]
