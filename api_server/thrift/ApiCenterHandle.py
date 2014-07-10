@@ -34,7 +34,7 @@ class ApiCenterHandle(object):
             nick = nick.decode('utf8')
             logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                     %(api_source,method,soft_code,nick,params.get('nick',None)))
-            if not api_source or api_source not in API_SOURCE:
+            if not api_source:
                 #API调用源检查
                 rsp = ApiCenterHandle.get_source_error_rsp(api_source)
                 logger.error('api source error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\

@@ -21,6 +21,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import SimbaRptAdgroupnonsearcheffectGetRequest
+from TaobaoSdk.Exceptions import  ErrorResponseException
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
@@ -48,14 +49,12 @@ class SimbaRptAdgroupnonsearchEffectGet(object):
         while True:  
             soft_code = None
             rsp = ApiService.execute(req,nick,soft_code)
-            if not rsp.rpt_nonsearch_effect_list:
-                l = {}
-            else:
-                l = json.loads(rsp.rpt_nonsearch_effect_list.lower())
+            if not rsp.isSuccess():
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+            response = json.loads(rsp.responseBody.lower())
+            l = response['simba_rpt_adgroupnonsearcheffect_get_response'].get('rpt_nonsearch_effect_list',[])
             if l == {}:
                 l = []
-            if isinstance(l, dict):
-                raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
             for rpt in l:
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
             effect_list.extend(l)
