@@ -18,7 +18,7 @@ from TaobaoSdk import SimbaKeywordsbykeywordidsGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from basic_types.keyword_new import Keyword
+from basic_types.keyword import Keyword
 logger = logging.getLogger(__name__)
 
 class SimbaKeywordsbykeywordidsGet(object):
