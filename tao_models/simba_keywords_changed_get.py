@@ -52,6 +52,43 @@ class SimbaKeywordsChangedGet(object):
             rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(nick,req)
             keyword_list.extend(rsp.keywords.keyword_list)
         return change_obj_to_dict_deeply(keyword_list)
+    
+    @classmethod
+    @tao_api_exception()
+    def get_total_page(cls,nick,start_time):
+        req = SimbaKeywordsChangedGetRequest()
+        req.nick = nick
+        req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        req.page_size = cls.PAGE_SIZE
+        req.page_no = 1
+        rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(nick,req)
+        if not rsp.keywords.total_item:
+            return 0 
+        total_pages = (rsp.keywords.total_item +  cls.PAGE_SIZE  -1)/ cls.PAGE_SIZE 
+        return total_pages
+    
+    @classmethod
+    @tao_api_exception()
+    def get_keywords_id_changed(cls,nick,start_time):
+        keyword_list = []
+        req = SimbaKeywordsChangedGetRequest()
+        req.nick = nick
+        req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        req.page_size = cls.PAGE_SIZE
+        req.page_no = 1
+        rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(nick,req)
+        if not rsp.keywords.total_item:
+            logger.debug("get_keywords_changed ---nick:%s start_time:%s total_changed_keywords:%s "%(nick,start_time,rsp.keywords.total_item))
+            return keyword_list
+        keyword_list.extend([ item.keyword_id for item in rsp.keywords.keyword_list])
+        total_pages = (rsp.keywords.total_item + cls.PAGE_SIZE - 1)/cls.PAGE_SIZE
+        logger.debug("get_keywords_changed ---nick:%s start_time:%s total_changed_keywords:%s total_pages:%s "%(nick,start_time,rsp.keywords.total_item,total_pages))
+        for curr_page_no in range(2, total_pages+1):
+            req.page_no = curr_page_no
+            rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(nick,req)
+            keyword_list.extend([ item.keyword_id for item in rsp.keywords.keyword_list])
+        return keyword_list
+
 
     @classmethod
     @tao_api_exception()
@@ -65,9 +102,8 @@ def test():
     from datetime import datetime,timedelta
     start_time = datetime.now() - timedelta(days=10)
     SimbaKeywordsChangedGet.PAGE_SIZE = 300
-    keyword_list = SimbaKeywordsChangedGet.get_keywords_changed(nick,start_time)
-    for keyword in keyword_list:
-        print keyword
+    print SimbaKeywordsChangedGet.get_total_page(nick,start_time)
+    print SimbaKeywordsChangedGet.get_keywords_id_changed(nick,start_time)
 
 if __name__ == '__main__':
     test()
