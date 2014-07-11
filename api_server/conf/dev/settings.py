@@ -36,6 +36,10 @@ def set_api_source(source):
     api_source = source
     print 'set api_source:',api_source
 
+def get_api_source():
+    global api_source
+    return api_source
+
 #MGDBS = {
 #        'api_conn':{
 #            'HOST':'app.maimiaotech.com',

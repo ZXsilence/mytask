@@ -13,6 +13,8 @@ class Keyword(object):
         for field in dir(self):
             if field.startswith('__'):
                 continue
+            if not keyword.has_key(field):
+                continue
             if not keyword[field]:
                 continue
             index = self.__get_index_by_field(field)
@@ -23,7 +25,7 @@ class Keyword(object):
 
     def get(self,key,value):
         index = self.__get_index_by_field(key)
-        if index or not self.data[index]:
+        if not index or not self.data[index]:
             return value
         else:
             return self.data[index]
@@ -44,7 +46,7 @@ class Keyword(object):
                 'sid':self.data[3],
                 'nick':self.data[4],
                 'word':self.data[5],
-                'audit_status':self.data[6],
+                'audit_pass':self.data[6],
                 'qscore':self.data[7],
                 'match_scope':self.data[8],
                 'max_price':self.data[9],
@@ -71,21 +73,29 @@ class Keyword(object):
             return 6
         if key == "qscore":
             return 7
-        if key == "match_scope":
+        if key =="rele_score":
             return 8
-        if key == "max_price":
+        if key =="cvr_score":
             return 9 
-        if key == "is_default_price":
+        if key =="cust_score":
             return 10
-        if key == "is_garbage":
+        if key =="creative_score":
             return 11
-        if key == "create_time":
+        if key == "match_scope":
             return 12
-        if key == "modified_time":
+        if key == "max_price":
             return 13
+        if key == "is_default_price":
+            return 14
+        if key == "is_garbage":
+            return 15
+        if key == "create_time":
+            return 16
+        if key == "modified_time":
+            return 17
 
 if __name__== '__main__':
-    keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_status', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))
+    keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_pass', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))
     print keyword['word']
     print keyword['audit_status']
 
