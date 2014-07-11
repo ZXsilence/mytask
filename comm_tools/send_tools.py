@@ -9,24 +9,19 @@
 @copyright: Copyright maimiaotech.com
 
 """
-import os,sys
+import sys
 import json
 import time
+import logging
 import smtplib, mimetypes
 import urllib, urllib2
-import logging,logging.config
 if __name__ == '__main__':
-    curr=os.path.normpath(os.path.dirname(__file__))
-    log_path=os.path.normpath(os.path.join(curr,'../core/log4p_file_console.conf'))
-    sys.path.append(os.path.normpath(os.path.join(curr,'../../')))
-    logging.config.fileConfig(log_path)
+    sys.path.append('../')
 
 from email.Header import Header
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
-
-logger=logging.getLogger(__file__)
 
 SEND_COMMAND = 'MT_REQUEST' 
 SPID = '5208'
@@ -46,13 +41,15 @@ def send_email_with_text(addressee, text, subject):
     msg.attach(MIMEText(text, _charset='utf-8'))
     msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = DIRECTOR['EMAIL']
-    msg['To'] = addressee
+    to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+    msg['To'] = ';'.join(to_list) 
     try:
         smtp = smtplib.SMTP()
         smtp.connect('smtp.ym.163.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
-        smtp.sendmail(msg['From'], msg['To'], msg.as_string())
+        smtp.sendmail(msg['From'], to_list, msg.as_string())
     except Exception,e:
+        print e
         logger.exception('send_email: %s' % (str(e)))
 
 def send_email_with_html(addressee, html, subject):
@@ -61,14 +58,15 @@ def send_email_with_html(addressee, html, subject):
     msg = MIMEMultipart()
     msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = DIRECTOR['EMAIL']
-    msg['To'] = addressee
+    to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+    msg['To'] = ';'.join(to_list) 
     html_att = MIMEText(html, 'html', 'utf-8')
     msg.attach(html_att)
     try:
         smtp = smtplib.SMTP()
         smtp.connect('smtp.ym.163.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
-        smtp.sendmail(msg['From'], msg['To'], msg.as_string())
+        smtp.sendmail(msg['From'], to_list, msg.as_string())
     except Exception,e:
         logger.exception('send_email: %s' % (str(e)))
 
@@ -140,6 +138,7 @@ def send_sms(cellphone, text, retry_times=3):
         dict = _parse_sms_response(response.read())
         if dict.get('mterrcode',None) != '000':
             logger.error('send message to %s unsuccessfully:response error'%(cellphone,))
+            logger.error('error dict: %s' % (str(dict)))
             send_sms(cellphone,text,retry_times)
     except urllib2.HTTPError,e:
         logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
@@ -149,6 +148,7 @@ def send_sms(cellphone, text, retry_times=3):
         send_sms(cellphone,text,retry_times)
 
 if __name__ == '__main__':
-    send_email_with_text(DIRECTOR['EMAIL'], 'text', 'subject')
-    send_sms(DIRECTOR['PHONE'], u'测试短信')
-    send_sms(DIRECTOR['PHONE'], '测试短信2')
+    send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
+    send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
+    #send_sms(DIRECTOR['PHONE'], u'测试短信1')
+    #send_sms(DIRECTOR['PHONE'], '测试短信2')
