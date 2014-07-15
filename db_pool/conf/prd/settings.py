@@ -22,7 +22,7 @@ RDS1 = {
 #rds2实例连接池配置
 RDS2 = {
          'pool_addr':{
-                 'HOST':'121.199.170.159',
+                 'HOST':'10.242.173.131',
                  'PORT':4041,
                  'USER':'maimiao_ops',
                  'PASSWD':'maimiaoadmin2014' 
