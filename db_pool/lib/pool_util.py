@@ -20,7 +20,8 @@ class PoolUtil(object):
     @classmethod
     def _get_cursor_by_rds(self,db_name,RDS):
         db_set = RDS['pool_addr']
-        conn=MySQLdb.connect(host=db_set['HOST'],user=db_set['USER'],passwd=db_set['PASSWD'],db=db_name,charset="utf8")
+        conn=MySQLdb.connect(host=db_set['HOST'],port=int(db_set['PORT']),\
+                user=db_set['USER'],passwd=db_set['PASSWD'],db=db_name,charset="utf8")
         cursor = conn.cursor()
         return (conn,cursor)
 
