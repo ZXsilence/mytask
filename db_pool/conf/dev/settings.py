@@ -17,7 +17,7 @@ RDS1 = {
                  'rpt_adgroupeffect','rpt_all_31','rpt_campaignbase',\
                  'rpt_campaigneffect','rpt_custbase','shop_info',\
                  'strategy','syb_common_info','taoci','test',\
-                 'xiangqing','xuanciw','syb_web']
+                 'xiangqing','xuanciw','syb_web','keywords_deleted']
         }
 
 #rds2实例连接池配置
