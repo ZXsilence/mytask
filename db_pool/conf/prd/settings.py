@@ -26,7 +26,7 @@ RDS2 = {
                  'PORT':4041,
                  'USER':'maimiao_ops2',
                  'PASSWD':'maimiaoadmin2014' 
-                 },
+                 }
              ,
          'db_list':[
               'keywords_deleted','access_records','dbtest'
