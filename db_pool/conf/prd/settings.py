@@ -24,7 +24,7 @@ RDS2 = {
          'pool_addr':{
                  'HOST':'10.242.173.131',
                  'PORT':4041,
-                 'USER':'maimiao_ops',
+                 'USER':'maimiao_ops2',
                  'PASSWD':'maimiaoadmin2014' 
                  },
              ,
