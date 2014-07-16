@@ -52,7 +52,7 @@ class SimbaKeywordKeywordforecastGet(object):
             num += 1
             temp_rank_dict = cls._get_keywordforecast(keyword_id,bid_price,nick)
             if not temp_rank_dict.keys():
-                raise TaoApiMaxRetryException("api error")
+                return {}
             rank_dict.update(temp_rank_dict)
             if max(temp_rank_dict.keys()) >= max_price:
                 logger.debug("经过num:%s次排名预估找到价格区间预估min_price:%s,max_price:%s,nick:%s,keyword_id:%s" %(num,min_price,max_price,nick,keyword_id))
@@ -77,9 +77,9 @@ class SimbaKeywordKeywordforecastGet(object):
             if i == 20:
                 raise TaoApiMaxRetryException("retry 20 times ,but still failed")
             data_dict = SimbaKeywordKeywordforecastGet.get_keywordforecast(keyword_id,price,nick)
-            if not data_dict or not data_dict.has_key('price_rank') or not data_dict['price_rank']:
+            if not data_dict or not data_dict.has_key('price_rank'):
                 i += 1
-                sleep(1)
+                sleep(0.5)
                 print 'retry get keywordforecast',i
                 continue
             else:
