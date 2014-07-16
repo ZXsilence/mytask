@@ -193,7 +193,7 @@ class ApiCenterHandle(object):
         rsp = {'error_response':{}}
         rsp['error_response']['code'] = 1000.2
         rsp['error_response']['msg'] = 'SDK Retry Error'
-        rsp['error_response']['sub_msg'] = '淘宝返回非json数据，sdk重试失败，具体返回可查看/home/ops/TaobaoOpenPythonSDK/TaobaoSdk/error_api.txt'
+        rsp['error_response']['sub_msg'] = 'SDK重试失败，可能是以下原因造成的:1.与淘宝交互返回的状态码非200     2.淘宝返回了非json数据，具体返回数据可查看/home/ops/TaobaoOpenPythonSDK/TaobaoSdk/error_api.txt'
         rsp['error_response']['sub_code'] = 'sdk-retry-error'
         return rsp
 
