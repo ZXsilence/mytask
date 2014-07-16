@@ -11,7 +11,7 @@ RDS1 = {
              ,
          'db_list':['information_schema','access_records',\
                  'adgroups','all_apps','api_record','auth',\
-                 'campaigns','cloud','cms','contact','crm',\
+                 'campaign','cloud','cms','contact','crm',\
                  'items','keywords','longtail','mobileapp',\
                  'mysql','performance','qianniupc','rpt_adgroupbase',\
                  'rpt_adgroupeffect','rpt_all_31','rpt_campaignbase',\
