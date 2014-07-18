@@ -51,6 +51,7 @@ class OperationType(object):
     #分层新增
     DELETE_LOW_CTR = 18
     DELETE_LOW_ROI = 19
+    DELETE_LOW_CUST_SCORE = 20
 
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
