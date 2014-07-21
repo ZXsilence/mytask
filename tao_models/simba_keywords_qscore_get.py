@@ -36,7 +36,9 @@ class SimbaKeywordsQscoreGet(object):
         return change_obj_to_dict_deeply(rsp.keyword_qscore_list)
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    adgroup_id = 336844923
+    #nick = 'chinchinstyle'
+    #adgroup_id = 336844923
+    nick = '麦苗科技001'
+    adgroup_id = 409604759 
     print SimbaKeywordsQscoreGet.get_keywords_qscore(nick,adgroup_id)
 

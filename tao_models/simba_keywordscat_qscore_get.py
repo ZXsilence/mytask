@@ -38,8 +38,9 @@ class SimbaKeywordscatQscoreGet(object):
 
 
 def test():
-    nick = 'chinchinstyle'
-    qscores_dict = SimbaKeywordscatQscoreGet.get_qscore_list_by_adgroup(nick, 336844923)
+    nick = '麦苗科技001'
+    adgroup_id = 409604759 
+    qscores_dict = SimbaKeywordscatQscoreGet.get_qscore_list_by_adgroup(nick, adgroup_id)
     print qscores_dict.keys()
     for qscore in qscores_dict['keyword_qscore_list']:
         print qscore

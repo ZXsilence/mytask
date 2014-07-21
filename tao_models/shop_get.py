@@ -57,8 +57,10 @@ class ShopGet(object):
 
 
 def test():
-    nick = '麦苗科技001'
-    access_token = '62011151ddc4cbf3f0777a7ZZa77e61da8cb381c3fcd6b6871727117'
+    #nick = '麦苗科技001'
+    #access_token = '62011151ddc4cbf3f0777a7ZZa77e61da8cb381c3fcd6b6871727117'
+    nick = '胜乐伟业数码专营店'
+    access_token = '6201513f826135c0898abdfbefegbfd8a211dac32266d41732150501'
     soft_code = 'SYB'
     shop_info = ShopGet.get_shop_with_access_token(nick,access_token,soft_code)
     print shop_info
