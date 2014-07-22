@@ -20,7 +20,7 @@ BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
 #SERVER_URL = "http://223.5.20.253:8002/router/rest"
-SERVER_URL = "http://223.5.20.253:8002/router/rest"
+SERVER_URL = "http://121.199.170.144:30002/router/rest"
 
 API_THRIFT = {
         'host':'localhost',
