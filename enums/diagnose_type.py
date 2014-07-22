@@ -16,6 +16,9 @@ class CampaignType(object):
     CAMPAIGN_LOW_ROI = 13
     CAMPAIGN_OK = 14
 
+    SHOP_IN_DEBT = 101     
+    SHOP_BE_PUNISH = 102
+    
     CAMPAIGN_OFF_LINE = 111
     CAMPAIGN_LESS_ADGROUPS = 112 
     CAMPAIGN_LOW_BIDMAX = 113
@@ -32,11 +35,9 @@ class CampaignType(object):
     
     CAMPAIGN_NO_ADGROUP = 151
     CAMPAIGN_NO_ADGROUP_HANDLE = 152
-    CAMPAIGN_STOP = 152
+    CAMPAIGN_STOP = 153
     CAMPAIGN_NO_HANDLE = 154
     
-    SHOP_IN_DEBT = 101     
-    SHOP_BE_PUNISH = 102
 
 
 class AdgroupType(object):
@@ -107,7 +108,3 @@ CAMPAIGN_LOW_ROI_REASON = {
         
         }                
 
-CAMPAIGN_STANDARD = {
-        'auto':{'click':15, 'roi':2.5}
-        ,'key':{'click':20, 'roi':2.0}
-        }
