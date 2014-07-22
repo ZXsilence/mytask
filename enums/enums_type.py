@@ -47,6 +47,7 @@ class OperationType(object):
     DELETE_LOW_PV_BY_ADGROUP_CPC = 15
     DELETE_USER_DELETE_TAOBAO = 16
     DELETE_GARBAGE_MAX_PRICE = 17
+    DELETE_MANUAL_ADGROUP = 18
 
     #分层新增
     DELETE_LOW_CTR = 18
@@ -74,6 +75,7 @@ class OperationType(object):
     UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE = 122
     UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE = 123
     UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE = 124 
+    UPDATE_PRICE_MANUAL_ADGROUP = 125
     
     #分层优化新增   
     UPDATE_PRICE_ACCURATE_MATCH = 125
@@ -156,7 +158,8 @@ class OperationType(object):
 
         DELETE_ADGROUP_NORMAL,
         DELETE_ADGROUP_INITIAL,
-        DELETE_ADGROUP_HISTORY_NORMAL
+        DELETE_ADGROUP_HISTORY_NORMAL,
+        DELETE_MANUAL_ADGROUP
     ]
 
     ALL_UPDATE_TYPES = [
@@ -182,6 +185,7 @@ class OperationType(object):
         UPDATE_PRICE_FOR_CPC_MAX,
         UPDATE_PRICE_ACCURATE_MATCH,
         UPDATE_PRICE_WIDE_MATCH,
+        UPDATE_PRICE_MANUAL_ADGROUP,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
@@ -328,6 +332,8 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_DIRECTOR : "加力计划优化，发现关键词表现不佳，已经删除"
     , OperationType.DELETE_HISTORY_NORMAL : "关键词已经被删除(历史记录未区分类型)"
     , OperationType.DELETE_LOW_PV_BY_ADGROUP_CPC : "关键词已经超出推广组cpc较多，仍然没有展现，已经删除"
+    
+    , OperationType.DELETE_MANUAL_ADGROUP: "手动计划自定义优化删除符合条件关键词"
 
     , OperationType.UPDATE_PRICE_ROI_GOOD_INCRE_PRICE : "关键词最近一段时间效果好于计划整体，加大投入"
     , OperationType.UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE : "系统预估关键词ROI潜力较大，适当加大投入"
@@ -353,6 +359,8 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "关键词修改为精准匹配"
     , OperationType.UPDATE_PRICE_WIDE_MATCH: "关键词修改为宽泛匹配"
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
+    
+    , OperationType.UPDATE_PRICE_MANUAL_ADGROUP: "手动计划自定义优化关键词价格"
     
     , OperationType.IGNORE_KEYWORD_NOT_EXIST: "关键词不存在"
     , OperationType.IGNORE_KEYWORD_NOT_HANDLE : "关键词未托管，无需处理"
