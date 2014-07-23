@@ -21,6 +21,8 @@ class DeleteWord(object):
             return 1
         elif field == 'priority':
             return 2
+        elif field == 'adgroup_id':
+            return 3
 
     def __getitem__(self,field):
         index = self.__get_index_by_field(field)
