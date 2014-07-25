@@ -109,6 +109,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         elif api_method == 'taobao.simba.nonsearch.adgroupplaces.delete' and e.sub_msg \
                                 and u'当前推广计划不支持该操作' in e.sub_msg:
                             raise NonsearchNotOpenException
+                        elif api_method == 'taobao.simba.nonsearch.adgroupplaces.get' and e.sub_msg \
+                                and u'当前推广计划不支持该操作' in e.sub_msg:
+                            raise NonsearchNotOpenException
 
                     #异常状态的重试处理,不扔出自定义的业务异常
                     if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 
