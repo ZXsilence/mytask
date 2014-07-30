@@ -24,7 +24,6 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import PromotionmiscMjsActivityAddRequest
-from tao_models.promotionmisc_mjs_activity_factory import MjsPromotionActivityFactory 
 from tao_models.common.decorator import tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
@@ -43,63 +42,68 @@ class PromotionmiscMjsActivityAdd(object):
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.activity_id
 
-class MjsPromotionActivityFactory(object):
-    """变异的工厂方法,进行创建满就送活动"""
+    class MjsPromotionActivityFactory(object):
+        """变异的匿名工厂方法,进行创建满就送活动.方便引和组装活动"""
 
-    __mjs_promotion_request = None
+        __mjs_promotion_request = None
 
-    @classmethod
-    def create_mjs_promotion_add(cls):
-        cls.__mjs_promotion_request = PromotionmiscMjsActivityAddRequest()
-        return MjsPromotionActivityFactory()
+        @classmethod
+        def create_mjs_promotion_add(cls):
+            factory = PromotionmiscMjsActivityAdd.MjsPromotionActivityFactory()
+            factory.__mjs_promotion_request = PromotionmiscMjsActivityAddRequest()
+            return factory
 
-    def add_mjs_base_condition(self,name,start_time,end_time,participate_range,type):
-        """添加满就送活动的必须条件"""
-        self.__mjs_promotion_request.name = name
-        self.__mjs_promotion_request.participate_range = participate_range 
-        self.__mjs_promotion_request.type = type 
-        self.__mjs_promotion_request.start_time = start_time 
-        self.__mjs_promotion_request.end_time = end_time 
+        def add_mjs_base_condition(self,name,start_time,end_time,participate_range,type):
+            """添加满就送活动的必须条件"""
+            self.__mjs_promotion_request.name = name
+            self.__mjs_promotion_request.participate_range = participate_range 
+            self.__mjs_promotion_request.type = type 
+            self.__mjs_promotion_request.start_time = start_time 
+            self.__mjs_promotion_request.end_time = end_time 
 
-    def add_mjs_item_condition(self,item_count,is_item_multiple):
-        """添加满就送活动的满件条件"""
-        self.__mjs_promotion_request.is_item_count_over = 'true'
-        self.__mjs_promotion_request.is_amount_over = 'false'
-        self.__mjs_promotion_request.item_count = item_count 
-        self.__mjs_promotion_request.is_item_multiple = is_item_multiple 
+        def add_mjs_item_condition(self,item_count,is_item_multiple):
+            """添加满就送活动的满件条件"""
+            self.__mjs_promotion_request.is_item_count_over = 'true'
+            self.__mjs_promotion_request.is_amount_over = 'false'
+            self.__mjs_promotion_request.item_count = item_count 
+            if is_item_multiple:
+                self.__mjs_promotion_request.is_item_multiple = 'true'
 
-    def add_mjs_price_condition(self,total_price,is_amount_multiple):
-        """添加满就送活动的满元条件"""
-        self.__mjs_promotion_request.is_item_count_over = 'false'
-        self.__mjs_promotion_request.is_amount_over = 'true'
-        self.__mjs_promotion_request.total_price = total_price 
-        self.__mjs_promotion_request.is_amount_multiple = is_amount_multiple 
+        def add_mjs_price_condition(self,total_price,is_amount_multiple):
+            """添加满就送活动的满元条件"""
+            self.__mjs_promotion_request.is_item_count_over = 'false'
+            self.__mjs_promotion_request.is_amount_over = 'true'
+            self.__mjs_promotion_request.total_price = total_price 
+            if is_amount_multiple:
+                self.__mjs_promotion_request.is_amount_multiple = 'true'
 
-    def decrease_money_condition(self,decrease_amount):
-        """减钱方式"""
-        self.__mjs_promotion_request.is_decrease_mone = 'true' 
-        self.__mjs_promotion_request.is_discount  = 'false' 
-        self.__mjs_promotion_request.decrease_amount = decrease_amount 
+        def decrease_money_condition(self,decrease_amount):
+            """减钱方式"""
+            self.__mjs_promotion_request.is_decrease_mone = 'true' 
+            self.__mjs_promotion_request.is_discount  = 'false' 
+            self.__mjs_promotion_request.decrease_amount = decrease_amount 
 
-    def decrease_discount_condition(self,discount_rate):
-        """打折方式"""
-        self.__mjs_promotion_request.is_decrease_mone = 'false' 
-        self.__mjs_promotion_request.is_discount  = 'true' 
-        self.__mjs_promotion_request.discount_rate = discount_rate 
+        def decrease_discount_condition(self,discount_rate):
+            """打折方式"""
+            self.__mjs_promotion_request.is_decrease_mone = 'false' 
+            self.__mjs_promotion_request.is_discount  = 'true' 
+            self.__mjs_promotion_request.discount_rate = discount_rate 
 
-    def add_gift_condition(self,is_send_gift,gift_name):
-        """送礼"""
-        self.__mjs_promotion_request.is_send_gift = is_send_gift 
-        self.__mjs_promotion_request.gift_name = gift_name 
+        def add_gift_condition(self,is_send_gift,gift_name):
+            """送礼"""
+            if is_send_gift:
+                self.__mjs_promotion_request.is_send_gift = 'true'
+            self.__mjs_promotion_request.gift_name = gift_name 
 
-    def add_free_post_condition(self,is_free_post,exclude_area):
-        """免邮"""
-        self.__mjs_promotion_request.is_free_post = is_free_post 
-        if exclude_area:
-            self.__mjs_promotion_request.exclude_area = exclude_area
+        def add_free_post_condition(self,is_free_post,exclude_area):
+            """免邮"""
+            if is_free_post:
+                self.__mjs_promotion_request.is_free_post = 'true'
+            if exclude_area:
+                self.__mjs_promotion_request.exclude_area = exclude_area
 
-    def build_promotion_request(self):
-        return  self.__mjs_promotion_request
+        def build_promotion_request(self):
+            return  self.__mjs_promotion_request
 
 
 if __name__ == "__main__":
@@ -110,7 +114,7 @@ if __name__ == "__main__":
     end_time = '2014-09-23 00:00:00'
     decrease_amount = None
     discount_rate = 900
-    factory = MjsPromotionActivityFactory.create_mjs_promotion_add()
+    factory = PromotionmiscMjsActivityAdd.MjsPromotionActivityFactory.create_mjs_promotion_add()
     factory.add_mjs_base_condition(name,start_time,end_time,1,1)
     factory.add_mjs_item_condition(1,'true')
     factory.decrease_money_condition(1000)
