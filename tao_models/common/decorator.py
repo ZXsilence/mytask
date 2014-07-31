@@ -216,6 +216,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     elif code == TaoOpenErrorCode.INVALID_SESSION_KEY:
                         raise InvalidAccessTokenException("access session expired or invalid")
+                    elif code == 53 and e.sub_code and 'isv.w2-security-authorize-invalid' in e.sub_code:
+                        raise W2securityException('w2-security-authorize-invalid') 
                     else:
                         raise  e
                 else:
