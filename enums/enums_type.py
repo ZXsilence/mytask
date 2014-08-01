@@ -9,6 +9,12 @@ class ExtendType(object):
     MONEY_FIRST = 3
     REL_AND_PV = 4
 
+class PlatformId(object):
+    pc_in = 1
+    pc_out = 2
+    wx_in = 8
+    wx_out = 16
+
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
     LOW_QSCORE = 2
@@ -274,7 +280,10 @@ class OperationType(object):
         DELETE_HISTORY_NORMAL,
         DELETE_LOW_PV_BY_ADGROUP_CPC,
         DELETE_USER_DELETE_TAOBAO,
-        DELETE_GARBAGE_MAX_PRICE
+        DELETE_GARBAGE_MAX_PRICE,
+        DELETE_LOW_CTR ,
+        DELETE_LOW_ROI ,
+        DELETE_LOW_CUST_SCORE 
     ]
 
     ALL_KEYWORD_UPDATE_TYPES = [
@@ -332,6 +341,9 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_DIRECTOR : "加力计划优化，发现关键词表现不佳，已经删除"
     , OperationType.DELETE_HISTORY_NORMAL : "关键词已经被删除(历史记录未区分类型)"
     , OperationType.DELETE_LOW_PV_BY_ADGROUP_CPC : "关键词已经超出推广组cpc较多，仍然没有展现，已经删除"
+    , OperationType.DELETE_LOW_CTR : "关键词点击率太低，已经删除"
+    , OperationType.DELETE_LOW_ROI : "关键词ROI较低，已经删除"
+    , OperationType.DELETE_LOW_CUST_SCORE : "关键词基础分太低，已经删除"
     
     , OperationType.DELETE_MANUAL_ADGROUP: "手动计划自定义优化删除符合条件关键词"
 
