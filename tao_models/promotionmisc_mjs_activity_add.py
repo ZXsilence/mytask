@@ -79,13 +79,13 @@ class PromotionmiscMjsActivityAdd(object):
 
         def decrease_money_condition(self,decrease_amount):
             """减钱方式"""
-            self.__mjs_promotion_request.is_decrease_mone = 'true' 
+            self.__mjs_promotion_request.is_decrease_money = 'true' 
             self.__mjs_promotion_request.is_discount  = 'false' 
             self.__mjs_promotion_request.decrease_amount = decrease_amount 
 
         def decrease_discount_condition(self,discount_rate):
             """打折方式"""
-            self.__mjs_promotion_request.is_decrease_mone = 'false' 
+            self.__mjs_promotion_request.is_decrease_money = 'false' 
             self.__mjs_promotion_request.is_discount  = 'true' 
             self.__mjs_promotion_request.discount_rate = discount_rate 
 
