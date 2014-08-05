@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class SimbaKeywordsbykeywordidsGet(object):
 
     @classmethod
-    @tao_api_exception()
+    @tao_api_exception(1)
     def _sub_get_keyword_list_by_keyword_ids(cls, nick, sub_keyword_id_list):
         req = SimbaKeywordsbykeywordidsGetRequest()
         req.nick = nick
