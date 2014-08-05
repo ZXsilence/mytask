@@ -56,9 +56,10 @@ class OperationType(object):
     DELETE_MANUAL_ADGROUP = 18
 
     #分层新增
-    DELETE_LOW_CTR = 18
-    DELETE_LOW_ROI = 19
-    DELETE_LOW_CUST_SCORE = 20
+    DELETE_LOW_CTR = 19 
+    DELETE_LOW_ROI = 20
+    DELETE_LOW_CUST_SCORE = 21
+    DELETE_LOW_PV = 22
 
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
@@ -283,6 +284,7 @@ class OperationType(object):
         DELETE_GARBAGE_MAX_PRICE,
         DELETE_LOW_CTR ,
         DELETE_LOW_ROI ,
+        DELETE_LOW_PV,
         DELETE_LOW_CUST_SCORE 
     ]
 
@@ -344,6 +346,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_CTR : "关键词点击率太低，已经删除"
     , OperationType.DELETE_LOW_ROI : "关键词ROI较低，已经删除"
     , OperationType.DELETE_LOW_CUST_SCORE : "关键词基础分太低，已经删除"
+    , OperationType.DELETE_LOW_PV : "关键词全网展现低，已经删除"
     
     , OperationType.DELETE_MANUAL_ADGROUP: "手动计划自定义优化删除符合条件关键词"
 
