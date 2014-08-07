@@ -15,26 +15,25 @@ if __name__ == "__main__":
 logger = logging.getLogger(__name__)
 
 
-class NmsCampaignModel(object):
-    baiduApiObj = BaiduApiClient('nms', 'CampaignService')
+class NmsGroupModel(object):
+    baiduApiObj = BaiduApiClient('nms', 'GroupService')
     
     @classmethod
-    def add_campaign(cls, username, access_token, campaign_name, budget, status):
+    def add_group(cls, username, access_token, campaign_id, group_name, price, type, status):
         cls.baiduApiObj.set_authheader(username, access_token)
         client = cls.baiduApiObj.client
 
-        request = client.factory.create('addCampaignRequest')
-        campaign = client.factory.create('addCampaignRequest.campaignTypes')
-        campaign.campaignName = campaign_name 
-        campaign.budget = budget 
-        campaign.status = status 
-        request.campaignTypes = []
-        request.campaignTypes.append(campaign)
-        client.service.addCampaign(request.campaignTypes)
-        
-        #data = [{"campaignName":campaign_name, "budget":budget, "status":status}]
-        #client.service.addCampaign(data)
+        request = client.factory.create('addGroupRequest')
+        group = client.factory.create('addGroupRequest.groupTypes')
+        group.campaignId = campaign_id 
+        group.groupName = group_name 
+        group.price = price 
+        group.type = type 
+        group.status = status 
+        request.groupTypes = []
+        request.groupTypes.append(group)
 
+        client.service.addGroup(request.groupTypes)
         res = client.last_received()
         
         res_dict, failure_dict = parse_soap_response(res)
@@ -44,11 +43,25 @@ class NmsCampaignModel(object):
         return res_dict
 
     @classmethod
-    def get_campaign_ids(cls, username, access_token):
+    def get_group_by_campaign_id(cls, username, access_token, campaign_id):
         cls.baiduApiObj.set_authheader(username, access_token)
         client = cls.baiduApiObj.client
 
-        client.service.getCampaignId()
+        client.service.getGroupByCampaignId(campaign_id)
+        res = client.last_received()
+
+        res_dict, failure_dict = parse_soap_response(res)
+        if failure_dict:
+            logger.error("error info: %s", str(failure_dict))
+            raise 
+        return res_dict
+
+    @classmethod
+    def get_group_ids(cls, username, access_token, group_ids):
+        cls.baiduApiObj.set_authheader(username, access_token)
+        client = cls.baiduApiObj.client
+
+        client.service.getGroupByGroupId(group_ids)
         res = client.last_received()
 
         res_dict, failure_dict = parse_soap_response(res)
@@ -57,30 +70,20 @@ class NmsCampaignModel(object):
             raise 
         return res_dict
         
-    @classmethod
-    def get_campaign_by_campaign_ids(cls, username, access_token, campaign_ids):
-        cls.baiduApiObj.set_authheader(username, access_token)
-        client = cls.baiduApiObj.client
-
-        client.service.getCampaignByCampaignId(campaign_ids)
-        res = client.last_received()
-
-        res_dict, failure_dict = parse_soap_response(res)
-        if failure_dict:
-            logger.error("error info: %s", str(failure_dict))
-            raise 
-        return res_dict
         
 
 if __name__ == "__main__":
-    access_token = "c15e6769-e204-4b4e-86ef-e4f8c5eed498"
+    access_token = "a2a8e353-33e8-473a-a0f3-7eafc0eebdaf"
     username = "xh麦苗"
-    res_dict = NmsCampaignModel.get_campaign_ids(username, access_token)
-    print res_dict['body']
-    print res_dict['response']
-    res_dict = NmsCampaignModel.get_campaign_by_campaign_ids(username, access_token, [2501797, 2501789])
-    print "=========="
-    print res_dict['body']
-    print res_dict['response']
-    print "++++++++++"
-    print NmsCampaignModel.add_campaign(username, access_token, "api测试2", 200, 0)
+    #res_dict = NmsGroupModel.get_group_ids(username, access_token)
+    #print res_dict['body']
+    #print res_dict['response']
+    #res_dict = NmsGroupModel.get_group_by_group_ids(username, access_token, [2501797, 2501789])
+    #print "=========="
+    #print res_dict['body']
+    #print res_dict['response']
+    #print "++++++++++"
+
+
+
+

@@ -42,18 +42,28 @@ class BaiduApiClient(object):
 
 
 def parse_suds_obj(suds_obj):
-    list = []
+    dict = {}
     for e in suds_obj:
        if e.getText() != None:
-           list.append({e.qname() : e.getText()})
+           if dict.has_key(e.qname()):
+               if type(dict[e.qname()]) != type([]):
+                   dict[e.qname()] = [dict[e.qname()], e.getText()] 
+               else:
+                   dict[e.qname()].append(e.getText())
+           else:
+               dict[e.qname()] = e.getText()
        else:
-           list.append({e.qname() : parse_suds_obj(e)})
-    return list
+           t = parse_suds_obj(e)
+           if dict.has_key(e.qname()):
+               if type(dict[e.qname()]) != type([]):
+                   dict[e.qname()] = [dict[e.qname()], t] 
+               else:
+                   dict[e.qname()].append(t)
+           else:
+               dict[e.qname()] = t 
+    return dict 
     
 
-'''
-    print response result
-'''
 def parse_soap_response(res):
     resheader = res.getChild("Envelope").getChild("Header").getChild("ResHeader")
     resbody = res.getChild("Envelope").getChild("Body")
@@ -82,4 +92,70 @@ def parse_soap_response(res):
     return res_dict, failure_dict
 
 
+"""
+def dict_to_request(client, acc_key, input):
+    if type(input) == type([]):
+        output = []
+        for e in input:
+            output.append(dict_to_request(client, acc_key, e))
+        return output
+    elif type(input) == type({}):
+        request = client.factory.create(acc_key)
+        value = input[acc_key.split('.')[-1]]
+        request.
 
+
+    {
+        "setTargetInfoRequest":
+            {
+                'targetInfo' : 
+                     {
+                         'type' : 2
+                         ,'groupId' : 2
+                         ,'ktItem' :
+                             {
+                                 "ktWordList":
+                                     [
+                                         {
+                                             'keyword':'baidu-search'
+                                             'pattern':0
+                                             'qualification':1
+                                         }
+                                         {
+                                             'keyword':'baidu-search'
+                                             'pattern':0
+                                             'qualification':1
+                                         }
+                                     ]
+                             }
+                         ,'ktItem' : None
+                         ,'vtItem' : None
+                     }
+            }
+    }
+
+    
+    targetInfo = client.factory.create('setTargetInfoRequest.targetInfo')
+    targetInfo.type = 2
+    targetInfo.groupId = 228
+    ktItem = client.factory.create('setTargetInfoRequest.targetInfo.ktItem')
+    ktItem.aliveDays = 30
+    ktItem.targetType = 7
+    ktWordList1 = client.factory.create('setTargetInfoRequest.targetInfo.ktItem.ktWordList')
+    ktWordList1.keyword = 'baidu-search'
+    ktWordList1.pattern = 0
+    ktWordList1.qualification = 1
+    ktWordList2 = client.factory.create('setTargetInfoRequest.targetInfo.ktItem.ktWordList')
+    ktWordList2.keyword = 'baidu-union'
+    ktWordList2.pattern = 1
+    ktWordList2.qualification = 3
+    ktItem.ktWordList = []
+    ktItem.ktWordList.append(ktWordList1)
+    ktItem.ktWordList.append(ktWordList2)
+    targetInfo.ktItem = ktItem
+    targetInfo.rtItem = None
+    targetInfo.vtItem = None
+    request.targetInfo = targetInfo
+
+    return request
+"""
