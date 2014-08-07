@@ -19,17 +19,6 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
-from api_records.services.api_records_service import inc_api_call_times, get_api_call_times, update_api_call_times, QueueName
-api_call_infos = [ 
-        ['syb_auto_campaign_optimize_job.py',QueueName.SYB_AUTO_CAMPAIGN_OPTIMIZE],
-        ['syb_auto_creative_optimize_job.py',QueueName.SYB_AUTO_CREATIVE_OPTIMIZE],
-        ['syb_key_campaign_optimize_job.py',QueueName.SYB_KEY_CAMPAIGN_OPTIMIZE]
-]
-api_call_requests = [
-    'SimbaKeywordsvonAdd',
-    'SimbaKeywordsPricevonSet',
-    'SimbaKeywordsDelete'
-]
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
 
@@ -118,6 +107,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                                 and u'当前推广计划不支持该操作' in e.sub_msg:
                             raise NonsearchNotOpenException
                         elif api_method == 'taobao.simba.nonsearch.adgroupplaces.delete' and e.sub_msg \
+                                and u'当前推广计划不支持该操作' in e.sub_msg:
+                            raise NonsearchNotOpenException
+                        elif api_method == 'taobao.simba.nonsearch.adgroupplaces.get' and e.sub_msg \
                                 and u'当前推广计划不支持该操作' in e.sub_msg:
                             raise NonsearchNotOpenException
 
