@@ -28,7 +28,7 @@ class NmsAccountModel(object):
         return res_dict
         
 if __name__ == "__main__":
-    access_token = "a2a8e353-33e8-473a-a0f3-7eafc0eebdaf"
+    access_token = "ad03f5fe-4380-486f-b71e-60ab55da56ea"
     username = "xh麦苗"
     res_dict = NmsAccountModel.get_account_info(username, access_token)
     #print res_dict['body']
