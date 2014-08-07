@@ -54,6 +54,7 @@ class PromotionmiscMjsActivityListGet(object):
         page_no = 1
         while True:
             l = PromotionmiscMjsActivityListGet._get_promotion_list(nick,page_no,type)
+            page_no += 1
             data.extend(l)
             if len(l) < cls.PAGE_SIZE:
                 break

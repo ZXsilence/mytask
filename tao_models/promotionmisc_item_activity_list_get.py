@@ -53,6 +53,7 @@ class PromotionmiscItemActivityListGet(object):
         page_no = 1
         while True:
             l = PromotionmiscItemActivityListGet._get_promotion_list(nick,page_no)
+            page_no += 1
             data.extend(l)
             if len(l) < cls.PAGE_SIZE:
                 break
