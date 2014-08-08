@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 class SimbaKeywordsPricevonSet(object):
 
     @classmethod
-    @tao_api_exception()
     def set_keywords_price(cls, nick, keyword_price_list,safe=True):
         if not keyword_price_list:
             return []
@@ -51,28 +50,38 @@ class SimbaKeywordsPricevonSet(object):
         if len(keyword_price_list) % size== 0:
             package_num -= 1
         keywords = []
+        soft_code = None
         for i in range(package_num):
-            try:
-                keyword_price_str = json.dumps(word_price_dict_list[i*size: (i+1)*size])
-                req.keywordid_prices = keyword_price_str
-                soft_code = None
-                rsp = ApiService.execute(req,nick,soft_code)
-                if not rsp.isSuccess():
-                    if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
-                        logger.warning('[%s] keywords_add failed,keywordid_prices:%s  :%s,%s'%(nick,keyword_price_str,rsp.msg,rsp.sub_msg))
-                        continue
-                    raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-            except Exception,e:
-                if safe is True:
-                    raise
-                else:
-                    continue
-            keywords.extend(rsp.keywords)
+            sub_keywords = cls._set_price2(nick, word_price_dict_list[i*size: (i+1)*size], soft_code, safe)
+            keywords.extend(sub_keywords)
+
         return change_obj_to_dict_deeply(keywords)
 
+    @classmethod
+    @tao_api_exception(20)
+    def _set_price2(cls, nick, word_price_list, soft_code, safe=True):
+        keywords = []
+        try:
+            req = SimbaKeywordsPricevonSetRequest()
+            req.nick = nick
+            keyword_price_str = json.dumps(word_price_list)
+            req.keywordid_prices = keyword_price_str
+            rsp = ApiService.execute(req,nick,soft_code)
+            if not rsp.isSuccess():
+                if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
+                    return keywords
+                raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        except Exception,e:
+            if safe is True:
+                raise
+        else:
+            keywords = rsp.keywords
+
+        return keywords
+        
 
     @classmethod
-    @tao_api_exception(50)
+    @tao_api_exception(20)
     def _set_price(cls, nick, keywordid_prices):
         """
         args:
@@ -166,7 +175,12 @@ def test():
 
 def test2():
     nick = 'chinchinstyle'
-    word_price_list = [{'kid':50729824900, 'price':333, 'match_scope':4}]
+    word_price_list = [{'kid':70160490652, 'price':101, 'match_scope':1}, \
+            {'kid':70160490655, 'price':101, 'match_scope':1}, \
+            {'kid':70160490656, 'price':101, 'match_scope':1}, \
+            {'kid':70160490657, 'price':101, 'match_scope':1}, \
+            {'kid':60160490658, 'price':101, 'match_scope':1}
+            ]
     print SimbaKeywordsPricevonSet.set_keywords_price(nick, word_price_list)
 
 if __name__ == '__main__':
