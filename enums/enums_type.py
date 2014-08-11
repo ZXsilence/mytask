@@ -18,8 +18,9 @@ class PlatformId(object):
     CODE_TO_STR = {
             1:'pc_in',
             2:'pc_out',
+            4:'pc_out',
             8:'wx_in',
-            16:'wx_out
+            16:'wx_out'
             }
     
 class WordDeleteType(object):
