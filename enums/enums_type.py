@@ -95,7 +95,8 @@ class OperationType(object):
     #分层优化新增   
     UPDATE_PRICE_ACCURATE_MATCH = 125
     UPDATE_PRICE_WIDE_MATCH = 126
-
+    UPDATE_PRICE_USER_EXPECT_INCRE_PRICE = 128 
+    UPDATE_PRICE_USER_EXPECT_DECRE_PRICE = 129 
     KEEP_NORMAL = 201
 
     IGNORE_KEYWORD_NOT_EXIST = 301
@@ -201,6 +202,8 @@ class OperationType(object):
         UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
         UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
         UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_INCRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_DECRE_PRICE,
         UPDATE_PRICE_FOR_CPC_MAX,
         UPDATE_PRICE_ACCURATE_MATCH,
         UPDATE_PRICE_WIDE_MATCH,
@@ -320,6 +323,8 @@ class OperationType(object):
         UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
         UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
         UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_INCRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_DECRE_PRICE,
         UPDATE_PRICE_FOR_CPC_MAX,
         UPDATE_PRICE_ACCURATE_MATCH,
         UPDATE_PRICE_WIDE_MATCH
@@ -367,7 +372,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_ROI_BAD_DECRE_PRICE : "关键词最近一段时间效果低于计划整体，减小投入"
     , OperationType.UPDATE_PRICE_COST_SUFF_INCRE_PRICE : "计划花费过低，根据报表，关键词加大投入"
     , OperationType.UPDATE_PRICE_COST_FULL_DECRE_PRICE : "计划花费过高，根据报表，关键词减小投入"
-    , OperationType.UPDATE_PRICE_GARBAGE_INCRE_PRICE : "关键词被淘宝判定为无展现词，加大投入"
+    , OperationType.UPDATE_PRICE_GARBAGE_INCRE_PRICE : "关键词长期无展现，加大投入"
     , OperationType.UPDATE_PRICE_MINIMIZE_CPC_MAX : "关键词超出设置的最高点击单价，降低出价"
     , OperationType.UPDATE_PRICE_TO_INCREASE_COST : "为了加大计划投入，关键词进行价格调整"
     , OperationType.UPDATE_PRICE_TO_DECREASE_COST : "为了减小计划投入，关键词进行价格调整"
@@ -378,13 +383,15 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
     
-    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好的排名'
-    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好的排名'
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好排名'
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好排名'
     , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划通过加价增加流量'
     , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划通过减价较少流量'
     , OperationType.UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE : '测款计划花费接近预算上限,关键词减价'
-    , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "关键词修改为精准匹配"
-    , OperationType.UPDATE_PRICE_WIDE_MATCH: "关键词修改为宽泛匹配"
+    , OperationType.UPDATE_PRICE_USER_EXPECT_INCRE_PRICE:'用户意图加大流量，关键词加价'
+    , OperationType.UPDATE_PRICE_USER_EXPECT_DECRE_PRICE:'用户意图减小流量，关键词减价'
+    , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "点击率低，关键词修改为精准匹配"
+    , OperationType.UPDATE_PRICE_WIDE_MATCH: "提升流量，关键词修改为广泛匹配"
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
     , OperationType.UPDATE_PRICE_MANUAL_ADGROUP: "手动计划自定义优化关键词价格"
