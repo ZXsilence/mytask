@@ -281,7 +281,7 @@ def analyze(func):
         start_info = get_sys_info(pid)
         a = func(*args, **kwargs)
         end_info = get_sys_info(pid)
-        logger.info('Analyze PID:%s function:%s start_mem:%sm end_mem:%sm cost_time:%sms'\
+        logger.info('Analyze PID:%s function:%s start_mem:%sMB end_mem:%sMB cost_time:%sms'\
                 %(pid,func.__name__,round(start_info[1]),round(end_info[1]),round((end_info[0]-start_info[0]),0)))
         return a
     return __wrappe_func
