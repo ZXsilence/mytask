@@ -15,6 +15,14 @@ class PlatformId(object):
     wx_in = 8
     wx_out = 16
 
+    CODE_TO_STR = {
+            1:'pc_in',
+            2:'pc_out',
+            4:'pc_out',
+            8:'wx_in',
+            16:'wx_out'
+            }
+    
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
     LOW_QSCORE = 2
