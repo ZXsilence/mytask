@@ -37,7 +37,7 @@ class PromotionmiscItemActivityAdd(object):
 
     @classmethod
     @tao_api_exception(10)
-    def add_promotionm_item_activity(cls,nick,name,participate_range,start_time,end_time,decrease_amount,discount_rate):
+    def add_promotionm_item_activity(cls,nick,name,participate_range,start_time,end_time,decrease_amount,discount_rate,soft_code = 'SYB'):
         req = PromotionmiscItemActivityAddRequest() 
         req.name = name
         req.participate_range = participate_range
@@ -49,7 +49,6 @@ class PromotionmiscItemActivityAdd(object):
         elif decrease_amount:
             req.is_decrease_money = 'true'
             req.decrease_amount = decrease_amount
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.activity_id
 

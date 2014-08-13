@@ -26,12 +26,11 @@ class PromotionmiscItemActivityDelete(object):
 
     @classmethod
     @tao_api_exception(5)
-    def delete_item_activity(cls, nick,activity_id):
+    def delete_item_activity(cls, nick,activity_id,soft_code = 'SYB'):
 
         req = PromotionmiscItemActivityDeleteRequest()
         req.nick = nick
         req.activity_id = activity_id 
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp)
 

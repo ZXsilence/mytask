@@ -37,11 +37,10 @@ class PromotionmiscActivityRangeAdd(object):
 
     @classmethod
     @tao_api_exception(12)
-    def __add_promotionm_activity_items(cls,nick,activity_id,num_iid_list):
+    def __add_promotionm_activity_items(cls,nick,activity_id,num_iid_list,soft_code = 'SYB'):
         req = PromotionmiscActivityRangeAddRequest() 
         req.activity_id = activity_id
         req.ids = ','.join(str(num_iid) for num_iid in num_iid_list) 
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
 
     @classmethod

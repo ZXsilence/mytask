@@ -35,10 +35,9 @@ class PromotionmiscActivityRangeAllRemove(object):
 
     @classmethod
     @tao_api_exception(12)
-    def clear_promotionm_activity_range(cls,nick,activity_id):
+    def clear_promotionm_activity_range(cls,nick,activity_id,soft_code = 'SYB'):
         req = PromotionmiscActivityRangeAllRemoveRequest() 
         req.activity_id = activity_id
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         print dir(rsp)
         return rsp.isSuccess()

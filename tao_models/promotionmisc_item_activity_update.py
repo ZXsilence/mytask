@@ -26,7 +26,7 @@ class PromotionmiscItemActivityUpdate(object):
 
     @classmethod
     @tao_api_exception(5)
-    def update_item_activity(cls, nick,activity_id,name,participate_range,start_time,end_time,decrease_amount,discount_rate):
+    def update_item_activity(cls, nick,activity_id,name,participate_range,start_time,end_time,decrease_amount,discount_rate,soft_code = 'SYB'):
         req = PromotionmiscItemActivityUpdateRequest()
         req.activity_id = activity_id 
         req.name = name 
@@ -40,7 +40,6 @@ class PromotionmiscItemActivityUpdate(object):
             req.is_discount = 'true'
             req.discount_rate = discount_rate
 
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.isSuccess()
 

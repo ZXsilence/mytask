@@ -37,8 +37,7 @@ class PromotionmiscMjsActivityUpdate(object):
 
     @classmethod
     @tao_api_exception(12)
-    def update_promotionm_mjs_activity(self,nick,req):
-        soft_code = None
+    def update_promotionm_mjs_activity(self,nick,req,soft_code = 'SYB'):
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.isSuccess()
 
