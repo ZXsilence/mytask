@@ -2,10 +2,14 @@
 """doc string for module"""
 __author__ = 'lym liyangmin@maimiaotech.com'
 
+import os
+import commands
 import sys
+import re
 import logging
 import traceback
 import inspect
+import time
 
 from time import  sleep
 from datetime import datetime
@@ -216,6 +220,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     elif code == TaoOpenErrorCode.INVALID_SESSION_KEY:
                         raise InvalidAccessTokenException("access session expired or invalid")
+                    elif code == 53 and e.sub_code and 'isv.w2-security-authorize-invalid' in e.sub_code:
+                        raise W2securityException('w2-security-authorize-invalid') 
                     else:
                         raise  e
                 else:
@@ -260,5 +266,24 @@ def mongo_exception(func):
                 raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
     return wrapped_func
 
+def get_sys_info(pid):
+    res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
+    p = re.compile(r'\s+')  
+    l = p.split(res)  
+    #'user':l[0],'pid':l[1],'cpu':l[2],'mem':l[3],'vsa':l[4],'rss':l[5],'start_time':l[6]
+    curr_mem = float(l[5])/1000.0
+    curr_time = time.time()*1000
+    return (curr_time,curr_mem)
+
+def analyze(func):
+    def __wrappe_func(*args, **kwargs):
+        pid = os.getpid()
+        start_info = get_sys_info(pid)
+        a = func(*args, **kwargs)
+        end_info = get_sys_info(pid)
+        logger.info('Analyze PID:%s function:%s start_mem:%sMB end_mem:%sMB cost_time:%sms'\
+                %(pid,func.__name__,round(start_info[1]),round(end_info[1]),round((end_info[0]-start_info[0]),0)))
+        return a
+    return __wrappe_func
 
 

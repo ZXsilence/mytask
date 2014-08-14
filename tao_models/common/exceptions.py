@@ -184,3 +184,14 @@ class AdgroupAudictFailedException(Exception):
     def __str__(self):
         return "AdgroupAudictFailedException:msg [%s] sub_msg [%s]" % (self.msg, self.sub_msg)
 
+class W2securityException(Exception):
+    """
+    raise this exception when taobao_client excute error  
+    """
+    def __init__(self, msg = None, sub_msg = None):
+        self.msg = msg
+        self.sub_msg = sub_msg
+    
+    def __str__(self):
+        return "W2securityException:msg [%s] sub_msg [%s]" % (self.msg, self.sub_msg)
+
