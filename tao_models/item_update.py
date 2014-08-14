@@ -35,6 +35,15 @@ class ItemUpdate(object):
         rsp = ApiService.execute(req,nick)
         return change_obj_to_dict_deeply(rsp.item)
 
+    @classmethod
+    @tao_api_exception()
+    def update_item_desc_by_desc_modules(cls,nick,num_iid,desc_modules):
+        req = ItemUpdateRequest()
+        req.num_iid = num_iid
+        req.desc_modules = desc_modules
+        rsp = ApiService.execute(req,nick)
+        return change_obj_to_dict_deeply(rsp.item)
+
 if __name__ == '__main__':
     nick = '麦苗科技001'
     num_iid = 39120249291 
