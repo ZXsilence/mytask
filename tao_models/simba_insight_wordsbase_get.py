@@ -74,7 +74,7 @@ class SimbaInsightWordsbaseGet(object):
     MAX_WORDS = 170
 
     @classmethod
-    @tao_api_exception(5)
+    @tao_api_exception(1)
     def _get_words_base(cls, time, word_list,nick=None):
         '''get words base'''
         req = SimbaInsightWordsbaseGetRequest()
