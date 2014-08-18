@@ -86,7 +86,9 @@ class AdgroupType(object):
     ADGROUP_LOW_CREATIVE_SCORE = 211
     ADGROUP_LOW_BASE_SCORE = 212
     ADGROUP_LOW_CTR = 213
-    
+    ADGROUP_LOW_ROI = 214
+    ADGROUP_NO_ATTRACTION = 215
+
     ADGROUP_USER_INCREASE_COST = 220
     ADGROUP_USER_DECREASE_COST = 221
 
@@ -109,6 +111,8 @@ class AdgroupType(object):
         ADGROUP_LOW_CREATIVE_SCORE,
         ADGROUP_LOW_BASE_SCORE,
         ADGROUP_LOW_CTR,
+        ADGROUP_LOW_ROI,
+        ADGROUP_NO_ATTRACTION,
         ADGROUP_USER_INCREASE_COST,
         ADGROUP_USER_DECREASE_COST,
         ADGROUP_NONSEARCH_CLOSE,
@@ -152,6 +156,8 @@ CODE_TO_TYPE = {
         ,211:'ADGROUP_LOW_CREATIVE_SCORE'
         ,212:'ADGROUP_LOW_BASE_SCORE'
         ,213:'ADGROUP_LOW_CTR'
+        ,214:'ADGROUP_LOW_ROI'
+        ,215:'ADGROUP_NO_ATTRACTION'
         ,220:'ADGROUP_USER_INCREASE_COST'
         ,221:'ADGROUP_USER_DECREASE_COST'
         ,230:'ADGROUP_NONSEARCH_CLOSE'
@@ -189,6 +195,7 @@ CAMPAIGN_LOW_CLICK_REASON = {
         ,AdgroupType.ADGROUP_LOW_BIDMAX:"推广组最高出价设置过低"
         ,AdgroupType.ADGROUP_LOW_BID:"推广组关键词出价过低"
         ,AdgroupType.ADGROUP_LOW_TRAFFIC:"推广组关键词偏冷"
+        ,AdgroupType.ADGROUP_LOW_CTR:"推广组点击率低"
 
         }
 
@@ -203,6 +210,7 @@ CAMPAIGN_LOW_ROI_REASON = {
         ,AdgroupType.ADGROUP_LOW_CVR:"宝贝转化率低"
         ,AdgroupType.ADGROUP_HIGH_CPC_OF_BID:"推广组CPC过高"
         ,AdgroupType.ADGROUP_HIGH_CPC_OF_QSCORE:"推广组质量分低导致CPC过高"
-        
+        ,AdgroupType.ADGROUP_LOW_ROI:"推广组ROI低"
+        ,AdgroupType.ADGROUP_NO_ATTRACTION:"推广组宝贝没有吸引力"
         }                
 
