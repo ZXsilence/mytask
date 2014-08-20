@@ -118,7 +118,7 @@ class ApiCenterHandle(object):
                 return ApiCenterHandle.get_sdk_retry_rsp()
 
             #记录API调用
-            ApiCenterHandle.mark_record(params,rsp_dict,soft_code,api_source,date_str)
+            #ApiCenterHandle.mark_record(params,rsp_dict,soft_code,api_source,date_str)
 
             #异常处理
             if rsp_dict.has_key('error_response') and rsp_dict['error_response'].get('code',0)== 27:
@@ -132,8 +132,8 @@ class ApiCenterHandle(object):
                 #API全天被限
                 wait_seconds = int(rsp_dict['error_response']['sub_msg'].split(' ')[5])
                 if wait_seconds > 60:
-                    api_record_tmp = ApiRecordService.get_record(shop_info['soft_code'],api_source,api_method,date_str)
-                    ApiRecordService.set_all_day_limit(api_record_tmp['id'],True)
+                    #api_record_tmp = ApiRecordService.get_record(shop_info['soft_code'],api_source,api_method,date_str)
+                    #ApiRecordService.set_all_day_limit(api_record_tmp['id'],True)
                     logger.error("API ALL DAY LIMITS , wait_seconds:%s , source:%s , method:%s , nick:%s , soft_code:%s"%(wait_seconds,api_source,api_method,shop_info['nick'],shop_info['soft_code']))
                     call_limit_count += 1
                     #切换app_key
