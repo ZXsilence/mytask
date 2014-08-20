@@ -72,6 +72,7 @@ class CampaignType(object):
 
 class AdgroupType(object):
     
+    ADGROUP_OK = 20
     ADGROUP_SMALL_CAT = 21
     ADGROUP_LESS_KEYWORD = 22
     ADGROUP_LOW_BIDMAX = 23
@@ -79,8 +80,8 @@ class AdgroupType(object):
     ADGROUP_LOW_TRAFFIC = 25
     ADGROUP_LOW_CVR = 26                           
 
-    ADGROUP_HIGH_CPC_OF_BID = 201
-    ADGROUP_HIGH_CPC_OF_QSCORE = 202
+    ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH = 201
+    ADGROUP_LOW_ROI_OF_HIGH_CPC = 202
 
     ADGROUP_LOW_RELATIVE_SCORE = 210
     ADGROUP_LOW_CREATIVE_SCORE = 211
@@ -99,14 +100,15 @@ class AdgroupType(object):
     ADGROUP_LOW_PV_UNKNOW = 401
     
     ALL_ADGROUP_TYPES = [
+        ADGROUP_OK,
         ADGROUP_SMALL_CAT,
         ADGROUP_LESS_KEYWORD,
         ADGROUP_LOW_BIDMAX,
         ADGROUP_LOW_BID,
         ADGROUP_LOW_TRAFFIC,
         ADGROUP_LOW_CVR,                           
-        ADGROUP_HIGH_CPC_OF_BID,
-        ADGROUP_HIGH_CPC_OF_QSCORE,
+        ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH,
+        ADGROUP_LOW_ROI_OF_HIGH_CPC,
         ADGROUP_LOW_RELATIVE_SCORE,
         ADGROUP_LOW_CREATIVE_SCORE,
         ADGROUP_LOW_BASE_SCORE,
@@ -144,14 +146,15 @@ CODE_TO_TYPE = {
         ,152:'CAMPAIGN_NO_ADGROUP_HANDLE'
         ,153:'CAMPAIGN_STOP'
         ,154:'CAMPAIGN_NO_HANDLE'
+        ,20:'ADGROUP_OK'
         ,21:'ADGROUP_SMALL_CAT'
         ,22:'ADGROUP_LESS_KEYWORD'
         ,23:'ADGROUP_LOW_BIDMAX'
         ,24:'ADGROUP_LOW_BID'
         ,25:'ADGROUP_LOW_TRAFFIC'
         ,26:'ADGROUP_LOW_CVR'
-        ,201:'ADGROUP_HIGH_CPC_OF_BID'
-        ,202:'ADGROUP_HIGH_CPC_OF_QSCORE'
+        ,201:'ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH'
+        ,202:'ADGROUP_LOW_ROI_OF_HIGH_CPC'
         ,210:'ADGROUP_LOW_RELATIVE_SCORE'
         ,211:'ADGROUP_LOW_CREATIVE_SCORE'
         ,212:'ADGROUP_LOW_BASE_SCORE'
@@ -208,8 +211,8 @@ CAMPAIGN_LOW_ROI_REASON = {
         
         ,AdgroupType.ADGROUP_NONSEARCH_LOW_ROI:"推广组定向设置不合理"
         ,AdgroupType.ADGROUP_LOW_CVR:"宝贝转化率低"
-        ,AdgroupType.ADGROUP_HIGH_CPC_OF_BID:"推广组CPC过高"
-        ,AdgroupType.ADGROUP_HIGH_CPC_OF_QSCORE:"推广组质量分低导致CPC过高"
+        ,AdgroupType.ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH:"ROI低推广组点击不充分"
+        ,AdgroupType.ADGROUP_LOW_ROI_OF_HIGH_CPC:"ROI低推广组CPC过高"
         ,AdgroupType.ADGROUP_LOW_ROI:"推广组ROI低"
         ,AdgroupType.ADGROUP_NO_ATTRACTION:"推广组宝贝没有吸引力"
         }                
