@@ -30,7 +30,7 @@ class ApiCenterHandle(object):
         try:
             params = simplejson.loads(params)
             method = params['method']
-            date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
+            #date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
             nick = nick.decode('utf8')
             logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                     %(api_source,method,soft_code,nick,params.get('nick',None)))
@@ -85,7 +85,7 @@ class ApiCenterHandle(object):
             对shop_infos循环调用，避免下面的特殊情况：
             一个用户订购多款软件，shop_info_list的session_expired全为False，但是其中一个订购已退款或失效
         """
-        date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
+        #date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
         rsp_dict = {}
         invalid_session_count = 0
         call_limit_count = 0
