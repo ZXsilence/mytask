@@ -26,7 +26,7 @@ class SimbaCampaignPlatformUpdate(object):
 
     @classmethod
     @tao_api_exception(5)
-    def update_campaign_platform(cls, nick, campaign_id, search_channels, nonsearch_channels, outside_discount):
+    def update_campaign_platform(cls, nick, campaign_id, search_channels, nonsearch_channels, outside_discount,mobile_outside_discount):
         """
         更新一个计划的推广平台设置 
         """
@@ -40,6 +40,7 @@ class SimbaCampaignPlatformUpdate(object):
             req.nonsearch_channels = nonsearch_channels 
         #req.nonsearch_channels = nonsearch_channels 
         req.outside_discount = outside_discount 
+        req.mobile_discount = mobile_outside_discount 
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.campaign_platform)
@@ -49,9 +50,10 @@ class SimbaCampaignPlatformUpdate(object):
 
 if __name__ == '__main__':
     nick = 'chinchinstyle'
-    campaign_id = 3328400
+    campaign_id = 3367690 
     search_channels = [1,2,4]
     nonsearch_channels = []
     outside_discount = 110 
-    result = SimbaCampaignPlatformUpdate.update_campaign_platform(nick, campaign_id, search_channels, nonsearch_channels, outside_discount )
+    wap_outside_discount = 200
+    result = SimbaCampaignPlatformUpdate.update_campaign_platform(nick, campaign_id, search_channels, nonsearch_channels, outside_discount,wap_outside_discount)
     print result
