@@ -44,5 +44,5 @@ class WangwangEserviceGroupmemberGet(object):
 
 if __name__ == "__main__":
     nick = "麦苗科技"
-    activity_list = WangwangEserviceGroupmemberGet.get_groupmember(nick)
+    activity_list = WangwangEserviceGroupmemberGet.get_group_member_list(nick)
     print activity_list
