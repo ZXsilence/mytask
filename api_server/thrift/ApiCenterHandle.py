@@ -106,7 +106,7 @@ class ApiCenterHandle(object):
 
             #掌中宝的非open平台access_token，需要加上header
             header = {}
-            if soft_code == 'QN' and not shop_info.get('is_open_access_token',False) and shop_info.has_key('header'): 
+            if soft_code == 'QN' and not shop_info.get('is_open_access_token',False) and shop_info.has_key('header') and shop_info['header']: 
                 header = shop_info['header']
 
             #发送请求
