@@ -16,8 +16,9 @@ RDS1 = {
                  'mysql','performance','qianniupc','rpt_adgroupbase',\
                  'rpt_adgroupeffect','rpt_all_31','rpt_campaignbase',\
                  'rpt_campaigneffect','rpt_custbase','shop_info',\
-                 'strategy','syb_common_info','taoci','test',\
-                 'xiangqing','xuanciw','syb_web','keywords_deleted','syb_layer','rpt_all','rpt_cache']
+                 'strategy','syb_common_info','taoci','test','busi',\
+                 'xiangqing','xuanciw','syb_web','keywords_deleted',\
+                 'syb_layer','rpt_all','rpt_cache','operation_log']
         }
 
 #rds2实例连接池配置
