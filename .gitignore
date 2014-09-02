@@ -41,3 +41,9 @@ tao_models/TaobaoSdk
 tao_models/conf/set_env.py
 
 tao_models/conf/settings.py
+
+*.ropeproject
+.ropeproject
+rollback.history
+
+
