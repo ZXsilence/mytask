@@ -122,12 +122,31 @@ class ClouddataMbpDataGet(object):
         rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
         return rpt_list
 
+    @classmethod
+    def get_shop_plot_data(cls,sid,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '5179'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
 
 
 
 if __name__ == '__main__':
-    sid = 108773362
+    sid = 63643897 
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
     sdate = edate - datetime.timedelta(days=30)
     rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
     print len(rpt_list)
+    for item in rpt_list:
+        print item['query']

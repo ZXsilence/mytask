@@ -51,9 +51,10 @@ def TimeOut(limit_time):
 
 
 if __name__ == "__main__":
-    @TimeOut(12)
+    @TimeOut(2)
     def fn(s_time):
         print 'sleep %s sesc' %s_time
         time.sleep(s_time)
+        print 'finish sleep'
         return "finished"
-    print fn(14)
+    print fn(4)
