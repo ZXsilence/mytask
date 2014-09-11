@@ -45,12 +45,12 @@ class SpecialWord():
         
         cls.count = 0
 
-    def get_curr_special_word_list(cls):
-        cls.count += 1
-        if cls.count % 2 == 0:
-            return cls.special_word_list_a
+    def get_curr_special_word_list(self):
+        self.count += 1
+        if self.count % 2 == 0:
+            return self.special_word_list_a
         else:
-            return cls.special_word_list_b
+            return self.special_word_list_b
 
 
 class SimbaInsightCatsforecastGet(object):

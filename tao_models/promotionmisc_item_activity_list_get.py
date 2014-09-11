@@ -43,8 +43,6 @@ class PromotionmiscItemActivityListGet(object):
         req.page_size = cls.PAGE_SIZE
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
         return change_obj_to_dict_deeply(rsp.item_promotion_list)
 
     @classmethod
