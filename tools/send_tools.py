@@ -63,6 +63,12 @@ class SendTools:
     DC = '15'
     SEND_MSG_URL = 'http://esms.etonenet.com/sms/mt'
 
+    REG = '101100-WEB-HUAX-307114'
+    PASSWORD = 'KNXPCLNW'
+    BALANCE_URL = 'http://www.stongnet.com/sdkhttp/getbalance.aspx'
+    SEND_MESSAGE_URL = 'http://www.stongnet.com/sdkhttp/sendsms.aspx'
+    MSG_REPORT = 'http://www.stongnet.com/sdkhttp/getmtreport.aspx'
+
     def __init__(self, phone, email, secret, logger):
         self.DIRECTOR = {
             'PHONE':phone,
@@ -133,7 +139,7 @@ class SendTools:
             self.logger.exception('send_email: %s' % (str(e)))
 
 
-    def send_sms(self, cellphone, text, retry_times=3):
+    def send_sms_old(self, cellphone, text, retry_times=3):
         """发送短信"""
 
         retry_times -= 1
@@ -153,13 +159,45 @@ class SendTools:
             dict = _parse_sms_response(response.read())
             if dict.get('mterrcode',None) != '000':
                 self.logger.error('send message to %s unsuccessfully:response error'%(cellphone,))
-                send_sms(cellphone,text,retry_times)
+                self.send_sms_old(cellphone,text,retry_times)
         except urllib2.HTTPError,e:
             self.logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
-            send_sms(cellphone,text,retry_times)
+            self.send_sms_old(cellphone,text,retry_times)
         except Exception,e:
             self.logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
-            send_sms(cellphone,text,retry_times)
+            self.send_sms_old(cellphone,text,retry_times)
+
+    def send_sms(self,cellphone, text, retry_times=3):
+        """发送短信"""
+
+        retry_times -= 1
+        if retry_times < 0:
+            logger.error('send message to %s unsuccessfully'%(cellphone,))
+            return
+        if type(text) == type(u''):
+            text = text.encode('utf-8')
+        if type(cellphone) == type([]):
+            cellphone = ','.join(cellphone)
+        dict = {}
+        dict['reg'] = SendTools.REG 
+        dict['pwd'] = SendTools.PASSWORD
+        dict['phone'] = cellphone
+        dict['content']  = text
+        dict['sourceadd']  = None
+        url_params = urllib.urlencode(dict)
+        try:
+            response = urllib2.urlopen(SendTools.SEND_MESSAGE_URL,url_params)
+            dict = _parse_sms_response(response.read())
+            if dict.get('result',None) != '0':
+                self.logger.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
+                self.send_sms(cellphone,text,retry_times)
+        except urllib2.HTTPError,e:
+            self.logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+            self.send_sms(cellphone,text,retry_times)
+        except Exception,e:
+            self.logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+            self.send_sms(cellphone,text,retry_times)
+
 
 def usage(argv0):
     print argv0 + "phone mail secret subject_file text_file"

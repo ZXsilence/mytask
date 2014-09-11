@@ -114,7 +114,7 @@ def test():
     num_iids = [26796368149]
     ItemsListGet.MAX_NUM_IIDS = 20
     fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified,freight_payer'
-    total_item_list = ItemsListGet.get_item_list(access_token, num_iids, fields)
+    total_item_list = ItemsListGet.get_item_list(num_iids, fields)
 
 
 if __name__ == '__main__':

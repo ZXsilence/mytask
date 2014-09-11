@@ -115,10 +115,10 @@ if __name__ == "__main__":
     decrease_amount = None
     discount_rate = 900
     activity_id = 404526601
-    factory = PromotionmiscMjsActivityUpdate.MjsPromotionActivityFactory.create_mjs_promotion_update()
-    factory.add_mjs_base_condition(activity_id,name,start_time,end_time,1)
-    factory.add_mjs_item_condition(1,'true')
-    factory.decrease_money_condition(1000)
-    factory.add_gift_condition('true','小狗狗')
-    req = factory.build_promotion_request()
-    print PromotionmiscMjsActivityUpdate.update_promotionm_mjs_activity(nick,req)
+    #factory = PromotionmiscMjsActivityUpdate.MjsPromotionActivityFactory.create_mjs_promotion_update()
+    #factory.add_mjs_base_condition(activity_id,name,start_time,end_time,1)
+    #factory.add_mjs_item_condition(1,'true')
+    #factory.decrease_money_condition(1000)
+    #factory.add_gift_condition('true','小狗狗')
+    #req = factory.build_promotion_request()
+    #print PromotionmiscMjsActivityUpdate.update_promotionm_mjs_activity(nick,req)

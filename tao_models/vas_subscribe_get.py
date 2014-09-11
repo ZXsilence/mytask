@@ -49,8 +49,6 @@ class VasSubscribeGet(object):
         params = ApiService.getReqParameters(req)
         taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
         rsp = ApiService.getResponseObj(taobao_client.execute(params, ''))
-        if not rsp.isSuccess():
-            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg,req=params,rsp=rsp)
         return change_obj_to_dict_deeply(rsp.article_user_subscribes)
 
 if __name__ == '__main__':
