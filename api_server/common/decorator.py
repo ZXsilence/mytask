@@ -7,9 +7,12 @@ import logging
 import traceback
 import inspect
 
+import time
 from time import  sleep
 from datetime import datetime
 import simplejson as json
+
+from MySQLdb import OperationalError
 
 from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
 from db_exceptions.exceptions import  MongodbException
@@ -77,6 +80,36 @@ def sdk_exception(MAX_RETRY_TIMES = 20):
 
     return _wrapper_func
 
+
+
+def mysql_exception(func):
+    """
+    """
+
+    def wrapped_func(*args, **kwargs):
+        retry_times = 0
+        start = time.time()
+        while True:
+            try:
+
+                ret = func(*args, **kwargs)
+                logging.debug("%s cost [%s]s, " % (func.__name__, time.time() - start))
+                return ret
+            except OperationalError, e:
+                code = e.args[0]
+                retry_times += 1
+                if int(code) == 1213:
+                    if retry_times > 3:
+                        logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
+                        raise e
+                else:
+                    raise e
+                sleep(1)
+            except Exception, e:
+                    logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
+                    raise e
+
+    return wrapped_func
 
 
 

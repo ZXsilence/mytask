@@ -34,20 +34,20 @@ class ClouddataMbpDataGet(object):
 
     @classmethod
     def _decode_clouddata(cls,rsp):
-
-        dict_column = json.loads(rsp.column_list)
-        dict_row = json.loads(rsp.row_list)
-        columns = dict_column.get('string', [])
-        rows = dict_row.get('query_row', []) 
+        
+        column_list = rsp.__dict__.get('column_list',[])
+        row_list =  rsp.__dict__.get('row_list',[]) 
         elements = []
+        if column_list == [] or row_list == []:
+            return elements
         int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num"]
         date_fields = ["thedate", "dt"]
         float_fields = ["alipay_trade_amt"]
-        for row in rows:
-            values = row.get('values', {}).get('string', [])
+        for row in row_list:
+            values = row.values
             rpt = {}
             for i in range(len(values)):
-                key = columns[i]
+                key = column_list[i]
                 if key in int_fields:
                     rpt[key] = int(values[i]) 
                 elif key in date_fields:
@@ -68,30 +68,33 @@ class ClouddataMbpDataGet(object):
         dt_str = dt.strftime("%Y%m%d")
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)+',dt1='+sdate_str+',dt2='+edate_str
         req = ClouddataMbpDataGetRequest() 
         req.sid = sid
         req.sql_id = sql_id
         req.parameter = parameter
         rsp = ApiService.execute(req)
         return cls._decode_clouddata(rsp)
-    
+
+    '''有点击词'''
     @classmethod
     def get_query_rpt(cls,sid,sdate,edate):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '4439'
+        sql_id = '4946'
         while True:
-            rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
-            print rpt_sub_list[0]
-            rpt_list.extend(rpt_sub_list)
-            if len(rpt_sub_list) < limit:
-                break
-            offset = offset + limit
-        print len(rpt_list)
+            try:
+                rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
         return rpt_list
-    
+
+    '''获取用户90天成交词'''    
     @classmethod
     def get_query_list_by_sid(cls, sid):
         rpt_list = []
@@ -123,12 +126,8 @@ class ClouddataMbpDataGet(object):
 
 
 if __name__ == '__main__':
-    sid = 70774620  
-    sql_id = 3472 
-    edate = datetime.datetime.now()
-    sdate = edate - datetime.timedelta(days=15)
+    sid = 108773362
+    edate = datetime.datetime.now() - datetime.timedelta(days=1)
+    sdate = edate - datetime.timedelta(days=30)
     rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
-    #rpt_list_1 = ClouddataMbpDataGet.get_query_list_by_sid(sid)
     print len(rpt_list)
-    print rpt_list[0]
-    #print rpt_list_1[0]

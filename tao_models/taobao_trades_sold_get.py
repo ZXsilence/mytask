@@ -46,6 +46,7 @@ class TradesSoldGet(object):
         req.end_created = end_created
         req.page_size = cls.PAGE_SIZE
         req.page_no = 1
+        req.nick = nick 
         total_trade_list = []
         while True:
             rsp = ApiService.execute(req,nick,soft_code)

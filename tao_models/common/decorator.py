@@ -2,10 +2,14 @@
 """doc string for module"""
 __author__ = 'lym liyangmin@maimiaotech.com'
 
+import os
+import commands
 import sys
+import re
 import logging
 import traceback
 import inspect
+import time
 
 from time import  sleep
 from datetime import datetime
@@ -19,17 +23,6 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
-from api_records.services.api_records_service import inc_api_call_times, get_api_call_times, update_api_call_times, QueueName
-api_call_infos = [ 
-        ['syb_auto_campaign_optimize_job.py',QueueName.SYB_AUTO_CAMPAIGN_OPTIMIZE],
-        ['syb_auto_creative_optimize_job.py',QueueName.SYB_AUTO_CREATIVE_OPTIMIZE],
-        ['syb_key_campaign_optimize_job.py',QueueName.SYB_KEY_CAMPAIGN_OPTIMIZE]
-]
-api_call_requests = [
-    'SimbaKeywordsvonAdd',
-    'SimbaKeywordsPricevonSet',
-    'SimbaKeywordsDelete'
-]
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
 
@@ -77,9 +70,6 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                         logger.info(args[0].__class__.__name__ + "return None")
                         return None
                     res =  func(*args, **kwargs)
-                except SDKRetryException,e:
-                    logger.error('sdk retry error:%s,*args:%s **kwargs:%s'%(func.__name__, str(args),str(kwargs)))
-                    raise e
                 except ErrorResponseException,e:
                     logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))
@@ -95,6 +85,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
 
                     if e.code == 1000.1:
                         raise ApiSourceError(e.code,e.sub_code,e.msg,e.sub_msg)
+                    if e.code == 1000.2:
+                        raise SDKRetryException(code=e.code,sub_code=e.sub_code\
+                                ,msg=e.msg,sub_msg=e.sub_msg)
                      
                     #扔出自定义异常
                     if hasattr(e,'params') and e.params:
@@ -118,6 +111,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                                 and u'当前推广计划不支持该操作' in e.sub_msg:
                             raise NonsearchNotOpenException
                         elif api_method == 'taobao.simba.nonsearch.adgroupplaces.delete' and e.sub_msg \
+                                and u'当前推广计划不支持该操作' in e.sub_msg:
+                            raise NonsearchNotOpenException
+                        elif api_method == 'taobao.simba.nonsearch.adgroupplaces.get' and e.sub_msg \
                                 and u'当前推广计划不支持该操作' in e.sub_msg:
                             raise NonsearchNotOpenException
 
@@ -219,8 +215,13 @@ def tao_api_exception(MAX_RETRY_TIMES = 20):
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
 
+                    elif code == 12 and e.sub_msg and '该子帐号无此操作权限' in e.sub_msg and '请通过主帐号设置开通相应权限' in e.sub_msg:
+                        raise InvalidAccessTokenException('subuser has no permission')
+
                     elif code == TaoOpenErrorCode.INVALID_SESSION_KEY:
                         raise InvalidAccessTokenException("access session expired or invalid")
+                    elif code == 53 and e.sub_code and 'isv.w2-security-authorize-invalid' in e.sub_code:
+                        raise W2securityException('w2-security-authorize-invalid') 
                     else:
                         raise  e
                 else:
@@ -265,5 +266,24 @@ def mongo_exception(func):
                 raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
     return wrapped_func
 
+def get_sys_info(pid):
+    res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
+    p = re.compile(r'\s+')  
+    l = p.split(res)  
+    #'user':l[0],'pid':l[1],'cpu':l[2],'mem':l[3],'vsa':l[4],'rss':l[5],'start_time':l[6]
+    curr_mem = float(l[5])/1000.0
+    curr_time = time.time()*1000
+    return (curr_time,curr_mem)
+
+def analyze(func):
+    def __wrappe_func(*args, **kwargs):
+        pid = os.getpid()
+        start_info = get_sys_info(pid)
+        a = func(*args, **kwargs)
+        end_info = get_sys_info(pid)
+        logger.info('Analyze PID:%s function:%s start_mem:%sMB end_mem:%sMB cost_time:%sms'\
+                %(pid,func.__name__,round(start_info[1]),round(end_info[1]),round((end_info[0]-start_info[0]),0)))
+        return a
+    return __wrappe_func
 
 

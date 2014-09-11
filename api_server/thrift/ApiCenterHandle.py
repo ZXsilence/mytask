@@ -16,6 +16,7 @@ from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOK
 from TaobaoSdk import  TaobaoClient
 from api_server.services.api_record_service import ApiRecordService
 from api_server.conf.settings import logger
+from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
    
 class ApiCenterHandle(object):
 
@@ -29,23 +30,23 @@ class ApiCenterHandle(object):
         try:
             params = simplejson.loads(params)
             method = params['method']
-            date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
-            api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
+            #date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
             nick = nick.decode('utf8')
             logger.info('api start , source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                     %(api_source,method,soft_code,nick,params.get('nick',None)))
-            if not api_source or api_source not in API_SOURCE:
+            if not api_source:
                 #API调用源检查
                 rsp = ApiCenterHandle.get_source_error_rsp(api_source)
                 logger.error('api source error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
                         %(api_source,method,soft_code,nick,params.get('nick',None)))
                 return simplejson.dumps(rsp)
-            if api_record and api_record['all_day_limit']:
-                #API全天流控检查
-                rsp = ApiCenterHandle.get_call_limit_rsp()
-                logger.error('api limit error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
-                        %(api_source,method,soft_code,nick,params.get('nick',None)))
-                return simplejson.dumps(rsp)
+            #api_record = ApiRecordService.get_record(soft_code,api_source,method,date_str)
+            #if api_record and api_record['all_day_limit']:
+            #    #API全天流控检查
+            #    rsp = ApiCenterHandle.get_call_limit_rsp()
+            #    logger.error('api limit error, source:%s , method:%s , soft_code:%s , nick:%s , params_nick:%s'\
+            #            %(api_source,method,soft_code,nick,params.get('nick',None)))
+            #    return simplejson.dumps(rsp)
 
             #根据入参的情况，获取相应的shop_infos列表
             session_expired = False
@@ -55,7 +56,7 @@ class ApiCenterHandle(object):
                 shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
             #去除QN的shop_info
             call_shop_infos = []
-            if len(shop_infos) >= 2:
+            if soft_code !='QN' and len(shop_infos) >= 2:
                 for shop_info in shop_infos:
                     if shop_info['soft_code'] == 'QN':
                         continue
@@ -84,7 +85,7 @@ class ApiCenterHandle(object):
             对shop_infos循环调用，避免下面的特殊情况：
             一个用户订购多款软件，shop_info_list的session_expired全为False，但是其中一个订购已退款或失效
         """
-        date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
+        #date_str = datetime.strftime(datetime.today() , '%Y-%m-%d')
         rsp_dict = {}
         invalid_session_count = 0
         call_limit_count = 0
@@ -105,15 +106,19 @@ class ApiCenterHandle(object):
 
             #掌中宝的非open平台access_token，需要加上header
             header = {}
-            if soft_code == 'QN' and not shop_info.get('is_open_access_token',False) and shop_info.has_key('header'): 
+            if soft_code == 'QN' and not shop_info.get('is_open_access_token',False) and shop_info.has_key('header') and shop_info['header']: 
                 header = shop_info['header']
 
             #发送请求
-            taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
-            rsp_dict = taobao_client.execute(params, access_token,header)
+            try:
+                taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
+                rsp_dict = taobao_client.execute(params, access_token,header)
+            except SDKRetryException:
+                logger.exception('api error, sdk retry failed, params:%s,nick:%s,soft_code:%s,api_source:%s'%(params,nick,soft_code,api_source))
+                return ApiCenterHandle.get_sdk_retry_rsp()
 
             #记录API调用
-            ApiCenterHandle.mark_record(params,rsp_dict,soft_code,api_source,date_str)
+            #ApiCenterHandle.mark_record(params,rsp_dict,soft_code,api_source,date_str)
 
             #异常处理
             if rsp_dict.has_key('error_response') and rsp_dict['error_response'].get('code',0)== 27:
@@ -127,7 +132,8 @@ class ApiCenterHandle(object):
                 #API全天被限
                 wait_seconds = int(rsp_dict['error_response']['sub_msg'].split(' ')[5])
                 if wait_seconds > 60:
-                    ApiRecordService.set_all_day_limit(soft_code,api_source,api_method,date_str,True)
+                    #api_record_tmp = ApiRecordService.get_record(shop_info['soft_code'],api_source,api_method,date_str)
+                    #ApiRecordService.set_all_day_limit(api_record_tmp['id'],True)
                     logger.error("API ALL DAY LIMITS , wait_seconds:%s , source:%s , method:%s , nick:%s , soft_code:%s"%(wait_seconds,api_source,api_method,shop_info['nick'],shop_info['soft_code']))
                     call_limit_count += 1
                     #切换app_key
@@ -180,6 +186,15 @@ class ApiCenterHandle(object):
         rsp['error_response']['msg'] = 'App Call Limited'
         rsp['error_response']['sub_msg'] = 'This ban will last for 123456 more seconds'
         rsp['error_response']['sub_code'] = 'accesscontrol.limited-by-api-access-count'
+        return rsp
+
+    @staticmethod
+    def get_sdk_retry_rsp():
+        rsp = {'error_response':{}}
+        rsp['error_response']['code'] = 1000.2
+        rsp['error_response']['msg'] = 'SDK Retry Error'
+        rsp['error_response']['sub_msg'] = 'SDK重试失败，可能是以下原因造成的:1.与淘宝交互返回的状态码非200     2.淘宝返回了非json数据，具体返回数据可查看/home/ops/TaobaoOpenPythonSDK/TaobaoSdk/error_api.txt'
+        rsp['error_response']['sub_code'] = 'sdk-retry-error'
         return rsp
 
     def say(self, msg):

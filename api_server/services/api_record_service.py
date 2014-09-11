@@ -27,11 +27,10 @@ class ApiRecordService(object):
             record_new['fail_detail_info'] = {}
             ApiRecord.insert_record(record_new)
         else:
-            ApiRecord.inc_success_record(soft_code,source,method,date_str)
+            ApiRecord.inc_success_record(record['id'])
 
     @staticmethod
     def inc_fail_record(soft_code,source,method,date_str,sub_code):
-        sub_code = sub_code.replace('.','/')
         record = ApiRecord.find_api_record(soft_code,source,method,date_str)
         if not record:
             record_new = {'soft_code':soft_code,'date':date_str,'source':source,'method':method}
@@ -42,19 +41,20 @@ class ApiRecordService(object):
             record_new['fail_detail_info'] = {sub_code:1}
             ApiRecord.insert_record(record_new)
         else:
-            if record['fail_detail_info'].has_key(sub_code):
-                ApiRecord.inc_fail_record(soft_code,source,method,date_str,sub_code)
+            fail_detail_info = record['fail_detail_info']
+            if fail_detail_info.has_key(sub_code):
+                fail_detail_info[sub_code]+=1
             else:
-                ApiRecord.inc_fail_record_new(soft_code,source,method,date_str,sub_code)
-
+                fail_detail_info[sub_code]=1
+            ApiRecord.inc_fail_record(record['id'],fail_detail_info)
 
     @staticmethod
     def get_record(soft_code,source,method,date_str):
         return ApiRecord.find_api_record(soft_code,source,method,date_str)
 
     @staticmethod
-    def set_all_day_limit(soft_code,source,method,date_str,flag):
-        ApiRecord.set_all_day_limit(soft_code,source,method,date_str,flag)
+    def set_all_day_limit(id,flag):
+        ApiRecord.set_all_day_limit(id,flag)
 
 
 

@@ -9,6 +9,20 @@ class ExtendType(object):
     MONEY_FIRST = 3
     REL_AND_PV = 4
 
+class PlatformId(object):
+    pc_in = 1
+    pc_out = 2
+    wx_in = 8
+    wx_out = 16
+
+    CODE_TO_STR = {
+            1:'pc_in',
+            2:'pc_out',
+            4:'pc_out',
+            8:'wx_in',
+            16:'wx_out'
+            }
+    
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
     LOW_QSCORE = 2
@@ -29,6 +43,7 @@ class WordDeleteType(object):
 
 class OperationType(object):
 
+    DELETE_UNEXPECT = -1
     DELETE_AUDIT_UNPASS = 1
     DELETE_LOW_QSCORE = 2
     DELETE_LOW_PV_OLD = 3
@@ -46,6 +61,14 @@ class OperationType(object):
     DELETE_LOW_PV_BY_ADGROUP_CPC = 15
     DELETE_USER_DELETE_TAOBAO = 16
     DELETE_GARBAGE_MAX_PRICE = 17
+    DELETE_MANUAL_ADGROUP = 18
+
+    #分层新增
+    DELETE_LOW_CTR = 19 
+    DELETE_LOW_ROI = 20
+    DELETE_LOW_CUST_SCORE = 21
+    DELETE_LOW_PV = 22
+
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
     UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE = 102
@@ -67,7 +90,15 @@ class OperationType(object):
     UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE = 122
     UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE = 123
     UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE = 124 
+    UPDATE_PRICE_MANUAL_ADGROUP = 127
     
+    #分层优化新增   
+    UPDATE_PRICE_ACCURATE_MATCH = 125
+    UPDATE_PRICE_WIDE_MATCH = 126
+    UPDATE_PRICE_USER_EXPECT_INCRE_PRICE = 128 
+    UPDATE_PRICE_USER_EXPECT_DECRE_PRICE = 129 
+    UPDATE_PRICE_ITEM_GOOD_INCRE_PRICE = 130
+    UPDATE_PRICE_ITEM_BAD_DECRE_PRICE = 131
     KEEP_NORMAL = 201
 
     IGNORE_KEYWORD_NOT_EXIST = 301
@@ -86,7 +117,18 @@ class OperationType(object):
     IGNORE_CAMPAIGN_CANCEL_OPTIMIZE = 313
     IGNORE_CAMPAIGN_LOW_IMPRESSIONS = 314
     IGNORE_ADGROUP_TOO_MUCH = 315
-
+    
+    IGNORE_PLATFORM_UNHANDLE = 316
+    IGNORE_PLATFORM_CAMPAIGN_CANCEL_OPTIMIZE = 317
+    IGNORE_PLATFORM_CAMPAIGN_LOW_COST = 318
+    IGNORE_PLATFORM_CAMPAIGN_OFFLINE =319
+    IGNORE_SCHEDULE_UNHANDLE = 320
+    IGNORE_SCHEDULE_REPORT_FAILED = 321
+    IGNORE_PLATFORM_REPORT_FAILED = 322
+    IGNORE_CAMPAIGN_PLATFORM_NORMAL = 325
+    CAMPAIGN_SCHEDULE_OPTIMIZE = 323
+    CAMPAIGN_PLATFORM_OPTIMIZE = 324
+    IGNORE_CAMPAIGN_GIVE_UP = 326
 
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
@@ -104,6 +146,7 @@ class OperationType(object):
     START_OPTIMIZE_ADGROUP = 511
     STOP_ADGROUP = 512
     STOP_OPTIMIZE_ADGROUP = 513
+    START_OPTIMIZE_ADGROUP_ONLY_PRICE = 514
 
 
     ADD_CAMPAIGN_NORMAL = 601
@@ -133,11 +176,18 @@ class OperationType(object):
 
         DELETE_ADGROUP_NORMAL,
         DELETE_ADGROUP_INITIAL,
-        DELETE_ADGROUP_HISTORY_NORMAL
+        DELETE_ADGROUP_HISTORY_NORMAL,
+        DELETE_MANUAL_ADGROUP,
+        DELETE_LOW_CTR ,
+        DELETE_LOW_ROI ,
+        DELETE_LOW_PV,
+        DELETE_LOW_CUST_SCORE 
     ]
 
     ALL_UPDATE_TYPES = [
         UPDATE_PRICE_ROI_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_ITEM_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_ITEM_BAD_DECRE_PRICE,
         UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE,
         UPDATE_PRICE_ROI_BAD_DECRE_PRICE,
         UPDATE_PRICE_COST_SUFF_INCRE_PRICE, 
@@ -156,17 +206,26 @@ class OperationType(object):
         UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
         UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
         UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_INCRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_DECRE_PRICE,
         UPDATE_PRICE_FOR_CPC_MAX,
+        UPDATE_PRICE_ACCURATE_MATCH,
+        UPDATE_PRICE_WIDE_MATCH,
+        UPDATE_PRICE_MANUAL_ADGROUP,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
         STOP_ADGROUP,
         STOP_OPTIMIZE_ADGROUP,
+        START_OPTIMIZE_ADGROUP_ONLY_PRICE,
 
         START_CAMPAIGN,
         START_OPTIMIZE_CAMPAIGN,
         STOP_CAMPAIGN,
-        STOP_OPTIMIZE_CAMPAIGN
+        STOP_OPTIMIZE_CAMPAIGN,
+        
+        CAMPAIGN_SCHEDULE_OPTIMIZE ,
+        CAMPAIGN_PLATFORM_OPTIMIZE
     ]
 
 
@@ -200,11 +259,96 @@ class OperationType(object):
         IGNORE_CAMPAIGN_INIT_FAILED,
         IGNORE_CAMPAIGN_CANCEL_OPTIMIZE,
         IGNORE_CAMPAIGN_LOW_IMPRESSIONS,
-        IGNORE_ADGROUP_TOO_MUCH
+        IGNORE_ADGROUP_TOO_MUCH,
+
+
+        IGNORE_PLATFORM_UNHANDLE, 
+        IGNORE_PLATFORM_CAMPAIGN_CANCEL_OPTIMIZE ,
+        IGNORE_PLATFORM_CAMPAIGN_LOW_COST ,
+        IGNORE_PLATFORM_CAMPAIGN_OFFLINE ,
+        IGNORE_SCHEDULE_UNHANDLE,
+        IGNORE_PLATFORM_REPORT_FAILED,
+        IGNORE_SCHEDULE_REPORT_FAILED,
+        IGNORE_CAMPAIGN_PLATFORM_NORMAL,
+        IGNORE_CAMPAIGN_GIVE_UP
+    ]
+
+    ALL_KEYWORD_ADD_TYPES = [
+        ADD_NORMAL,
+        ADD_KEYWORD_NORMAL,
+        ADD_KEYWORD_INITIAL,
+        ADD_KEYWORD_DIRECTOR,
+        ADD_KEYWORD_HISTORY_NORMAL,
+        ADD_KEYWORD_EXTRA_INFO
+    ]
+
+
+    ALL_KEYWORD_DELETE_TYPES = [
+        DELETE_UNEXPECT,
+        DELETE_AUDIT_UNPASS,
+        DELETE_LOW_QSCORE,
+        DELETE_LOW_PV_OLD,
+        DELETE_DELETE_PERCENT,
+        DELETE_LOW_CLICK_OLD,
+        DELETE_IS_GARBAGE,
+        DELETE_USER_DELETE,
+        DELETE_LOW_PV_MAX_PRICE,
+        DELETE_LOW_PV_BEST_POSITION,
+        DELETE_FILTER_WORDS,
+        DELETE_LOW_RELEVANCE,
+        DELETE_DIRECTOR,
+        DELETE_HISTORY_NORMAL,
+        DELETE_LOW_PV_BY_ADGROUP_CPC,
+        DELETE_USER_DELETE_TAOBAO,
+        DELETE_GARBAGE_MAX_PRICE,
+        DELETE_LOW_CTR ,
+        DELETE_LOW_ROI ,
+        DELETE_LOW_PV,
+        DELETE_LOW_CUST_SCORE 
+    ]
+
+    ALL_KEYWORD_UPDATE_TYPES = [
+        UPDATE_PRICE_ROI_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_ITEM_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_ITEM_BAD_DECRE_PRICE,
+        UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_ROI_BAD_DECRE_PRICE,
+        UPDATE_PRICE_COST_SUFF_INCRE_PRICE, 
+        UPDATE_PRICE_COST_FULL_DECRE_PRICE,
+        UPDATE_PRICE_GARBAGE_INCRE_PRICE,
+        UPDATE_PRICE_MINIMIZE_CPC_MAX,
+        UPDATE_PRICE_TO_INCREASE_COST,
+        UPDATE_PRICE_TO_DECREASE_COST,
+        UPDATE_PRICE_TO_APPROVE_ROI,
+        UPDATE_PRICE_DIRECTOR,
+        UPDATE_PRICE_HISTORY_NORMAL,
+        UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE,
+        UPDATE_PRICE_CUSTOM,
+        UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE,
+        UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE,
+        UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE,
+        UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE,
+        UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_INCRE_PRICE,
+        UPDATE_PRICE_USER_EXPECT_DECRE_PRICE,
+        UPDATE_PRICE_FOR_CPC_MAX,
+        UPDATE_PRICE_ACCURATE_MATCH,
+        UPDATE_PRICE_WIDE_MATCH
+    ]
+
+    ALL_ADGROUP_DELETE_TYPES = [
+        DELETE_ADGROUP_NORMAL,
+        DELETE_ADGROUP_INITIAL,
+        DELETE_ADGROUP_HISTORY_NORMAL
+    ]
+
+    ALL_ADGROUP_ADD_TYPES = [
+        ADD_ADGROUP_NORMAL
     ]
 
 OPTTYPE_COMMENT = {
     OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
+    , OperationType.DELETE_UNEXPECT: "关键词删除时未记录原因"
     , OperationType.DELETE_LOW_QSCORE : "关键词质量分过低，已经删除"
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PERCENT : "关键词在计划中相对表现较差，已经删除"
@@ -222,13 +366,21 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_DIRECTOR : "加力计划优化，发现关键词表现不佳，已经删除"
     , OperationType.DELETE_HISTORY_NORMAL : "关键词已经被删除(历史记录未区分类型)"
     , OperationType.DELETE_LOW_PV_BY_ADGROUP_CPC : "关键词已经超出推广组cpc较多，仍然没有展现，已经删除"
+    , OperationType.DELETE_LOW_CTR : "关键词点击率太低，已经删除"
+    , OperationType.DELETE_LOW_ROI : "关键词ROI较低，已经删除"
+    , OperationType.DELETE_LOW_CUST_SCORE : "关键词基础分太低，已经删除"
+    , OperationType.DELETE_LOW_PV : "关键词全网展现低，已经删除"
+    
+    , OperationType.DELETE_MANUAL_ADGROUP: "手动计划自定义优化删除符合条件关键词"
 
     , OperationType.UPDATE_PRICE_ROI_GOOD_INCRE_PRICE : "关键词最近一段时间效果好于计划整体，加大投入"
+    , OperationType.UPDATE_PRICE_ITEM_GOOD_INCRE_PRICE: "宝贝在计划中表现相对优异，适当加大投入"
+    , OperationType.UPDATE_PRICE_ITEM_BAD_DECRE_PRICE: "宝贝在计划中表现相对较差，适当减小投入"
     , OperationType.UPDATE_PRICE_ROI_PREDICT_GOOD_INCRE_PRICE : "系统预估关键词ROI潜力较大，适当加大投入"
     , OperationType.UPDATE_PRICE_ROI_BAD_DECRE_PRICE : "关键词最近一段时间效果低于计划整体，减小投入"
     , OperationType.UPDATE_PRICE_COST_SUFF_INCRE_PRICE : "计划花费过低，根据报表，关键词加大投入"
     , OperationType.UPDATE_PRICE_COST_FULL_DECRE_PRICE : "计划花费过高，根据报表，关键词减小投入"
-    , OperationType.UPDATE_PRICE_GARBAGE_INCRE_PRICE : "关键词被淘宝判定为无展现词，加大投入"
+    , OperationType.UPDATE_PRICE_GARBAGE_INCRE_PRICE : "关键词长期无展现，加大投入"
     , OperationType.UPDATE_PRICE_MINIMIZE_CPC_MAX : "关键词超出设置的最高点击单价，降低出价"
     , OperationType.UPDATE_PRICE_TO_INCREASE_COST : "为了加大计划投入，关键词进行价格调整"
     , OperationType.UPDATE_PRICE_TO_DECREASE_COST : "为了减小计划投入，关键词进行价格调整"
@@ -239,12 +391,18 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
     
-    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好的排名'
-    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好的排名'
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好排名'
+    , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好排名'
     , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划通过加价增加流量'
     , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划通过减价较少流量'
     , OperationType.UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE : '测款计划花费接近预算上限,关键词减价'
+    , OperationType.UPDATE_PRICE_USER_EXPECT_INCRE_PRICE:'用户意图加大流量，关键词加价'
+    , OperationType.UPDATE_PRICE_USER_EXPECT_DECRE_PRICE:'用户意图减小流量，关键词减价'
+    , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "点击率低，关键词修改为精准匹配"
+    , OperationType.UPDATE_PRICE_WIDE_MATCH: "提升流量，关键词修改为广泛匹配"
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
+    
+    , OperationType.UPDATE_PRICE_MANUAL_ADGROUP: "手动计划自定义优化关键词价格"
     
     , OperationType.IGNORE_KEYWORD_NOT_EXIST: "关键词不存在"
     , OperationType.IGNORE_KEYWORD_NOT_HANDLE : "关键词未托管，无需处理"
@@ -279,12 +437,24 @@ OPTTYPE_COMMENT = {
     , OperationType.START_OPTIMIZE_ADGROUP: "推广组加入托管" 
     , OperationType.STOP_ADGROUP: "推广组取消推广"
     , OperationType.STOP_OPTIMIZE_ADGROUP: "推广组取消托管"
+    , OperationType.START_OPTIMIZE_ADGROUP_ONLY_PRICE: "推广组开启价格优化"
 
     , OperationType.ADD_CAMPAIGN_NORMAL: "新建计划" 
     , OperationType.START_CAMPAIGN: "计划开启推广" 
     , OperationType.START_OPTIMIZE_CAMPAIGN: "计划加入托管"
     , OperationType.STOP_CAMPAIGN: "计划暂停推广"
     , OperationType.STOP_OPTIMIZE_CAMPAIGN: "计划取消托管"
+    , OperationType.IGNORE_PLATFORM_UNHANDLE :"平台优化未打开"
+    , OperationType.IGNORE_PLATFORM_CAMPAIGN_CANCEL_OPTIMIZE :"计划未托管，分时和平台不需要优化"
+    , OperationType.IGNORE_PLATFORM_CAMPAIGN_LOW_COST:"计划花费过低，平台不需要优化" 
+    , OperationType.IGNORE_PLATFORM_CAMPAIGN_OFFLINE :"计划暂停推广，分时和平台不需要优化"
+    , OperationType.IGNORE_SCHEDULE_UNHANDLE :"分时优化未打开"
+    , OperationType.CAMPAIGN_SCHEDULE_OPTIMIZE:"对计划分时折扣进行优化" 
+    , OperationType.CAMPAIGN_PLATFORM_OPTIMIZE:"对计划平台设置进行优化" 
+    , OperationType.IGNORE_SCHEDULE_REPORT_FAILED:"获取店铺分时报表异常，跳过优化"
+    , OperationType.IGNORE_PLATFORM_REPORT_FAILED:"计划平台报表获取异常，跳过优化"
+    , OperationType.IGNORE_CAMPAIGN_PLATFORM_NORMAL:"平台设置正常，跳过优化"
+    , OperationType.IGNORE_CAMPAIGN_GIVE_UP:"放弃计划优化"
 
 }
 
@@ -299,6 +469,10 @@ class LoginFailType(object):
     ACCESS_TOKEN_ERROR = 8
     HTTP_ERROR = 9
 
+class AdgroupHandleStatus(object):
+    UNDEAL = 0
+    AUTO_DEAL = 1
+    ONLY_PRICE = 2
 
 LOGFAILTYPE_COMMENT = {
         LoginFailType.UN_BUY:'授权失败，当前用户未购买该软件，请切换淘宝帐号并重新登录，<a href="http://login.taobao.com/member/logout.jhtml?spm=1.1000386.5982201.5.qQ0uFL&f=top&out=true&redirectURL=http%3A%2F%2Fwww.taobao.com%2F">退出当前淘宝帐号</a>'

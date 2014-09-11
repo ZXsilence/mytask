@@ -2,7 +2,7 @@
 
 # C extensions
 *.so
-
+.ropeproject
 # Packages
 *.egg
 *.egg-info
@@ -15,7 +15,6 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
 lib64
 
 # Installer logs
@@ -42,3 +41,9 @@ tao_models/TaobaoSdk
 tao_models/conf/set_env.py
 
 tao_models/conf/settings.py
+
+*.ropeproject
+.ropeproject
+rollback.history
+
+

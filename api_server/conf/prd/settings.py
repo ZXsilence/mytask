@@ -3,6 +3,8 @@ import os, sys
 import pymongo
 from pymongo import Connection
 import logging
+import MySQLdb
+from DBUtils.PooledDB import PooledDB
 
 if pymongo.version.startswith("2.5"):
     import bson.objectid
@@ -20,7 +22,8 @@ sys.path.append(BACKENDS)
 SERVER_URL = "http://gw.api.taobao.com/router/rest"
 
 API_THRIFT = {
-        'host':'api.maimiaotech.com',
+        #'host':'api.maimiaotech.com',
+        'host':'10.242.173.131',
         'port':30005
     }
 
@@ -32,6 +35,10 @@ def set_api_source(source):
         return 
     api_source = source
     print 'set api_source:',api_source
+
+def get_api_source():
+    global api_source
+    return api_source
 
 API_MAIN_DB = {
         #'HOST':'syb.maimiaotech.com',
@@ -51,7 +58,10 @@ API_SECOND_DB={
 
 host_url = '%s:%i,%s:%i'%(API_MAIN_DB['HOST'],API_MAIN_DB['PORT'],API_SECOND_DB['HOST'],API_SECOND_DB['PORT'])
 print 'api_db:',host_url
-api_conn = pymongo.MongoReplicaSetClient(host=host_url, replicaSet='api_db_replset')
+try:
+    api_conn = pymongo.MongoReplicaSetClient(host=host_url, replicaSet='api_db_replset')
+except Exception,e:
+    api_conn = None
 
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/alidata1/logs/api_server.log')
@@ -61,6 +71,23 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
+
+API_DB = {
+         'NAME': 'api_record',
+         'HOST':'jconn2thvf8ua.mysql.rds.aliyuncs.com',
+         'PORT':3306,
+         'USER':'api',
+         'PASSWD':'maimiaoadmin2014' }
+
+
+api_pool = PooledDB(creator = MySQLdb, 
+                maxusage=600,
+                host=API_DB['HOST'],
+                port=API_DB['PORT'],
+                user=API_DB['USER'],
+                passwd=API_DB['PASSWD'], 
+                db=API_DB['NAME'],
+                charset="utf8")
 
 APP_SETTINGS = {
 
