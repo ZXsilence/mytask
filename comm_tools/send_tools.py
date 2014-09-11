@@ -28,6 +28,13 @@ SPID = '5208'
 SP_PASSWORD = 'Ad8@@yt011'
 DC = '15'
 SEND_MSG_URL = 'http://esms.etonenet.com/sms/mt'
+
+#新账号
+REG = '101100-WEB-HUAX-307114'
+PASSWORD = 'KNXPCLNW'
+BALANCE_URL = 'http://www.stongnet.com/sdkhttp/getbalance.aspx'
+SEND_MESSAGE_URL = 'http://www.stongnet.com/sdkhttp/sendsms.aspx'
+MSG_REPORT = 'http://www.stongnet.com/sdkhttp/getmtreport.aspx'
 DIRECTOR = {
             'PHONE':'15068116152',
             'EMAIL':'xieguanfu@maimiaotech.com',
@@ -118,7 +125,7 @@ def _parse_sms_response(message):
         dict[key_value[0]] = key_value[1]   
     return dict
 
-def send_sms(cellphone, text, retry_times=3):
+def send_sms_old(cellphone, text, retry_times=3):
     """发送短信"""
 
     retry_times -= 1
@@ -139,6 +146,57 @@ def send_sms(cellphone, text, retry_times=3):
         if dict.get('mterrcode',None) != '000':
             logger.error('send message to %s unsuccessfully:response error'%(cellphone,))
             logger.error('error dict: %s' % (str(dict)))
+            send_sms_old(cellphone,text,retry_times)
+    except urllib2.HTTPError,e:
+        logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        send_sms_old(cellphone,text,retry_times)
+    except Exception,e:
+        logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        send_sms_old(cellphone,text,retry_times)
+
+def get_balance():
+    url_params = urllib.urlencode({'reg':REG,'pwd':PASSWORD})
+    response = urllib2.urlopen(BALANCE_URL,url_params)
+    data = _parse_sms_response(response.read())
+    balance = 0
+    if data['result'] == '0':
+        balance = int(data['balance'])
+    return balance
+
+def get_msg_report():
+    url_params = urllib.urlencode({'reg':REG,'pwd':PASSWORD})
+    response = urllib2.urlopen(MSG_REPORT,url_params)
+    report = {}
+    data = _parse_sms_response(response.read())
+    if data['result'] == '0':
+        report.update(data)
+    return report
+
+def send_sms(cellphone, text, retry_times=3):
+    """发送短信"""
+
+    retry_times -= 1
+    if retry_times < 0:
+        logger.error('send message to %s unsuccessfully'%(cellphone,))
+        return
+    if type(text) == type(u''):
+        text = text.encode('utf-8')
+    if '【麦苗】' not in text:
+        text += '【麦苗】'
+    if type(cellphone) == type([]):
+        cellphone = ','.join(cellphone)
+    dict = {}
+    dict['reg'] = REG 
+    dict['pwd'] = PASSWORD
+    dict['phone'] = cellphone
+    dict['content']  = text
+    dict['sourceadd']  = None
+    url_params = urllib.urlencode(dict)
+    try:
+        response = urllib2.urlopen(SEND_MESSAGE_URL,url_params)
+        dict = _parse_sms_response(response.read())
+        if dict.get('result',None) != '0':
+            logger.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
             send_sms(cellphone,text,retry_times)
     except urllib2.HTTPError,e:
         logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
@@ -146,9 +204,10 @@ def send_sms(cellphone, text, retry_times=3):
     except Exception,e:
         logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
         send_sms(cellphone,text,retry_times)
-
 if __name__ == '__main__':
-    send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
-    send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
-    #send_sms(DIRECTOR['PHONE'], u'测试短信1')
+    #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
+    #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
+    print get_msg_report()['message']
+    print get_balance()
+    send_sms(DIRECTOR['PHONE'], '省油宝新评价:好评2')
     #send_sms(DIRECTOR['PHONE'], '测试短信2')

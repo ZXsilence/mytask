@@ -29,25 +29,38 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 
 class  SimbaInsightWordsdataGet(object):
-    
+    Max_Words = 10
     @classmethod
     @tao_api_exception()
-    def get_words_data(cls,words_list,sdate,edate):
+    def _get_words_data(cls,words_list,sdate,edate):
         req = SimbaInsightWordsdataGetRequest()
         req.bidword_list = ','.join(words_list)
-        import pdb;pdb.set_trace()
         req.start_date = sdate.strftime("%Y-%m-%d")
         req.end_date = edate.strftime("%Y-%m-%d")
         nick = None
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.word_data_list)
+    
+    @classmethod
+    def get_words_data(cls,words_list,sdate,edate):
+        total_list = []
+        while words_list:
+            sub_word_list = words_list[:cls.Max_Words]
+            sub_list = SimbaInsightWordsdataGet._get_words_data(sub_word_list,sdate,edate)
+            words_list = words_list[cls.Max_Words:]
+            total_list.extend(sub_list)
+        return total_list
+
+
 
 
 if __name__ == '__main__':
-   edate = datetime.datetime.now() - datetime.timedelta(days = 1)
-   sdate = edate - datetime.timedelta(days = 7)
-   words_list = ["连衣裙","礼品"]
-   res =  SimbaInsightWordsdataGet.get_words_data(words_list,sdate,edate)
-   print res
-
+    impression = 0
+    cost = 0
+    words_list = ["罗技鼠标g402"]
+    edate = datetime.datetime.now() - datetime.timedelta(days = 1)
+    sdate = edate - datetime.timedelta(days = 1)
+    print sdate ,edate
+    res =  SimbaInsightWordsdataGet.get_words_data(words_list,sdate,edate)
+    print res[0]
