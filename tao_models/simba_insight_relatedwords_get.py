@@ -30,20 +30,39 @@ from api_server.common.util import change_obj_to_dict_deeply
 
 class SimbaInsightRelatedwordsGet(object):
     
+    Max_Words = 10
     @classmethod
     @tao_api_exception()
-    def get_related_words(cls,bidword_list,number):
+    def _get_related_words(cls,bidword_list,number):
         req = SimbaInsightRelatedwordsGetRequest()
         req.bidword_list = ','.join(bidword_list)
         req.number = number
         nick = None
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.related_words_result_list)
+        related_words_list = change_obj_to_dict_deeply(rsp.related_words_result_list)
+        return  related_words_list 
 
+    @classmethod
+    def get_related_words(cls,bidword_list,number):
+        related_words_list = []
+        related_words = []
+        while bidword_list:
+            sub_words_list = bidword_list[:cls.Max_Words]
+            sub_list = SimbaInsightRelatedwordsGet._get_related_words(sub_words_list,number)
+            related_words_list.extend(sub_list)
+            bidword_list = bidword_list[cls.Max_Words:]
+        for item in related_words_list:
+            words_list = item.get('related_word_items_list',[])
+            for word_info  in  words_list:
+                related_words.append(word_info['related_word'])
+        return  related_words
+        
 if __name__ == '__main__':
-    bidword_list = ["连衣裙"]
-    print SimbaInsightRelatedwordsGet.get_related_words(bidword_list,10)
+    bidword_list = ["尿布带尿布扣包邮","连衣裙"]
+    res =  SimbaInsightRelatedwordsGet.get_related_words(bidword_list,10)
+    for item in res:
+        print item
 
 
 
