@@ -57,7 +57,7 @@ def send_email_with_text(addressee, text, subject):
         smtp.sendmail(msg['From'], to_list, msg.as_string())
     except Exception,e:
         print e
-        logger.exception('send_email: %s' % (str(e)))
+        #logger.exception('send_email: %s' % (str(e)))
 
 def send_email_with_html(addressee, html, subject):
     """发送html email"""
@@ -75,7 +75,8 @@ def send_email_with_html(addressee, html, subject):
         smtp.login(msg['From'], DIRECTOR['SECRET'])
         smtp.sendmail(msg['From'], to_list, msg.as_string())
     except Exception,e:
-        logger.exception('send_email: %s' % (str(e)))
+        #logger.exception('send_email: %s' % (str(e)))
+        print e
 
 def send_email_with_file(addressee, text, subject, file_list):
     """发送file email"""
@@ -103,7 +104,8 @@ def send_email_with_file(addressee, text, subject, file_list):
         smtp.login(msg['From'], DIRECTOR['SECRET']) 
         smtp.sendmail(msg['From'], addressee, msg.as_string())
     except Exception,e:
-        logger.exception('send_email: %s' % (str(e)))
+        #logger.exception('send_email: %s' % (str(e)))
+        print e
 
 def _toHex(str,charset):
     if type(str) == type('type'):
@@ -130,7 +132,8 @@ def send_sms_old(cellphone, text, retry_times=3):
 
     retry_times -= 1
     if retry_times < 0:
-        logger.error('send message to %s unsuccessfully'%(cellphone,))
+        #logger.error('send message to %s unsuccessfully'%(cellphone,))
+        print 'send message to %s unsuccessfully'%(cellphone,)
         return
     dict = {}
     dict['command'] = SEND_COMMAND
@@ -144,14 +147,18 @@ def send_sms_old(cellphone, text, retry_times=3):
         response = urllib2.urlopen(SEND_MSG_URL,url_params)
         dict = _parse_sms_response(response.read())
         if dict.get('mterrcode',None) != '000':
-            logger.error('send message to %s unsuccessfully:response error'%(cellphone,))
-            logger.error('error dict: %s' % (str(dict)))
+            #logger.error('send message to %s unsuccessfully:response error'%(cellphone,))
+            #logger.error('error dict: %s' % (str(dict)))
+            print 'send message to %s unsuccessfully:response error'%(cellphone,)
+            print 'error dict: %s' % (str(dict))
             send_sms_old(cellphone,text,retry_times)
     except urllib2.HTTPError,e:
-        logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        #logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
         send_sms_old(cellphone,text,retry_times)
     except Exception,e:
-        logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        #logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        print 'send message to %s unsuccessfully:server error'%(cellphone,)
         send_sms_old(cellphone,text,retry_times)
 
 def get_balance():
@@ -177,7 +184,8 @@ def send_sms(cellphone, text, retry_times=3):
 
     retry_times -= 1
     if retry_times < 0:
-        logger.error('send message to %s unsuccessfully'%(cellphone,))
+        #logger.error('send message to %s unsuccessfully'%(cellphone,))
+        print 'send message to %s unsuccessfully'%(cellphone,)
         return
     if type(text) == type(u''):
         text = text.encode('utf-8')
@@ -196,13 +204,16 @@ def send_sms(cellphone, text, retry_times=3):
         response = urllib2.urlopen(SEND_MESSAGE_URL,url_params)
         dict = _parse_sms_response(response.read())
         if dict.get('result',None) != '0':
-            logger.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
+            #logger.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
+            print 'send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict)
             send_sms(cellphone,text,retry_times)
     except urllib2.HTTPError,e:
-        logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        #logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
         send_sms(cellphone,text,retry_times)
     except Exception,e:
-        logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        #logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        print 'send message to %s unsuccessfully:server error'%(cellphone,)
         send_sms(cellphone,text,retry_times)
 if __name__ == '__main__':
     #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')

@@ -12,8 +12,7 @@ if __name__ == '__main__':
     from api_server.conf import set_env
     set_env.getEnvReady()
 
-from api_server.conf import settings 
-from api_server.conf.settings import api_pool
+from db_pool.lib.pool_util import PoolUtil   
 from api_server.common.decorator import mysql_exception
 
 
@@ -30,6 +29,7 @@ class ApiRecord(object):
             soft_code:应用名
             fail_detail_info:错误的详细记录
     '''
+    _db = 'api_record'
     _table = 'api_record'
     API_SETTINGS_MAX_EXECUTE_NUM = 1000 
     _fields = """source,soft_code,method,date,all_day_limit,\
@@ -38,14 +38,11 @@ class ApiRecord(object):
     
     @classmethod
     def _get_cursor(cls):
-        conn = api_pool.connection()
-        cursor = conn.cursor()
-        return (conn, cursor)
+        return PoolUtil.get_cursor(cls._db)
 
     @classmethod
     def _close_cursor(cls, conn, cursor):
-        cursor.close()
-        conn.close()
+        PoolUtil.close_cursor(conn,cursor)
 
     @classmethod
     def _data_cleaning(cls, settings_dict):

@@ -40,8 +40,6 @@ class SimbaRptCusteffectGet(object):
         l = json.loads(rsp.rpt_cust_effect_list.lower())
         if l == {}:
             l = []
-        if isinstance(l, dict):
-            raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
         return change_obj_to_dict_deeply(l)

@@ -54,8 +54,6 @@ class SimbaRptAdgroupBaseGet(object):
             l = json.loads(rsp.rpt_adgroup_base_list.lower())
             if l == {}:
                 l = []
-            if isinstance(l, dict):
-                raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
             for rpt in l:
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
             base_list.extend(l)

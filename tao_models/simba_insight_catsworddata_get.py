@@ -49,5 +49,5 @@ if __name__ == '__main__':
     cat_id = 50000852 
     edate = datetime.datetime.now() - datetime.timedelta(days = 1)
     sdate = edate - datetime.timedelta(days = 7)
-    print SimbaInsightCatsworddataGet.get_cats_top_words(cat_id,bidword_list,sdate,edate)
+    print SimbaInsightCatsworddataGet.get_words_cats_data(cat_id,bidword_list,sdate,edate)
 
