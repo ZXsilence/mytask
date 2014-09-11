@@ -181,6 +181,8 @@ def send_sms(cellphone, text, retry_times=3):
         return
     if type(text) == type(u''):
         text = text.encode('utf-8')
+    if '【麦苗】' not in text:
+        text += '【麦苗】'
     if type(cellphone) == type([]):
         cellphone = ','.join(cellphone)
     dict = {}
@@ -207,5 +209,5 @@ if __name__ == '__main__':
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
     print get_msg_report()['message']
     print get_balance()
-    #send_sms(DIRECTOR['PHONE'], u'测试短信1')
+    send_sms(DIRECTOR['PHONE'], '省油宝新评价:好评2')
     #send_sms(DIRECTOR['PHONE'], '测试短信2')
