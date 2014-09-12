@@ -53,18 +53,36 @@ class  SimbaInsightCatsforecastnewGet(object):
         length = len(cats_info_list)
         cats_list = []
         score_list = []
+        index = 0 
         for item in cats_info_list:
-            index  =  cats_info_list.index(item)
             cat_path_id = item['cat_path_id']
             cat_id = cat_path_id.split(' ')[-1]
-            cats_list.append(cat_id)
-            score_list.append(item['score'])
+            '''处理连续2个词重复的逻辑'''
+            if cat_id not in cats_list:
+                cats_list.append(cat_id)
+                score_list.append(item['score'])
+            else:
+                all_cats_list.append(cats_list)
+                all_score_list.append(score_list)
+                cats_list = []
+                score_list = []
+                cats_list.append(cat_id)
+                score_list.append(item['score'])
+                if index == length-1 or cats_info_list[index]['bidword'] !=\
+                       cats_info_list[index+1]['bidword'] : 
+                    all_cats_list.append(cats_list)
+                    all_score_list.append(score_list)
+                    cats_list = []
+                    score_list = []
+                index = index +1
+                continue
             if  index == length-1  or  cats_info_list[index]['bidword'] != \
                     cats_info_list[index+1]['bidword']:
                 all_cats_list.append(cats_list)
                 all_score_list.append(score_list)
                 cats_list = []
                 score_list = []
+            index = index +1
         return all_cats_list,all_score_list
             
     @classmethod
@@ -82,12 +100,11 @@ class  SimbaInsightCatsforecastnewGet(object):
         return cats_list
 
 if __name__ == '__main__':
-    words_list = ["秋装线衣女装新款"]
+    words_list = [u'nt01pro',  u'u12s', u'u12s', u'b81l', u'连衣裙']
+    words_list = [u'nt01pro',  u'u12s', u'u12s', u'b81l']
+    words_list = [u'nt01pro']
     res,res1 =  SimbaInsightCatsforecastnewGet.get_words_forecast_cats_list(words_list) 
-    for item in res:
-        print item
-    for item in res1:
-        print item
-
-
+    for item in  res:
+        if  len(item) == 1 and  item[0]== u'':
+            print "no cat"
 
