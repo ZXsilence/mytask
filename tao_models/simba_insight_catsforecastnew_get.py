@@ -28,8 +28,8 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 
-class  SimbaInsightCatsforecastnew(object):
-    
+class  SimbaInsightCatsforecastnewGet(object):
+    Max_Words = 10 
     @classmethod
     @tao_api_exception()
     def get_words_forecast_cats(cls,words_list):
@@ -42,23 +42,54 @@ class  SimbaInsightCatsforecastnew(object):
     
     @classmethod
     def get_words_forecast_cats_list(cls,words_list):
-        cast_info_list = SimbaInsightCatsforecastnew.get_words_forecast_cats(words_list)
+        cats_info_list = []
+        while  words_list:
+            sub_words_list =words_list[:cls.Max_Words]
+            words_list = words_list[cls.Max_Words:]
+            cat_sub_list = SimbaInsightCatsforecastnewGet.get_words_forecast_cats(sub_words_list)
+            cats_info_list.extend(cat_sub_list)
+        all_cats_list = []
+        all_score_list = []
+        length = len(cats_info_list)
         cats_list = []
-        for item in cast_info_list:
-            import pdb;pdb.set_trace()
-            cat_path_id = item.get('cat_path_id',None)
-            if not cat_path_id:
-                continue
+        score_list = []
+        index = 0 
+        for item in cats_info_list:
+            cat_path_id = item['cat_path_id']
             cat_id = cat_path_id.split(' ')[-1]
-            cats_list.append(cat_id)
-        return cats_list
+            '''处理连续2个词重复的逻辑'''
+            if cat_id not in cats_list:
+                cats_list.append(cat_id)
+                score_list.append(item['score'])
+            else:
+                all_cats_list.append(cats_list)
+                all_score_list.append(score_list)
+                cats_list = []
+                score_list = []
+                cats_list.append(cat_id)
+                score_list.append(item['score'])
+                if index == length-1 or cats_info_list[index]['bidword'] !=\
+                       cats_info_list[index+1]['bidword'] : 
+                    all_cats_list.append(cats_list)
+                    all_score_list.append(score_list)
+                    cats_list = []
+                    score_list = []
+                index = index +1
+                continue
+            if  index == length-1  or  cats_info_list[index]['bidword'] != \
+                    cats_info_list[index+1]['bidword']:
+                all_cats_list.append(cats_list)
+                all_score_list.append(score_list)
+                cats_list = []
+                score_list = []
+            index = index +1
+        return all_cats_list,all_score_list
             
     @classmethod
     def get_words_forecast_cats_info(cls,words_list):
-        cast_info_list = SimbaInsightCatsforecastnew.get_words_forecast_cats(words_list)
-        import pdb;pdb.set_trace()
+        cats_info_list = SimbaInsightCatsforecastnewGet.get_words_forecast_cats(words_list)
         cats_list = []
-        for item in cast_info_list:
+        for item in cats_info_list:
             cat_path_id = item.get('cat_path_id',None)
             cat_path_name = item.get('cat_path_name',None)
             if not cat_path_id or not cat_path_name:
@@ -69,9 +100,11 @@ class  SimbaInsightCatsforecastnew(object):
         return cats_list
 
 if __name__ == '__main__':
-    words_list = ["连衣裙"]
-    res =  SimbaInsightCatsforecastnew.get_words_forecast_cats_info(words_list) 
-    for item in res:
-        print item,item['cat_name']
-
+    words_list = [u'nt01pro',  u'u12s', u'u12s', u'b81l', u'连衣裙']
+    words_list = [u'nt01pro',  u'u12s', u'u12s', u'b81l']
+    words_list = [u'nt01pro']
+    res,res1 =  SimbaInsightCatsforecastnewGet.get_words_forecast_cats_list(words_list) 
+    for item in  res:
+        if  len(item) == 1 and  item[0]== u'':
+            print "no cat"
 
