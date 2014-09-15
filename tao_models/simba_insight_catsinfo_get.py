@@ -9,7 +9,7 @@
 @copyright: Copyright Maimiaotech.com
 
 """
-
+import math
 import sys
 import os
 import logging
@@ -41,8 +41,21 @@ class  SimbaInsightCatsinfoGet(object):
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.category_info_list)
+    
+    @classmethod
+    def get_all_cats_info(cls, cat_id_list=[]):
+        type = 2
+        if len(cat_id_list) == 0:
+            type = 0
+        first_cat_list = cls.get_cats_info(type, cat_id_list)
+        first_cat_ids = [cat['cat_id'] for cat in first_cat_list]
+        page_num = int(math.ceil(len(first_cat_ids) / 20.0))
+        for i in range(page_num):    
+            first_cat_list.extend(cls.get_all_cats_info(first_cat_ids[i*20: i*20+20]))
+
+        return first_cat_list
 
 if __name__ == '__main__':
-   cat_id_list = [50023582,50023591]
-   type =0 
-   print SimbaInsightCatsinfoGet.get_cats_info(type,cat_id_list)
+    cat_list = SimbaInsightCatsinfoGet.get_all_cats_info()
+    for cat in cat_list:
+        print '%d: %s' % (cat['cat_id'], cat['cat_name'])
