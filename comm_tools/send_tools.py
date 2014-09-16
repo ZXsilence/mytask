@@ -57,7 +57,6 @@ def send_email_with_text(addressee, text, subject):
         smtp.sendmail(msg['From'], to_list, msg.as_string())
     except Exception,e:
         print e
-        #logger.exception('send_email: %s' % (str(e)))
 
 def send_email_with_html(addressee, html, subject):
     """发送html email"""
@@ -75,7 +74,6 @@ def send_email_with_html(addressee, html, subject):
         smtp.login(msg['From'], DIRECTOR['SECRET'])
         smtp.sendmail(msg['From'], to_list, msg.as_string())
     except Exception,e:
-        #logger.exception('send_email: %s' % (str(e)))
         print e
 
 def send_email_with_file(addressee, text, subject, file_list):
@@ -104,7 +102,6 @@ def send_email_with_file(addressee, text, subject, file_list):
         smtp.login(msg['From'], DIRECTOR['SECRET']) 
         smtp.sendmail(msg['From'], addressee, msg.as_string())
     except Exception,e:
-        #logger.exception('send_email: %s' % (str(e)))
         print e
 
 def _toHex(str,charset):
@@ -218,7 +215,7 @@ def send_sms(cellphone, text, retry_times=3):
 if __name__ == '__main__':
     #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
-    print get_msg_report()['message']
+    print get_msg_report()
     print get_balance()
-    send_sms(DIRECTOR['PHONE'], '省油宝新评价:好评2')
+    #send_sms(DIRECTOR['PHONE'], '省油宝新评价:好评2')
     #send_sms(DIRECTOR['PHONE'], '测试短信2')
