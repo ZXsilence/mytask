@@ -129,7 +129,7 @@ def send_sms_old(cellphone, text, retry_times=3):
 
     retry_times -= 1
     if retry_times < 0:
-        #logger.error('send message to %s unsuccessfully'%(cellphone,))
+        logging.error('send message to %s unsuccessfully'%(cellphone,))
         print 'send message to %s unsuccessfully'%(cellphone,)
         return
     dict = {}
@@ -144,17 +144,17 @@ def send_sms_old(cellphone, text, retry_times=3):
         response = urllib2.urlopen(SEND_MSG_URL,url_params)
         dict = _parse_sms_response(response.read())
         if dict.get('mterrcode',None) != '000':
-            #logger.error('send message to %s unsuccessfully:response error'%(cellphone,))
-            #logger.error('error dict: %s' % (str(dict)))
+            logging.error('send message to %s unsuccessfully:response error'%(cellphone,))
+            logging.error('error dict: %s' % (str(dict)))
             print 'send message to %s unsuccessfully:response error'%(cellphone,)
             print 'error dict: %s' % (str(dict))
             send_sms_old(cellphone,text,retry_times)
     except urllib2.HTTPError,e:
-        #logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        logging.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
         print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
         send_sms_old(cellphone,text,retry_times)
     except Exception,e:
-        #logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
         print 'send message to %s unsuccessfully:server error'%(cellphone,)
         send_sms_old(cellphone,text,retry_times)
 
@@ -181,7 +181,7 @@ def send_sms(cellphone, text, retry_times=3):
 
     retry_times -= 1
     if retry_times < 0:
-        #logger.error('send message to %s unsuccessfully'%(cellphone,))
+        logging.error('send message to %s unsuccessfully'%(cellphone,))
         print 'send message to %s unsuccessfully'%(cellphone,)
         return
     if type(text) == type(u''):
@@ -201,15 +201,14 @@ def send_sms(cellphone, text, retry_times=3):
         response = urllib2.urlopen(SEND_MESSAGE_URL,url_params)
         dict = _parse_sms_response(response.read())
         if dict.get('result',None) != '0':
-            #logger.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
+            logging.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
             print 'send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict)
-            send_sms(cellphone,text,retry_times)
     except urllib2.HTTPError,e:
-        #logger.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
+        logging.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
         print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
         send_sms(cellphone,text,retry_times)
     except Exception,e:
-        #logger.error('send message to %s unsuccessfully:server error'%(cellphone,))
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
         print 'send message to %s unsuccessfully:server error'%(cellphone,)
         send_sms(cellphone,text,retry_times)
 if __name__ == '__main__':
