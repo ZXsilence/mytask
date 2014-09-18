@@ -124,7 +124,7 @@ def _parse_sms_response(message):
         dict[key_value[0]] = key_value[1]   
     return dict
 
-def send_sms_old(cellphone, text, retry_times=3):
+def send_sms(cellphone, text, retry_times=3):
     """发送短信"""
 
     retry_times -= 1
@@ -176,7 +176,7 @@ def get_msg_report():
         report.update(data)
     return report
 
-def send_sms(cellphone, text, retry_times=3):
+def send_sms_new(cellphone, text, retry_times=3):
     """发送短信"""
 
     retry_times -= 1
