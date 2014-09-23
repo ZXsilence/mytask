@@ -105,6 +105,7 @@ class AdgroupType(object):
 
     ADGROUP_NONSEARCH_CLOSE = 230
     ADGROUP_NONSEARCH_LOW_ROI = 231
+    ADGROUP_NONSEARCH_LOW_BID = 232
     
     ADGROUP_UNKNOW = 400
     ADGROUP_LOW_PV_UNKNOW = 401
@@ -131,6 +132,7 @@ class AdgroupType(object):
         HOT_ADGROUP_CLICK_OVER,
         ADGROUP_NONSEARCH_CLOSE,
         ADGROUP_NONSEARCH_LOW_ROI,
+        ADGROUP_NONSEARCH_LOW_BID,
         ADGROUP_UNKNOW,
         ADGROUP_LOW_PV_UNKNOW
         ]
@@ -198,6 +200,7 @@ CODE_TO_TYPE = {
         ,223:'HOT_ADGROUP_CLICK_OVER'
         ,230:'ADGROUP_NONSEARCH_CLOSE'
         ,231:'ADGROUP_NONSEARCH_LOW_ROI'
+        ,232:'ADGROUP_NONSEARCH_LOW_BID'
         ,400:'ADGROUP_UNKNOW'
         ,401:'ADGROUP_LOW_PV_UNKNOW'
         ,'None_11':'None->CAMPAIGN_GIVEUP'
@@ -262,7 +265,8 @@ CAMPAIGN_LOW_ROI_REASON = {
         ,CampaignType.CAMPAIGN_SCHEDULE_ROI_DIFF:"计划分时折扣设置不合理"
         ,CampaignType.CAMPAIGN_AREA_LOW_ROI:"计划地域设置不合理"
         
-        ,AdgroupType.ADGROUP_NONSEARCH_LOW_ROI:"推广组定向设置不合理"
+        ,AdgroupType.ADGROUP_NONSEARCH_LOW_ROI:"推广组定向出价不合理"
+        ,AdgroupType.ADGROUP_NONSEARCH_LOW_BID:"推广组定向出价过低"
         ,AdgroupType.ADGROUP_LOW_CVR:"宝贝转化率低"
         ,AdgroupType.ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH:"ROI低推广组点击不充分"
         ,AdgroupType.ADGROUP_LOW_ROI_OF_HIGH_CPC:"ROI低推广组CPC过高"
