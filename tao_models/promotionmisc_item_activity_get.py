@@ -35,10 +35,9 @@ class PromotionmiscItemActivityGet(object):
     
     @classmethod
     @tao_api_exception(10)
-    def get_promotionm_item_activity(cls,nick,activity_id):
+    def get_promotionm_item_activity(cls,nick,activity_id,soft_code = 'SYB'):
         req = PromotionmiscItemActivityGetRequest() 
         req.activity_id = activity_id
-        soft_code = 'SYB' 
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.item_promotion)
 

@@ -44,10 +44,10 @@ class PromotionmiscActivityRangeAdd(object):
         rsp = ApiService.execute(req,nick,soft_code)
 
     @classmethod
-    def add_promotionm_activity_items(cls,nick,activity_id,num_iid_list):
+    def add_promotionm_activity_items(cls,nick,activity_id,num_iid_list,soft_code = 'SYB'):
         total_pages = (len(num_iid_list) - 1)/cls.PAGE_SIZE + 1
         for page_no in range(total_pages):
-            cls.__add_promotionm_activity_items(nick,activity_id,num_iid_list[page_no*cls.PAGE_SIZE:(page_no+1)*cls.PAGE_SIZE])
+            cls.__add_promotionm_activity_items(nick,activity_id,num_iid_list[page_no*cls.PAGE_SIZE:(page_no+1)*cls.PAGE_SIZE],soft_code)
 
 if __name__ == "__main__":
     nick = "麦苗科技001"

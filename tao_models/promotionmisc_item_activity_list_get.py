@@ -37,20 +37,19 @@ class PromotionmiscItemActivityListGet(object):
 
     @classmethod
     @tao_api_exception(10)
-    def _get_promotion_list(cls, nick,page_no):
+    def _get_promotion_list(cls, nick,page_no,soft_code = 'SYB'):
         req = PromotionmiscItemActivityListGetRequest() 
         req.page_no = page_no
         req.page_size = cls.PAGE_SIZE
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.item_promotion_list)
 
     @classmethod
-    def get_item_promotion_list(cls,nick):
+    def get_item_promotion_list(cls,nick,soft_code = 'SYB'):
         data = []
         page_no = 1
         while True:
-            l = PromotionmiscItemActivityListGet._get_promotion_list(nick,page_no)
+            l = PromotionmiscItemActivityListGet._get_promotion_list(nick,page_no,soft_code)
             page_no += 1
             data.extend(l)
             if len(l) < cls.PAGE_SIZE:

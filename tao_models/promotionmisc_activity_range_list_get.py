@@ -37,10 +37,9 @@ class PromotionmiscActivityRangeListGet(object):
 
     @classmethod
     @tao_api_exception(10)
-    def get_promotionm_activity_range(cls,nick,activity_id):
+    def get_promotionm_activity_range(cls,nick,activity_id,soft_code = 'SYB'):
         req = PromotionmiscActivityRangeListGetRequest() 
         req.activity_id = activity_id
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.promotion_range_list)
 

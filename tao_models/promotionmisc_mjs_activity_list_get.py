@@ -37,7 +37,7 @@ class PromotionmiscMjsActivityListGet(object):
 
     @classmethod
     @tao_api_exception(10)
-    def _get_promotion_list(cls, nick,page_no,type):
+    def _get_promotion_list(cls, nick,page_no,type,soft_code = 'SYB'):
         req = PromotionmiscMjsActivityListGetRequest() 
         req.activity_type  = type
         req.page_no = page_no
@@ -47,11 +47,11 @@ class PromotionmiscMjsActivityListGet(object):
         return change_obj_to_dict_deeply(rsp.mjs_promotion_list)
 
     @classmethod
-    def _get_promotion_list_by_type(cls,nick,type):
+    def _get_promotion_list_by_type(cls,nick,type,soft_code):
         data = []
         page_no = 1
         while True:
-            l = PromotionmiscMjsActivityListGet._get_promotion_list(nick,page_no,type)
+            l = PromotionmiscMjsActivityListGet._get_promotion_list(nick,page_no,type,soft_code)
             page_no += 1
             data.extend(l)
             if len(l) < cls.PAGE_SIZE:
@@ -59,16 +59,16 @@ class PromotionmiscMjsActivityListGet(object):
         return change_obj_to_dict_deeply(data)
 
     @classmethod
-    def get_mjs_promotion_list(cls,nick,type = 'all'):
+    def get_mjs_promotion_list(cls,nick,type = 'all',soft_code = 'SYB'):
         if type == 'all':
             data = []
-            item_promotion_list = cls._get_promotion_list_by_type(nick,1)
-            shop_promotion_list = cls._get_promotion_list_by_type(nick,2)
+            item_promotion_list = cls._get_promotion_list_by_type(nick,1,soft_code)
+            shop_promotion_list = cls._get_promotion_list_by_type(nick,2,soft_code)
             data.extend(shop_promotion_list)
             data.extend(item_promotion_list)
             return  data
         else:
-            return cls._get_promotion_list_by_type(nick,1)
+            return cls._get_promotion_list_by_type(nick,1,soft_code)
 
 if __name__ == "__main__":
     nick = "麦苗科技001"
