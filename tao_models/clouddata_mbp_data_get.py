@@ -94,12 +94,29 @@ class ClouddataMbpDataGet(object):
         edate_str = edate.strftime("%Y%m%d")
         parameter = "auction_id="+str(auction_id)+",sdate="+sdate_str+",edate="+edate_str
         req = ClouddataMbpDataGetRequest() 
-        req.sid = sid
         req.sql_id = sql_id
         req.parameter = parameter
         rsp = ApiService.execute(req)
         return cls._decode_clouddata(rsp)
     
+    @classmethod
+    @tao_api_exception()
+    def get_shop_list_append(cls, thedate):
+        """获取省油宝thedate新增店铺"""
+        
+        sql_id = 3473
+        dt = thedate.strftime("%Y%m%d")
+        parameter = "dt="+str(dt)
+        req = ClouddataMbpDataGetRequest() 
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+
+        shop_list = cls._decode_clouddata(rsp)
+        for shop in shop_list:
+            print shop['shop_id']
+        return cls._decode_clouddata(rsp)
+
     @classmethod
     def get_items_rpt_by_sid(cls, sid, sdate, edate):
         """获取店铺商品基本报表数据"""
