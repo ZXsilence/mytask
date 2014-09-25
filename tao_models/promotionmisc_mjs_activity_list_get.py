@@ -42,7 +42,6 @@ class PromotionmiscMjsActivityListGet(object):
         req.activity_type  = type
         req.page_no = page_no
         req.page_size = cls.PAGE_SIZE
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.mjs_promotion_list)
 
