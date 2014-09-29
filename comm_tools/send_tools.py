@@ -124,7 +124,7 @@ def _parse_sms_response(message):
         dict[key_value[0]] = key_value[1]   
     return dict
 
-def send_sms(cellphone, text, retry_times=3):
+def send_sms_old(cellphone, text, retry_times=3):
     """发送短信"""
 
     retry_times -= 1
@@ -176,7 +176,7 @@ def get_msg_report():
         report.update(data)
     return report
 
-def send_sms_new(cellphone, text, retry_times=3):
+def send_sms(cellphone, text, retry_times=3):
     """发送短信"""
 
     retry_times -= 1
@@ -217,4 +217,4 @@ if __name__ == '__main__':
     print get_msg_report()
     print get_balance()
     #send_sms(DIRECTOR['PHONE'], '省油宝新评价:好评2')
-    #send_sms(DIRECTOR['PHONE'], '测试短信2')
+    #send_sms(DIRECTOR['PHONE'], '尊敬的客户你好！您的省油宝长期未登陆导致不能正常优化,请您及时登陆省油宝,方便我们进行优化!')
