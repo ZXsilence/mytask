@@ -101,6 +101,17 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     @tao_api_exception()
+    def _get_data_list4(cls,auction_id,sql_id,thedate):
+        date_str = thedate.strftime("%Y%m%d")
+        parameter = "auction_id="+str(auction_id)+",dt="+date_str+",thedate="+date_str
+        req = ClouddataMbpDataGetRequest() 
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
     def get_shop_list_append(cls, thedate):
         """获取省油宝thedate新增店铺"""
         
@@ -139,6 +150,13 @@ class ClouddataMbpDataGet(object):
         rpt_list = cls._get_data_list3(item_id, sql_id, sdate, edate)
         return rpt_list
     
+    @classmethod
+    def get_item_rpt_sum(cls, item_id):
+        sql_id = '5678'
+        thedate = datetime.datetime.now() - datetime.timedelta(days=1)
+        rpt_list = cls._get_data_list4(item_id, sql_id, thedate)
+        return rpt_list
+
     @classmethod
     def get_items_page_pc_rpt_by_sid(cls, sid, sdate, edate):
         """获取店铺商品页面pc报表数据"""
@@ -246,3 +264,6 @@ if __name__ == '__main__':
         #item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
         #print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
     print sum_dict
+
+    rpt_list = ClouddataMbpDataGet.get_item_rpt_sum(item_id)
+    print rpt_list[0]
