@@ -17,6 +17,7 @@ from TaobaoSdk import SimbaAdgroupsbycampaignidGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException 
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,12 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.page_no = 1
 
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
+                return adgroup_list
+            raise e
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
         if not rsp.adgroups.total_item:
             logger.debug("no adgroup in campaign:%i"%(campaign_id))
@@ -69,7 +75,13 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.campaign_id = campaign_id
         req.page_no = 1 
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        #rsp = ApiService.execute(req,nick,soft_code)
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
+                return 0
+            raise e
         total_item = rsp.adgroups.total_item
         if not total_item:
             return 0
@@ -85,7 +97,13 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.campaign_id = campaign_id
         req.page_no = 1
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        #rsp = ApiService.execute(req,nick,soft_code)
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
+                return adgroup_list
+            raise e
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
         if not rsp.adgroups.total_item:
             logger.debug("no adgroup in campaign:%i"%(campaign_id))
@@ -110,8 +128,10 @@ class SimbaAdgroupsbycampaignidGet(object):
 
 
 def test():
-    nick = 'chinchinstyle'
-    campaign_id = 3367690 
+    nick = '美之雅家具'
+    campaign_id =3075359 
+    #nick = 'chinchinstyle'
+    #campaign_id = 3328400
     adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
     for adgroup in adgroups:
         print adgroup
