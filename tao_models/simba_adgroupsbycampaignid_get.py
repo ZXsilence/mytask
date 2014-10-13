@@ -102,7 +102,7 @@ class SimbaAdgroupsbycampaignidGet(object):
             rsp = ApiService.execute(req,nick,soft_code)
         except ErrorResponseException,e:
             if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
-                return adgroup_list
+                return {'total_item':0, 'adgroup_list':adgroup_list}
             raise e
         logger.debug("[%s] adgroups in campaign_id [%s]"%(rsp.adgroups.total_item,campaign_id))
         if not rsp.adgroups.total_item:
