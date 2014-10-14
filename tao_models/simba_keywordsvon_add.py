@@ -74,7 +74,7 @@ class SimbaKeywordsvonAdd(object):
                     if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
                         return []
                     if rsp.code == 15 and  rsp.sub_msg == u"bidwordList size must in [1,200] , actual is 0":
-                        return  [] 
+                        return  change_obj_to_dict_deeply(keywords) 
                     raise e
             keywords.extend(rsp.keywords) 
         return change_obj_to_dict_deeply(keywords)
