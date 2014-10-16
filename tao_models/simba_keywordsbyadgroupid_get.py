@@ -18,6 +18,7 @@ from TaobaoSdk import SimbaKeywordsbyadgroupidGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException 
 
 logger = logging.getLogger(__name__)
 
@@ -33,13 +34,20 @@ class SimbaKeywordsbyadgroupidGet(object):
         req.nick = nick
         req.adgroup_id = adgroup_id
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        #rsp = ApiService.execute(req,nick,soft_code)
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            if e.sub_code == '205_E_PARAMETER_LIST_OUT_OF_BOUND' and e.sub_msg and 'idList expect' in e.sub_msg:
+                return [] 
+            raise e
         return change_obj_to_dict_deeply(rsp.keywords)
 
 
 def test():
-    nick = 'chinchinstyle'
-    adgroup_id = 169462953 
+    nick = '小新在线1992'
+    adgroup_id = 447310159
+    #adgroup_id = 429010771
     keywords = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup_id)
     for keyword in keywords:
         print keyword
