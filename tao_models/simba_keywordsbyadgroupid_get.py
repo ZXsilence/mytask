@@ -41,12 +41,14 @@ class SimbaKeywordsbyadgroupidGet(object):
             if e.sub_code == '205_E_PARAMETER_LIST_OUT_OF_BOUND' and e.sub_msg and 'idList expect' in e.sub_msg:
                 return [] 
             raise e
+        if not rsp.keywords:
+            return []
         return change_obj_to_dict_deeply(rsp.keywords)
 
 
 def test():
-    nick = '小新在线1992'
-    adgroup_id = 447310159
+    nick = '骏淘阁'
+    adgroup_id = 448850394 
     #adgroup_id = 429010771
     keywords = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup_id)
     for keyword in keywords:
