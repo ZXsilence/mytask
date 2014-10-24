@@ -43,7 +43,7 @@ class TaoOpenErrorCode(object):
 
 
 DEBUG_MODE=False
-def tao_api_exception(MAX_RETRY_TIMES = 10):
+def tao_api_exception(MAX_RETRY_TIMES = 6):
     def _wrapper_func(func):
         """
         decorator to catch and handle taobao open api exception in a uniform way.
