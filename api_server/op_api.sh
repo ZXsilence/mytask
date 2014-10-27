@@ -1,10 +1,11 @@
 #!/bin/bash
 function useage(){
-    echo 'sh op_api.sh check         查看api server进程总数'     
-    echo 'sh op_api.sh stop          停止api server服务'     
-    echo 'sh op_api.sh start         启动api server服务'     
-    echo 'sh op_api.sh restart       重启api server服务'     
-    echo 'sh op_api.sh build         代码更新并重启api server服务'     
+    echo 'useage:'
+    echo '               sh op_api.sh check         查看api server进程总数'     
+    echo '               sh op_api.sh stop          停止api server服务'     
+    echo '               sh op_api.sh start         启动api server服务'     
+    echo '               sh op_api.sh restart       重启api server服务'     
+    echo '               sh op_api.sh rebuild       代码更新并重启api server服务'     
 }
 
 function stop_api(){
@@ -44,7 +45,7 @@ function restart_api(){
     start_api
 }
 
-function build_api(){
+function rebuild_api(){
     cd ~ && sh update.sh
     restart_api
 }
@@ -59,8 +60,8 @@ elif [ $1_ == 'start_' ] ; then
     start_api
 elif [ $1_ == 'restart_' ] ; then
     restart_api
-elif [ $1_ == 'build_' ] ; then
-    build_api
+elif [ $1_ == 'rebuild_' ] ; then
+    rebuild_api
 else
     useage
 fi
