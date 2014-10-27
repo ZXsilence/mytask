@@ -98,7 +98,7 @@ def mysql_exception(func):
             except OperationalError, e:
                 code = e.args[0]
                 retry_times += 1
-                if int(code) == 1213:
+                if int(code) in [1213,2013]:
                     if retry_times > 3:
                         logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
                         raise e
