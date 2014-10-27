@@ -71,9 +71,11 @@ class SimbaKeywordsvonAdd(object):
                         return change_obj_to_dict_deeply(keywords)
                     if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
                         return []
-                    if rsp.code == 15 and rsp.sub_msg and  u'非法词或与已有的关键词重复' in rsp.sub_msg:
+                    if rsp.code == 15 and rsp.sub_msg and u'非法词或与已有的关键词重复' in rsp.sub_msg:
                         return []
                     if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
+                        return []
+                    if rsp.code == 15 and rsp.sub_msg == u'推广组未找到':
                         return []
                     if rsp.code == 15 and  rsp.sub_msg == u"bidwordList size must in [1,200] , actual is 0":
                         return  change_obj_to_dict_deeply(keywords) 
@@ -83,7 +85,7 @@ class SimbaKeywordsvonAdd(object):
 
 
 def test():
-    nick = '萌娃潮妞'
+    nick = '麦苗科技001'
     adgroup_id =  446826939 
     word_price_list = [('test', 250), ('test1', 168)]
     print SimbaKeywordsvonAdd.add_keywords(nick, adgroup_id, word_price_list)
