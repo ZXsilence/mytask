@@ -182,10 +182,10 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
-                        if e.sub_code.startswith('isv'):
+                        if e.sub_code and e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
                             raise
-                        elif e.sub_code == "6001":
+                        elif e.sub_code and e.sub_code == "6001":
                             #user not exist
                             raise
                         else:
