@@ -31,11 +31,11 @@ class SimbaCreativeDelete(object):
         req.creative_id = creative_id 
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.balance)
+        return change_obj_to_dict_deeply(rsp.creative)
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    creative_id = 174804004 
+    nick = '麦苗科技001'
+    creative_id = 496515057 
     SimbaCreativeDelete.delete_creative(nick,creative_id) 
 
 

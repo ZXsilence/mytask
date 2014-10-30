@@ -5,12 +5,32 @@ import datetime
 
 class Keyword(object):
     __slots__ = ['data']
+    fields = [
+         "keyword_id",
+        "adgroup_id",
+        "campaign_id",
+        "sid",
+        "nick",
+        "word",
+        "audit_status",
+        "qscore",
+        "rele_score",
+        "cvr_score",
+        "cust_score",
+        "creative_score",
+        "match_scope",
+        "max_price",
+        "is_default_price",
+        "is_garbage",
+        "create_time"
+    ]
 
     def __init__(self, kwd_data):
         self.data = kwd_data
 
     def update(self,keyword):
-        for field in dir(self):
+        data_list = list(self.data)
+        for  field  in  self.fields:
             if field.startswith('__'):
                 continue
             if not keyword.has_key(field):
@@ -18,10 +38,13 @@ class Keyword(object):
             if not keyword[field]:
                 continue
             index = self.__get_index_by_field(field)
-            self.data[index] = keyword[field]
+            data_list[index] = keyword[field] 
+        self.data = tuple(data_list) 
 
-    def has_key(self):
-        pass
+    def has_key(self,key):
+        if  key in self.fields:
+            return True
+        return False
 
     def get(self,key,value):
         index = self.__get_index_by_field(key)
@@ -96,6 +119,5 @@ class Keyword(object):
 
 if __name__== '__main__':
     keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_pass', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))
-    print keyword['word']
-    print keyword['audit_status']
+    print  keyword.has_key("keyword_id")
 
