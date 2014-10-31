@@ -33,10 +33,12 @@ class SimbaKeywordsQscoreGet(object):
         req.adgroup_id = adgroup_id
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
+        if not rsp.keyword_qscore_list:
+            return []
         return change_obj_to_dict_deeply(rsp.keyword_qscore_list)
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    adgroup_id = 336844923
+    nick = '小新在线1992'
+    adgroup_id = 447310159 
     print SimbaKeywordsQscoreGet.get_keywords_qscore(nick,adgroup_id)
 

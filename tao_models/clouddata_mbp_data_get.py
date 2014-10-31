@@ -31,7 +31,6 @@ import datetime
 import simplejson as json
 class ClouddataMbpDataGet(object):
     
-
     @classmethod
     def _decode_clouddata(cls,rsp):
         
@@ -62,7 +61,6 @@ class ClouddataMbpDataGet(object):
     @classmethod
     @tao_api_exception()
     def _get_data_list(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000):
-        print sql_id
         n = datetime.datetime.now()
         dt = n-datetime.timedelta(days=1)
         dt_str = dt.strftime("%Y%m%d")
@@ -75,6 +73,111 @@ class ClouddataMbpDataGet(object):
         req.parameter = parameter
         rsp = ApiService.execute(req)
         return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
+    def _get_data_list2(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        req = ClouddataMbpDataGetRequest() 
+        req.sid = sid
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+
+    @classmethod
+    @tao_api_exception()
+    def _get_data_list3(cls,auction_id,sql_id,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        parameter = "auction_id="+str(auction_id)+",sdate="+sdate_str+",edate="+edate_str
+        req = ClouddataMbpDataGetRequest() 
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
+    def _get_data_list4(cls,auction_id,sql_id,thedate):
+        date_str = thedate.strftime("%Y%m%d")
+        parameter = "auction_id="+str(auction_id)+",dt="+date_str+",thedate="+date_str
+        req = ClouddataMbpDataGetRequest() 
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
+    def get_shop_list_append(cls, thedate):
+        """获取省油宝thedate新增店铺"""
+        
+        sql_id = 3473
+        dt = thedate.strftime("%Y%m%d")
+        parameter = "dt="+str(dt)
+        req = ClouddataMbpDataGetRequest() 
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+
+        shop_list = cls._decode_clouddata(rsp)
+        for shop in shop_list:
+            print shop['shop_id']
+        return cls._decode_clouddata(rsp)
+
+    @classmethod
+    def get_items_rpt_by_sid(cls, sid, sdate, edate):
+        """获取店铺商品基本报表数据"""
+        rpt_list = []
+        sql_id = '5569'
+        limit = 5000
+        offset = 0
+        while True:
+            rpt_sub_list = cls._get_data_list2(sid, sql_id, sdate, edate, offset, limit)
+            rpt_list.extend(rpt_sub_list)
+            if len(rpt_sub_list) < limit:
+                break
+            offset = offset + limit
+        return rpt_list
+    
+    @classmethod
+    def get_item_rpt(cls, item_id, sdate, edate):
+        """获取商品基本报表数据"""
+        sql_id = '5568'
+        rpt_list = cls._get_data_list3(item_id, sql_id, sdate, edate)
+        return rpt_list
+    
+    @classmethod
+    def get_item_rpt_sum(cls, item_id):
+        sql_id = '5678'
+        thedate = datetime.datetime.now() - datetime.timedelta(days=1)
+        rpt_list = cls._get_data_list4(item_id, sql_id, thedate)
+        return rpt_list
+
+    @classmethod
+    def get_items_page_pc_rpt_by_sid(cls, sid, sdate, edate):
+        """获取店铺商品页面pc报表数据"""
+        rpt_list = []
+        sql_id = '5570'
+        limit = 5000
+        offset = 0
+        while True:
+            rpt_sub_list = cls._get_data_list2(sid, sql_id, sdate, edate, offset, limit)
+            rpt_list.extend(rpt_sub_list)
+            if len(rpt_sub_list) < limit:
+                break
+            offset = offset + limit
+        return rpt_list
+    
+    @classmethod
+    def get_item_page_pc_rpt(cls, item_id, sdate, edate):
+        """获取商品页面pc报表数据"""
+        sql_id = '5561'
+        rpt_list = cls._get_data_list3(item_id, sql_id, sdate, edate)
+        return rpt_list
 
     '''有点击词'''
     @classmethod
@@ -122,12 +225,45 @@ class ClouddataMbpDataGet(object):
         rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
         return rpt_list
 
-
-
+    @classmethod
+    def get_shop_plot_data(cls,sid,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '5179'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
 
 if __name__ == '__main__':
-    sid = 108773362
+    sid = int(sys.argv[1])
+    item_id = int(sys.argv[2])
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = edate - datetime.timedelta(days=30)
-    rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
+    sdate = edate - datetime.timedelta(days=29)
+    rpt_list = ClouddataMbpDataGet.get_item_rpt(item_id,sdate,edate)
+    #rpt_list = ClouddataMbpDataGet.get_item_page_pc_rpt(item_id,sdate,edate)
+
     print len(rpt_list)
+    sum_dict = {}
+
+    #for key in ['ipv', 'iuv', 'page_duration', 'bounce_cnt', 'landing_cnt', 'landing_uv', 'exit_cnt']:
+    for key in ['ipv', 'alipay_auction_num', 'iuv', 'bounce_rate']:
+        sum_dict[key] = 0
+    
+    #print 'date page_duration iuv ipv bounce_cnt landing_cnt landing_uv exit_cnt'
+    for item in rpt_list:
+        for key in sum_dict.keys():
+            sum_dict[key] += float(item[key])
+        #item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
+        #print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
+    print sum_dict
+
+    rpt_list = ClouddataMbpDataGet.get_item_rpt_sum(item_id)
+    print rpt_list[0]

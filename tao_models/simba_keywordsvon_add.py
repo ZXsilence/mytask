@@ -57,7 +57,6 @@ class SimbaKeywordsvonAdd(object):
         package_num = len(word_price_dict_list)/size + 1
         if len(word_price_dict_list) % size== 0:
             package_num -= 1
-
         for i in range(package_num):
             keyword_prices_str = json.dumps(word_price_dict_list[i*size:(i+1)*size])
             req.keyword_prices = keyword_prices_str 
@@ -72,16 +71,22 @@ class SimbaKeywordsvonAdd(object):
                         return change_obj_to_dict_deeply(keywords)
                     if rsp.code == 15 and rsp.sub_msg == u'没有有效关键词可增加， 输入的关键词和已有出现重复':
                         return []
+                    if rsp.code == 15 and rsp.sub_msg and u'非法词或与已有的关键词重复' in rsp.sub_msg:
+                        return []
                     if rsp.code == 15 and rsp.sub_msg == u'指定的推广组不存在':
                         return []
+                    if rsp.code == 15 and rsp.sub_msg == u'推广组未找到':
+                        return []
+                    if rsp.code == 15 and  rsp.sub_msg == u"bidwordList size must in [1,200] , actual is 0":
+                        return  change_obj_to_dict_deeply(keywords) 
                     raise e
             keywords.extend(rsp.keywords) 
         return change_obj_to_dict_deeply(keywords)
 
 
 def test():
-    nick = 'chinchinstyle'
-    adgroup_id = 336844923
+    nick = '麦苗科技001'
+    adgroup_id =  446826939 
     word_price_list = [('test', 250), ('test1', 168)]
     print SimbaKeywordsvonAdd.add_keywords(nick, adgroup_id, word_price_list)
 

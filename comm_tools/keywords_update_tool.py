@@ -13,7 +13,7 @@ import os
 import datetime
 
 from keyword_db.services.keyword_db_service import KeywordDBService
-from shengyb.db_models.keywords_deleted import KeywordsDeleted 
+from busi_service.db_models.keywords_deleted import KeywordsDeleted 
 from tao_models.simba_keywords_delete import SimbaKeywordsDelete
 from tao_models.simba_keywordsvon_add import SimbaKeywordsvonAdd
 from tao_models.simba_keywords_pricevon_set import SimbaKeywordsPricevonSet

@@ -14,8 +14,8 @@ RDS1 = {
                  'crm','dbtest','items','keywords',\
                  'longtail','mobileapp','mysql','performance',\
                  'qianniu','shop_info','syb_comm_info',\
-                 'syb_web','syb_webpage' ,'sys_info','taoci'\
-                 ,'xiangqing','xuanciw','syb_layer'
+                 'syb_web','busi','syb_webpage' ,'sys_info','taoci'\
+                 ,'xiangqing','xuanciw','syb_layer','rpt_cache'
                  ]
         }
 
@@ -29,6 +29,6 @@ RDS2 = {
                  }
              ,
          'db_list':[
-              'keywords_deleted','access_records','dbtest'
+              'keywords_deleted','access_records','dbtest','rpt_all','operation_log'
              ]
         }
