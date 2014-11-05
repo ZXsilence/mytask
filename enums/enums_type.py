@@ -359,7 +359,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PERCENT : "关键词在计划中相对表现较差，已经删除"
     , OperationType.DELETE_LOW_CLICK_OLD : "关键词最近一段时间点击量过低，已经删除"
-    , OperationType.DELETE_IS_GARBAGE : "关键词被淘宝判断为垃圾词，已经删除"
+    , OperationType.DELETE_IS_GARBAGE : "关键词15天展现为0，已经删除"
     , OperationType.DELETE_USER_DELETE : "关键词被用户手工删除"
     , OperationType.DELETE_USER_DELETE_TAOBAO : "关键词被用户在直通车手工删除"
     , OperationType.DELETE_GARBAGE_MAX_PRICE : "7天无展现关键词，已经删除"
@@ -400,7 +400,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好排名'
     , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好排名'
     , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划通过加价增加流量'
-    , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划通过减价较少流量'
+    , OperationType.UPDATE_PRICE_HOT_DECRE_CLICK_DECRE_PRICE : '测款计划通过减价减少流量'
     , OperationType.UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE : '测款计划花费接近预算上限,关键词减价'
     , OperationType.UPDATE_PRICE_USER_EXPECT_INCRE_PRICE:'用户意图加大流量，关键词加价'
     , OperationType.UPDATE_PRICE_USER_EXPECT_DECRE_PRICE:'用户意图减小流量，关键词减价'
