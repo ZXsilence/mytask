@@ -92,6 +92,7 @@ class AdgroupType(object):
     ADGROUP_LOW_TRAFFIC = 25
     ADGROUP_LOW_CVR = 26                           
     ADGROUP_LACK_INFO = 27
+    ADGROUP_HIGH_DISCOUNT = 28
 
     ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH = 201
     ADGROUP_LOW_ROI_OF_HIGH_CPC = 202
@@ -124,6 +125,7 @@ class AdgroupType(object):
         ADGROUP_LOW_TRAFFIC,
         ADGROUP_LOW_CVR,                           
         ADGROUP_LACK_INFO,
+        ADGROUP_HIGH_DISCOUNT,
         ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH,
         ADGROUP_LOW_ROI_OF_HIGH_CPC,
         ADGROUP_LOW_RELATIVE_SCORE,
@@ -152,6 +154,7 @@ class AdgroupType(object):
         ADGROUP_LOW_TRAFFIC,
         ADGROUP_LOW_CVR,                           
         ADGROUP_LACK_INFO,
+        ADGROUP_HIGH_DISCOUNT,
         ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH,
         ADGROUP_LOW_ROI_OF_HIGH_CPC,
         ADGROUP_LOW_RELATIVE_SCORE,
@@ -196,6 +199,7 @@ CODE_TO_TYPE = {
         ,25:'ADGROUP_LOW_TRAFFIC'
         ,26:'ADGROUP_LOW_CVR'
         ,27:'ADGROUP_LACK_INFO'
+        ,28:'ADGROUP_HIGH_DISCOUNT'
         ,201:'ADGROUP_LOW_ROI_CLICK_NOT_ENOUGH'
         ,202:'ADGROUP_LOW_ROI_OF_HIGH_CPC'
         ,210:'ADGROUP_LOW_RELATIVE_SCORE'
