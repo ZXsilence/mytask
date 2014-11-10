@@ -182,6 +182,8 @@ class ClouddataMbpDataGet(object):
     '''有点击词'''
     @classmethod
     def get_query_rpt(cls,sid,sdate,edate):
+        return []
+
         rpt_list = []
         limit = 5000
         offset = 0
