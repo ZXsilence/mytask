@@ -205,6 +205,16 @@ class ClouddataMbpDataGet(object):
         sdate = edate - datetime.timedelta(days=90)
         sql_id = '3378'
         rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
+        keyword_dict = {}
+        rpt_keys = ['impression', 'alipay_trade_num', 'uv', 'alipay_winner_num', 'alipay_trade_amt', 'alipay_auction_num', 'click']
+        for keyword in rpt_list:
+            if keyword_dict.has_key(keyword['query']):
+                for key in rpt_keys:
+                    keyword_dict[keyword['query']][key] = keyword.get(key, 0)
+            else:
+                keyword_dict[keyword['query']] = keyword
+        
+        rpt_list = keyword_dict.values()
         return rpt_list
 
     @classmethod
@@ -244,6 +254,11 @@ class ClouddataMbpDataGet(object):
 
 if __name__ == '__main__':
     sid = int(sys.argv[1])
+    query_list = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    for query in query_list:
+        print query['query']
+    
+    exit(0)
     item_id = int(sys.argv[2])
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
     sdate = edate - datetime.timedelta(days=29)
