@@ -182,8 +182,6 @@ class ClouddataMbpDataGet(object):
     '''有点击词'''
     @classmethod
     def get_query_rpt(cls,sid,sdate,edate):
-        return []
-
         rpt_list = []
         limit = 5000
         offset = 0
@@ -205,9 +203,21 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         edate = datetime.datetime.now() - datetime.timedelta(days=1)
         sdate = edate - datetime.timedelta(days=90)
-        sql_id = '3378'
-        rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
+        sql_id = '6327'
+        limit = 5000
+        offset = 0
+        rpt_list = []
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                break
         keyword_dict = {}
+        
         rpt_keys = ['impression', 'alipay_trade_num', 'uv', 'alipay_winner_num', 'alipay_trade_amt', 'alipay_auction_num', 'click']
         for keyword in rpt_list:
             if keyword_dict.has_key(keyword['query']):
@@ -257,9 +267,10 @@ class ClouddataMbpDataGet(object):
 if __name__ == '__main__':
     sid = int(sys.argv[1])
     query_list = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    print len(query_list)
     for query in query_list:
         print query['query']
-    
+        break 
     exit(0)
     item_id = int(sys.argv[2])
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
