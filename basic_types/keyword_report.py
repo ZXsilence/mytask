@@ -65,7 +65,10 @@ class KeywordReportUnit(object):
                , "paycount"
                , "favitemcount"
                , "favshopcount"
-               , "favcount"
+               , "fav"
+                ,"roi"
+                ,"cpc"
+                ,"ctr"
                ]
         if key == 'keyword_id':
             key = 'keywordid'
