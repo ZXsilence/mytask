@@ -18,8 +18,11 @@ RDS1 = {
                  'rpt_campaigneffect','rpt_custbase','shop_info',\
                  'strategy','syb_common_info','taoci','test','busi',\
                  'xiangqing','xuanciw','syb_web','keywords_deleted',\
-                 'syb_layer','rpt_all','rpt_cache','operation_log']
+                 'syb_layer','rpt_all','rpt_cache','operation_log',\
+                 'queryall','queryqueue','item_query_rpt']
         }
 
 #rds2实例连接池配置
 RDS2 = RDS1
+#rds3实例连接池配置
+RDS3 = RDS1 
