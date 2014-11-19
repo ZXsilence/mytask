@@ -203,7 +203,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         edate = datetime.datetime.now() - datetime.timedelta(days=1)
         sdate = edate - datetime.timedelta(days=90)
-        sql_id = '6327'
+        sql_id = '6367'
         limit = 5000
         offset = 0
         rpt_list = []
@@ -234,7 +234,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         edate = datetime.datetime.now() - datetime.timedelta(days=1)
         sdate = edate - datetime.timedelta(days=30)
-        sql_id = '3971'
+        sql_id = '6366'
         rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
         return rpt_list
     
@@ -266,32 +266,7 @@ class ClouddataMbpDataGet(object):
 
 if __name__ == '__main__':
     sid = int(sys.argv[1])
-    query_list = ClouddataMbpDataGet.get_query_list_by_sid(sid)
-    print len(query_list)
-    for query in query_list:
-        print query['query']
-        break 
-    exit(0)
-    item_id = int(sys.argv[2])
-    edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = edate - datetime.timedelta(days=29)
-    rpt_list = ClouddataMbpDataGet.get_item_rpt(item_id,sdate,edate)
-    #rpt_list = ClouddataMbpDataGet.get_item_page_pc_rpt(item_id,sdate,edate)
-
-    print len(rpt_list)
-    sum_dict = {}
-
-    #for key in ['ipv', 'iuv', 'page_duration', 'bounce_cnt', 'landing_cnt', 'landing_uv', 'exit_cnt']:
-    for key in ['ipv', 'alipay_auction_num', 'iuv', 'bounce_rate']:
-        sum_dict[key] = 0
-    
-    #print 'date page_duration iuv ipv bounce_cnt landing_cnt landing_uv exit_cnt'
-    for item in rpt_list:
-        for key in sum_dict.keys():
-            sum_dict[key] += float(item[key])
-        #item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
-        #print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
-    print sum_dict
-
-    rpt_list = ClouddataMbpDataGet.get_item_rpt_sum(item_id)
-    print rpt_list[0]
+    #res = ClouddataMbpDataGet.get_shop_rpt_hour_30d(sid,0,5000)
+    res = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    for item in res:
+        print item
