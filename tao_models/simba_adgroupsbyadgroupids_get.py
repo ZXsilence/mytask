@@ -41,7 +41,6 @@ class SimbaAdgroupsbyadgroupidsGet(object):
             req.adgroup_ids = ",".join([str(k) for k in sub_adgroup_id_list])
             logger.debug("get adgroup info adgroup_length:%s nick:%s"%(len(sub_adgroup_id_list), nick))
             soft_code = None
-            import pdb;pdb.set_trace()
             rsp = ApiService.execute(req,nick,soft_code)
             result_adgroup_list = rsp.adgroups.adgroup_list
             for adgroup_object in result_adgroup_list:
