@@ -7,7 +7,43 @@ class KeywordReportUnit(object):
 
     def __init__(self, data):
         self.data = data
+    
+    def get(self, key, value):
+        keys = ["nick"
+               , "keywordid"
+               , "keywordstr"
+               , "adgroup_id"
+               , "campaign_id"
+               , "searchtype"
+               , "source"
+               , "date"
+               , "impressions"
+               , "click"
+               , "cost"
+               , "avgpos"
+               , "directpay"
+               , "indirectpay"
+               , "pay"
+               , "directpaycount"
+               , "indirectpaycount"
+               , "paycount"
+               , "favitemcount"
+               , "favshopcount"
+               , "fav"
+                ,"roi"
+                ,"cpc"
+                ,"ctr"
+               ] 
+        if key == 'keyword_id':
+            key = 'keywordid'
+        i = 0
+        for k in keys:
+            if k == key:
+                return self.data[i]
+            i += 1
+        return value
 
+    
     def __getitem__(self, key):
         keys = ["nick"
                , "keywordid"
@@ -29,8 +65,13 @@ class KeywordReportUnit(object):
                , "paycount"
                , "favitemcount"
                , "favshopcount"
-               , "favcount"
+               , "fav"
+                ,"roi"
+                ,"cpc"
+                ,"ctr"
                ]
+        if key == 'keyword_id':
+            key = 'keywordid'
         i = 0
         for k in keys:
             if k == key:

@@ -112,6 +112,18 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     @tao_api_exception()
+    def _get_data_list5(cls,sid,sql_id,thedate,sub_offset=0,sub_limit=5000):
+        date_str = thedate.strftime("%Y%m%d")
+        parameter = "shop_id="+str(sid)+",thedate="+date_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        req = ClouddataMbpDataGetRequest() 
+        req.sid = sid
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+
+    @classmethod
+    @tao_api_exception()
     def get_shop_list_append(cls, thedate):
         """获取省油宝thedate新增店铺"""
         
@@ -158,19 +170,44 @@ class ClouddataMbpDataGet(object):
         return rpt_list
 
     @classmethod
-    def get_items_page_pc_rpt_by_sid(cls, sid, sdate, edate):
-        """获取店铺商品页面pc报表数据"""
+    def get_item_rpt_sum_by_sid(cls, sid):
         rpt_list = []
-        sql_id = '5570'
+        sql_id = '6344'
         limit = 5000
         offset = 0
+        thedate = datetime.datetime.now() - datetime.timedelta(days=1)
+        item_rpt_dict = {}
         while True:
-            rpt_sub_list = cls._get_data_list2(sid, sql_id, sdate, edate, offset, limit)
-            rpt_list.extend(rpt_sub_list)
+            rpt_sub_list = cls._get_data_list5(sid, sql_id, thedate, offset, limit)
+            for item in rpt_sub_list:
+                item_rpt_dict[item['auction_id']] = item
             if len(rpt_sub_list) < limit:
                 break
             offset = offset + limit
-        return rpt_list
+        return item_rpt_dict 
+
+    @classmethod
+    def get_items_page_pc_rpt_by_sid(cls, sid, sdate, edate):
+        """获取店铺商品页面pc报表数据"""
+        rpt_list = []
+        sql_id = '6345'
+        limit = 5000
+        offset = 0
+        item_page_rpt_dict = {}
+        rpt_keys = ['iuv', 'ipv', 'page_duration', 'bounce_cnt', 'landing_cnt', 'landing_uv', 'exit_cnt']
+        while True:
+            rpt_sub_list = cls._get_data_list2(sid, sql_id, sdate, edate, offset, limit)
+            for item in rpt_sub_list:
+                if item_page_rpt_dict.has_key(item['auction_id']):
+                    for key in rpt_keys:
+                        item_page_rpt_dict[item['auction_id']][key] += item[key]
+                else:
+                    item_page_rpt_dict[item['auction_id']] = item
+
+            if len(rpt_sub_list) < limit:
+                break
+            offset = offset + limit
+        return item_page_rpt_dict
     
     @classmethod
     def get_item_page_pc_rpt(cls, item_id, sdate, edate):
@@ -203,8 +240,30 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         edate = datetime.datetime.now() - datetime.timedelta(days=1)
         sdate = edate - datetime.timedelta(days=90)
-        sql_id = '3378'
-        rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
+        sql_id = '6367'
+        limit = 5000
+        offset = 0
+        rpt_list = []
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                break
+        keyword_dict = {}
+        
+        rpt_keys = ['impression', 'alipay_trade_num', 'uv', 'alipay_winner_num', 'alipay_trade_amt', 'alipay_auction_num', 'click']
+        for keyword in rpt_list:
+            if keyword_dict.has_key(keyword['query']):
+                for key in rpt_keys:
+                    keyword_dict[keyword['query']][key] = keyword.get(key, 0)
+            else:
+                keyword_dict[keyword['query']] = keyword
+        
+        rpt_list = keyword_dict.values()
         return rpt_list
 
     @classmethod
@@ -212,7 +271,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         edate = datetime.datetime.now() - datetime.timedelta(days=1)
         sdate = edate - datetime.timedelta(days=30)
-        sql_id = '3971'
+        sql_id = '6366'
         rpt_list = cls._get_data_list(sid,sql_id,sdate,edate)
         return rpt_list
     
@@ -244,11 +303,17 @@ class ClouddataMbpDataGet(object):
 
 if __name__ == '__main__':
     sid = int(sys.argv[1])
-    item_id = int(sys.argv[2])
+    #res = ClouddataMbpDataGet.get_shop_rpt_hour_30d(sid,0,5000)
+    res = ClouddataMbpDataGet.get_query_list_by_sid(sid)
+    for item in res:
+        print item
+    exit(0)
+
+    item_id = int(sys.argv[1])
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = edate - datetime.timedelta(days=29)
-    rpt_list = ClouddataMbpDataGet.get_item_rpt(item_id,sdate,edate)
-    #rpt_list = ClouddataMbpDataGet.get_item_page_pc_rpt(item_id,sdate,edate)
+    sdate = edate - datetime.timedelta(days=10)
+    #rpt_list = ClouddataMbpDataGet.get_item_rpt(item_id,sdate,edate)
+    rpt_list = ClouddataMbpDataGet.get_item_page_pc_rpt(item_id,sdate,edate)
 
     print len(rpt_list)
     sum_dict = {}
@@ -259,11 +324,9 @@ if __name__ == '__main__':
     
     #print 'date page_duration iuv ipv bounce_cnt landing_cnt landing_uv exit_cnt'
     for item in rpt_list:
-        for key in sum_dict.keys():
-            sum_dict[key] += float(item[key])
-        #item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
-        #print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
-    print sum_dict
+        #for key in sum_dict.keys():
+        #    sum_dict[key] += float(item[key])
+        item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
+        print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
+    #print sum_dict
 
-    rpt_list = ClouddataMbpDataGet.get_item_rpt_sum(item_id)
-    print rpt_list[0]

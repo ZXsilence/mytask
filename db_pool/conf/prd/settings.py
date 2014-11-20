@@ -29,6 +29,21 @@ RDS2 = {
                  }
              ,
          'db_list':[
-              'keywords_deleted','access_records','dbtest','rpt_all','operation_log'
+              'access_records','dbtest','rpt_all','operation_log'
              ]
         }
+
+#rds3实例连接池配置
+RDS3 = {
+         'pool_addr':{
+                 'HOST':'10.242.173.131',
+                 'PORT':4042,
+                 'USER':'maimiao_ops3',
+                 'PASSWD':'maimiaoadmin2014' 
+                 }
+             ,
+         'db_list':[
+              'queryall','queryqueue','item_query_rpt','keywords_deleted'
+             ]
+        }
+
