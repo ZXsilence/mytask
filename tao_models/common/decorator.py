@@ -299,7 +299,7 @@ def task_manage(arg):
             save_params = copy.deepcopy(params)
             del save_params['nick']
             del save_params['soft_code']
-            del save_params['sid']
+            #del save_params['sid']
             task_id = save_params.get('task_id',0)
             #如果参数中带有task_id，表示是老任务重试，而非新任务
             if task_id:
