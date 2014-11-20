@@ -188,6 +188,7 @@ def send_sms(cellphone, text, retry_times=3):
         text = text.encode('utf-8')
     if '【麦苗】' not in text:
         text += '【麦苗】'
+    text = filter_words(text)
     if type(cellphone) == type([]):
         cellphone = ','.join(cellphone)
     dict = {}
@@ -203,6 +204,7 @@ def send_sms(cellphone, text, retry_times=3):
         if dict.get('result',None) != '0':
             logging.error('send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict))
             print 'send message to %s unsuccessfully:response error,msg:%s'%(cellphone,dict)
+            send_email_with_html('xieguanfu@maimiaotech.com', text, '短信发送失败')
     except urllib2.HTTPError,e:
         logging.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
         print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
@@ -211,10 +213,18 @@ def send_sms(cellphone, text, retry_times=3):
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
         print 'send message to %s unsuccessfully:server error'%(cellphone,)
         send_sms(cellphone,text,retry_times)
+
+def filter_words(msg):
+    words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),('傻逼','傻&逼'),('脑残','脑&残'),('二货','二&货')]
+    for word in words:
+        msg = msg.replace(word[0],word[1])
+    return msg
+
 if __name__ == '__main__':
     #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
     print get_msg_report()
     print get_balance()
-    #send_sms(DIRECTOR['PHONE'], '省油宝新评价:好评2')
+    
+    #send_sms(DIRECTOR['PHONE'], u'省油宝新评价:小--漫,评分:1,用了两个多月 再来评价的！说句真心话，没有一点用！ 烧出去的关键词比系统自动添加的还差！每天开出去200多块左')
     #send_sms(DIRECTOR['PHONE'], '尊敬的客户你好！您的省油宝长期未登陆导致不能正常优化,请您及时登陆省油宝,方便我们进行优化!')

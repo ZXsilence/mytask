@@ -64,7 +64,6 @@ class ClouddataMbpDataFlowback(object):
     @tao_api_exception()
     def flowback_data(cls, table_name, input_data):
         """获取省油宝thedate新增店铺"""
-        import pdb;pdb.set_trace()
         encode_data = cls.__encode_data(input_data)
 
         req = ClouddataMbpDataFlowbackRequest() 
