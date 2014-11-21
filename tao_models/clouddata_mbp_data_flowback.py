@@ -85,4 +85,4 @@ if __name__ == '__main__':
         {'shop_id': 73259890, 'resv':''},
         {'shop_id': 64116298, 'resv':''}
     ]
-    status = ClouddataMbpDataFlowback.flowback_data('pri_upload.shop_id_sld', input_data)
+    status = ClouddataMbpDataFlowback.flowback_data('pri_upload.shop_id_sld_new', input_data)
