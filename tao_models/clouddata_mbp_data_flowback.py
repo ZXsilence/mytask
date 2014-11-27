@@ -49,7 +49,7 @@ class ClouddataMbpDataFlowback(object):
             keys.append(k)
         keys.append('dt')
         encode_data += ','.join(keys) + ';'
-        dt_value = (datetime.datetime.now()-datetime.timedelta(days=1)).strftime('%Y%m%d')
+        dt_value = (datetime.datetime.now()-datetime.timedelta(days=0)).strftime('%Y%m%d')
         for e in input_data:
             values_one = []
             for k in keys:
