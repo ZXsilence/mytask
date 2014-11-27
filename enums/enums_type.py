@@ -404,7 +404,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_HOT_COST_FULL_DECRE_PRICE : '测款计划花费接近预算上限,关键词减价'
     , OperationType.UPDATE_PRICE_USER_EXPECT_INCRE_PRICE:'用户意图加大流量，关键词加价'
     , OperationType.UPDATE_PRICE_USER_EXPECT_DECRE_PRICE:'用户意图减小流量，关键词减价'
-    , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "点击率低，关键词修改为精准匹配"
+    , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "点击率低，关键词修改匹配方式"
     , OperationType.UPDATE_PRICE_WIDE_MATCH: "提升流量，关键词修改为广泛匹配"
     , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
     
