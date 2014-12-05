@@ -319,3 +319,23 @@ def task_manage(arg):
     return _wrapper_func
 
 
+def script_manage(arg):
+    def _wrapper_func(func):
+        def __wrappe_func(*args, **kwargs):
+            task_name = arg
+            status = 'doing'
+            start_time = datetime.now()
+            task_id = TaskService.insert_script_task(task_name,status,start_time)
+            try:
+                a = func(*args, **kwargs)
+            except Exception,e:
+                end_time = datetime.now()
+                TaskService.upset_script_task(task_id,{'status':'failed','exception':str(e),'end_time':end_time})
+                logger.exception('task error!')
+            else:
+                end_time = datetime.now()
+                TaskService.upset_script_task(task_id,{'status':'done','result':a,'end_time':end_time})
+        return __wrappe_func
+    return _wrapper_func
+
+
