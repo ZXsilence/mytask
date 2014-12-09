@@ -41,7 +41,7 @@ DIRECTOR = {
             'SECRET':'xgf612257'
             }
 
-def send_email_with_text(addressee, text, subject):
+def send_email_with_text(addressee, text, subject,cc = None):
     """发送文本email"""
 
     msg = MIMEMultipart()
@@ -50,15 +50,19 @@ def send_email_with_text(addressee, text, subject):
     msg['From'] = DIRECTOR['EMAIL']
     to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
     msg['To'] = ';'.join(to_list) 
+    cc_list = []
+    if cc:
+        cc_list = [ str(adr).strip() for adr in cc.split(';')] if type(cc) in [str,type(u'')] else cc 
+        msg['Cc'] = ';'.join(cc_list)
     try:
         smtp = smtplib.SMTP()
         smtp.connect('smtp.ym.163.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
-        smtp.sendmail(msg['From'], to_list, msg.as_string())
+        smtp.sendmail(msg['From'], list(set(to_list+cc_list)), msg.as_string())
     except Exception,e:
         print e
 
-def send_email_with_html(addressee, html, subject):
+def send_email_with_html(addressee, html, subject,cc = None):
     """发送html email"""
 
     msg = MIMEMultipart()
@@ -66,13 +70,17 @@ def send_email_with_html(addressee, html, subject):
     msg['From'] = DIRECTOR['EMAIL']
     to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
     msg['To'] = ';'.join(to_list) 
+    cc_list = []
+    if cc:
+        cc_list = [ str(adr).strip() for adr in cc.split(';')] if type(cc) in [str,type(u'')] else cc 
+        msg['Cc'] = ';'.join(cc_list)
     html_att = MIMEText(html, 'html', 'utf-8')
     msg.attach(html_att)
     try:
         smtp = smtplib.SMTP()
         smtp.connect('smtp.ym.163.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
-        smtp.sendmail(msg['From'], to_list, msg.as_string())
+        smtp.sendmail(msg['From'], list(set(to_list + cc_list)), msg.as_string())
     except Exception,e:
         print e
 
@@ -186,6 +194,8 @@ def send_sms(cellphone, text, retry_times=3):
         return
     if type(text) == type(u''):
         text = text.encode('utf-8')
+    if '麦苗提醒:' not in  text and '新评价:' not in text:
+        text = '麦苗提醒:' + text
     if '【麦苗】' not in text:
         text += '【麦苗】'
     text = filter_words(text)
@@ -198,6 +208,7 @@ def send_sms(cellphone, text, retry_times=3):
     dict['content']  = text
     dict['sourceadd']  = None
     url_params = urllib.urlencode(dict)
+    print text
     try:
         response = urllib2.urlopen(SEND_MESSAGE_URL,url_params)
         dict = _parse_sms_response(response.read())
@@ -223,8 +234,10 @@ def filter_words(msg):
 if __name__ == '__main__':
     #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
-    print get_msg_report()
+    send_email_with_html('115965829@qq.com','网络延迟','标题',['xieguanfu@maimiaotech.com','guanfuxie@163.com'])
+    #print get_msg_report()
     print get_balance()
     
+    #send_sms(DIRECTOR['PHONE'],'收到一条疑似差评,请立即处理,辛苦了，谢谢!')
     #send_sms(DIRECTOR['PHONE'], u'省油宝新评价:小--漫,评分:1,用了两个多月 再来评价的！说句真心话，没有一点用！ 烧出去的关键词比系统自动添加的还差！每天开出去200多块左')
     #send_sms(DIRECTOR['PHONE'], '尊敬的客户你好！您的省油宝长期未登陆导致不能正常优化,请您及时登陆省油宝,方便我们进行优化!')
