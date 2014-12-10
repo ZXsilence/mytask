@@ -10,7 +10,8 @@
 
 """
 class CampaignType(object):
-
+    
+    CAMPAIGN_TEST = 10
     CAMPAIGN_GIVEUP = 11
     CAMPAIGN_LOW_CLICK = 12
     CAMPAIGN_LOW_ROI = 13
@@ -46,6 +47,7 @@ class CampaignType(object):
     CAMPAIGN_NO_HANDLE = 154
     
     ALL_CAMPAIGN_TYPES = [
+        CAMPAIGN_TEST,
         CAMPAIGN_GIVEUP,
         CAMPAIGN_LOW_CLICK,
         CAMPAIGN_LOW_ROI,
@@ -184,7 +186,8 @@ class AdgroupType(object):
         ]
 
 CODE_TO_TYPE = {
-        11:'CAMPAIGN_GIVEUP'
+        10:'CAMPAIGN_TEST'
+        ,11:'CAMPAIGN_GIVEUP'
         ,12:'CAMPAIGN_LOW_CLICK'
         ,13:'CAMPAIGN_LOW_ROI'
         ,14:'CAMPAIGN_OK'
