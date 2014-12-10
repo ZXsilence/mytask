@@ -118,9 +118,11 @@ class ClouddataMbpDataGet(object):
         return result_list
     
     @classmethod
-    def keyword_map_type(cls, keyword, query):
-        keyword = keyword.replace(' ','')
-        query = query.replace(' ', '')
+    def get_query_match_scope(cls, item):
+        """获取query_dict匹配方式"""
+        
+        keyword = item['keyword'].replace(' ','')
+        query = item['query'].replace(' ', '')
 
         keyword = sorted(keyword)
         keyword = ''.join(keyword)
@@ -142,7 +144,7 @@ def get_shop(shop_id):
     for item in ret:
         for key in ['auction_id', 'gmv_auction_num','alipay_trade_amt','pay_status','gmv_time','alipay_time','orderdate']:
             item[key] = item.get(key, '')
-        item['match_scope'] = ClouddataMbpDataGet.keyword_map_type(item['keyword'], item['query'])
+        item['match_scope'] = ClouddataMbpDataGet.get_query_match_scope(item)
         #print "%(thedate)s,%(orderdate)s,%(shop_id)s,%(buyer_id)s,%(keyword)s,%(query)s,%(url_title)s,%(auction_id)s,%(gmv_auction_num)s,%(alipay_trade_amt)s,%(pay_status)s,%(gmv_time)s,%(alipay_time)s" % item
         print "%(keyword)s,%(query)s,%(match_scope)s,%(auction_id)s,%(gmv_auction_num)s" % item
     return len(ret)
