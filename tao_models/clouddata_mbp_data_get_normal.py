@@ -1,0 +1,172 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@author: liumc
+@contact: liumingchao@maimiaotech.com
+@date: 2014-06-09 14:27
+@version: 0.0.0
+@license: Copyright Maimiaotech.com
+@copyright: Copyright Maimiaotech.com
+
+"""
+
+import urllib
+import sys
+import os
+import copy
+import logging
+import logging.config
+import datetime
+
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+    from api_server.conf import set_env
+    set_env.getEnvReady()
+    from api_server.conf.settings import set_api_source
+    set_api_source('normal_test')
+
+from TaobaoSdk import ClouddataMbpDataGetRequest 
+from tao_models.common.decorator import  tao_api_exception
+from api_server.services.api_service import ApiService 
+from api_server.common.util import change_obj_to_dict_deeply
+import datetime
+import simplejson as json
+
+class ClouddataMbpDataGet(object):
+    
+    @classmethod
+    def _decode_clouddata(cls,rsp):
+        
+        column_list = rsp.__dict__.get('column_list',[])
+        row_list =  rsp.__dict__.get('row_list',[]) 
+        elements = []
+        if column_list == [] or row_list == []:
+            return elements
+        for row in row_list:
+            values = row.values
+            rpt = {}
+            for i in range(len(values)):
+                key = column_list[i]
+                rpt[key] = values[i]
+            elements.append(rpt)
+        return elements
+
+
+    @classmethod
+    @tao_api_exception()
+    def get_data_from_clouddata(cls, sql_id, query_dict):
+        ret = []
+        page_count = 0
+        while page_count <= 20:
+            query_dict_single = copy.copy(query_dict)
+            query_dict_single['sub_limit'] = 5000
+            query_dict_single['sub_offset'] = page_count*query_dict_single['sub_limit']
+            parameter = ",".join([str(k)+"="+str(v) for k,v in query_dict_single.items()])
+
+            #parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)+',dt1='+sdate_str+',dt2='+edate_str
+            req = ClouddataMbpDataGetRequest() 
+            req.sql_id = sql_id
+            req.parameter = parameter
+            rsp = ApiService.execute(req)
+            res = cls._decode_clouddata(rsp)
+            ret.extend(res)
+            if len(res) < query_dict_single['sub_limit']:
+                break
+            page_count += 1
+            
+        return ret
+    
+    
+    @classmethod
+    def get_sid_keyword_query_report(cls, sid, sdate, edate, flag='all'):
+        """获取关键词_query报表"""
+        
+        dt = datetime.datetime.now() - datetime.timedelta(days=1)
+        dt_str = dt.strftime("%Y%m%d")
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":dt_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        if flag == "all" or flag == "pc":
+            sql_id = 6608 if sid % 2 == 0 else 6610
+            ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+            result_list.extend(ret)
+        
+        if flag == "all" or flag == "wx":
+            sql_id = 6609 if sid % 2 == 0 else 6611
+            ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+            result_list.extend(ret)
+            
+        
+        for item in result_list:
+            keyword = urllib.unquote(item['keyword'])
+            query = urllib.unquote(item['query'])
+            
+            try:
+                item['keyword'] = keyword.decode('gbk')
+            except Exception,e:
+                item['keyword'] = keyword
+
+            try:
+                item['query'] = query.decode('gbk')
+            except Exception,e:
+                item['query'] = query
+            
+            item['keyword'] = item['keyword'].replace('+', ' ')
+            item['query'] = item['query'].replace('+', ' ')
+
+        return result_list
+    
+    @classmethod
+    def keyword_map_type(cls, keyword, query):
+        keyword = keyword.replace(' ','')
+        query = query.replace(' ', '')
+
+        keyword = sorted(keyword)
+        keyword = ''.join(keyword)
+        query = sorted(query)
+        query = ''.join(query)
+
+        if keyword == query:
+            return 1
+
+        if keyword.find('_') != -1:
+            return -1
+        
+        return 4
+    
+
+def get_shop(shop_id):
+    date = datetime.datetime.now() - datetime.timedelta(days=1)
+    ret = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, date, date)
+    for item in ret:
+        for key in ['auction_id', 'gmv_auction_num','alipay_trade_amt','pay_status','gmv_time','alipay_time','orderdate']:
+            item[key] = item.get(key, '')
+        item['match_scope'] = ClouddataMbpDataGet.keyword_map_type(item['keyword'], item['query'])
+        #print "%(thedate)s,%(orderdate)s,%(shop_id)s,%(buyer_id)s,%(keyword)s,%(query)s,%(url_title)s,%(auction_id)s,%(gmv_auction_num)s,%(alipay_trade_amt)s,%(pay_status)s,%(gmv_time)s,%(alipay_time)s" % item
+        print "%(keyword)s,%(query)s,%(match_scope)s,%(auction_id)s,%(gmv_auction_num)s" % item
+    return len(ret)
+
+if __name__ == '__main__':
+    shop_id = int(sys.argv[1])
+    #print "thedate,orderdate,shop_id,buyer_id,keyword,query,url_title,auction_id,gmv_auction_num,alipay_trade_amt,pay_status,gmv_time,alipay_time"
+    number = get_shop(shop_id)
+    exit(0)
+    shop_num = 0
+    from shop_db.services.shop_info_service import ShopInfoService
+    shop_list = ShopInfoService.get_all_shop_info_list('SYB')
+    for shop in shop_list:
+        number = 0
+        shop_id = shop['sid']
+        try:
+            number = get_shop(shop_id)
+        except Exception,e:
+            continue
+
+        if number > 0:
+            shop_num += 1
+
+        if shop_num > 1000:
+            break
+
