@@ -76,7 +76,6 @@ class ClouddataMbpDataGet(object):
             
         return ret
     
-    
     @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, flag='all'):
         """获取关键词_query报表"""

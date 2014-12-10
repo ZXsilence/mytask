@@ -13,7 +13,7 @@ import os,sys,random
 import MySQLdb
 currDir = os.path.normpath(os.path.dirname(__file__))
 os.path.normpath(os.path.join(currDir, '../../../'))
-from db_pool.conf.settings import RDS1,RDS2
+from db_pool.conf.settings import RDS1,RDS2,RDS3
 
 class PoolUtil(object):
 
@@ -29,10 +29,13 @@ class PoolUtil(object):
     def get_cursor(self,db_name):
         rds1_db_list= RDS1['db_list']
         rds2_db_list= RDS2['db_list']
+        rds3_db_list= RDS3['db_list']
         if db_name in rds1_db_list:
             return PoolUtil._get_cursor_by_rds(db_name,RDS1)
         elif db_name in rds2_db_list:
             return PoolUtil._get_cursor_by_rds(db_name,RDS2)
+        elif db_name in rds3_db_list:
+            return PoolUtil._get_cursor_by_rds(db_name,RDS3)
         else:
             raise Exception('can not find db_name in rds settings,current db_name is %s'%db_name)
 
