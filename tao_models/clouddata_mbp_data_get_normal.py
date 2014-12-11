@@ -17,6 +17,7 @@ import copy
 import logging
 import logging.config
 import datetime
+import chardet
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
@@ -31,6 +32,7 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 import datetime
 import simplejson as json
+logger = logging.getLogger(__name__)
 
 class ClouddataMbpDataGet(object):
     
@@ -100,17 +102,31 @@ class ClouddataMbpDataGet(object):
         
         for item in result_list:
             keyword = urllib.unquote(item['keyword'])
+            keyword = urllib.unquote(keyword)
             query = urllib.unquote(item['query'])
-            
-            try:
-                item['keyword'] = keyword.decode('gbk')
-            except Exception,e:
-                item['keyword'] = keyword
+            query = urllib.unquote(query)
+            try: 
+                if chardet.detect(keyword)['encoding'] in ['utf-8', 'ascii']:
+                    item['keyword'] = keyword.decode('utf-8')
+                else:
+                    try:
+                        item['keyword'] = keyword.decode('gbk')
+                    except Exception,e:
+                        logger.debug("sid:%d, keyword 解码失败", sid)
+                        item['keyword'] = keyword.decode('utf-8')
 
-            try:
-                item['query'] = query.decode('gbk')
+                if chardet.detect(query)['encoding'] in ['utf-8', 'ascii']:
+                    item['query'] = query.decode('utf-8')
+                else:
+                    try:
+                        item['query'] = query.decode('gbk')
+                    except Exception,e:
+                        logger.debug("sid:%d, keyword 解码失败", sid)
+                        item['query'] = query.decode('utf-8')
+            
             except Exception,e:
-                item['query'] = query
+                item['keyword'] = ''
+                item['query'] = ''
             
             item['keyword'] = item['keyword'].replace('+', ' ')
             item['query'] = item['query'].replace('+', ' ')
