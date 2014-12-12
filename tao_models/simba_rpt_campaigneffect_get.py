@@ -43,7 +43,10 @@ class SimbaRptCampaigneffectGet(object):
         #if not isinstance(l, list) and  l.has_key('code') and l['code'] == 15:
         #    raise TBDataNotReadyException(rsp.rpt_campaign_effect_list)
         for rpt in l:
-            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+            try:
+                rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+            except Exception,e:
+                raise Exception('rpt data error:%s'%rpt)
         return change_obj_to_dict_deeply(l)
         
     @classmethod
