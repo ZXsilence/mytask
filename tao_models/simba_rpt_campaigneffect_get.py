@@ -20,6 +20,7 @@ from TaobaoSdk import SimbaRptCampaigneffectGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,9 @@ class SimbaRptCampaigneffectGet(object):
             try:
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
             except Exception,e:
-                raise Exception('rpt data error:%s'%rpt)
+                raise ErrorResponseException(code=15, msg='rpt data error:%s'%rpt,\
+                    sub_code='isp.internal-error', sub_msg='rpt data error:%s'%rpt,\
+                    params={},rsp=rsp)
         return change_obj_to_dict_deeply(l)
         
     @classmethod
