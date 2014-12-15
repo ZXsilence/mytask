@@ -19,9 +19,10 @@ class CampaignType(object):
     CAMPAIGN_USER_WANT_AUCTION_KEYWORD = 15
     CAMPAIGN_USER_WANT_EXCHANGE_KEYWORD = 16
     CAMPAIGN_USER_WANT_ADD_KEYWORD = 17
-
+    
     SHOP_IN_DEBT = 101     
     SHOP_BE_PUNISH = 102
+    CAMPAIGN_BUDGET_OUT_LIMIT = 103
     
     CAMPAIGN_OFF_LINE = 111
     CAMPAIGN_LESS_ADGROUPS = 112 
@@ -55,6 +56,7 @@ class CampaignType(object):
         CAMPAIGN_OK,
         SHOP_IN_DEBT,     
         SHOP_BE_PUNISH,
+        CAMPAIGN_BUDGET_OUT_LIMIT,
         CAMPAIGN_OFF_LINE,
         CAMPAIGN_LESS_ADGROUPS, 
         CAMPAIGN_LOW_BIDMAX,
@@ -195,6 +197,7 @@ CODE_TO_TYPE = {
         ,14:'CAMPAIGN_OK'
         ,101:'SHOP_IN_DEBT'
         ,102:'SHOP_BE_PUNISH'
+        ,103:'CAMPAIGN_BUDGET_OUT_LIMIT'
         ,111:'CAMPAIGN_OFF_LINE'
         ,112:'CAMPAIGN_LESS_ADGROUPS'
         ,113:'CAMPAIGN_LOW_BIDMAX'
@@ -275,7 +278,7 @@ CAMPAIGN_GIVEUP_REASON = {
         ,CampaignType.CAMPAIGN_NO_HANDLE:"计划未托管"
         ,CampaignType.SHOP_IN_DEBT:"店铺欠费"
         ,CampaignType.SHOP_BE_PUNISH:"店铺直通车违禁"
-
+        ,CampaignType.CAMPAIGN_BUDGET_OUT_LIMIT:"预算超出版本限制"
         }
 
 CAMPAIGN_LOW_CLICK_REASON = {
