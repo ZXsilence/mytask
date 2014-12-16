@@ -86,7 +86,7 @@ class ClouddataMbpDataGet(object):
         dt_str = dt.strftime("%Y%m%d")
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":sid, "dt":dt_str, "sdate":sdate_str, "edate":edate_str}
+        query_dict = {"shop_id":sid, "dt":edate_str, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
         if flag == "all" or flag == "pc":
