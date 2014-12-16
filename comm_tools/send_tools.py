@@ -41,7 +41,7 @@ DIRECTOR = {
             'SECRET':'xgf612257'
             }
 
-def send_email_with_text(addressee, text, subject,cc = None):
+def send_email_with_text(addressee, text, subject,cc = None, reply_to=None):
     """发送文本email"""
 
     msg = MIMEMultipart()
@@ -54,6 +54,8 @@ def send_email_with_text(addressee, text, subject,cc = None):
     if cc:
         cc_list = [ str(adr).strip() for adr in cc.split(';')] if type(cc) in [str,type(u'')] else cc 
         msg['Cc'] = ';'.join(cc_list)
+    if reply_to:
+        msg.add_header('reply-to',reply_to)
     try:
         smtp = smtplib.SMTP()
         smtp.connect('smtp.ym.163.com', 25) 
@@ -62,7 +64,7 @@ def send_email_with_text(addressee, text, subject,cc = None):
     except Exception,e:
         print e
 
-def send_email_with_html(addressee, html, subject,cc = None):
+def send_email_with_html(addressee, html, subject,cc = None,reply_to=None):
     """发送html email"""
 
     msg = MIMEMultipart()
@@ -74,6 +76,8 @@ def send_email_with_html(addressee, html, subject,cc = None):
     if cc:
         cc_list = [ str(adr).strip() for adr in cc.split(';')] if type(cc) in [str,type(u'')] else cc 
         msg['Cc'] = ';'.join(cc_list)
+    if reply_to:
+        msg.add_header('reply-to',reply_to)
     html_att = MIMEText(html, 'html', 'utf-8')
     msg.attach(html_att)
     try:
@@ -234,7 +238,7 @@ def filter_words(msg):
 if __name__ == '__main__':
     #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
-    send_email_with_html('115965829@qq.com','网络延迟','标题',['xieguanfu@maimiaotech.com','guanfuxie@163.com'])
+    send_email_with_html('dongxuanliang@maimiaotech.com','网络延迟','标题',['dongxl123@163.com'],'245684715@qq.com')
     #print get_msg_report()
     print get_balance()
     
