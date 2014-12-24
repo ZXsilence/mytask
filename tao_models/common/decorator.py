@@ -332,6 +332,7 @@ def script_manage(arg):
                 end_time = datetime.now()
                 TaskService.upset_script_task(task_id,{'status':'failed','exception':str(e),'end_time':end_time})
                 logger.exception('task error!')
+                logger.info('%s'%task_name)
             else:
                 end_time = datetime.now()
                 TaskService.upset_script_task(task_id,{'status':'done','result':a,'end_time':end_time})
