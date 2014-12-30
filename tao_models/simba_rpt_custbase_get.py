@@ -28,13 +28,13 @@ class SimbaRptCustbaseGet(object):
     
     @classmethod
     @tao_api_exception()
-    def get_shop_rpt_base(cls, nick, start_date, end_date):
+    def get_shop_rpt_base(cls, nick, start_date, end_date,source = 'SUMMARY'):
         logger.debug('get nick:%s cust base rpt'%nick)
         req = SimbaRptCustbaseGetRequest()
         req.nick = nick
         req.start_time = datetime.datetime.strftime(start_date, '%Y-%m-%d')
         req.end_time = datetime.datetime.strftime(end_date, '%Y-%m-%d')
-        req.source = 'SUMMARY'
+        req.source = source
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         l = json.loads(rsp.rpt_cust_base_list.lower())
@@ -45,10 +45,14 @@ class SimbaRptCustbaseGet(object):
         return change_obj_to_dict_deeply(l)
 
 if __name__ == "__main__":
-    nick = 'chinchinstyle'
+    nick = '晓迎'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    print SimbaRptCustbaseGet.get_shop_rpt_base(nick, start_time, end_time)
+    start_time = datetime.datetime(2014,12,18)
+    end_time = datetime.datetime(2014,12,18)
+    list = SimbaRptCustbaseGet.get_shop_rpt_base(nick, start_time, end_time)
+    for obj in list:
+        print obj['source'],obj['click']
 
 
 
