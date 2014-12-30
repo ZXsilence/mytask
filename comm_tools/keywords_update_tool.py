@@ -31,12 +31,13 @@ def delete_keywords(keyword_delete_list, campaign_id, sid, nick):
             , campaign_id, keyword_id_delete_list)
     keyword_ids_deleted = [k['keyword_id'] for k in keywords_deleted]
     KeywordDBService.del_keywords_by_keyword_ids(sid, keyword_ids_deleted)
-
+    del_kwds = []
     for keyword in keywords_deleted:
         delete_info = keyword_delete_dict[keyword['keyword_id']]
         delete_info['deleted_time'] = datetime.datetime.now()
         keyword.update(delete_info)
-        KeywordsDeleted.upsert_keyword(sid, nick, keyword)
+        del_kwds.append(keyword)
+    KeywordsDeleted.upsert_keyword_list(sid,nick, del_kwds)
     return keywords_deleted
 
 
