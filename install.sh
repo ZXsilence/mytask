@@ -29,6 +29,7 @@ then
     rm -f "${proPath}/comm_lib/api_server/conf/settings.py"
     rm -f "${proPath}/comm_lib/api_server/conf/set_env.py"
     rm -f "${proPath}/comm_lib/db_pool/conf/set_env.py"
+    rm -f "${proPath}/comm_lib/db_pool/conf/settings.py"
 
 elif [ "_" == "_" ]
 then
