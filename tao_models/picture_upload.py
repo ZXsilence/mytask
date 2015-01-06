@@ -38,7 +38,7 @@ class PictureUpload(object):
 
     @classmethod
     @tao_api_exception()
-    def upload_img(cls,nick,image_path):
+    def upload_img(cls,nick,image_path,category_id = 0,title = 'any.jpg'):
         soft_code = None
         shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,False)
         soft_code = shop_infos[0]['soft_code']
@@ -46,14 +46,14 @@ class PictureUpload(object):
         appkey = APP_SETTINGS[soft_code]['app_key']
         secret = APP_SETTINGS[soft_code]['app_secret']
         req = PictureUploadRequest()
-        #req = PictureUploadRequest('223.5.20.253',8002)
+        #req = PictureUploadRequest('121.199.170.144',30002)
         req.set_app_info({'appkey':appkey,'secret':secret})
 
-        image=FileItem('any.jpg',open(image_path))
+        image=FileItem(title,open(image_path))
         req.img = image
         req.image = image
-        req.picture_category_id = 0
-        req.image_input_title = 'any.jpg'
+        req.picture_category_id = category_id
+        req.image_input_title = title
 
         try:
             resp= req.getResponse(access_token)
