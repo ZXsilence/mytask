@@ -26,7 +26,6 @@ from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
 from busi_service.service.task_service import TaskService
-from sys_admin.lib.notice_tool import notice_by_eamil,notice_by_message
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
 
@@ -355,7 +354,6 @@ def server_timeout_check(func):
             t._Thread__stop()
             message = '【系统监控】%s响应较慢，超过限额值%s秒(主机:%s)'%(name,timeout,host)
             logger.error(message)
-            notice_by_message(contact,message)
         else:
             message = '【系统监控】%s响应未超时(主机:%s)'%(name,host)
             logger.info(message)
