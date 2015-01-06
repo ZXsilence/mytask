@@ -10,6 +10,7 @@ import logging
 import traceback
 import inspect
 import time
+from threading import Thread
 
 from time import  sleep
 from datetime import datetime
@@ -338,5 +339,24 @@ def script_manage(arg):
                 TaskService.upset_script_task(task_id,{'status':'done','result':a,'end_time':end_time})
         return __wrappe_func
     return _wrapper_func
+
+
+def server_timeout_check(func):
+    def __wrappe_func(*args, **kwargs):
+        name = args[0]
+        timeout = args[1]
+        contact = args[2]
+        host = args[3]
+        t = Thread(target=func,args=(name,timeout,contact,host))
+        t.start()
+        t.join(timeout)
+        if t.is_alive():
+            t._Thread__stop()
+            message = '【系统监控】%s响应较慢，超过限额值%s秒(主机:%s)'%(name,timeout,host)
+            logger.error(message)
+        else:
+            message = '【系统监控】%s响应未超时(主机:%s)'%(name,host)
+            logger.info(message)
+    return __wrappe_func
 
 
