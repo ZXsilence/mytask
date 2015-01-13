@@ -88,12 +88,15 @@ class SimbaKeywordsPricevonSet(object):
             wordid_price_list: [('keywordid', price),(102232, 33)]
         """
         word_price_dict_list = []
-        for kid, price in keywordid_prices:
+        for k in keywordid_prices:
+            kid = k[0]
+            price = k[1]
+            match_scope = k[2] if len(k) >=3 else 4
             word_price_dict = {
                     "keywordId":kid
                     , "maxPrice":price
                     , "isDefaultPrice":0
-                    , "matchScope":4
+                    , "matchScope": match_scope
                     }
             word_price_dict_list.append(word_price_dict)
 
@@ -170,7 +173,7 @@ class SimbaKeywordsPricevonSet(object):
 
 def test():
     nick = 'chinchinstyle'
-    word_price_list = [(50729824904, 250), (50729824900, 168)]
+    word_price_list = [(50729824904, 250), (50729824900, 168,1)]
     print SimbaKeywordsPricevonSet.set_price(nick, word_price_list)
 
 def test2():
