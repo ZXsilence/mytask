@@ -24,7 +24,7 @@ from TaobaoSdk.Domain.multipart import PictureUploadRequest,FileItem
 
 from tao_models.common.decorator import  tao_api_exception
 from shop_db.services.shop_info_service import ShopInfoService
-from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_HOST,API_PORT
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 
@@ -45,7 +45,7 @@ class PictureUpload(object):
         access_token = shop_infos[0]['access_token']
         appkey = APP_SETTINGS[soft_code]['app_key']
         secret = APP_SETTINGS[soft_code]['app_secret']
-        req = PictureUploadRequest()
+        req = PictureUploadRequest(API_HOST,API_PORT)
         #req = PictureUploadRequest('121.199.170.144',30002)
         req.set_app_info({'appkey':appkey,'secret':secret})
 

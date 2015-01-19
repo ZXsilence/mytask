@@ -24,7 +24,7 @@ from TaobaoSdk.Domain.multipart import ItemImgUploadRequest,FileItem
 
 from tao_models.common.decorator import  tao_api_exception
 from shop_db.services.shop_info_service import ShopInfoService
-from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_HOST,API_PORT
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class ItemImgUpload(object):
         access_token = shop_infos[0]['access_token']
         appkey = APP_SETTINGS[soft_code]['app_key']
         secret = APP_SETTINGS[soft_code]['app_secret']
-        req = ItemImgUploadRequest()
+        req = ItemImgUploadRequest(API_HOST,API_PORT)
         req.set_app_info({'appkey':appkey,'secret':secret})
 
         req.num_iid = num_iid
@@ -64,7 +64,7 @@ class ItemImgUpload(object):
 if __name__ == '__main__':
     nick = 'chinchinstyle'
     num_iid =7794896442 
-    image_path = '/home/wulingping/test.png'
+    image_path = '/alidata1/upload/syb/a.png'
     print ItemImgUpload.upload_img(nick,num_iid,image_path)
     
 
