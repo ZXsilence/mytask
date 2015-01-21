@@ -489,6 +489,25 @@ class AdgroupHandleStatus(object):
     AUTO_DEAL = 1
     ONLY_PRICE = 2
 
+class FilterType(object):
+    AUDIT_OFFLINE = 'audit_offline'
+    USER_CONFIRM_ALLOW = 'allow'
+    USER_CONFIRM_DISALLOW = 'disallow'
+    USER_CONFIRM_UNKNOWN = 'unknown'
+    BAN = 'banned'
+    USER_DELETE = 'user_delete'
+    USER_ADD_BLACK = 'user_add_black'
+
+FILTER_COMMENT = {
+    FilterType.AUDIT_OFFLINE:'审核下线'
+    ,FilterType.USER_CONFIRM_DISALLOW:'用户不同意推广'
+    ,FilterType.USER_CONFIRM_UNKNOWN:'有风险,用户还未确认'
+    ,FilterType.BAN:'宝贝曾违规或审核失败'
+    ,FilterType.USER_DELETE:'不推广用户删除的宝贝'
+    ,FilterType.USER_ADD_BLACK:'用户添加到不推广名单中'
+}
+
+
 LOGFAILTYPE_COMMENT = {
         LoginFailType.UN_BUY:'授权失败，当前用户未购买该软件，请切换淘宝帐号并重新登录，<a href="http://login.taobao.com/member/logout.jhtml?spm=1.1000386.5982201.5.qQ0uFL&f=top&out=true&redirectURL=http%3A%2F%2Fwww.taobao.com%2F">退出当前淘宝帐号</a>'
         ,LoginFailType.USER_NOT_EXIST:'用户不存在'
@@ -500,5 +519,4 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.ACCESS_TOKEN_ERROR:'授权失败，淘宝的access_token解析错误，请尝试重新登录'
         ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
         ,LoginFailType.FORBBDIEN_DEBUG_PLATFROM:'对不请,线上环境禁止debug登入,请从全拼域名的客服后台登入'
-        
 }
