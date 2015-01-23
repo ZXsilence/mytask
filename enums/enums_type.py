@@ -490,23 +490,42 @@ class AdgroupHandleStatus(object):
     ONLY_PRICE = 2
 
 class FilterType(object):
+    OFFLINE = 'offline_type'
+    USER_CONFIRM = 'user_confirm'
+    BAN = 'is_ban'
+    USER_DELETE = 'is_user_delete'
+    USER_BLACK = 'is_user_black'
+
     AUDIT_OFFLINE = 'audit_offline'
-    USER_CONFIRM_ALLOW = 'allow'
-    USER_CONFIRM_DISALLOW = 'disallow'
-    USER_CONFIRM_UNKNOWN = 'unknown'
-    BAN = 'banned'
-    USER_DELETE = 'user_delete'
-    USER_ADD_BLACK = 'user_add_black'
+    CRM_OFFLINE = 'crm_offline'
+    DISALLOW = 'disallow'
+    UNKNOWN = 'unknown'
+    FILTER = True
 
-FILTER_COMMENT = {
-    FilterType.AUDIT_OFFLINE:'审核下线'
-    ,FilterType.USER_CONFIRM_DISALLOW:'用户不同意推广'
-    ,FilterType.USER_CONFIRM_UNKNOWN:'有风险,用户还未确认'
-    ,FilterType.BAN:'宝贝曾违规或审核失败'
-    ,FilterType.USER_DELETE:'不推广用户删除的宝贝'
-    ,FilterType.USER_ADD_BLACK:'用户添加到不推广名单中'
-}
+    ALL_FILTER_CODE = [AUDIT_OFFLINE,CRM_OFFLINE,DISALLOW,UNKNOWN,FILTER]
 
+    ALL_FILTER_TYPE = {
+        OFFLINE : [AUDIT_OFFLINE,CRM_OFFLINE],
+        USER_CONFIRM : [DISALLOW,UNKNOWN],
+        BAN : [FILTER],
+        USER_DELETE : [FILTER],
+        USER_BLACK :[FILTER]
+    }
+
+    FILTER_COMMENT = {
+        (OFFLINE,AUDIT_OFFLINE):'审核下线'
+        ,(OFFLINE,CRM_OFFLINE):'crm下线'
+        ,(USER_CONFIRM,DISALLOW):'用户不同意推广'
+        ,(USER_CONFIRM,UNKNOWN):'有风险,用户还未确认'
+        ,(BAN,FILTER):'宝贝曾违规或审核失败'
+        ,(USER_DELETE,FILTER):'不推广用户删除的宝贝'
+        ,(USER_BLACK,FILTER):'用户添加到不推广名单中'
+    }
+
+    @classmethod
+    def REASON(cls,type,value):
+        if type in cls.ALL_FILTER_TYPE and value in cls.ALL_FILTER_TYPE[type]:
+            return cls.FILTER_COMMENT[(type,value)]
 
 LOGFAILTYPE_COMMENT = {
         LoginFailType.UN_BUY:'授权失败，当前用户未购买该软件，请切换淘宝帐号并重新登录，<a href="http://login.taobao.com/member/logout.jhtml?spm=1.1000386.5982201.5.qQ0uFL&f=top&out=true&redirectURL=http%3A%2F%2Fwww.taobao.com%2F">退出当前淘宝帐号</a>'
