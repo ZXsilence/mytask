@@ -48,7 +48,7 @@ class Keyword(object):
 
     def get(self,key,value):
         index = self.__get_index_by_field(key)
-        if not index or not self.data[index]:
+        if index == None:
             return value
         else:
             return self.data[index]
