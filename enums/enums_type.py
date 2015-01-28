@@ -489,11 +489,6 @@ class AdgroupHandleStatus(object):
     AUTO_DEAL = 1
     ONLY_PRICE = 2
 
-class OptimizeMethod(object):
-    UNDEAL = 0
-    AUTO_DEAL = 1
-    ONLY_PRICE = 2
-
 class FilterType(object):
     OFFLINE = 'offline_type'
     USER_CONFIRM = 'user_confirm'
