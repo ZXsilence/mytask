@@ -30,6 +30,7 @@ from TaobaoSdk import ClouddataMbpDataGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService 
 from api_server.common.util import change_obj_to_dict_deeply
+from comm_tools.string_tools import StringTools
 import datetime
 import simplejson as json
 logger = logging.getLogger(__name__)
@@ -91,21 +92,11 @@ class ClouddataMbpDataGet(object):
         sql_id = sql_ids[index]
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         result_list.extend(ret)
+        word_set = StringTools.load_word_set()
         for item in result_list:
             query = urllib.unquote(item['query'])
             query = urllib.unquote(query)
-            try:
-                if chardet.detect(query)['encoding'] in ['utf-8', 'ascii']:
-                    item['query'] = query.decode('utf-8')
-                else:
-                    try:
-                        item['query'] = query.decode('gbk')
-                    except Exception,e:
-                        logger.debug("sid:%d, keyword 解码失败", sid)
-                        item['query'] = query.decode('utf-8')
-
-            except Exception,e:
-                item['query'] = ''
+            item['query'] = StringTools.keyword_decode(query, word_set)
             item['query'] = item['query'].replace('+', ' ')
         
         uniq_dict = {}
@@ -121,7 +112,7 @@ class ClouddataMbpDataGet(object):
         return result_list
 
     @classmethod
-    def get_sid_keyword_query_report(cls, sid, sdate, edate, flag='all'):
+    def get_sid_keyword_query_report2(cls, sid, sdate, edate, flag='all'):
         """获取关键词_query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
@@ -144,8 +135,9 @@ class ClouddataMbpDataGet(object):
             keyword = urllib.unquote(keyword)
             query = urllib.unquote(item['query'])
             query = urllib.unquote(query)
-            try: 
-                if chardet.detect(keyword)['encoding'] in ['utf-8', 'ascii']:
+            try:
+                item['keyword_code'] = chardet.detect(keyword)['encoding']
+                if item['keyword_code'] in ['utf-8', 'ascii']:
                     item['keyword'] = keyword.decode('utf-8')
                 else:
                     try:
@@ -153,8 +145,9 @@ class ClouddataMbpDataGet(object):
                     except Exception,e:
                         logger.debug("sid:%d, keyword 解码失败", sid)
                         item['keyword'] = keyword.decode('utf-8')
-
-                if chardet.detect(query)['encoding'] in ['utf-8', 'ascii']:
+                
+                item['query_code'] = chardet.detect(query)['encoding']
+                if item['query_code'] in ['utf-8', 'ascii']:
                     item['query'] = query.decode('utf-8')
                 else:
                     try:
@@ -170,6 +163,50 @@ class ClouddataMbpDataGet(object):
             item['keyword'] = item['keyword'].replace('+', ' ')
             item['query'] = item['query'].replace('+', ' ')
         
+        uniq_dict = {}
+        for query in result_list:
+            key = query['thedate']+query['auction_id']+query['keyword']+query['query']+query['buyer_id']
+            uniq_query = uniq_dict.get(key,{})
+            if not uniq_query:
+                uniq_dict[key] = query
+            else:
+                if int(query.get('gmv_auction_num',0)) > int(uniq_query.get('gmv_auction_num',0)):
+                    uniq_dict[key] = query
+        
+        result_list = uniq_dict.values()
+        return result_list
+    
+    @classmethod
+    def get_sid_keyword_query_report(cls, sid, sdate, edate, flag='all'):
+        """获取关键词_query报表"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt1":sdate_str, "dt2":edate_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        if flag == "all" or flag == "pc":
+            sql_id = 7387 if sid % 2 == 0 else 7389
+            ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+            result_list.extend(ret)
+
+        if flag == "all" or flag == "wx":
+            sql_id = 7388 if sid % 2 == 0 else 7390
+            ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+            result_list.extend(ret)
+        
+        word_set = StringTools.load_word_set()
+        for item in result_list:
+            keyword = urllib.unquote(item['keyword'])
+            keyword = urllib.unquote(keyword)
+            query = urllib.unquote(item['query'])
+            query = urllib.unquote(query)
+
+            item['keyword'] = StringTools.keyword_decode(keyword, word_set)
+            item['keyword'] = item['keyword'].replace('+', ' ')
+            item['query'] = StringTools.keyword_decode(query, word_set)
+            item['query'] = item['query'].replace('+', ' ')
+
         uniq_dict = {}
         for query in result_list:
             key = query['thedate']+query['auction_id']+query['keyword']+query['query']+query['buyer_id']
@@ -218,10 +255,12 @@ def get_shop(shop_id):
 if __name__ == '__main__':
     shop_id = int(sys.argv[1])
     #print "thedate,orderdate,shop_id,buyer_id,keyword,query,url_title,auction_id,gmv_auction_num,alipay_trade_amt,pay_status,gmv_time,alipay_time"
-    sdate = datetime.datetime.now() - datetime.timedelta(days=4)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=9)
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    res = ClouddataMbpDataGet.get_sid_nosearch_query_report(shop_id,sdate,edate)
-    #res = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id,sdate,edate)
+    #res = ClouddataMbpDataGet.get_sid_nosearch_query_report(shop_id,sdate,edate)
+    print 'start_time:',datetime.datetime.now()
+    res = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id,sdate,edate)
+    print 'end_time:',datetime.datetime.now()
     for item in res:
-        print item['thedate'],item['auction_id'],item['query'],item['buyer_id']
+        print item['thedate'],item['auction_id'],item['query'],item['keyword']
 
