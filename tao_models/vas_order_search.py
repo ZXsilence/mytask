@@ -27,7 +27,7 @@ class VasOrderSearch(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(10)
     def _search_vas_order(cls, start_created, end_created, page_no,soft_code, nick=None):
 
         req = VasOrderSearchRequest()
@@ -87,7 +87,7 @@ class VasOrderSearch(object):
         return VasOrderSearch.search_vas_order(start_created, end_created,soft_code, nick)
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(10)
     def get_var_orders_count(cls,start_created, end_created,soft_code,nick=None):
         """
         article_code 应用id 
@@ -107,9 +107,9 @@ class VasOrderSearch(object):
 
 
 if __name__ == '__main__':
-    nick = '麦苗科技001'
+    nick = '易瑞达家居专营店'
     soft_code = 'SYB'
-    start = datetime.datetime.now() - datetime.timedelta(30)
+    start = datetime.datetime.now() - datetime.timedelta(89)
     today = datetime.datetime.now()
     result = VasOrderSearch.search_vas_order_by_nick(start, today, soft_code,nick)
     for element in result:

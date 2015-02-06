@@ -133,6 +133,10 @@ class OperationType(object):
     IGNORE_ADGROUP_NOT_INCREASE_COST = 327
     IGNORE_ADGROUP_NOT_DECREASE_COST =328
     IGNORE_CAMPAIGN_BUDGET_OUT_LIMIT = 329
+    CHANGE_CAMPAIGN_PLATFORM_PC_DISCOUNT = 330
+    CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT = 331
+    OPEN_CAMPAIGN_PLATFORM_OPTIMIZE = 332
+    CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE = 333
 
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
@@ -230,7 +234,11 @@ class OperationType(object):
         STOP_OPTIMIZE_CAMPAIGN,
         
         CAMPAIGN_SCHEDULE_OPTIMIZE ,
-        CAMPAIGN_PLATFORM_OPTIMIZE
+        CAMPAIGN_PLATFORM_OPTIMIZE,
+        CHANGE_CAMPAIGN_PLATFORM_PC_DISCOUNT,
+        CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT,
+        OPEN_CAMPAIGN_PLATFORM_OPTIMIZE,
+        CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE
     ]
 
 
@@ -469,6 +477,10 @@ OPTTYPE_COMMENT = {
     , OperationType.IGNORE_CAMPAIGN_GIVE_UP:"放弃计划优化"
     , OperationType.IGNORE_ADGROUP_NOT_INCREASE_COST: "不需要加大投入"
     , OperationType.IGNORE_ADGROUP_NOT_DECREASE_COST: "不需要减少投入"
+    ,OperationType.CHANGE_CAMPAIGN_PLATFORM_PC_DISCOUNT:"调整pc平台折扣"
+    ,OperationType.CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT:"调整无线平台折扣"
+    ,OperationType.OPEN_CAMPAIGN_PLATFORM_OPTIMIZE:"开启平台优化"
+    ,OperationType.CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE:"关闭平台优化"
 
 }
 
@@ -489,6 +501,44 @@ class AdgroupHandleStatus(object):
     AUTO_DEAL = 1
     ONLY_PRICE = 2
 
+class FilterType(object):
+    OFFLINE = 'offline_type'
+    USER_CONFIRM = 'user_confirm'
+    BAN = 'is_ban'
+    USER_DELETE = 'is_user_delete'
+    USER_BLACK = 'is_user_black'
+
+    AUDIT_OFFLINE = 'audit_offline'
+    CRM_OFFLINE = 'crm_offline'
+    DISALLOW = 'disallow'
+    UNKNOWN = 'unknown'
+    FILTER = True
+
+    ALL_FILTER_CODE = [AUDIT_OFFLINE,CRM_OFFLINE,DISALLOW,UNKNOWN,FILTER]
+
+    ALL_FILTER_TYPE = {
+        OFFLINE : [AUDIT_OFFLINE,CRM_OFFLINE],
+        USER_CONFIRM : [DISALLOW,UNKNOWN],
+        BAN : [FILTER],
+        USER_DELETE : [FILTER],
+        USER_BLACK :[FILTER]
+    }
+
+    FILTER_COMMENT = {
+        (OFFLINE,AUDIT_OFFLINE):'审核下线'
+        ,(OFFLINE,CRM_OFFLINE):'crm下线'
+        ,(USER_CONFIRM,DISALLOW):'用户不同意推广'
+        ,(USER_CONFIRM,UNKNOWN):'有风险,用户还未确认'
+        ,(BAN,FILTER):'宝贝曾违规或审核失败'
+        ,(USER_DELETE,FILTER):'不推广用户删除的宝贝'
+        ,(USER_BLACK,FILTER):'用户添加到不推广名单中'
+    }
+
+    @classmethod
+    def REASON(cls,type,value):
+        if type in cls.ALL_FILTER_TYPE and value in cls.ALL_FILTER_TYPE[type]:
+            return cls.FILTER_COMMENT[(type,value)]
+
 LOGFAILTYPE_COMMENT = {
         LoginFailType.UN_BUY:'授权失败，当前用户未购买该软件，请切换淘宝帐号并重新登录，<a href="http://login.taobao.com/member/logout.jhtml?spm=1.1000386.5982201.5.qQ0uFL&f=top&out=true&redirectURL=http%3A%2F%2Fwww.taobao.com%2F">退出当前淘宝帐号</a>'
         ,LoginFailType.USER_NOT_EXIST:'用户不存在'
@@ -500,5 +550,4 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.ACCESS_TOKEN_ERROR:'授权失败，淘宝的access_token解析错误，请尝试重新登录'
         ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
         ,LoginFailType.FORBBDIEN_DEBUG_PLATFROM:'对不请,线上环境禁止debug登入,请从全拼域名的客服后台登入'
-        
 }
