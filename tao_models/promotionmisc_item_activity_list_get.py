@@ -48,11 +48,14 @@ class PromotionmiscItemActivityListGet(object):
     def get_item_promotion_list(cls,nick,soft_code = 'SYB'):
         data = []
         page_no = 1
+        max_page_no = 100
         while True:
             l = PromotionmiscItemActivityListGet._get_promotion_list(nick,page_no,soft_code)
             page_no += 1
             data.extend(l)
             if len(l) < cls.PAGE_SIZE:
+                break
+            if page_no > max_page_no:
                 break
         return change_obj_to_dict_deeply(data)
 
