@@ -80,12 +80,15 @@ class ClouddataMbpDataGet(object):
         return ret
 
     @classmethod
-    def get_sid_nosearch_query_report(cls, sid, sdate, edate, flag='all'):
+    def get_sid_nosearch_query_report(cls, sid, sdate, edate, dt1=None, dt2=None):
         """获取关键词_query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":sid, "dt1":sdate_str, "dt2":edate_str, "sdate":sdate_str, "edate":edate_str}
+        if dt1 and dt2:
+            query_dict = {"shop_id":sid, "dt1":dt1.strftime("%Y%m%d"), "dt2":dt2.strftime("%Y%m%d"), "sdate":sdate_str, "edate":edate_str}
+        else:
+            query_dict = {"shop_id":sid, "dt1":sdate_str, "dt2":edate_str, "sdate":sdate_str, "edate":edate_str}
         result_list = []
         sql_ids = [7391,7392,7393,7394,7395]
         index = int(sid) % 5
@@ -102,12 +105,40 @@ class ClouddataMbpDataGet(object):
         return result_list
 
     @classmethod
-    def get_sid_keyword_query_report(cls, sid, sdate, edate, flag='all'):
+    def get_test_wc_web_log(cls, sid, sdate, edate):
+        """获取测试无线web_log"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":sdate_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 6612
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_pc_hour_click(cls, sid, thedate):
+
+        sdate_str = thedate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":sdate_str, "thedate":sdate_str}
+        result_list = []
+
+        sql_id = 7741
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='all'):
         """获取关键词_query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":sid, "dt1":sdate_str, "dt2":edate_str, "sdate":sdate_str, "edate":edate_str}
+        if dt1 and dt2:
+            query_dict = {"shop_id":sid, "dt1":dt1.strftime("%Y%m%d"), "dt2":dt2.strftime("%Y%m%d"), "sdate":sdate_str, "edate":edate_str}
+        else:
+            query_dict = {"shop_id":sid, "dt1":sdate_str, "dt2":edate_str, "sdate":sdate_str, "edate":edate_str}
+        
         result_list = []
 
         if flag == "all" or flag == "pc":
@@ -184,13 +215,24 @@ def get_shop(shop_id):
 if __name__ == '__main__':
     shop_id = int(sys.argv[1])
     #print "thedate,orderdate,shop_id,buyer_id,keyword,query,url_title,auction_id,gmv_auction_num,alipay_trade_amt,pay_status,gmv_time,alipay_time"
-    sdate = datetime.datetime.now() - datetime.timedelta(days=5)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=9)
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    res = ClouddataMbpDataGet.get_sid_nosearch_query_report(shop_id,sdate,edate)
+    #res = ClouddataMbpDataGet.get_sid_nosearch_query_report(shop_id,sdate,edate)
     print 'start_time:',datetime.datetime.now()
-    #res = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id,sdate,edate)
-    res = ClouddataMbpDataGet.get_uniq_query(res)
+    
+    dt = datetime.datetime.now()-datetime.timedelta(days=1)
+    edt = dt-datetime.timedelta(days=6)
+    sdate = dt-datetime.timedelta(days=2)
+    res = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, sdate, dt, dt, dt)
+    
+    while dt > edt:
+        dt = dt-datetime.timedelta(days=1)
+        sdate = dt-datetime.timedelta(days=2)
+        res.extend(ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, sdate, sdate, dt, dt))
+
+    #res = ClouddataMbpDataGet.get_uniq_query(res)
+    #res = ClouddataMbpDataGet.get_pc_hour_click(shop_id,sdate)
     print 'end_time:',datetime.datetime.now()
     for item in res:
-        print item['thedate'],item['auction_id'],item['query'],item.get('keyword','')
+        print item['auction_id'],item.get('keyword',''),item['query']
 
