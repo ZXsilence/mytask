@@ -186,6 +186,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         continue
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
                         if e.sub_msg and "Query timeout:query has been executed more than 10 seconds" in e.sub_msg:
+                            sleep(1)
                             if retry_times == MAX_RETRY_TIMES:
                                 logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                                 raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
