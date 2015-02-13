@@ -164,6 +164,8 @@ class OperationType(object):
     STOP_CAMPAIGN = 612
     STOP_OPTIMIZE_CAMPAIGN = 613
 
+    UPGRADE_CAMPAIGN = 614
+
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
@@ -232,6 +234,7 @@ class OperationType(object):
         START_OPTIMIZE_CAMPAIGN,
         STOP_CAMPAIGN,
         STOP_OPTIMIZE_CAMPAIGN,
+        UPGRADE_CAMPAIGN,
         
         CAMPAIGN_SCHEDULE_OPTIMIZE ,
         CAMPAIGN_PLATFORM_OPTIMIZE,
@@ -463,6 +466,7 @@ OPTTYPE_COMMENT = {
     , OperationType.START_OPTIMIZE_CAMPAIGN: "计划加入托管"
     , OperationType.STOP_CAMPAIGN: "计划暂停推广"
     , OperationType.STOP_OPTIMIZE_CAMPAIGN: "计划取消托管"
+    , OperationType.UPGRADE_CAMPAIGN: "加力计划升级为全能计划"
     , OperationType.IGNORE_PLATFORM_UNHANDLE :"平台优化未打开"
     , OperationType.IGNORE_PLATFORM_CAMPAIGN_CANCEL_OPTIMIZE :"计划未托管，分时和平台不需要优化"
     , OperationType.IGNORE_PLATFORM_CAMPAIGN_LOW_COST:"计划花费过低，平台不需要优化" 
