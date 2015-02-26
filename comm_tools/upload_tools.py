@@ -78,5 +78,5 @@ def scp_file(root_path, ext_path, file_name,servers=['121.199.172.249','121.199.
     return True
 
 if __name__ == '__main__':
-    #print file_append_timestamp('111_1')
+    print file_append_timestamp('111_1')
     #scp_file('/home/dongxl/','','test2',['121.199.172.249','121.199.172.86'],22,'static','Static_maimiao2014','/home/static/assets/crm/1/',1)
