@@ -25,7 +25,7 @@ def upload_file(file_obj,root_path,category,proj_path,mode=None,with_scp=False):
     远程文件的绝对路径为:**+proj_path+category+'/'+mode_path+file_name
     """
     #创建文件路径
-    file_name = file_obj.name
+    file_name = file_append_timestamp(file_obj.name)
     mode_path=''
     ext_path= category + '/' + mode_path
     package_path = root_path + ext_path
@@ -44,6 +44,15 @@ def upload_file(file_obj,root_path,category,proj_path,mode=None,with_scp=False):
     if with_scp:
         flag = scp_file(root_path=root_path,ext_path=ext_path,file_name=file_name,dest_path='/home/static/'+proj_path)
     return flag,relative_file_path
+
+def file_append_timestamp(file_name):
+    timestamp=int(time.time())
+    buckets=file_name.split('.')
+    if len(buckets)==1:
+        return '%s_%s' % (file_name,timestamp)
+    suffix = buckets[-1]
+    pre_name = '.'.join(buckets[:-1])
+    return '%s_%s.%s' % (pre_name,timestamp,suffix)
 
 def scp_file(root_path, ext_path, file_name,servers=['121.199.172.249','121.199.172.86'],port=22, username='static',password='Static_maimiao2014',dest_path='/home/static/',max_retry_times=5):
     for server in servers:
@@ -67,4 +76,7 @@ def scp_file(root_path, ext_path, file_name,servers=['121.199.172.249','121.199.
                 continue
             break
     return True
-#scp_file('/home/dongxl/','','test2',['121.199.172.249','121.199.172.86'],22,'static','Static_maimiao2014','/home/static/assets/crm/1/',1)
+
+if __name__ == '__main__':
+    print file_append_timestamp('111_1')
+    #scp_file('/home/dongxl/','','test2',['121.199.172.249','121.199.172.86'],22,'static','Static_maimiao2014','/home/static/assets/crm/1/',1)
