@@ -499,6 +499,7 @@ class LoginFailType(object):
     ACCESS_TOKEN_ERROR = 8
     HTTP_ERROR = 9
     FORBBDIEN_DEBUG_PLATFROM= 10
+    NO_SUBSCRIBE = 11
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -554,4 +555,5 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.ACCESS_TOKEN_ERROR:'授权失败，淘宝的access_token解析错误，请尝试重新登录'
         ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
         ,LoginFailType.FORBBDIEN_DEBUG_PLATFROM:'对不请,线上环境禁止debug登入,请从全拼域名的客服后台登入'
+        ,LoginFailType.NO_SUBSCRIBE:'未找到订购关系,当前用户未购买软件或已退款'
 }
