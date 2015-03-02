@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 class SimbaRptAdgroupnonsearchEffectGet(object):
 
     @classmethod
-    @tao_api_exception(40)
+    @tao_api_exception()
     def get_rpt_adgroupnonsearcheffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time):
         """
         Notes:

@@ -24,7 +24,7 @@ from TaobaoSdk.Domain.multipart import PictureUploadRequest,FileItem
 
 from tao_models.common.decorator import  tao_api_exception
 from shop_db.services.shop_info_service import ShopInfoService
-from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_HOST,API_PORT
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 
@@ -38,22 +38,22 @@ class PictureUpload(object):
 
     @classmethod
     @tao_api_exception()
-    def upload_img(cls,nick,image_path):
+    def upload_img(cls,nick,image_path,category_id = 0,title = 'any.jpg'):
         soft_code = None
         shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,False)
         soft_code = shop_infos[0]['soft_code']
         access_token = shop_infos[0]['access_token']
         appkey = APP_SETTINGS[soft_code]['app_key']
         secret = APP_SETTINGS[soft_code]['app_secret']
-        req = PictureUploadRequest()
-        #req = PictureUploadRequest('223.5.20.253',8002)
+        req = PictureUploadRequest(API_HOST,API_PORT)
+        #req = PictureUploadRequest('121.199.170.144',30002)
         req.set_app_info({'appkey':appkey,'secret':secret})
 
-        image=FileItem('any.jpg',open(image_path))
+        image=FileItem(title,open(image_path))
         req.img = image
         req.image = image
-        req.picture_category_id = 0
-        req.image_input_title = 'any.jpg'
+        req.picture_category_id = category_id
+        req.image_input_title = title
 
         try:
             resp= req.getResponse(access_token)

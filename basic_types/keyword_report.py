@@ -10,7 +10,7 @@ class KeywordReportUnit(object):
     
     def get(self, key, value):
         keys = ["nick"
-               , "keywordid"
+               , "keyword_id"
                , "keywordstr"
                , "adgroup_id"
                , "campaign_id"
@@ -34,8 +34,6 @@ class KeywordReportUnit(object):
                 ,"cpc"
                 ,"ctr"
                ] 
-        if key == 'keyword_id':
-            key = 'keywordid'
         i = 0
         for k in keys:
             if k == key:
@@ -46,7 +44,7 @@ class KeywordReportUnit(object):
     
     def __getitem__(self, key):
         keys = ["nick"
-               , "keywordid"
+               , "keyword_id"
                , "keywordstr"
                , "adgroup_id"
                , "campaign_id"
@@ -70,8 +68,6 @@ class KeywordReportUnit(object):
                 ,"cpc"
                 ,"ctr"
                ]
-        if key == 'keyword_id':
-            key = 'keywordid'
         i = 0
         for k in keys:
             if k == key:
@@ -87,7 +83,7 @@ class KeywordReportBase(object):
 
     def __getitem__(self, key):
         keys = ["nick"
-               , "keywordid"
+               , "keyword_id"
                , "keywordstr"
                , "adgroup_id"
                , "campaign_id"
@@ -114,7 +110,7 @@ class KeywordReportEffect(object):
 
     def __getitem__(self, key):
         keys = ["nick"
-               , "keywordid"
+               , "keyword_id"
                , "keywordstr"
                , "adgroup_id"
                , "campaign_id"

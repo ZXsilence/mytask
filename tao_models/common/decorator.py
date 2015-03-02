@@ -10,6 +10,7 @@ import logging
 import traceback
 import inspect
 import time
+from threading import Thread
 
 from time import  sleep
 from datetime import datetime
@@ -184,7 +185,19 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
-                        if e.sub_code and e.sub_code.startswith('isv'):
+                        if e.sub_msg and "Query timeout:query has been executed more than 10 seconds" in e.sub_msg:
+                            sleep(1)
+                            if retry_times == MAX_RETRY_TIMES:
+                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                            continue
+                        if e.sub_code and e.sub_code == 'isv.invalid-permission':
+                            if retry_times == MAX_RETRY_TIMES:
+                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                            sleep(1)
+                            continue
+                        elif e.sub_code and e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
                             raise
                         elif e.sub_code and e.sub_code == "6001":
@@ -338,5 +351,24 @@ def script_manage(arg):
                 TaskService.upset_script_task(task_id,{'status':'done','result':a,'end_time':end_time})
         return __wrappe_func
     return _wrapper_func
+
+
+def server_timeout_check(func):
+    def __wrappe_func(*args, **kwargs):
+        name = args[0]
+        timeout = args[1]
+        contact = args[2]
+        host = args[3]
+        t = Thread(target=func,args=(name,timeout,contact,host))
+        t.start()
+        t.join(timeout)
+        if t.is_alive():
+            t._Thread__stop()
+            message = '【系统监控】%s响应较慢，超过限额值%s秒(主机:%s)'%(name,timeout,host)
+            logger.error(message)
+        else:
+            message = '【系统监控】%s响应未超时(主机:%s)'%(name,host)
+            logger.info(message)
+    return __wrappe_func
 
 

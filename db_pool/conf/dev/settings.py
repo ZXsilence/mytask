@@ -26,3 +26,5 @@ RDS1 = {
 RDS2 = RDS1
 #rds3实例连接池配置
 RDS3 = RDS1 
+#rds4实例连接池配置
+RDS4 = RDS1 
