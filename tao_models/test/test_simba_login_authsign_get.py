@@ -44,7 +44,9 @@ class test_simba_login_authsign_get(unittest.TestCase):
                                   'exception':'access session expired or invalid'}},
                 {'soft_code':'SYB', 'nick':'麦苗科技001', 'access_token':'asdasd2222',
                  'expect_result':{'code':27,'msg':'Invalid session','sub_code':'INVALID_PARAMS','sub_msg':'INVALID_PARAMS:invalid AccessToken : asdasd2222',
-                                  'exception':'access session expired or invalid'}}]
+                                  'exception':'access session expired or invalid'}},
+                {'soft_code':'SYB', 'nick':'tester', 'access_token':'62004155d9841cff42d5e4ceg02aa97dc7226246da446b5871727117',
+                 'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'无法根据nick获取直通车帐号信息'}}]
         for item in data:
             soft_code = item['soft_code']
             nick = item['nick']
@@ -56,9 +58,10 @@ class test_simba_login_authsign_get(unittest.TestCase):
                 self.assertEqual(len(expect_result),len(actual_result))
             except InvalidAccessTokenException,e:
                 self.assertEqual(e.msg,expect_result['exception'])
-                #self.assertEqual(e.code,expect_result['code'])
-                #self.assertAlmostEqual(e.msg,expect_result['msg'])
-                #self.assertDictEqual(e.sub_code,expect_result['sub_code'])
+            except ErrorResponseException,e:
+                self.assertEqual(e.code,expect_result['code'])
+                self.assertEqual(e.msg,expect_result['msg'])
+                self.assertEqual(e.sub_code,expect_result['sub_code'])
     def tearDown(self):
         pass
     
