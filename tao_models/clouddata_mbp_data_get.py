@@ -39,7 +39,8 @@ class ClouddataMbpDataGet(object):
         elements = []
         if column_list == [] or row_list == []:
             return elements
-        int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num"]
+        int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num",\
+                      "session_num","pv","visit_repeat_num","shop_collect_num","auction_collect_num","ipv","iuv"]
         date_fields = ["thedate", "dt"]
         float_fields = ["alipay_trade_amt"]
         for row in row_list:
@@ -293,6 +294,23 @@ class ClouddataMbpDataGet(object):
         while True:
             try:
                 rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+    
+    @classmethod
+    def get_seller_dwb_shop_rpt_90d(cls,sid,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '7858'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list(sid, sql_id, sdate, edate, offset, limit)
                 rpt_list.extend(rpt_sub_list)
                 if len(rpt_sub_list) < limit:
                     break
