@@ -130,6 +130,28 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_all_pc_schedule_rpt(cls,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"dt1":sdate_str, "dt2":edate_str}
+        result_list = []
+
+        sql_id = 7842 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_all_wx_schedule_rpt(cls,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"dt1":sdate_str, "dt2":edate_str}
+        result_list = []
+
+        sql_id = 7861 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='all'):
         """获取关键词_query报表"""
 
