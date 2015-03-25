@@ -504,6 +504,8 @@ class LoginFailType(object):
     HTTP_ERROR = 9
     FORBBDIEN_DEBUG_PLATFROM= 10
     NO_SUBSCRIBE = 11
+    UID_NOT_FOUND = 12
+    NEED_TOP_AUTH = 13
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -560,4 +562,6 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
         ,LoginFailType.FORBBDIEN_DEBUG_PLATFROM:'对不请,线上环境禁止debug登入,请从全拼域名的客服后台登入'
         ,LoginFailType.NO_SUBSCRIBE:'未找到订购关系,当前用户未购买软件或已退款'
+        ,LoginFailType.UID_NOT_FOUND:'授权失败,关键性信息uid缺失'
+        ,LoginFailType.NEED_TOP_AUTH:'需要OPEN授权'
 }
