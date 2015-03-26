@@ -22,6 +22,7 @@ from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,8 @@ class SimbaRptAdgroupkeywordbaseGet(object):
     @tao_api_exception()
     def get_rpt_adgroupkeywordbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type):
         req = SimbaRptAdgroupkeywordbaseGetRequest()
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         req.nick = nick
         req.adgroup_id = adgroup_id
         req.campaign_id = campaign_id
@@ -64,17 +67,19 @@ class SimbaRptAdgroupkeywordbaseGet(object):
                 break
             req.page_no += 1
         logger.debug("get_rpt_adgroupkeywordbase_list, adgroup_id:%s"%(adgroup_id))
-        return change_obj_to_dict_deeply(base_list)
-            
-            
-        
+        return change2num(change_obj_to_dict_deeply(base_list))
+
+
+
 if __name__ == '__main__':
     #搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = 'zhangyu_xql'
+    campaign_id = 6765909
+    adgroup_id =368440092 
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    print SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)
+    res =  SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)
+    for item in res:
+        print item

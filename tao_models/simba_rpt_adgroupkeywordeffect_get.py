@@ -22,6 +22,7 @@ from TaobaoSdk import SimbaRptAdgroupkeywordeffectGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,7 @@ class SimbaRptAdgroupkeywordeffectGet(object):
                 break
             req.page_no += 1
         logger.debug("get_rpt_adgroupkeywordeffect_list, adgroup_id:%s"%(adgroup_id))
-        return change_obj_to_dict_deeply(effect_list)
+        return change2num(change_obj_to_dict_deeply(effect_list))
     
 if __name__ == '__main__':
     nick = 'chinchinstyle'

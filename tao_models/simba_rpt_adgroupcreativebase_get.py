@@ -26,6 +26,7 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,7 @@ class SimbaRptAdgroupcreativeBaseGet(object):
             if len(l) < 500:
                 break
             req.page_no += 1
-        return change_obj_to_dict_deeply(base_list)
+        return change2num(change_obj_to_dict_deeply(base_list))
     
         
 if __name__ == '__main__':
