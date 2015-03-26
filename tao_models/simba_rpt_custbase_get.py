@@ -21,6 +21,7 @@ from TaobaoSdk import SimbaRptCustbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -44,14 +45,7 @@ class SimbaRptCustbaseGet(object):
             l = []
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        rpt_list  = change_obj_to_dict_deeply(l)
-        for item in  rpt_list:
-            for key in item.keys():
-                if key in keys_int:
-                    item[key] = int(item[key])
-                elif key in keys_float:
-                    item[key] = float(item[key])
-        return rpt_list
+        return change2num(change_obj_to_dict_deeply(l))
 
 if __name__ == "__main__":
     nick = '晓迎'

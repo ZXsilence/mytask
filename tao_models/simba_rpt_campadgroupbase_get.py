@@ -21,6 +21,7 @@ from TaobaoSdk import SimbaRptCampadgroupbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -62,14 +63,7 @@ class SimbaRptCampadgroupBaseGet(object):
             if len(subbase_list) < 500:
                 break
             page_no += 1
-        rpt_list  = change_obj_to_dict_deeply(base_list)
-        for item in  rpt_list:
-            for key in item.keys():
-                if key in keys_int:
-                    item[key] = int(item[key])
-                elif key in keys_float:
-                    item[key] = float(item[key])
-        return rpt_list
+        return change2num(change_obj_to_dict_deeply(base_list))
 
 if __name__ == '__main__':
     nick = 'zhangyu_xql'
