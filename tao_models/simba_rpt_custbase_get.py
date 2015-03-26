@@ -37,22 +37,31 @@ class SimbaRptCustbaseGet(object):
         req.source = source
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         l = json.loads(rsp.rpt_cust_base_list.lower())
         if l == {}:
             l = []
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        return change_obj_to_dict_deeply(l)
+        rpt_list  = change_obj_to_dict_deeply(l)
+        for item in  rpt_list:
+            for key in item.keys():
+                if key in keys_int:
+                    item[key] = int(item[key])
+                elif key in keys_float:
+                    item[key] = float(item[key])
+        return rpt_list
 
 if __name__ == "__main__":
     nick = '晓迎'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    start_time = datetime.datetime(2014,12,18)
-    end_time = datetime.datetime(2014,12,18)
+    start_time = datetime.datetime(2015,1,18)
+    end_time = datetime.datetime(2015,2,18)
     list = SimbaRptCustbaseGet.get_shop_rpt_base(nick, start_time, end_time)
     for obj in list:
-        print obj['source'],obj['click']
+        print obj
 
 
 
