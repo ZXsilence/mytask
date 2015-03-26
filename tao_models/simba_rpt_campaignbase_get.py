@@ -22,6 +22,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -49,14 +50,7 @@ class SimbaRptCampaignbaseGet(object):
             raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        rpt_list  = change_obj_to_dict_deeply(l)
-        for item in  rpt_list:
-            for key in item.keys():
-                if key in keys_int:
-                    item[key] = int(item[key])
-                elif key in keys_float:
-                    item[key] = float(item[key])
-        return rpt_list
+        return change2num(change_obj_to_dict_deeply(l))
     
     @classmethod
     @tao_api_exception()
@@ -79,14 +73,7 @@ class SimbaRptCampaignbaseGet(object):
             raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        rpt_list  = change_obj_to_dict_deeply(l)
-        for item in  rpt_list:
-            for key in item.keys():
-                if key in keys_int:
-                    item[key] = int(item[key])
-                elif key in keys_float:
-                    item[key] = float(item[key])
-        return rpt_list
+        return change2num(change_obj_to_dict_deeply(l))
         
     @classmethod
     def get_campaign_base_accumulate(cls, nick, campaign_id, search_type, source, sdate, edate):

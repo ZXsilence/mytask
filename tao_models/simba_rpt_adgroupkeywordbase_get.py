@@ -22,6 +22,7 @@ from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -66,14 +67,7 @@ class SimbaRptAdgroupkeywordbaseGet(object):
                 break
             req.page_no += 1
         logger.debug("get_rpt_adgroupkeywordbase_list, adgroup_id:%s"%(adgroup_id))
-        rpt_list  = change_obj_to_dict_deeply(base_list)
-        for item in  rpt_list:
-            for key in item.keys():
-                if key in keys_int:
-                    item[key] = int(item[key])
-                elif key in keys_float:
-                    item[key] = float(item[key])
-        return rpt_list
+        return change2num(change_obj_to_dict_deeply(base_list))
 
 
 

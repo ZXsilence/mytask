@@ -21,6 +21,7 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ class SimbaRptCampaigneffectGet(object):
                 raise ErrorResponseException(code=15, msg='rpt data error:%s'%rpt,\
                     sub_code='isp.internal-error', sub_msg='rpt data error:%s'%rpt,\
                     params={},rsp=rsp)
-        return change_obj_to_dict_deeply(l)
+        return change2num(change_obj_to_dict_deeply(l))
         
     @classmethod
     def get_campaign_effect_accumulate(cls, nick, campaign_id, search_type, source, sdate, edate):
