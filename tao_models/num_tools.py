@@ -12,7 +12,7 @@
 
 def change2num(rpt_list):
     keys_int  =["click","impressions","directpaycount","indirectpaycount","favitemcount","favshopcount"]
-    keys_float = ["cpm","avgpos","ctr","cost","directpay","indirectpay"]
+    keys_float = ["cpm","avgpos","ctr","cost","directpay","indirectpay","cpc"]
     if not rpt_list:
         return rpt_list
     for item in  rpt_list:
