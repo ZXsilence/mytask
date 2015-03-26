@@ -52,6 +52,8 @@ class SimbaRptCampadgroupBaseGet(object):
     def get_rpt_adgroupbase_list(cls, nick, campaign_id, start_time, end_time, search_type, source):
         page_no = 1
         base_list = []
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         while True:  
             subbase_list = SimbaRptCampadgroupBaseGet._get_rpt_adgroupbase_list(\
                     nick, campaign_id, start_time, end_time, search_type,\
@@ -60,12 +62,19 @@ class SimbaRptCampadgroupBaseGet(object):
             if len(subbase_list) < 500:
                 break
             page_no += 1
-        return change_obj_to_dict_deeply(base_list)
+        rpt_list  = change_obj_to_dict_deeply(base_list)
+        for item in  rpt_list:
+            for key in item.keys():
+                if key in keys_int:
+                    item[key] = int(item[key])
+                elif key in keys_float:
+                    item[key] = float(item[key])
+        return rpt_list
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = 'zhangyu_xql'
+    campaign_id = 6765909
+    adgroup_id =368440092 
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)

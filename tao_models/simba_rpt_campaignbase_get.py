@@ -39,6 +39,8 @@ class SimbaRptCampaignbaseGet(object):
         req.source = source
         req.search_type = search_type   
         soft_code = None
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         rsp = ApiService.execute(req,nick,soft_code)
         l = json.loads(rsp.rpt_campaign_base_list.lower())
         if l == {}:
@@ -47,12 +49,21 @@ class SimbaRptCampaignbaseGet(object):
             raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        return change_obj_to_dict_deeply(l)
+        rpt_list  = change_obj_to_dict_deeply(l)
+        for item in  rpt_list:
+            for key in item.keys():
+                if key in keys_int:
+                    item[key] = int(item[key])
+                elif key in keys_float:
+                    item[key] = float(item[key])
+        return rpt_list
     
     @classmethod
     @tao_api_exception()
     def get_camp_rpt_list_by_date(cls, nick, campaign_id, search_type, source, start_date, end_date):
         req = SimbaRptCampaignbaseGetRequest()
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         req.nick = nick
         req.campaign_id = campaign_id
         req.start_time = datetime.datetime.strftime(start_date, '%Y-%m-%d')
@@ -68,7 +79,14 @@ class SimbaRptCampaignbaseGet(object):
             raise ErrorResponseException(code=l['code'], msg=l['msg'], sub_code=l['sub_code'], sub_msg=l['sub_msg'])
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        return change_obj_to_dict_deeply(l)
+        rpt_list  = change_obj_to_dict_deeply(l)
+        for item in  rpt_list:
+            for key in item.keys():
+                if key in keys_int:
+                    item[key] = int(item[key])
+                elif key in keys_float:
+                    item[key] = float(item[key])
+        return rpt_list
         
     @classmethod
     def get_campaign_base_accumulate(cls, nick, campaign_id, search_type, source, sdate, edate):
@@ -107,14 +125,14 @@ class SimbaRptCampaignbaseGet(object):
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = 'zhangyu_xql'
+    campaign_id = 6765909
+    adgroup_id =368440092 
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     try_list = SimbaRptCampaignbaseGet.get_camp_rpt_list_by_date(nick, campaign_id, search_type, source, start_time, end_time)
     print try_list
-        
+
 
