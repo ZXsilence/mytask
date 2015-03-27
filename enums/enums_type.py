@@ -137,6 +137,8 @@ class OperationType(object):
     CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT = 331
     OPEN_CAMPAIGN_PLATFORM_OPTIMIZE = 332
     CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE = 333
+    
+    ADD_NEW_CAMPAIGN_SETTINGS = 334
 
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
@@ -155,6 +157,8 @@ class OperationType(object):
     STOP_ADGROUP = 512
     STOP_OPTIMIZE_ADGROUP = 513
     START_OPTIMIZE_ADGROUP_ONLY_PRICE = 514
+    RISE_ADGROUP_CPC_MAX = 515
+    DROP_ADGROUP_CPC_MAX = 516
 
 
     ADD_CAMPAIGN_NORMAL = 601
@@ -163,6 +167,8 @@ class OperationType(object):
     START_OPTIMIZE_CAMPAIGN = 611
     STOP_CAMPAIGN = 612
     STOP_OPTIMIZE_CAMPAIGN = 613
+
+    UPGRADE_CAMPAIGN = 614
 
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
@@ -227,11 +233,14 @@ class OperationType(object):
         STOP_ADGROUP,
         STOP_OPTIMIZE_ADGROUP,
         START_OPTIMIZE_ADGROUP_ONLY_PRICE,
+        RISE_ADGROUP_CPC_MAX,
+        DROP_ADGROUP_CPC_MAX,
 
         START_CAMPAIGN,
         START_OPTIMIZE_CAMPAIGN,
         STOP_CAMPAIGN,
         STOP_OPTIMIZE_CAMPAIGN,
+        UPGRADE_CAMPAIGN,
         
         CAMPAIGN_SCHEDULE_OPTIMIZE ,
         CAMPAIGN_PLATFORM_OPTIMIZE,
@@ -252,7 +261,8 @@ class OperationType(object):
 
         ADD_ADGROUP_NORMAL,
 
-        ADD_CAMPAIGN_NORMAL
+        ADD_CAMPAIGN_NORMAL,
+        ADD_NEW_CAMPAIGN_SETTINGS
     ]
 
     ALL_IGNORE_TYPES = [
@@ -463,6 +473,7 @@ OPTTYPE_COMMENT = {
     , OperationType.START_OPTIMIZE_CAMPAIGN: "计划加入托管"
     , OperationType.STOP_CAMPAIGN: "计划暂停推广"
     , OperationType.STOP_OPTIMIZE_CAMPAIGN: "计划取消托管"
+    , OperationType.UPGRADE_CAMPAIGN: "加力计划升级为全能计划"
     , OperationType.IGNORE_PLATFORM_UNHANDLE :"平台优化未打开"
     , OperationType.IGNORE_PLATFORM_CAMPAIGN_CANCEL_OPTIMIZE :"计划未托管，分时和平台不需要优化"
     , OperationType.IGNORE_PLATFORM_CAMPAIGN_LOW_COST:"计划花费过低，平台不需要优化" 
@@ -481,6 +492,9 @@ OPTTYPE_COMMENT = {
     ,OperationType.CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT:"调整无线平台折扣"
     ,OperationType.OPEN_CAMPAIGN_PLATFORM_OPTIMIZE:"开启平台优化"
     ,OperationType.CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE:"关闭平台优化"
+    ,OperationType.ADD_NEW_CAMPAIGN_SETTINGS:"新设置自动计划"
+    ,OperationType.RISE_ADGROUP_CPC_MAX:"为了效果加大投入,推广单元最高出价增加10%"
+    ,OperationType.DROP_ADGROUP_CPC_MAX:"为了效果减少投入,推广单元最高出价减少10%"
 
 }
 
@@ -495,6 +509,9 @@ class LoginFailType(object):
     ACCESS_TOKEN_ERROR = 8
     HTTP_ERROR = 9
     FORBBDIEN_DEBUG_PLATFROM= 10
+    NO_SUBSCRIBE = 11
+    UID_NOT_FOUND = 12
+    NEED_TOP_AUTH = 13
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -550,4 +567,7 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.ACCESS_TOKEN_ERROR:'授权失败，淘宝的access_token解析错误，请尝试重新登录'
         ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
         ,LoginFailType.FORBBDIEN_DEBUG_PLATFROM:'对不请,线上环境禁止debug登入,请从全拼域名的客服后台登入'
+        ,LoginFailType.NO_SUBSCRIBE:'未找到订购关系,当前用户未购买软件或已退款'
+        ,LoginFailType.UID_NOT_FOUND:'授权失败,关键性信息uid缺失'
+        ,LoginFailType.NEED_TOP_AUTH:'需要OPEN授权'
 }

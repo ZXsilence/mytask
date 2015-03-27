@@ -21,6 +21,7 @@ from TaobaoSdk import SimbaRptCustbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -37,22 +38,24 @@ class SimbaRptCustbaseGet(object):
         req.source = source
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         l = json.loads(rsp.rpt_cust_base_list.lower())
         if l == {}:
             l = []
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-        return change_obj_to_dict_deeply(l)
+        return change2num(change_obj_to_dict_deeply(l))
 
 if __name__ == "__main__":
     nick = '晓迎'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    start_time = datetime.datetime(2014,12,18)
-    end_time = datetime.datetime(2014,12,18)
+    start_time = datetime.datetime(2015,1,18)
+    end_time = datetime.datetime(2015,2,18)
     list = SimbaRptCustbaseGet.get_shop_rpt_base(nick, start_time, end_time)
     for obj in list:
-        print obj['source'],obj['click']
+        print obj
 
 
 

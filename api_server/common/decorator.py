@@ -70,6 +70,9 @@ def sdk_exception(MAX_RETRY_TIMES = 20):
                     retry_times += 1
                     continue
                 except Exception,e:
+                    if retry_times != MAX_RETRY_TIMES and ("Connection reset by peer" in str(e) or " Connection timed out" in str(e)):
+                        retry_times += 1
+                        continue
                     logger.exception('sdk error:%s'%e)
                     raise e
                 else:
