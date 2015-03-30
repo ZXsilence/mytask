@@ -48,15 +48,21 @@ class PromotionmiscItemActivityListGet(object):
     def get_item_promotion_list(cls,nick,soft_code = 'SYB'):
         data = []
         page_no = 1
+        max_page_no = 100
         while True:
             l = PromotionmiscItemActivityListGet._get_promotion_list(nick,page_no,soft_code)
             page_no += 1
+            #api bug处理,当page_size 刚好等于活动数量时,api返回的数量一致导致进入死循环
+            if data[-cls.PAGE_SIZE:] == l:
+                break
             data.extend(l)
             if len(l) < cls.PAGE_SIZE:
+                break
+            if page_no > max_page_no:
                 break
         return change_obj_to_dict_deeply(data)
 
 if __name__ == "__main__":
-    nick = "麦苗科技001"
+    nick = "songsongq6"
     activity_list = PromotionmiscItemActivityListGet.get_item_promotion_list(nick)
     print len(activity_list)
