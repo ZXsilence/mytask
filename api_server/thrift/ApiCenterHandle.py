@@ -20,6 +20,8 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
    
 class ApiCenterHandle(object):
 
+    WHITE_METHOD_LIST = ['taobao.items.list.get','taobao.vas.subscribe.get','taobao.vas.order.search','taobao.fuwu.sale.link.gen','taobao.vas.subsc.search']
+
     def execute(self,params,nick,soft_code,api_source):
         """
             params       API请求淘宝的参数
@@ -98,6 +100,8 @@ class ApiCenterHandle(object):
             app_secret = APP_SETTINGS[soft_code]['app_secret']
             access_token = shop_info['access_token']
             api_method = params['method']
+            if api_method in ApiCenterHandle.WHITE_METHOD_LIST:
+                access_token = None
 
             #报表相关接口需要subway_token
             if api_method in API_NEED_SUBWAY_TOKEN:
