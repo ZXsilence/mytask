@@ -39,9 +39,10 @@ class ClouddataMbpDataGet(object):
         elements = []
         if column_list == [] or row_list == []:
             return elements
-        int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num"]
+        int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num",\
+                      "session_num","pv","visit_repeat_num","shop_collect_num","auction_collect_num","ipv","iuv","visit_platform","gmv_trade_num"]
         date_fields = ["thedate", "dt"]
-        float_fields = ["alipay_trade_amt"]
+        float_fields = ["alipay_trade_amt","bounce_rate"]
         for row in row_list:
             values = row.values
             rpt = {}
@@ -115,6 +116,42 @@ class ClouddataMbpDataGet(object):
     def _get_data_list5(cls,sid,sql_id,thedate,sub_offset=0,sub_limit=5000):
         date_str = thedate.strftime("%Y%m%d")
         parameter = "shop_id="+str(sid)+",thedate="+date_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        req = ClouddataMbpDataGetRequest() 
+        req.sid = sid
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
+    def _get_data_list_with_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
+        n = datetime.datetime.now()
+        dt = n-datetime.timedelta(days=1)
+        dt_str = dt.strftime("%Y%m%d")
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        if other_param_dict:
+            for k,v in other_param_dict.iteritems():
+                parameter += ",%s=%s" % (k,v)
+        req = ClouddataMbpDataGetRequest() 
+        req.sid = sid
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
+    def _get_data_list_between_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
+        n = datetime.datetime.now()
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        if other_param_dict:
+            for k,v in other_param_dict.iteritems():
+                parameter += ",%s=%s" % (k,v)
         req = ClouddataMbpDataGetRequest() 
         req.sid = sid
         req.sql_id = sql_id
@@ -293,6 +330,74 @@ class ClouddataMbpDataGet(object):
         while True:
             try:
                 rpt_sub_list = cls._get_data_list(sid,sql_id,sdate,edate,offset,limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+    
+    @classmethod
+    def get_seller_dwb_shop_rpt_90d(cls,sid,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '7858'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list(sid, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+    
+    @classmethod
+    def get_shop_platform_view_90d(cls,sid,sdate,edate,platform_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '7874'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_with_dt(sid, sql_id, sdate, edate, offset, limit,{'platform':'platform_id'})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+    
+    @classmethod
+    def get_shop_last_effect_src_90d(cls,sid,sdate,edate,src_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '7875'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_with_dt(sid, sql_id, sdate, edate, offset, limit,{'src_id':src_id})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_seller_dwb_auction_rpt_90d(cls,sid,sdate,edate,auction_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '7876'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
                 rpt_list.extend(rpt_sub_list)
                 if len(rpt_sub_list) < limit:
                     break

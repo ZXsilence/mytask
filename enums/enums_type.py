@@ -157,6 +157,8 @@ class OperationType(object):
     STOP_ADGROUP = 512
     STOP_OPTIMIZE_ADGROUP = 513
     START_OPTIMIZE_ADGROUP_ONLY_PRICE = 514
+    RISE_ADGROUP_CPC_MAX = 515
+    DROP_ADGROUP_CPC_MAX = 516
 
 
     ADD_CAMPAIGN_NORMAL = 601
@@ -231,6 +233,8 @@ class OperationType(object):
         STOP_ADGROUP,
         STOP_OPTIMIZE_ADGROUP,
         START_OPTIMIZE_ADGROUP_ONLY_PRICE,
+        RISE_ADGROUP_CPC_MAX,
+        DROP_ADGROUP_CPC_MAX,
 
         START_CAMPAIGN,
         START_OPTIMIZE_CAMPAIGN,
@@ -489,6 +493,8 @@ OPTTYPE_COMMENT = {
     ,OperationType.OPEN_CAMPAIGN_PLATFORM_OPTIMIZE:"开启平台优化"
     ,OperationType.CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE:"关闭平台优化"
     ,OperationType.ADD_NEW_CAMPAIGN_SETTINGS:"新设置自动计划"
+    ,OperationType.RISE_ADGROUP_CPC_MAX:"为了效果加大投入,推广单元最高出价增加10%"
+    ,OperationType.DROP_ADGROUP_CPC_MAX:"为了效果减少投入,推广单元最高出价减少10%"
 
 }
 
@@ -504,6 +510,8 @@ class LoginFailType(object):
     HTTP_ERROR = 9
     FORBBDIEN_DEBUG_PLATFROM= 10
     NO_SUBSCRIBE = 11
+    UID_NOT_FOUND = 12
+    NEED_TOP_AUTH = 13
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -560,4 +568,6 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.HTTP_ERROR:'授权失败，与淘宝通信出错，请尝试重新登录'
         ,LoginFailType.FORBBDIEN_DEBUG_PLATFROM:'对不请,线上环境禁止debug登入,请从全拼域名的客服后台登入'
         ,LoginFailType.NO_SUBSCRIBE:'未找到订购关系,当前用户未购买软件或已退款'
+        ,LoginFailType.UID_NOT_FOUND:'授权失败,关键性信息uid缺失'
+        ,LoginFailType.NEED_TOP_AUTH:'需要OPEN授权'
 }

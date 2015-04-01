@@ -22,6 +22,7 @@ from TaobaoSdk import SimbaRptCampadgroupeffectGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +62,7 @@ class SimbaRptCampadgroupEffectGet(object):
             if len(subeffect_list) < 500:
                 break
             page_no += 1
-        return change_obj_to_dict_deeply(effect_list)
+        return change2num(change_obj_to_dict_deeply(effect_list))
 
 
 if __name__ == '__main__':
