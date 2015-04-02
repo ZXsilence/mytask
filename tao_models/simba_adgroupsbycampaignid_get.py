@@ -126,18 +126,41 @@ class SimbaAdgroupsbycampaignidGet(object):
         logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))
         return {'total_item':change_obj_to_dict_deeply(rsp.adgroups.total_item), 'adgroup_list':change_obj_to_dict_deeply(adgroup_list)}
 
+    @classmethod
+    @tao_api_exception()
+    def get_adgroup_count_by_campaign_id(cls, nick, campaign_id):
+        req = SimbaAdgroupsbycampaignidGetRequest()
+        req.page_size = 1
+        req.nick = nick
+        req.campaign_id = campaign_id
+        req.page_no = 1
+        soft_code = None
+        count = 0
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
+                return count
+            raise e
+        if not rsp.adgroups.total_item:
+            logger.debug("no adgroup in campaign:%i"%(campaign_id))
+            return count
+        return rsp.adgroups.total_item
+
 
 def test():
     nick = '美之雅家具'
     campaign_id =3075359 
+    nick = 'tmmly5520'
+    campaign_id = 3432596
     #nick = 'chinchinstyle'
     #campaign_id = 3328400
     adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
-    for adgroup in adgroups:
-        print adgroup
+    ids = [obj['adgroup_id'] for obj in adgroups]
+    #open('/tmp/a','w').write(str(ids))
+    print len(adgroups)
 
-    print SimbaAdgroupsbycampaignidGet.get_adgroup_count(nick, campaign_id)
-    print SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign_with_overview(nick, campaign_id)
+    print SimbaAdgroupsbycampaignidGet.get_adgroup_count_by_campaign_id(nick, campaign_id)
 
 if __name__ == '__main__':
     test()
