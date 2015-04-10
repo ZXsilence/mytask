@@ -46,6 +46,8 @@ class test_simba_insight_catsinfo_get(unittest.TestCase):
                                    'cat_id': 50023582, 
                                    'last_sync_time': datetime.datetime(2011, 5, 19, 16, 26, 25), 
                                    'cat_path_id': '50022517 50012374 50023582'}]},
+                {'cat_id_list':[50023582],'type':2,
+                 'expect_result':[]},
                 {'cat_id_list':[50012374],'type':2,
                  'expect_result':[{'parent_cat_id': 50012374, 
                                    'cat_name': '防辐射卡', 
