@@ -56,18 +56,31 @@ class test_simba_insight_catsdata_get(unittest.TestCase):
                                    'transactionshippingtotal': 3,
                                    'favitemtotal': 2, 
                                    'cat_id': 50023582,
-                                   'favtotal': 2}] }]
+                                   'favtotal': 2}] },
+                {'cat_id_list':[501111582],'start_date_offset':8,'end_date_offset':1,
+                 'expect_result':[]},
+                {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
+                 'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'类目id错误！'}}]
         for item in data:
             cat_id_list = item['cat_id_list']
             start_date  = datetime.datetime.now() - datetime.timedelta(days = item['start_date_offset'])
             end_date    = datetime.datetime.now() - datetime.timedelta(days = item['end_date_offset'])
-            actual_result = SimbaInsightCatsdataGet.get_cats_data(cat_id_list,start_date,end_date)
             expect_result = item['expect_result']
-            self.assertEqual(type(actual_result),list)
-            self.assertEqual(type(actual_result[0]),dict)
-            for index in range(len(actual_result)):
-                self.assertEqual(actual_result[index]['cat_id'],expect_result[index]['cat_id'])
-                self.assertEqual(actual_result[index].keys().sort(),expect_result[index].keys().sort())
+            try:
+                actual_result = SimbaInsightCatsdataGet.get_cats_data(cat_id_list,start_date,end_date)
+                self.assertEqual(type(actual_result),list)
+                if len(actual_result)==0:
+                    self.assertEqual(actual_result,expect_result)
+                    continue
+                self.assertEqual(type(actual_result[0]),dict)
+                for index in range(len(actual_result)):
+                    self.assertEqual(actual_result[index]['cat_id'],expect_result[index]['cat_id'])
+                    self.assertEqual(actual_result[index].keys().sort(),expect_result[index].keys().sort())
+            except ErrorResponseException,e:
+                self.assertEqual(e.code,expect_result['code'])
+                self.assertEqual(e.msg,expect_result['msg'])
+                self.assertEqual(e.sub_code,expect_result['sub_code'])
+
     
     def tearDown(self):
         pass
