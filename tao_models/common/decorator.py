@@ -282,11 +282,12 @@ def mongo_exception(func):
     return wrapped_func
 
 def get_sys_info(pid):
-    res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
-    p = re.compile(r'\s+')  
-    l = p.split(res)  
+    #res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
+    #p = re.compile(r'\s+')  
+    #l = p.split(res)  
     #'user':l[0],'pid':l[1],'cpu':l[2],'mem':l[3],'vsa':l[4],'rss':l[5],'start_time':l[6]
-    curr_mem = float(l[5])/1000.0
+    #curr_mem = float(l[5])/1000.0
+    curr_mem = 0
     curr_time = time.time()*1000
     return (curr_time,curr_mem)
 
@@ -328,6 +329,7 @@ def task_manage(arg):
             else:
                 end_time = datetime.now()
                 TaskService.upset_task(task_id,{'status':'done','result':a,'end_time':end_time})
+            return a
         return __wrappe_func
     return _wrapper_func
 
