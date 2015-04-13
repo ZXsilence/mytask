@@ -3,7 +3,7 @@
 """
 @author: luxiaowen
 @contact: luxiaowen@maimiaotech.com
-@date: 2015-04-12 22:31
+@date: 2015-04-13 11:01
 @version: 0.0.0
 @license: Copyright Maimiaotech.com
 @copyright: Copyright Maimiaotech.com
@@ -21,11 +21,11 @@ if __name__ == '__main__':
 
 import unittest
 import datetime
-from tao_models.simba_insight_wordsareadata_get import SimbaInsightWordsareadataGet 
+from tao_models.simba_insight_wordspricedata_get import SimbaInsightWordspricedataGet 
 from TaobaoSdk.Exceptions import ErrorResponseException
 #from tao_models.common.exceptions import InvalidAccessTokenException
 
-class test_simba_insight_wordsareadata_get(unittest.TestCase):
+class test_simba_insight_wordspricedata_get(unittest.TestCase):
     maxDiff = None
     @classmethod
     def setUpClass(cls):
@@ -34,31 +34,30 @@ class test_simba_insight_wordsareadata_get(unittest.TestCase):
     def setUp(self):
         pass
     
-    def test_get_cats_data(self):
+    def test_get_words_price_data(self):
         '''
         校验实际返回的词数目是否一致（可能不足），权重是够降序
         '''
-        data = [{'bidword':u'牙刷','start_date_offset':7,'end_date_offset':1,
-                 'expect_result':[{'impression': 39101, 
-                                   'cpc': '139.45', 
-                                   'provincename': u'\u5b89\u5fbd', 
-                                   'ctr': '1.03', 
-                                   'roi': '0.89', 
-                                   'directtransactionshipping': 27, 
-                                   'indirecttransactionshipping': 1, 
-                                   'cityname': u'\u5b89\u5fbd', 
-                                   'competition': 0, 
-                                   'transactiontotal': 49947, 
-                                   'cost': 55892, 
-                                   'directtransaction': 48453, 
-                                   'indirecttransaction': 1633, 
-                                   'coverage': '5.99', 
-                                   'favshoptotal': 4, 
-                                   'transactionshippingtotal': 28, 
-                                   'bidword': u'牙刷', 
-                                   'favitemtotal': 11, 
-                                   'click': 442, 
-                                   'favtotal': 15}]} ]
+        data = [{'bidword':u'连衣裙','start_date_offset':2,'end_date_offset':1,
+                 'expect_result':[{'impression': 230295, 
+                                   'cpc': '28.25', 
+                                   'transactiontotal': 112859, 
+                                   'ctr': '0.53', 
+                                   'roi': '3.23', 
+                                   'directtransactionshipping': 10, 
+                                   'indirecttransactionshipping': 4, 
+                                   'competition': 541, 
+                                   'click': 1353, 
+                                   'cost': 35761, 
+                                   'directtransaction': 90092, 
+                                   'indirecttransaction': 23925, 
+                                   'coverage': '0.89', 
+                                   'favshoptotal': 11, 
+                                   'transactionshippingtotal': 13, 
+                                   'bidword': u'\u8fde\u8863\u88d9', 
+                                   'favitemtotal': 30, 
+                                   'price': 5, 
+                                   'favtotal': 41}]} ]
         
         for item in data:
             bidword = item['bidword']
@@ -66,7 +65,7 @@ class test_simba_insight_wordsareadata_get(unittest.TestCase):
             edate = datetime.datetime.now() - datetime.timedelta(days=item['end_date_offset'])
             expect_result = item['expect_result']
             try:
-                actual_result = SimbaInsightWordsareadataGet.get_words_area_data(bidword,sdate,edate)
+                actual_result = SimbaInsightWordspricedataGet.get_words_price_data(bidword,sdate,edate)
                 self.assertEqual(type(actual_result),list)
                 if len(actual_result)==0:
                     self.assertEqual(actual_result,expect_result)
@@ -74,11 +73,10 @@ class test_simba_insight_wordsareadata_get(unittest.TestCase):
                 self.assertEqual(type(actual_result[0]),dict)
                 for index in range(len(actual_result)):
                     self.assertEqual(actual_result[index]['bidword'],expect_result[0]['bidword'])
-                    if actual_result[index].get('provincename',None):
+                    if actual_result[index].get('price',None):
                         self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
-                        self.assertEqual(actual_result[index]['provincename'],actual_result[index]['cityname'])
+                        #self.assertEqual(actual_result[index]['provincename'],actual_result[index]['cityname'])
                     else:
-                        #有问题的数据应该是香港和澳门
                         self.assertIn(len(actual_result[index]),[15,18])
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])
@@ -94,6 +92,8 @@ class test_simba_insight_wordsareadata_get(unittest.TestCase):
         pass
 if __name__ == "__main__":
     unittest.main()
+
+
 
 
 
