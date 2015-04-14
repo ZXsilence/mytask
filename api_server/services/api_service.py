@@ -56,7 +56,8 @@ class ApiService(object):
         parameters = dict()
         for key, value in req.__dict__.iteritems():
             if key == 'timestamp':
-                value = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(value))
+                #value = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(value))
+                value = str(long(time.time() * 1000))
             if value == None:
                 continue
             parameters[key] = unicode(value)
