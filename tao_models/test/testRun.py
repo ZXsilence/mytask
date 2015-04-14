@@ -54,6 +54,7 @@ import test_simba_adgroup_catmatch_update
 import test_simba_adgroup_nonsearchprices_update
 import test_simba_adgroup_nonsearchstates_update
 import test_picture_category_add
+import test_clouddata_mbp_data_get
 
 import test_promotionmisc_activity_range_add
 import test_promotionmisc_activity_range_all_remove
@@ -120,6 +121,7 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_adgroup_nonsearchstates_update.alltests
                                ,test_picture_upload_and_delete.alltests
                                ,test_picture_category_add.alltests
+                               ,test_clouddata_mbp_data_get.alltests
                                #promotionmisc暂时不跑
                                #,test_promotionmisc_activity_range_add.alltests
                                #,test_promotionmisc_activity_range_all_remove.alltests
