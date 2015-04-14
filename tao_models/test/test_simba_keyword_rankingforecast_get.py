@@ -23,7 +23,7 @@ import unittest
 import datetime
 from tao_models.simba_keyword_rankingforecast_get import SimbaKeywordRankingforecastGet 
 from TaobaoSdk.Exceptions import ErrorResponseException
-#from tao_models.common.exceptions import InvalidAccessTokenException
+from tao_models.common.exceptions import InvalidAccessTokenException
 
 class test_simba_keyword_rankingforecast_get(unittest.TestCase):
     maxDiff = None
@@ -47,7 +47,11 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
                                              16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 
                                              15, 15, 15, 14, 14, 14, 14, 14, 14, 14], 
                                   'keyword_id': 69533299980, 
-                                  'nick': u'\u6653\u8fce'}] } ]
+                                  'nick': u'\u6653\u8fce'}] } ,
+                {'nick':'晓迎','keyword_id':69533287980,
+                'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'keyword.not.found'}},
+                {'nick':'晓迎1','keyword_id':69533299980,
+                 'expect_result':{'exception':'access session expired or invalid'}}]
                # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
                #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'类目id错误！'}}]
         for item in data:
@@ -70,6 +74,8 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
                     self.assertEqual(type(actual_result[0]['prices'][index]),int)
                     if index > 0:
                         self.assertLessEqual(actual_result[0]['prices'][index],actual_result[0]['prices'][index-1])
+            except InvalidAccessTokenException,e:
+                self.assertEqual(e.msg,expect_result['exception'])
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])
