@@ -37,9 +37,15 @@ class test_simba_keywordids_deleted_get(unittest.TestCase):
     def test_get_words_cats_data(self):
         data = [{'nick':'chinchinstyle','start_date_offset':7,
                  'expect_result':[97225580319, 97225580318, 97225580317, 97225580316, 97225580315, 97225580314, 97225580313, 97225580312, 
-                                  97225568410, 97225568409, 97225568408, 97225568407, 97225568406, 97225568405, 97225568403, 97225568402]} ] 
+                                  97225568410, 97225568409, 97225568408, 97225568407, 97225568406, 97225568405, 97225568403, 97225568402]},
+                {'nick':'chinchinstyle','start_date_offset':0,
+                 'expect_result':[]},
+                {'nick':'chinchinstyle','start_date_offset':100,
+                 'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.missing-parameter','sub_msg':'date.must.lt.one.month'}},
+                {'nick':'chin1chinstyle','start_date_offset':100,                 
+                 'expect_result':{'exception':'access session expired or invalid'}}]
                # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
-               #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'类目id错误！'}}]
+               #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.missing-parameter','sub_msg':'date.must.lt.one.month'}}]
         for item in data:
             nick = item['nick']
             start_time = datetime.datetime.now()-datetime.timedelta(days=item['start_date_offset'])
@@ -55,7 +61,6 @@ class test_simba_keywordids_deleted_get(unittest.TestCase):
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])
                 self.assertEqual(e.sub_code,expect_result['sub_code'])
-
     def tearDown(self):
         pass
     
