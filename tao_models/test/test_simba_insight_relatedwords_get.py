@@ -68,7 +68,10 @@ class test_simba_insight_relatedwords_get(unittest.TestCase):
                     self.assertEqual(actual_result[index]['bidword'],expect_result[index]['bidword'])
                     self.assertEqual(actual_result[index].keys().sort(),expect_result[index].keys().sort())
                     self.assertEqual(len(actual_result[index]['related_word_items_list']),num)
-                    #self.assertEqual(actual_result['related_word_items_list'],expect_result)
+                    if num > 1:
+                        for i in range(num):
+                            if i > 0:
+                                self.assertLessEqual(actual_result[index]['related_word_items_list'][i]['weight'],actual_result[index]['related_word_items_list'][i-1]['weight'])
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])
