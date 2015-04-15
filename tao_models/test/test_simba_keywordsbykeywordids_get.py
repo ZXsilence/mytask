@@ -62,7 +62,13 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
                                   'keyword_id': 96000635553, 
                                   'audit_status': 'audit_pass', 
                                   'max_price': 50, 
-                                  'adgroup_id': 407767758}}]
+                                  'adgroup_id': 407767758}},
+                {'nick':'晓迎','keywordids_list':[96000635553,101461016943,99975482757]*100,
+                 'expect_result':{'code':41,'msg':'Invalid arguments:keyword_ids','sub_code':None,'sub_msg':None}},
+                {'nick':'晓迎','keywordids_list':[122],
+                 'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.entity-not-exist','sub_msg':'推广组未找到'}},
+                {'nick':'晓迎','keywordids_list':[],
+                 'expect_result':{'code':41,'msg':'Invalid arguments:keyword_ids','sub_code':None,'sub_msg':None}}]
                 #{'nick':'晓迎1','adgroup_id':69533299980,
                 # 'expect_result':{'exception':'access session expired or invalid'}}]
                # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
@@ -76,6 +82,8 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
                 self.assertEqual(type(actual_result),list)
                 if len(actual_result) == 0:
                     self.assertEqual(actual_result,expect_result)
+                    continue
+                self.assertEqual(len(actual_result),len(keywordids_list))
                 for index in range(len(actual_result)):
                     actual_res =  actual_result[index].__dict__
                     #self.assertEqual(type(actual_result[index]),<class 'Domain.Keyword.Keyword'>)
@@ -88,6 +96,7 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])
                 self.assertEqual(e.sub_code,expect_result['sub_code'])
+                self.assertEqual(e.sub_msg,expect_result['sub_msg'])
     def tearDown(self):
         pass
     
