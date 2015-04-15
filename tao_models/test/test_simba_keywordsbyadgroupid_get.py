@@ -48,7 +48,11 @@ class test_simba_keywordsbyadgroupid_get(unittest.TestCase):
                                    'keyword_id': 105291664764, 
                                    'audit_status': 'audit_pass', 
                                    'max_price': 64, 
-                                   'is_garbage': False}]}]
+                                   'is_garbage': False}]},
+                {'nick':'chinchinstyle','adgroup_id':111111,
+                 'expect_result':[]},
+                {'nick':'晓迎1','adgroup_id':69533299980,
+                 'expect_result':{'exception':'access session expired or invalid'}}]
                # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
                #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.missing-parameter','sub_msg':'date.must.lt.one.month'}}]
         for item in data:
@@ -58,6 +62,8 @@ class test_simba_keywordsbyadgroupid_get(unittest.TestCase):
             try:
                 actual_result = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup_id)
                 self.assertEqual(type(actual_result),list)
+                if len(actual_result) == 0:
+                    self.assertEqual(actual_result,expect_result)
                 for index in range(len(actual_result)):
                     self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
                     self.assertEqual(actual_result[index]['adgroup_id'],adgroup_id)
