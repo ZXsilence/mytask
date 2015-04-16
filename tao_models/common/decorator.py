@@ -329,6 +329,7 @@ def task_manage(arg):
             else:
                 end_time = datetime.now()
                 TaskService.upset_task(task_id,{'status':'done','result':a,'end_time':end_time})
+            return a
         return __wrappe_func
     return _wrapper_func
 
