@@ -59,7 +59,7 @@ class TestVasOrderSearch(unittest.TestCase):
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
     
-    def test_search_vas_order_yesterday(self):
+    def itest_search_vas_order_yesterday(self):
         for inputdata in self.testData_yesterday:
             is_popped= False
             try:
@@ -72,7 +72,7 @@ class TestVasOrderSearch(unittest.TestCase):
                 self.assertRaises(inputdata['exceptClass'])
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-    def test_search_vas_order_all(self):
+    def itest_search_vas_order_all(self):
         for inputdata in self.testData_yesterday:
             is_popped= False
             try:

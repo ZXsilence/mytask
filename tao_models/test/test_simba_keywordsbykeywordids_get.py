@@ -105,3 +105,4 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
         pass
 if __name__ == "__main__":
     unittest.main()
+alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_keywordsbykeywordids_get)

@@ -113,3 +113,4 @@ class test_simba_insight_catsinfo_get(unittest.TestCase):
         pass
 if __name__ == "__main__":
     unittest.main()
+alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_insight_catsinfo_get)
