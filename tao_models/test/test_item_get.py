@@ -46,6 +46,7 @@ class TestItemGet(unittest.TestCase):
     def setUp(self):
         pass
 
+    @unittest.skip("Unconditionally skip the No Use test")
     def test_get_cid(self):
         for inputdata in self.testInputDatas_cid:
             self.tcinfo = 'API Test - taobao.item.get'
@@ -59,7 +60,7 @@ class TestItemGet(unittest.TestCase):
                 self.assertRaises(inputdata['exceptionClass'])
             finally:
                 self.assertEqual(inputdata['popException'],is_poped,self.tcinfo)
-
+    @unittest.skip("Unconditionally skip the No Use test")
     def test_get_item_info(self):
         for inputdata in self.testInputDatas_info:
             self.tcinfo = 'API Test - taobao.item.get'
