@@ -145,7 +145,8 @@ class ClouddataMbpDataGet(object):
     @classmethod
     @tao_api_exception()
     def _get_data_list_between_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
-        n = datetime.datetime.now()
+        sub_offset=10
+        sdate -= datetime.timedelta(days=10)
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
@@ -343,7 +344,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '7879'
+        sql_id = '100147'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
@@ -360,7 +361,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '7877'
+        sql_id = '100148'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'platform_id':platform_id})
@@ -377,7 +378,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '7878'
+        sql_id = '100150'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'src_id':src_id})
@@ -394,7 +395,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '7880'
+        sql_id = '100149'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
