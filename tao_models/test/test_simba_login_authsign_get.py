@@ -54,8 +54,8 @@ class test_simba_login_authsign_get(unittest.TestCase):
             expect_result = item['expect_result']
             try:
                 actual_result = SimbaLoginAuthsignGet.get_subway_token_with_access_token(soft_code,nick,access_token)
-                self.assertEqual(type(expect_result),type(actual_result))
-                self.assertEqual(len(expect_result),len(actual_result))
+                self.assertEqual(type(actual_result),type(expect_result))
+                self.assertEqual(len(actual_result),len(expect_result))
             except InvalidAccessTokenException,e:
                 self.assertEqual(e.msg,expect_result['exception'])
             except ErrorResponseException,e:
