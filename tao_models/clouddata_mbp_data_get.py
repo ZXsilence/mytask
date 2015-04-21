@@ -145,8 +145,6 @@ class ClouddataMbpDataGet(object):
     @classmethod
     @tao_api_exception()
     def _get_data_list_between_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
-        sub_offset=10
-        sdate -= datetime.timedelta(days=10)
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
