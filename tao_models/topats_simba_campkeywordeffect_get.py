@@ -36,7 +36,7 @@ class TopatsSimbaCampkeywordeffectGet(object):
         req.search_type = 'SEARCH'
         req.source = 'SUMMARY'
         try:
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,None)
         except ErrorResponseException,e:
             rsp = e.rsp
             if not rsp.isSuccess():
