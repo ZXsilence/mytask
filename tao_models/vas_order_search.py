@@ -40,6 +40,7 @@ class VasOrderSearch(object):
         if nick != None:
             req.nick = nick
         nick = None
+        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.article_biz_orders
 

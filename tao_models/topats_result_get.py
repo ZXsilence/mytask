@@ -29,7 +29,7 @@ class TopatsResultGet(object):
     def get_task_result(cls, task_id,soft_code,nick):
         req = TopatsResultGetRequest()
         req.task_id = task_id
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,None)
         return change_obj_to_dict_deeply(rsp.task)
 
 
