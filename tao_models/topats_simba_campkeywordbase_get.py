@@ -37,7 +37,7 @@ class TopatsSimbaCampkeywordbaseGet(object):
         req.source = 'SUMMARY'
         try:
 
-            rsp = ApiService.execute(req,nick,None)
+            rsp = ApiService.execute(req,nick,soft_code)
         except ErrorResponseException,e:
             rsp = e.rsp
             if not rsp.isSuccess():
@@ -49,9 +49,9 @@ class TopatsSimbaCampkeywordbaseGet(object):
         return change_obj_to_dict_deeply(rsp.task.task_id)
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'    
+    nick = '麦苗科技001'    
     campaign_id = 3367748
     time_slot = '7DAY'
-    soft_code = 'SYB'
+    soft_code = 'QN'
     print TopatsSimbaCampkeywordbaseGet.get_camp_keywordbase_task(nick, campaign_id, time_slot, soft_code)
 
