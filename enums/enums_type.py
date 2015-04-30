@@ -512,6 +512,7 @@ class LoginFailType(object):
     NO_SUBSCRIBE = 11
     UID_NOT_FOUND = 12
     NEED_TOP_AUTH = 13
+    NO_SWITCH_PERMISSION = 14
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -570,4 +571,5 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.NO_SUBSCRIBE:'未找到订购关系,当前用户未购买软件或已退款'
         ,LoginFailType.UID_NOT_FOUND:'授权失败,关键性信息uid缺失'
         ,LoginFailType.NEED_TOP_AUTH:'需要OPEN授权'
+        ,LoginFailType.NO_SWITCH_PERMISSION:'无权限切换用户，请尝试重新登录主账户'
 }
