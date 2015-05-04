@@ -11,7 +11,9 @@
 """
 import os
 import time
+from datetime import datetime
 import paramiko
+from tao_models.picture_upload import PictureUpload
 
 def upload_file(file_obj,root_path,category,proj_path,mode=None,with_scp=False):
     """
@@ -76,6 +78,21 @@ def scp_file(root_path, ext_path, file_name,servers=['121.199.172.249','121.199.
                 continue
             break
     return True
+
+def upload_activity_img(root_path,file_obj):
+    if not file_obj:
+        return
+    file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
+    packge_path = os.path.join(root_path,'')
+    if not os.path.exists(packge_path):
+        os.makedirs(packge_path)
+    file_path = os.path.normpath(os.path.join(root_path,'feedback/%s'%file_name))
+    destination = open(file_path,'wb+')
+    for chunk in file_obj.chunks():
+        destination.write(chunk)
+    destination.close()
+    rsp = PictureUpload.upload_img('麦苗科技001',file_path)
+    return rsp['picture']['picture_path']
 
 if __name__ == '__main__':
     print file_append_timestamp('111_1')
