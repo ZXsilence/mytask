@@ -12,6 +12,9 @@
 import os
 import time
 from datetime import datetime
+import base64
+import urllib
+import re
 import paramiko
 from tao_models.picture_upload import PictureUpload
 
@@ -79,7 +82,7 @@ def scp_file(root_path, ext_path, file_name,servers=['121.199.172.249','121.199.
             break
     return True
 
-def upload_activity_img(root_path,file_obj):
+def upload_activity_img_with_base64(root_path,file_obj):
     if not file_obj:
         return
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
@@ -88,8 +91,9 @@ def upload_activity_img(root_path,file_obj):
         os.makedirs(packge_path)
     file_path = os.path.normpath(os.path.join(root_path,'feedback/%s'%file_name))
     destination = open(file_path,'wb+')
-    for chunk in file_obj.chunks():
-        destination.write(chunk)
+    img_data = urllib.unquote_plus(file_obj.replace('\n',''))
+    img_data = img_data[re.search(';base64',img_data).start()+8:]
+    destination.write(base64.b64decode(img_data))
     destination.close()
     rsp = PictureUpload.upload_img('麦苗科技001',file_path)
     return rsp['picture']['picture_path']
