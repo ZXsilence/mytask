@@ -86,10 +86,10 @@ def upload_activity_img_with_base64(root_path,file_obj):
     if not file_obj:
         return
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
-    packge_path = os.path.join(root_path,'')
-    if not os.path.exists(packge_path):
-        os.makedirs(packge_path)
-    file_path = os.path.normpath(os.path.join(root_path,'feedback/%s'%file_name))
+    package_path = os.path.join(root_path,'feedback')
+    if not os.path.exists(package_path):
+        os.makedirs(package_path)
+    file_path = os.path.normpath(os.path.join(package_path,'%s'%file_name))
     destination = open(file_path,'wb+')
     img_data = urllib.unquote_plus(file_obj.replace('\n',''))
     img_data = img_data[re.search(';base64',img_data).start()+8:]
