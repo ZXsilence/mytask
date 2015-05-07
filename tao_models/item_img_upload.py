@@ -38,7 +38,7 @@ class ItemImgUpload(object):
     @tao_api_exception()
     def upload_img(cls,nick,num_iid,image_path):
         soft_code = None
-        session_expired = True
+        session_expired = False
         exception = None
         shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
         for shop_info in shop_infos:
