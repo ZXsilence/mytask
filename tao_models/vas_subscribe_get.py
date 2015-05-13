@@ -35,6 +35,7 @@ class VasSubscribeGet(object):
         req = VasSubscribeGetRequest()
         req.nick = nick
         req.article_code = APP_SETTINGS[soft_code]['article_code']
+        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.article_user_subscribes)
 

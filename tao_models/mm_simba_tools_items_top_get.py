@@ -39,6 +39,7 @@ class MMSimbaToolsItemsTopGet(object):
         req.nick = nick
         req.keyword = keyword
         req.ip = ip
+        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.rankeditems)
 
