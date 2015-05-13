@@ -41,30 +41,35 @@ class PictureUpload(object):
     def upload_img(cls,nick,image_path,category_id = 0,title = 'any.jpg'):
         soft_code = None
         shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,False)
-        soft_code = shop_infos[0]['soft_code']
-        access_token = shop_infos[0]['access_token']
-        appkey = APP_SETTINGS[soft_code]['app_key']
-        secret = APP_SETTINGS[soft_code]['app_secret']
-        req = PictureUploadRequest(API_HOST,API_PORT)
-        #req = PictureUploadRequest('121.199.170.144',30002)
-        req.set_app_info({'appkey':appkey,'secret':secret})
+        for shop_info in shop_infos:
+            soft_code = shop_info['soft_code']
+            access_token = shop_info['access_token']
+            appkey = APP_SETTINGS[soft_code]['app_key']
+            secret = APP_SETTINGS[soft_code]['app_secret']
+            req = PictureUploadRequest(API_HOST,API_PORT)
+            #req = PictureUploadRequest('121.199.170.144',30002)
+            req.set_app_info({'appkey':appkey,'secret':secret})
 
-        image=FileItem(title,open(image_path))
-        req.img = image
-        req.image = image
-        req.picture_category_id = category_id
-        req.image_input_title = title
+            image=FileItem(title,open(image_path))
+            req.img = image
+            req.image = image
+            req.picture_category_id = category_id
+            req.image_input_title = title
 
-        try:
-            resp= req.getResponse(access_token)
-        except Exception,e:
-            raise ErrorResponseException(code=e.errorcode,msg=e.message,sub_code=e.subcode,sub_msg=e.submsg)
-
-        return resp['picture_upload_response'] 
+            try:
+                resp= req.getResponse(access_token)
+            except Exception,e:
+                exception = ErrorResponseException(code=e.errorcode,msg=e.message,sub_code=e.subcode,sub_msg=e.submsg)
+                continue
+            return resp['picture_upload_response'] 
+        if exception:
+            raise exception
+        else:
+            raise ErrorResponseException(code=27,msg='invalid-shop_info',sub_code='invalid-shop_info',sub_msg='can not find valid shop_info')
     
 if __name__ == '__main__':
     nick = '麦苗科技001'
-    image_path = '/home/xiegf/banner590_1.jpg'
+    image_path = '/home/xiegf/quan.jpg'
     print PictureUpload.upload_img(nick,image_path)
     
 
