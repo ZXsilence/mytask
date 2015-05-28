@@ -44,20 +44,20 @@ class PoolUtil(object):
         self._conn_pool[db_name] = pool
         return pool
 
-    #@classmethod
-    #def _get_cursor_by_rds(self,db_name,RDS):
-    #    pool = self._get_db_pool(db_name,RDS)
-    #    conn = pool.connection()
-    #    cursor = conn.cursor()
-    #    return(conn,cursor)
-
     @classmethod
     def _get_cursor_by_rds(self,db_name,RDS):
-        db_set = RDS['pool_addr']
-        conn=MySQLdb.connect(host=db_set['HOST'],port=int(db_set['PORT']),\
-                user=db_set['USER'],passwd=db_set['PASSWD'],db=db_name,charset="utf8")
+        pool = self._get_db_pool(db_name,RDS)
+        conn = pool.connection()
         cursor = conn.cursor()
-        return (conn,cursor)
+        return(conn,cursor)
+
+    #@classmethod
+    #def _get_cursor_by_rds(self,db_name,RDS):
+    #    db_set = RDS['pool_addr']
+    #    conn=MySQLdb.connect(host=db_set['HOST'],port=int(db_set['PORT']),\
+    #            user=db_set['USER'],passwd=db_set['PASSWD'],db=db_name,charset="utf8")
+    #    cursor = conn.cursor()
+    #    return (conn,cursor)
 
     @classmethod
     def get_cursor(self,db_name):
