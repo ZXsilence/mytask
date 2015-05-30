@@ -356,6 +356,18 @@ def script_manage(arg):
     return _wrapper_func
 
 
+def ysf_exception():
+    def _func(func):
+        def __func(*args, **kwargs):
+            result = []
+            try:
+                result = func(*args, **kwargs)
+            except Exception,e:
+                logger.exception('%s',str(e))
+            return result
+        return __func
+    return _func
+
 def server_timeout_check(func):
     def __wrappe_func(*args, **kwargs):
         name = args[0]

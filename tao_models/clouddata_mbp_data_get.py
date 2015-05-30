@@ -24,7 +24,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import ClouddataMbpDataGetRequest 
-from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.decorator import  tao_api_exception, ysf_exception
 from api_server.services.api_service import ApiService 
 from api_server.common.util import change_obj_to_dict_deeply
 import datetime
@@ -60,6 +60,7 @@ class ClouddataMbpDataGet(object):
         return elements
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000):
         n = datetime.datetime.now()
@@ -76,6 +77,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list2(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000):
         sdate_str = sdate.strftime("%Y%m%d")
@@ -89,6 +91,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list3(cls,auction_id,sql_id,sdate,edate):
         sdate_str = sdate.strftime("%Y%m%d")
@@ -101,6 +104,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list4(cls,auction_id,sql_id,thedate):
         date_str = thedate.strftime("%Y%m%d")
@@ -112,6 +116,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list5(cls,sid,sql_id,thedate,sub_offset=0,sub_limit=5000):
         date_str = thedate.strftime("%Y%m%d")
@@ -143,6 +148,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list_between_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
         sdate_str = sdate.strftime("%Y%m%d")
@@ -159,6 +165,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def get_shop_list_append(cls, thedate):
         """获取省油宝thedate新增店铺"""
@@ -407,30 +414,9 @@ class ClouddataMbpDataGet(object):
 
 if __name__ == '__main__':
     sid = int(sys.argv[1])
-    #res = ClouddataMbpDataGet.get_shop_rpt_hour_30d(sid,0,5000)
-    res = ClouddataMbpDataGet.get_query_list_by_sid(sid)
-    for item in res:
-        print item
-    exit(0)
-
-    item_id = int(sys.argv[1])
-    edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = edate - datetime.timedelta(days=10)
-    #rpt_list = ClouddataMbpDataGet.get_item_rpt(item_id,sdate,edate)
-    rpt_list = ClouddataMbpDataGet.get_item_page_pc_rpt(item_id,sdate,edate)
-
+    edate = datetime.datetime.now()
+    sdate = edate - datetime.timedelta(days=15)
+    rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
     print len(rpt_list)
-    sum_dict = {}
-
-    #for key in ['ipv', 'iuv', 'page_duration', 'bounce_cnt', 'landing_cnt', 'landing_uv', 'exit_cnt']:
-    for key in ['ipv', 'alipay_auction_num', 'iuv', 'bounce_rate']:
-        sum_dict[key] = 0
-    
-    #print 'date page_duration iuv ipv bounce_cnt landing_cnt landing_uv exit_cnt'
-    for item in rpt_list:
-        #for key in sum_dict.keys():
-        #    sum_dict[key] += float(item[key])
-        item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
-        print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
-    #print sum_dict
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
 
