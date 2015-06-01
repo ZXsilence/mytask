@@ -25,7 +25,10 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import FuwuScoresGetRequest 
+from TaobaoSdk import TaobaoClient
+from TaobaoSdk.Exceptions.ErrorResponseException import ErrorResponseException
 from tao_models.common.decorator import  tao_api_exception
+from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_HOST,API_PORT
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 
@@ -36,26 +39,50 @@ class FuwuScoresGet(object):
     PAGE_SIZE = 100
 
     @classmethod
-    @tao_api_exception(3)
-    def get_fuwu_scores(cls,date_time,soft_code,page_no=1):
+    def get_fuwu_scores_by_apicenter(cls,date_time,soft_code,page_no=1):
         result_list = []
         req = FuwuScoresGetRequest()
         req.current_page = page_no
         req.date = date_time
         req.page_size = 100
-        result_list = FuwuScoresGet.sub_get_fuwu_scores(req,soft_code)
-        return change_obj_to_dict_deeply(result_list)
+        nick = None
+        rsp = ApiService.execute(req,nick,soft_code)
+        result_list = change_obj_to_dict_deeply(rsp.score_result)
+        if result_list is None:
+            result_list = []
+        return result_list
 
     @classmethod
-    @tao_api_exception(3)
+    @tao_api_exception(15)
     def sub_get_fuwu_scores(cls,req,soft_code):
         nick = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.score_result
 
     @classmethod
+    @tao_api_exception(15)
+    def get_fuwu_scores(cls,date_time,soft_code,page_no = 1):
+        app_key = APP_SETTINGS[soft_code]['app_key']
+        app_secret = APP_SETTINGS[soft_code]['app_secret']
+
+        req = FuwuScoresGetRequest()
+        req.current_page = page_no
+        req.date = date_time.strftime('%Y-%m-%d') if type(date_time) == type(datetime.now()) else date_time
+        req.page_size = 100
+        params = ApiService.getReqParameters(req)
+        taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
+        rsp = ApiService.getResponseObj(taobao_client.execute(params, ''))
+        if not rsp.isSuccess():
+            raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
+        result_list = change_obj_to_dict_deeply(rsp.score_result)
+        if result_list is None:
+            result_list = []
+        return result_list
+
+    @classmethod
     def get_all_fuwu_scores(cls,date_time,soft_code):
         """获取所有评价"""
+
         page_no = 1
         data_list = []
         flag = True
@@ -71,7 +98,19 @@ class FuwuScoresGet(object):
             
 if __name__ == "__main__":
     d = datetime.combine(datetime.today(),dt.time()) - dt.timedelta(3)
-    soft_code = 'SYB'
-    print FuwuScoresGet.get_fuwu_scores(d,soft_code)
-    #print FuwuScoresGet.get_all_fuwu_scores('2014-05-14',soft_code)
+    d = datetime.now()
+    soft_code = 'BD'
+    #print FuwuScoresGet.get_fuwu_scores(d,soft_code)
+    i = 0
+    while (i < 20):
+        i += 1
+        try:
+            suggest_list = FuwuScoresGet.get_all_fuwu_scores('2015-02-04','BD')
+            print len(suggest_list)
+        except Exception,e:
+            print 'error:%s' %i
+            print e
+            continue
+
+        print i 
 

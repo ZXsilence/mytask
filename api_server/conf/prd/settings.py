@@ -19,7 +19,9 @@ APISDK = os.path.normpath(os.path.join(currDir,'../../../TaobaoOpenPythonSDK'))
 BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
-SERVER_URL = "http://gw.api.taobao.com/router/rest"
+API_HOST = "gw.api.taobao.com"
+API_PORT = 80 
+SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
         #'host':'api.maimiaotech.com',

@@ -18,6 +18,7 @@ from pymongo.errors import AutoReconnect, OperationFailure, PyMongoError
 from db_exceptions.exceptions import  MongodbException
 from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 import simplejson as json
+from thrift.transport.TTransport import TTransportException   
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +70,18 @@ def sdk_exception(MAX_RETRY_TIMES = 20):
                         raise SDKRetryException
                     retry_times += 1
                     continue
+                except TTransportException,e:
+                    if retry_times != MAX_RETRY_TIMES:
+                        retry_times += 1
+                        sleep(3)
+                        continue
+                    logger.exception('sdk error:%s'%e)
+                    raise e
                 except Exception,e:
+                    if retry_times != MAX_RETRY_TIMES and ("Connection reset by peer" in str(e) or " Connection timed out" in str(e)):
+                        retry_times += 1
+                        sleep(1)
+                        continue
                     logger.exception('sdk error:%s'%e)
                     raise e
                 else:
@@ -98,13 +110,13 @@ def mysql_exception(func):
             except OperationalError, e:
                 code = e.args[0]
                 retry_times += 1
-                if int(code) in [1213,2013]:
-                    if retry_times > 3:
+                if int(code) in [1213,2013,1040,2003]:
+                    if retry_times > 20:
                         logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
                         raise e
                 else:
                     raise e
-                sleep(1)
+                sleep(3)
             except Exception, e:
                     logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
                     raise e

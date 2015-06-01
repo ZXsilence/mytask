@@ -1,9 +1,10 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 '''
 Created on 2012-8-10
 
 @author: dk
 '''
-#encoding=utf8
 import sys
 import os
 import logging
@@ -24,13 +25,15 @@ from TaobaoSdk import SimbaRptAdgroupcreativebaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
 class SimbaRptAdgroupcreativeBaseGet(object):
 
     @classmethod
-    @tao_api_exception(40)
+    @tao_api_exception(10)
     def get_rpt_adgroupcreativebase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
@@ -52,6 +55,8 @@ class SimbaRptAdgroupcreativeBaseGet(object):
             soft_code = None
             rsp = ApiService.execute(req,nick,soft_code)
             l = json.loads(rsp.rpt_adgroupcreative_base_list.lower())
+            if type(l) == type({}) and 'sub_code' in l:
+                raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
             if l == {}:
                 l = []
             for rpt in l:
@@ -60,18 +65,25 @@ class SimbaRptAdgroupcreativeBaseGet(object):
             if len(l) < 500:
                 break
             req.page_no += 1
-        return change_obj_to_dict_deeply(base_list)
+        return change2num(change_obj_to_dict_deeply(base_list))
     
         
 if __name__ == '__main__':
 
+    nick = '御森旗舰店'
+    campaign_id = 18819261 
+    adgroup_id = 448284862
+    #nick = '牙齿天天晒'
+    #campaign_id = 6965418 
+    #adgroup_id = 441729311 
     nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
-    search_type = 'SUMMARY'
+    campaign_id = 3328400
+    adgroup_id = 458765944
+    search_type = 'SEARCH,NOSEARCH,CAT'
     source = 'SUMMARY'
-    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    start_time = datetime.datetime.now() - datetime.timedelta(days=1)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     try_list = SimbaRptAdgroupcreativeBaseGet.get_rpt_adgroupcreativebase_list(nick, campaign_id, adgroup_id, start_time, end_time, search_type, source)
-    print try_list
+    for obj in try_list:
+        print obj
         

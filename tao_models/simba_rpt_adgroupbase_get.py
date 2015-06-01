@@ -24,18 +24,21 @@ from TaobaoSdk import SimbaRptAdgroupbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
 class SimbaRptAdgroupBaseGet(object):
 
     @classmethod
-    @tao_api_exception(40)
+    @tao_api_exception()
     def get_rpt_adgroupbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
                 because of taobao API access-times limit,so we recommend that (end_time - start_time) do not more than a day
         """
+        keys_int  =["click","impressions"]
+        keys_float = ["cpm","avgpos","ctr","cost"]
         req = SimbaRptAdgroupbaseGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
@@ -69,13 +72,13 @@ class SimbaRptAdgroupBaseGet(object):
         source: the data source in {1,2}
         date: the report date
         """
-        return change_obj_to_dict_deeply(base_list)
+        return change2num(change_obj_to_dict_deeply(base_list))
     
         
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = 'zhangyu_xql'
+    campaign_id = 6765909
+    adgroup_id =368440092 
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)

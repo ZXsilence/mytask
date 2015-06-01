@@ -198,7 +198,7 @@ def send_sms(cellphone, text, retry_times=3):
         return
     if type(text) == type(u''):
         text = text.encode('utf-8')
-    if '麦苗提醒:' not in  text and '新评价:' not in text:
+    if '麦苗提醒:' not in  text and '新评价:' not in text and '验证码' not in text:
         text = '麦苗提醒:' + text
     if '【麦苗】' not in text:
         text += '【麦苗】'
@@ -223,14 +223,15 @@ def send_sms(cellphone, text, retry_times=3):
     except urllib2.HTTPError,e:
         logging.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
         print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
-        send_sms(cellphone,text,retry_times)
+        #send_sms(cellphone,text,retry_times)
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
         print 'send message to %s unsuccessfully:server error'%(cellphone,)
-        send_sms(cellphone,text,retry_times)
+        #send_sms(cellphone,text,retry_times)
 
 def filter_words(msg):
-    words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),('傻逼','傻&逼'),('脑残','脑&残'),('二货','二&货')]
+    words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),\
+             ('傻逼','傻&逼'),('脑残','脑&残'),('二货','二&货'),('骚扰','骚&扰')]
     for word in words:
         msg = msg.replace(word[0],word[1])
     return msg
@@ -238,10 +239,11 @@ def filter_words(msg):
 if __name__ == '__main__':
     #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
-    send_email_with_html('dongxuanliang@maimiaotech.com','网络延迟','标题',['dongxl123@163.com'],'245684715@qq.com')
-    #print get_msg_report()
+    #send_email_with_html('dongxuanliang@maimiaotech.com','网络延迟','标题',['dongxl123@163.com'],'245684715@qq.com')
+    print get_msg_report()
     print get_balance()
     
-    #send_sms(DIRECTOR['PHONE'],'收到一条疑似差评,请立即处理,辛苦了，谢谢!')
+    #send_sms('18612251466','省油宝会员激活验证码:988280。请勿告知他人并确认申请是您本人操作。')
+    #send_sms('15068116152','省油宝会员激活验证码:988288。请勿告知他人并确认申请是您本人操作。')
     #send_sms(DIRECTOR['PHONE'], u'省油宝新评价:小--漫,评分:1,用了两个多月 再来评价的！说句真心话，没有一点用！ 烧出去的关键词比系统自动添加的还差！每天开出去200多块左')
     #send_sms(DIRECTOR['PHONE'], '尊敬的客户你好！您的省油宝长期未登陆导致不能正常优化,请您及时登陆省油宝,方便我们进行优化!')

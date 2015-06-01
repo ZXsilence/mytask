@@ -10,6 +10,7 @@ import logging
 import traceback
 import inspect
 import time
+from threading import Thread
 
 from time import  sleep
 from datetime import datetime
@@ -184,7 +185,19 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
                     elif code == TaoOpenErrorCode.REMOTE_SERVICE_ERROR:
-                        if e.sub_code and e.sub_code.startswith('isv'):
+                        if e.sub_msg and "Query timeout:query has been executed more than 10 seconds" in e.sub_msg:
+                            sleep(1)
+                            if retry_times == MAX_RETRY_TIMES:
+                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                            continue
+                        if e.sub_code and e.sub_code == 'isv.invalid-permission':
+                            if retry_times == MAX_RETRY_TIMES:
+                                logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                                raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                            sleep(1)
+                            continue
+                        elif e.sub_code and e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
                             raise
                         elif e.sub_code and e.sub_code == "6001":
@@ -269,11 +282,12 @@ def mongo_exception(func):
     return wrapped_func
 
 def get_sys_info(pid):
-    res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
-    p = re.compile(r'\s+')  
-    l = p.split(res)  
+    #res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
+    #p = re.compile(r'\s+')  
+    #l = p.split(res)  
     #'user':l[0],'pid':l[1],'cpu':l[2],'mem':l[3],'vsa':l[4],'rss':l[5],'start_time':l[6]
-    curr_mem = float(l[5])/1000.0
+    #curr_mem = float(l[5])/1000.0
+    curr_mem = 0
     curr_time = time.time()*1000
     return (curr_time,curr_mem)
 
@@ -312,9 +326,11 @@ def task_manage(arg):
                 end_time = datetime.now()
                 TaskService.upset_task(task_id,{'status':'failed','exception':str(e),'end_time':end_time})
                 logger.exception('task error!')
+                return None
             else:
                 end_time = datetime.now()
                 TaskService.upset_task(task_id,{'status':'done','result':a,'end_time':end_time})
+            return a
         return __wrappe_func
     return _wrapper_func
 
@@ -338,5 +354,36 @@ def script_manage(arg):
                 TaskService.upset_script_task(task_id,{'status':'done','result':a,'end_time':end_time})
         return __wrappe_func
     return _wrapper_func
+
+
+def ysf_exception():
+    def _func(func):
+        def __func(*args, **kwargs):
+            result = []
+            try:
+                result = func(*args, **kwargs)
+            except Exception,e:
+                logger.exception('%s',str(e))
+            return result
+        return __func
+    return _func
+
+def server_timeout_check(func):
+    def __wrappe_func(*args, **kwargs):
+        name = args[0]
+        timeout = args[1]
+        contact = args[2]
+        host = args[3]
+        t = Thread(target=func,args=(name,timeout,contact,host))
+        t.start()
+        t.join(timeout)
+        if t.is_alive():
+            t._Thread__stop()
+            message = '【系统监控】%s响应较慢，超过限额值%s秒(主机:%s)'%(name,timeout,host)
+            logger.error(message)
+        else:
+            message = '【系统监控】%s响应未超时(主机:%s)'%(name,host)
+            logger.info(message)
+    return __wrappe_func
 
 

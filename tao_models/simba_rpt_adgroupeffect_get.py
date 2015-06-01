@@ -22,13 +22,14 @@ from TaobaoSdk import SimbaRptAdgroupeffectGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
 class SimbaRptAdgroupEffectGet(object):
 
     @classmethod
-    @tao_api_exception(40)
+    @tao_api_exception()
     def get_rpt_adgroupeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
@@ -66,7 +67,7 @@ class SimbaRptAdgroupEffectGet(object):
         source: the data source in {1,2}
         date: the report date
         """
-        return change_obj_to_dict_deeply(effect_list)
+        return change2num(change_obj_to_dict_deeply(effect_list))
     
 if __name__ == '__main__':
     nick = 'chinchinstyle'
