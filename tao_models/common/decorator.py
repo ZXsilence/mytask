@@ -13,7 +13,7 @@ import time
 from threading import Thread
 
 from time import  sleep
-from datetime import datetime,date,time,timedelta
+from datetime import datetime,date,timedelta
 import simplejson as json
 import copy
 
