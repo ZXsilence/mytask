@@ -13,7 +13,7 @@ import time
 from threading import Thread
 
 from time import  sleep
-from datetime import datetime
+from datetime import datetime,date,time,timedelta
 import simplejson as json
 import copy
 
@@ -386,4 +386,16 @@ def server_timeout_check(func):
             logger.info(message)
     return __wrappe_func
 
+def retry(func):
+    def _wrap(*args,**kwargs):
+        try:
+            tom = datetime.now( )+ timedelta(days=1)
+            retry_time = datetime(tom.year,tom.month,tom.day,1,0,0)
+            return func(*args,**kwargs)
+        except AppCallLimitedAllDayException as exc:
+            raise args[0].retry(exc=exc,max_retries=1,throw=True,eta=retry_time)
+        except TaoApiMaxRetryException ,e :
+            if 'reason:App Call Limited' in str(e):
+                raise args[0].retry(exc=TaoApiMaxRetryException,max_retries=1,throw=True,eta=retry_time)
+    return _wrap
 
