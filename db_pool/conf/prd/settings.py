@@ -15,7 +15,7 @@ RDS1 = {
                  'longtail','mobileapp','mysql','performance',\
                  'qianniu','shop_info','syb_comm_info',\
                  'syb_web','busi','syb_webpage' ,'sys_info','taoci'\
-                 ,'xiangqing','xuanciw','syb_layer','rpt_cache','sample_analysis'
+                 ,'xiangqing','xuanciw','syb_layer','rpt_cache','busi_back','sample_analysis'
                  ]
         }
 

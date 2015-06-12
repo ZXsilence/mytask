@@ -27,7 +27,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import ClouddataMbpDataGetRequest 
-from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.decorator import  tao_api_exception, ysf_exception
 from api_server.services.api_service import ApiService 
 from api_server.common.util import change_obj_to_dict_deeply
 from comm_tools.string_tools import StringTools
@@ -56,6 +56,7 @@ class ClouddataMbpDataGet(object):
 
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def get_data_from_clouddata(cls, sql_id, query_dict):
         ret = []
