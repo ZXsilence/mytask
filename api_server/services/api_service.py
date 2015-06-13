@@ -111,3 +111,10 @@ class ApiService(object):
                 return app_settings
         return {}
 
+    @staticmethod
+    def get_app_settings_by_appkey(appkey):
+        for soft_code,app_settings in APP_SETTINGS.iteritems():
+            if appkey == app_settings['app_key']:
+                return app_settings
+        return {}
+
