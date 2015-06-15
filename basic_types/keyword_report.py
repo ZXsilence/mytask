@@ -29,6 +29,7 @@ class KeywordReportUnit(object):
                , "paycount"
                , "favitemcount"
                , "favshopcount"
+               , "carttotal"
                , "fav"
                 ,"roi"
                 ,"cpc"
@@ -64,6 +65,7 @@ class KeywordReportUnit(object):
                , "favitemcount"
                , "favshopcount"
                , "fav"
+               , "carttotal"
                 ,"roi"
                 ,"cpc"
                 ,"ctr"
@@ -123,6 +125,9 @@ class KeywordReportEffect(object):
                , "indirectpaycount"
                , "favitemcount"
                , "favshopcount"
+               , "directcarttotal"
+               , "indirectcarttotal"
+               , "carttotal"
                ]
         i = 0
         for k in keys:

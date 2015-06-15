@@ -68,6 +68,7 @@ class OperationType(object):
     DELETE_LOW_ROI = 20
     DELETE_LOW_CUST_SCORE = 21
     DELETE_LOW_PV = 22
+    DELETE_IS_GARBAGE_BY_USER = 23
 
 
     UPDATE_PRICE_ROI_GOOD_INCRE_PRICE = 101
@@ -195,6 +196,7 @@ class OperationType(object):
         DELETE_LOW_CTR ,
         DELETE_LOW_ROI ,
         DELETE_LOW_PV,
+        DELETE_IS_GARBAGE_BY_USER,
         DELETE_LOW_CUST_SCORE 
     ]
 
@@ -331,7 +333,8 @@ class OperationType(object):
         DELETE_LOW_CTR ,
         DELETE_LOW_ROI ,
         DELETE_LOW_PV,
-        DELETE_LOW_CUST_SCORE 
+        DELETE_IS_GARBAGE_BY_USER,
+        DELETE_LOW_CUST_SCORE
     ]
 
     ALL_KEYWORD_UPDATE_TYPES = [
@@ -398,6 +401,7 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_LOW_ROI : "关键词ROI较低，已经删除"
     , OperationType.DELETE_LOW_CUST_SCORE : "关键词基础分太低，已经删除"
     , OperationType.DELETE_LOW_PV : "关键词全网展现低，已经删除"
+    , OperationType.DELETE_IS_GARBAGE_BY_USER : "根据用户设置删除垃圾词"
     
     , OperationType.DELETE_MANUAL_ADGROUP: "手动计划自定义优化删除符合条件关键词"
 
@@ -512,6 +516,7 @@ class LoginFailType(object):
     NO_SUBSCRIBE = 11
     UID_NOT_FOUND = 12
     NEED_TOP_AUTH = 13
+    NO_SWITCH_PERMISSION = 14
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -570,4 +575,5 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.NO_SUBSCRIBE:'未找到订购关系,当前用户未购买软件或已退款'
         ,LoginFailType.UID_NOT_FOUND:'授权失败,关键性信息uid缺失'
         ,LoginFailType.NEED_TOP_AUTH:'需要OPEN授权'
+        ,LoginFailType.NO_SWITCH_PERMISSION:'无权限切换用户，请尝试重新登录主账户'
 }

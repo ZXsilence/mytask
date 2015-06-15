@@ -19,7 +19,7 @@ RDS1 = {
                  'strategy','syb_common_info','taoci','test','busi',\
                  'xiangqing','xuanciw','syb_web','keywords_deleted',\
                  'syb_layer','rpt_all','rpt_cache','operation_log',\
-                 'queryall','queryqueue','item_query_rpt']
+                 'queryall','queryqueue','item_query_rpt','busi_back','sample_analysis']
         }
 
 #rds2实例连接池配置
