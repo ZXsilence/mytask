@@ -56,7 +56,8 @@ class ApiService(object):
         parameters = dict()
         for key, value in req.__dict__.iteritems():
             if key == 'timestamp':
-                value = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(value))
+                #value = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(value))
+                value = str(long(time.time() * 1000))
             if value == None:
                 continue
             parameters[key] = unicode(value)
@@ -107,6 +108,13 @@ class ApiService(object):
     def get_app_settings_by_article_code(article_code):
         for soft_code,app_settings in APP_SETTINGS.iteritems():
             if article_code == app_settings['article_code']:
+                return app_settings
+        return {}
+
+    @staticmethod
+    def get_app_settings_by_appkey(appkey):
+        for soft_code,app_settings in APP_SETTINGS.iteritems():
+            if appkey == app_settings['app_key']:
                 return app_settings
         return {}
 

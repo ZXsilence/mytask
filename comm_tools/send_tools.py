@@ -223,14 +223,15 @@ def send_sms(cellphone, text, retry_times=3):
     except urllib2.HTTPError,e:
         logging.error('send message to %s unsuccessfully:url connect error'%(cellphone,))
         print 'send message to %s unsuccessfully:url connect error'%(cellphone,)
-        send_sms(cellphone,text,retry_times)
+        #send_sms(cellphone,text,retry_times)
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
         print 'send message to %s unsuccessfully:server error'%(cellphone,)
-        send_sms(cellphone,text,retry_times)
+        #send_sms(cellphone,text,retry_times)
 
 def filter_words(msg):
-    words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),('傻逼','傻&逼'),('脑残','脑&残'),('二货','二&货')]
+    words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),\
+             ('傻逼','傻&逼'),('脑残','脑&残'),('二货','二&货'),('骚扰','骚&扰')]
     for word in words:
         msg = msg.replace(word[0],word[1])
     return msg

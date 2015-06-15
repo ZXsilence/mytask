@@ -24,7 +24,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import ClouddataMbpDataGetRequest 
-from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.decorator import  tao_api_exception, ysf_exception
 from api_server.services.api_service import ApiService 
 from api_server.common.util import change_obj_to_dict_deeply
 import datetime
@@ -40,9 +40,9 @@ class ClouddataMbpDataGet(object):
         if column_list == [] or row_list == []:
             return elements
         int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num",\
-                      "session_num","pv","visit_repeat_num","shop_collect_num","auction_collect_num","ipv","iuv"]
+                      "session_num","pv","visit_repeat_num","shop_collect_num","auction_collect_num","ipv","iuv","visit_platform","gmv_trade_num"]
         date_fields = ["thedate", "dt"]
-        float_fields = ["alipay_trade_amt"]
+        float_fields = ["alipay_trade_amt","bounce_rate"]
         for row in row_list:
             values = row.values
             rpt = {}
@@ -60,6 +60,7 @@ class ClouddataMbpDataGet(object):
         return elements
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000):
         n = datetime.datetime.now()
@@ -76,6 +77,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list2(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000):
         sdate_str = sdate.strftime("%Y%m%d")
@@ -89,6 +91,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list3(cls,auction_id,sql_id,sdate,edate):
         sdate_str = sdate.strftime("%Y%m%d")
@@ -101,6 +104,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list4(cls,auction_id,sql_id,thedate):
         date_str = thedate.strftime("%Y%m%d")
@@ -112,6 +116,7 @@ class ClouddataMbpDataGet(object):
         return cls._decode_clouddata(rsp)
     
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def _get_data_list5(cls,sid,sql_id,thedate,sub_offset=0,sub_limit=5000):
         date_str = thedate.strftime("%Y%m%d")
@@ -122,8 +127,45 @@ class ClouddataMbpDataGet(object):
         req.parameter = parameter
         rsp = ApiService.execute(req)
         return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @tao_api_exception()
+    def _get_data_list_with_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
+        n = datetime.datetime.now()
+        dt = n-datetime.timedelta(days=1)
+        dt_str = dt.strftime("%Y%m%d")
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        if other_param_dict:
+            for k,v in other_param_dict.iteritems():
+                parameter += ",%s=%s" % (k,v)
+        req = ClouddataMbpDataGetRequest() 
+        req.sid = sid
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
+    
+    @classmethod
+    @ysf_exception()
+    @tao_api_exception()
+    def _get_data_list_between_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        if other_param_dict:
+            for k,v in other_param_dict.iteritems():
+                parameter += ",%s=%s" % (k,v)
+        req = ClouddataMbpDataGetRequest() 
+        req.sid = sid
+        req.sql_id = sql_id
+        req.parameter = parameter
+        rsp = ApiService.execute(req)
+        return cls._decode_clouddata(rsp)
 
     @classmethod
+    @ysf_exception()
     @tao_api_exception()
     def get_shop_list_append(cls, thedate):
         """获取省油宝thedate新增店铺"""
@@ -307,10 +349,61 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '7858'
+        sql_id = '100147'
         while True:
             try:
-                rpt_sub_list = cls._get_data_list(sid, sql_id, sdate, edate, offset, limit)
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+    
+    @classmethod
+    def get_shop_platform_view_90d(cls,sid,sdate,edate,platform_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '100148'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'platform_id':platform_id})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+    
+    @classmethod
+    def get_shop_last_effect_src_90d(cls,sid,sdate,edate,src_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '100150'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'src_id':src_id})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_seller_dwb_auction_rpt_90d(cls,sid,sdate,edate,auction_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '100149'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
                 rpt_list.extend(rpt_sub_list)
                 if len(rpt_sub_list) < limit:
                     break
@@ -321,30 +414,9 @@ class ClouddataMbpDataGet(object):
 
 if __name__ == '__main__':
     sid = int(sys.argv[1])
-    #res = ClouddataMbpDataGet.get_shop_rpt_hour_30d(sid,0,5000)
-    res = ClouddataMbpDataGet.get_query_list_by_sid(sid)
-    for item in res:
-        print item
-    exit(0)
-
-    item_id = int(sys.argv[1])
-    edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = edate - datetime.timedelta(days=10)
-    #rpt_list = ClouddataMbpDataGet.get_item_rpt(item_id,sdate,edate)
-    rpt_list = ClouddataMbpDataGet.get_item_page_pc_rpt(item_id,sdate,edate)
-
+    edate = datetime.datetime.now()
+    sdate = edate - datetime.timedelta(days=15)
+    rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
     print len(rpt_list)
-    sum_dict = {}
-
-    #for key in ['ipv', 'iuv', 'page_duration', 'bounce_cnt', 'landing_cnt', 'landing_uv', 'exit_cnt']:
-    for key in ['ipv', 'alipay_auction_num', 'iuv', 'bounce_rate']:
-        sum_dict[key] = 0
-    
-    #print 'date page_duration iuv ipv bounce_cnt landing_cnt landing_uv exit_cnt'
-    for item in rpt_list:
-        #for key in sum_dict.keys():
-        #    sum_dict[key] += float(item[key])
-        item['page_duration'] = float(item['page_duration']) / int(item['ipv'])
-        print item['thedate'],item['page_duration'],item['iuv'],item['ipv'],item['bounce_cnt'],item['landing_cnt'],item['landing_uv'],item['exit_cnt']
-    #print sum_dict
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
 

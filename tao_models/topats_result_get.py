@@ -34,7 +34,7 @@ class TopatsResultGet(object):
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
+    nick = '麦苗科技001'
     soft_code = 'SYB'
-    task_id = 215621102
+    task_id = 349019750
     print TopatsResultGet.get_task_result(task_id,soft_code,nick)

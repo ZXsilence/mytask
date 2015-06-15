@@ -119,6 +119,12 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         elif api_method == 'taobao.simba.nonsearch.adgroupplaces.get' and e.sub_msg \
                                 and u'当前推广计划不支持该操作' in e.sub_msg:
                             raise NonsearchNotOpenException
+                        elif api_method == 'taobao.item.img.delete' and e.sub_msg \
+                                and u'行业管控要求' in e.sub_msg:
+                            raise NoPermissionException(e.sub_msg) 
+                        elif api_method == 'taobao.simba.creative.update' and e.sub_msg \
+                                and u'创意在待审核状态' in e.sub_msg:
+                            raise NoPermissionException(e.sub_msg) 
 
                     #异常状态的重试处理,不扔出自定义的业务异常
                     if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 
@@ -282,11 +288,12 @@ def mongo_exception(func):
     return wrapped_func
 
 def get_sys_info(pid):
-    res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
-    p = re.compile(r'\s+')  
-    l = p.split(res)  
+    #res = commands.getstatusoutput('ps aux|grep '+str(pid))[1].split('\n')[0]  
+    #p = re.compile(r'\s+')  
+    #l = p.split(res)  
     #'user':l[0],'pid':l[1],'cpu':l[2],'mem':l[3],'vsa':l[4],'rss':l[5],'start_time':l[6]
-    curr_mem = float(l[5])/1000.0
+    #curr_mem = float(l[5])/1000.0
+    curr_mem = 0
     curr_time = time.time()*1000
     return (curr_time,curr_mem)
 
@@ -325,9 +332,11 @@ def task_manage(arg):
                 end_time = datetime.now()
                 TaskService.upset_task(task_id,{'status':'failed','exception':str(e),'end_time':end_time})
                 logger.exception('task error!')
+                return None
             else:
                 end_time = datetime.now()
                 TaskService.upset_task(task_id,{'status':'done','result':a,'end_time':end_time})
+            return a
         return __wrappe_func
     return _wrapper_func
 
@@ -352,6 +361,18 @@ def script_manage(arg):
         return __wrappe_func
     return _wrapper_func
 
+
+def ysf_exception():
+    def _func(func):
+        def __func(*args, **kwargs):
+            result = []
+            try:
+                result = func(*args, **kwargs)
+            except Exception,e:
+                logger.exception('%s',str(e))
+            return result
+        return __func
+    return _func
 
 def server_timeout_check(func):
     def __wrappe_func(*args, **kwargs):
