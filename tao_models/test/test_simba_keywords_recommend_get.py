@@ -34,7 +34,7 @@ class test_simba_keywords_recommend_get(unittest.TestCase):
     def setUp(self):
         pass
     def test_get_keywords_recommend_by_adgroup(self):
-        data = [{'nick':'麦苗科技001','campaign_id':10528974,'adgroup_id':489540183,
+        data = [{'nick':'麦苗科技001','campaign_id':10528974,'adgroup_id':606180775,
                  'expect_result':[{'pertinence': '100.0', 
                                    'average_price': '0.53', 
                                    'pv': '13090986', 
