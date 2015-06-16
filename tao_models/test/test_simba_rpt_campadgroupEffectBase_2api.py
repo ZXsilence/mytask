@@ -28,6 +28,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException,SDKRetryException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from simba_rpt_campadgroupbase_get import   SimbaRptCampadgroupBaseGet
 from simba_rpt_campadgroupeffect_get import SimbaRptCampadgroupEffectGet
+from tao_models.common.getCampaignAdgroup import GetCampaignAdgroup
 
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
@@ -38,16 +39,24 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        start = datetime.datetime(2015,4,1)
-        end = datetime.datetime(2015,4,8)
-        cls.testData = [{'nick':'zhangyu_xql','campaign_id':6765909,'adgroup_id':368440092,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
-                        {'nick':'','campaign_id':6765909,'adgroup_id':368440092,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':True,'exceptClass':SDKRetryException},
+        shop = GetCampaignAdgroup.get_a_valid_shop()
+        nick=shop['nick']
+        campaign=GetCampaignAdgroup.get_a_valid_campaign(nick)
+        campaign_id = campaign['campaign_id']
+        adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,"SYB",shop['sid'])
+        adgroup_id = adgroup['adgroup_id']    
+        start = datetime.datetime.now()-datetime.timedelta(days=7)
+        end = datetime.datetime.now()-datetime.timedelta(days=1)
+        cls.testData = [{'nick':nick,'campaign_id':campaign_id,'adgroup_id':adgroup_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
+                        {'nick':'','campaign_id':campaign_id,'adgroup_id':adgroup_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
+                        {'nick':nick,'campaign_id':0,'adgroup_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
                         ]
         cls.errs={'effect_error':'error find in API: simba_rpt_campadgroupeffect_get',
                   'base_error':'error find in API: simba_rpt_campadgroupbase_get',
                   'assert_error':'assert exception',
                   }
-    
+        cls.assertBaseKeys=['avgpos','ctr','adgroupid','cpm','searchtype','campaignid','cpc','nick','cost','source','date','impressions','click'] 
+        cls.assertEffectKeys=['adgroupid','searchtype','source','campaignid','nick','date']
     def seUp(self):
         pass
     def test_get_rpt_adgroupbase_list(self):
@@ -56,12 +65,14 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
             try:
                 res = SimbaRptCampadgroupBaseGet.get_rpt_adgroupbase_list(inputdata['nick'], inputdata['campaign_id'],inputdata['start'], inputdata['end'], inputdata['search_type'],inputdata['source'])
                 self.assertEqual(type(res), list, self.errs['base_error'])
-                self.assertGreater(len(res),0,self.errs['base_error'])
-
+                if len(res)>0:
+                    for k in self.assertBaseKeys:
+                        self.assertTrue(res[0].has_key(k),self.errs['base_error'])
                 res =  SimbaRptCampadgroupEffectGet.get_rpt_adgroupeffect_list(inputdata['nick'], inputdata['campaign_id'],inputdata['start'],inputdata['end'],inputdata['search_type'],inputdata['source'])
                 self.assertEqual(type(res), list, self.errs['effect_error'])
-                self.assertGreater(len(res), 0 , self.errs['effect_error'])
-
+                if len(res)>0:
+                    for k in self.assertEffectKeys:
+                        self.assertTrue(res[0].has_key(k),self.errs['effect_error'])
             except Exception, e:
                 is_popped = True
                 self.assertRaises(inputdata['exceptClass'])

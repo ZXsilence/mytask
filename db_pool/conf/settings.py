@@ -1,1 +1,1 @@
-/home/tangll/comm_lib/..//comm_lib/db_pool/conf/dev/settings.py
+/home/tangll/lottery/comm_lib/..//comm_lib/db_pool/conf/dev/settings.py

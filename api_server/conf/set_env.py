@@ -1,1 +1,1 @@
-/home/tangll/comm_lib/..//comm_lib/api_server/conf/dev/set_env.py
+/home/tangll/lottery/comm_lib/..//comm_lib/api_server/conf/dev/set_env.py

@@ -1,9 +1,9 @@
+#encoding=utf8
 '''
 Created on 2012-8-10
 
 @author: dk
 '''
-#encoding=utf8
 import sys
 import os
 import logging
@@ -19,6 +19,8 @@ if __name__ == '__main__':
     set_env.getEnvReady()
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../../backends/'))
+    from adgroup_db.db_models.adgroups import Adgroups
 
 from TaobaoSdk import SimbaRptAdgroupnonsearchbaseGetRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
@@ -74,9 +76,12 @@ class SimbaRptAdgroupnonsearchBaseGet(object):
         return change2num(change_obj_to_dict_deeply(base_list))
     
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = '沃尔盾家居专营店'
+    campaign_id =  11219137
+    #sid = 101240238
+    #adgroups = Adgroups.get_adgroups_by_campaign_id(sid,campaign_id)
+    #print adgroups
+    adgroup_id = 604426910
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     print SimbaRptAdgroupnonsearchBaseGet.get_rpt_adgroupnonsearchbase_list(nick, campaign_id, adgroup_id, start_time, end_time)

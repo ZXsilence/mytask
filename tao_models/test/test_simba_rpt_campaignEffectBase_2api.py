@@ -28,6 +28,7 @@ from tao_models.common.exceptions import W2securityException, InvalidAccessToken
 from simba_rpt_campaignbase_get import SimbaRptCampaignbaseGet
 from simba_rpt_campaigneffect_get import SimbaRptCampaigneffectGet
 
+from  tao_models.common.getCampaignAdgroup import GetCampaignAdgroup
 
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
@@ -38,15 +39,25 @@ class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        cls.testDataBase = [{'nick':'zhangyu_xql','campaign_id':6765909,'search_type':'SEARCH,CAT','source':'1,2','start':datetime.datetime(2015,4,5),'end':datetime.datetime(2015,4,8),'popException':False,'exceptClass':None},
-                            {'nick':'','campaign_id':6765909,'search_type':'SEARCH,CAT','source':'1,2','start':datetime.datetime(2015,4,5),'end':datetime.datetime(2015,4,8),'popException':True,'exceptClass':ErrorResponseException},
-                            {'nick':'zhangyu_xql','campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':datetime.datetime(2015,4,5),'end':datetime.datetime(2015,4,8),'popException':False,'exceptClass':None},
+        soft_code = "SYB"
+        shop_info = GetCampaignAdgroup.get_a_valid_shop(soft_code,False)
+        nick = shop_info['nick']
+        campaign = GetCampaignAdgroup.get_a_valid_campaign(nick)
+        campaign_id = campaign['campaign_id']
+        start = datetime.datetime.now()-datetime.timedelta(days=7)
+        end = datetime.datetime.now()-datetime.timedelta(days=1)
+
+        cls.testDataBase = [{'nick':nick,'campaign_id':campaign_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
+                            {'nick':'','campaign_id':campaign_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False, 'exceptClass':None},
+                            {'nick':nick,'campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
+                            {'nick':"_nick_not_exists_",'campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':True,'exceptClass':InvalidAccessTokenException},
                             ]
         cls.errs={'effet_error':'error found in API: simba_rpt_campaigneffect_get',
                   'base_error':'error found in API: simba_rpt_campaignbase_get',
                   'assert_error':'assert exception',
                   }
-    
+        cls.assertKeys=['avgpos','aclick','cpm','searchtype','nick','cpc','ctr','source','cost','campaignid','date','impressions','click']
+        cls.assertKey2=['pay','fav','pay_count']
     def seUp(self):
         pass
     def test_get_user_seller(self):
@@ -55,22 +66,14 @@ class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
             try:
                 res =  SimbaRptCampaignbaseGet.get_camp_rpt_list_by_date(inputdata['nick'], inputdata['campaign_id'],inputdata['search_type'], inputdata['source'], inputdata['start'],inputdata['end'])
                 self.assertEqual(type(res), list ,self.errs['base_error'])
-                if inputdata['campaign_id'] == 0:
-                    self.assertEqual( len(res) , 0 , self.errs['base_error'])
-                else:
-                    self.assertGreater( len(res) , 0 , self.errs['base_error'])
-
+                if len(res)>0:
+                    for k in self.assertKeys:
+                        self.assertTrue(res[0].has_key(k),self.errs['base_error'])
                 res = SimbaRptCampaigneffectGet.get_campaign_effect_accumulate(inputdata['nick'], inputdata['campaign_id'],inputdata['search_type'], inputdata['source'], inputdata['start'],inputdata['end'])
                 self.assertEqual( type(res), dict , self.errs['effet_error'])
-                if inputdata['campaign_id'] ==0:
-                    self.assertEqual( res['pay'],0,self.errs['effet_error'])
-                    self.assertEqual( res['fav'],0,self.errs['effet_error'])
-                    self.assertEqual( res['pay_count'],0,self.errs['effet_error'])
-                else:
-                    self.assertNotEqual( res['pay'],0,self.errs['effet_error'])
-                    self.assertNotEqual( res['fav'],0,self.errs['effet_error'])
-                    self.assertNotEqual( res['pay_count'],0,self.errs['effet_error'])
-
+                if res :
+                    for k in self.assertKey2:
+                        self.assertTrue(res.has_key(k),self.errs['effet_error'])
             except Exception, e:
                 is_popped = True
                 self.assertRaises(inputdata['exceptClass'])

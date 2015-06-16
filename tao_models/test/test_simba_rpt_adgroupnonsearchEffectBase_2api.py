@@ -29,6 +29,8 @@ from tao_models.common.exceptions import W2securityException, InvalidAccessToken
 from simba_rpt_campadgroupbase_get import   SimbaRptCampadgroupBaseGet
 from simba_rpt_campadgroupeffect_get import SimbaRptCampadgroupEffectGet
 
+from common import GetCampaignAdgroup
+
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
     '''
@@ -38,10 +40,18 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        start = datetime.datetime(2015,4,1)
-        end = datetime.datetime(2015,4,8)
-        cls.testData = [{'nick':'zhangyu_xql','campaign_id':6765909,'adgroup_id':368440092,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
-                        {'nick':'','campaign_id':6765909,'adgroup_id':368440092,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':True,'exceptClass':SDKRetryException},
+        start = datetime.datetime.now() - datetime.timedelta(days=7)
+        end = datetime.datetime.now()
+
+        nick = GetCampaignAdgroup.get_a_valid_shop() 
+        nick=nick['nick']
+        campaign = GetCampaignAdgroup.get_a_valid_campaign(nick)
+        campaign_id  = campaign['campaign_id']
+        adgroup=GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,"SYB",campaign['sid'])
+        adgroup_id = adgroup['adgroup_id']
+
+        cls.testData = [{'nick':nick,'campaign_id':campaign_id,'adgroup_id':adgroup_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
+                        {'nick':'','campaign_id':campaign,'adgroup_id':adgroup_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':True,'exceptClass':SDKRetryException},
                         ]
         cls.errs={'effect_error':'error find in API: simba_rpt_campadgroupeffect_get',
                   'base_error':'error find in API: simba_rpt_campadgroupbase_get',
