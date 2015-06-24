@@ -49,7 +49,7 @@ class TestSimbaCampaignBudgetGetAndUpdate(unittest.TestCase):
                                      {'nick': 'chinchinstyle','campaign_id':3328400,'budget':33,'use_smooth':'true','popException':False, 'exceptionClass':None}
                                      ]
         cls.valueType = {'returnValue_get':dict, 'returnValue_update':dict}
-        cls.itemFields_get = 'nick,is_smooth,budget,modified_time,campaign_id'.split(',')
+        cls.itemFields_get = ['budget', 'modified_time', 'campaign_id', 'nick', 'create_time', 'is_smooth']#'nick,is_smooth,budget,modified_time,campaign_id'.split(',')
         cls.itemFields_update = 'nick,is_smooth,budget,campaign_id'.split(',')
 
     def setUp(self):
