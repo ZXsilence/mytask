@@ -44,7 +44,7 @@ class TestSimbaCampaignsGet(unittest.TestCase):
                                   ]
         cls.testInputDatas_update = [{'nick': '__NotExistNick__','campaign_id':None,'title':None,'online_status':None,'popException':True, 'exceptionClass':InvalidAccessTokenException},
                                      {'nick': 'chinchinstyle','campaign_id':9214487,'title':None,'online_status':None,'popException':True, 'exceptionClass':ErrorResponseException},
-                                     {'nick': 'chinchinstyle','campaign_id':None,'title':'API测试','online_status':'offline','popException':False, 'exceptionClass':None}
+                                     {'nick': 'chinchinstyle','campaign_id':None,'title':'API测试','online_status':'offline','popException':True, 'exceptionClass':ErrorResponseException}
                                      ]
         cls.valueType = {'returnValue':list, 'returnValue_item':dict,'returnValue_update':dict}
         cls.itemFields = ['online_status','title', 'settle_status', 'campaign_id', 'modified_time', 'nick' ,'create_time', 'settle_reason']
