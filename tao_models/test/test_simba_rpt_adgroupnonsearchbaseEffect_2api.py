@@ -28,7 +28,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException,SDKRetryException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from simba_rpt_adgroupnonsearchbase_get import SimbaRptAdgroupnonsearchBaseGet
 from simba_rpt_adgroupnonsearcheffect_get import SimbaRptAdgroupnonsearchEffectGet
-
+from tao_models.test.getCampaignAdgroup import GetCampaignAdgroup
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):
     '''
@@ -38,11 +38,19 @@ class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        start = datetime.datetime(2015,4,1)
-        end = datetime.datetime(2015,4,9)
-        cls.testData = [{'nick':'zhangyu_xql','campaign_id':6765909,'adgroup_id':368440092,'start':start,'end':end,'popException':False,'exceptClass':None},
-                        {'nick':'','campaign_id':6765909,'adgroup_id':368440092,'start':start,'end':end,'popException':True,'exceptClass':TypeError},
-                        {'nick':'zhangyu_xql','campaign_id':0,'adgroup_id':0,'start':start,'end':end,'popException':False,'exceptClass':None},
+        
+        shop = GetCampaignAdgroup.get_a_valid_shop()
+        nick=shop['nick']
+        campaign=GetCampaignAdgroup.get_a_valid_campaign(nick)
+        campaign_id = campaign['campaign_id']
+        adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,"SYB",shop['sid'])
+        adgroup_id = adgroup['adgroup_id']    
+        start = datetime.datetime.now()-datetime.timedelta(days=7)
+        end = datetime.datetime.now()-datetime.timedelta(days=1)
+
+        cls.testData = [{'nick':nick,'campaign_id':campaign_id,'adgroup_id':adgroup_id,'start':start,'end':end,'popException':False,'exceptClass':None},
+                        #{'nick':'','campaign_id':campaign_id,'adgroup_id':adgroup_id,'start':start,'end':end,'popException':True,'exceptClass':TypeError},
+                        {'nick':nick,'campaign_id':0,'adgroup_id':0,'start':start,'end':end,'popException':False,'exceptClass':None},
                         ]
         cls.errs={'effect_error':'error find in API: simba_rpt_adgroupnonsearcheffect_get',
                   'base_error':'error find in API: simba_rpt_adgroupnonsearchbase_get',

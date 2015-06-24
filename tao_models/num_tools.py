@@ -9,10 +9,22 @@
 @copyright: Copyright Maimiaotech.com
 
 """
+KEYS_INT  =["click","impression","impressions","directpaycount",\
+            "indirectpaycount","favitemcount","favshopcount",\
+            "transactiontotal","directtransactionshipping",\
+            "indirecttransactionshipping","indirectcarttotal", \
+            "transactionshippingtotal","favshoptotal","carttotal",\
+            "favitemtotal","directcarttotal","favtotal"]
+KEYS_FLOAT = ["cpm","avgpos","ctr","cost","directpay","indirectpay",\
+                "cpc","roi","indirecttransaction","directtransaction", \
+              "coverage"]
+KEYS_RT = ['impression', 'roi', 'directtransactionshipping', 'cost', \
+           'directtransaction', 'favshoptotal', 'impressions', 'click',\
+           'transactiontotal', 'indirecttransactionshipping', 'indirecttransaction', \
+           'transactionshippingtotal', 'coverage', 'directcarttotal', 'favtotal', \
+           'cpm', 'ctr', 'cpc', 'indirectcarttotal', 'carttotal', 'favitemtotal']
 
 def change2num(rpt_list):
-    keys_int  =["click","impressions","directpaycount","indirectpaycount","favitemcount","favshopcount"]
-    keys_float = ["cpm","avgpos","ctr","cost","directpay","indirectpay","cpc"]
     if not rpt_list:
         return rpt_list
     for item in  rpt_list:
@@ -20,8 +32,8 @@ def change2num(rpt_list):
             #处理None
             if not item[key]:
                 item[key] = 0
-            if key in keys_int:
+            if key in KEYS_INT:
                 item[key] = int(float(item[key]))
-            elif key in keys_float:
+            elif key in KEYS_FLOAT:
                 item[key] = float(item[key])
     return rpt_list

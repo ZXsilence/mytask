@@ -63,7 +63,7 @@ class TradesSoldGet(object):
         return change_obj_to_dict_deeply(total_trade_list)
 
 def test_get_trade_list():
-    nick = '麦苗科技001'
+    nick = '沃尔盾家居专营店'
     start_created_str = "2014-01-01"
     end_created_str = "2014-01-15"
     total_trade_list = TradesSoldGet.get_trades_sold_list(nick, start_created_str, end_created_str)
