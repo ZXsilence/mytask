@@ -66,9 +66,9 @@ class SimbaRptCampadgroupBaseGet(object):
         return change2num(change_obj_to_dict_deeply(base_list))
 
 if __name__ == '__main__':
-    nick = 'zhangyu_xql'
-    campaign_id = 6765909
-    adgroup_id =368440092 
+    nick = '沃尔盾家居专营店'
+    campaign_id = 11219137 
+    adgroup_id = 604426910
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)

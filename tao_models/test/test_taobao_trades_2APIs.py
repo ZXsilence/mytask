@@ -27,7 +27,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from taobao_trades_sold_get import TradesSoldGet
 from taobao_trade_fullinfo_get import TradeFullinfoGet
-
+from tao_models.test.getCampaignAdgroup import GetCampaignAdgroup
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestTradesSoldGet(unittest.TestCase):
     '''
@@ -43,10 +43,11 @@ class TestTradesSoldGet(unittest.TestCase):
     def setUpClass(cls):
         set_api_source('SDK_TEST')
 
+        shop = GetCampaignAdgroup.get_a_valid_shop()
+        nick=shop['nick']
         start = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(1),"%Y-%m-%d %H:%M:%S")
         end = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d %H:%M:%S")
-        
-        cls.testData = [{'nick':'小烨家','start':start,'end':end,'popException':False,'exceptClass':None},
+        cls.testData = [{'nick':nick,'start':start,'end':end,'popException':False,'exceptClass':None},
                         {'nick':'','start':start,'end':end,'popException':False,'exceptClass':None},
                         {'nick':'_nick_not_exists_','start':start,'end':end,'popException':True,'exceptClass':InvalidAccessTokenException},
                         ]
@@ -65,7 +66,7 @@ class TestTradesSoldGet(unittest.TestCase):
                 self.assertEqual(type(res),list,self.errs['trades'])
                 if inputdata['nick']=='':
                     self.assertGreater( len(res), 0 , self.errs['trades'])
-                if len(res)>=1:
+                if len(res)>=0:
                     tid = res[0]['tid']
                     trade = TradeFullinfoGet.get_trade_info(inputdata['nick'], tid) # test taobao_trade_fullinfo_get
                     self.assertEqual( type(trade), dict , self.errs['fullinfo'])
