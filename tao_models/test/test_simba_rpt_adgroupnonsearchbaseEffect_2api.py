@@ -62,6 +62,8 @@ class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):
     def seUp(self):
         pass
     def test_get_rpt_adgroupbase_list(self):
+        pass
+        '''
         for inputdata in self.testData:
             is_popped = False
             try:
@@ -82,7 +84,7 @@ class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):
                 self.assertRaises(inputdata['exceptClass'])
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-
+        '''
 
     def tearDown(self):
         pass
