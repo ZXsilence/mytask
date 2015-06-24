@@ -30,7 +30,7 @@ from simba_rpt_adgroupcreativebase_get import SimbaRptAdgroupcreativeBaseGet
 from simba_rpt_adgroupkeywordbase_get import SimbaRptAdgroupkeywordbaseGet
 from simba_rpt_adgroupeffect_get import SimbaRptAdgroupEffectGet
 from simba_rpt_adgroupbase_get import SimbaRptAdgroupBaseGet
-from tao_models.common.getCampaignAdgroup import GetCampaignAdgroup
+from tao_models.test.getCampaignAdgroup import GetCampaignAdgroup
 
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):

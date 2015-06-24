@@ -28,7 +28,7 @@ from tao_models.common.exceptions import W2securityException, InvalidAccessToken
 from simba_rpt_campaignbase_get import SimbaRptCampaignbaseGet
 from simba_rpt_campaigneffect_get import SimbaRptCampaigneffectGet
 
-from  tao_models.common.getCampaignAdgroup import GetCampaignAdgroup
+from  tao_models.test.getCampaignAdgroup import GetCampaignAdgroup
 
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):

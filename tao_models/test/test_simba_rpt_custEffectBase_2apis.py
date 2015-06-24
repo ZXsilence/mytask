@@ -27,7 +27,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from simba_rpt_custeffect_get import SimbaRptCusteffectGet
 from simba_rpt_custbase_get import SimbaRptCustbaseGet
-from tao_models.common.getCampaignAdgroup import GetCampaignAdgroup
+from tao_models.test.getCampaignAdgroup import GetCampaignAdgroup
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptCusteffectGet(unittest.TestCase):
     '''
