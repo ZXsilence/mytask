@@ -29,9 +29,19 @@ class GetCampaignAdgroup(object):
     def get_a_valid_shop(cls,soft_code="SYB",test=False):
         testShop=[{'nick':'chinchinstyle','sid':62847885,'soft_code':"SYB"},{'nick':'麦苗科技001','sid':101240238,'soft_code':"SYB"}]
         if test:
-            return testShop
+            return testShop[1]
         all_shops = ShopInfo.get_valid_shop_infos_list(soft_code)
-        return all_shops[23]
+        for shop in all_shops:
+            if shop:
+                nick = shop['nick']
+                soft_code = shop['soft_code']
+                sid = shop['sid']
+                campaign = GetCampaignAdgroup.get_a_valid_campaign(nick,soft_code)
+                if campaign:
+                    adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,soft_code,sid)
+                    if adgroup:
+                        return shop
+        return testShop[0]
 
     @classmethod
     def get_a_valid_campaign(cls,nick,soft_code='SYB'):
@@ -58,8 +68,9 @@ class GetCampaignAdgroup(object):
 
 if __name__=='__main__':
     soft_code = "SYB"
-    print GetCampaignAdgroup.get_a_valid_nick(soft_code,False)
-    nick = '麦苗科技001'
+    shop = GetCampaignAdgroup.get_a_valid_shop(soft_code,False)
+    nick =  shop['nick']
+    print nick
     campaign = GetCampaignAdgroup.get_a_valid_campaign(nick)
     print campaign
     adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign)
