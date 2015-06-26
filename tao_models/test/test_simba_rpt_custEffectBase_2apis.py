@@ -60,11 +60,9 @@ class TestSimbaRptCusteffectGet(unittest.TestCase):
             try:
                 res = SimbaRptCusteffectGet.get_shop_rpt_effect(inputdata['nick'], inputdata['start'],inputdata['end'])
                 self.assertEqual(type(res),list,self.errs['effect_error'])
-                self.assertGreater( len(res), 0 , self.errs['effect_error'])
 
                 res = SimbaRptCustbaseGet.get_shop_rpt_base(inputdata['nick'],inputdata['start'],inputdata['end'])
                 self.assertEqual ( type(res), list, self.errs['base_error'])
-                self.assertGreater( len(res) , 0 , self.errs['base_error'])
 
             except Exception, e:
                 is_popped = True

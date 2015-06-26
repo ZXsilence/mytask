@@ -48,8 +48,8 @@ class TestSimbaCampaignPlatformGetAndUpdate(unittest.TestCase):
                                      {'nick': 'chinchinstyle','campaign_id':3328400,'search_channels':[1,2,4],'nonsearch_channels':[],'outside_discount':110,'wap_outside_discount':120,'popException':False, 'exceptionClass':None},
                                      ]
         cls.valueType = {'returnValue_get':dict, 'returnValue_update':dict}
-        cls.itemFields_get = 'mobile_discount,outside_discount,campaign_id,nick,search_channels,nonsearch_channels'.split(',')
-        cls.itemFields_update = 'mobile_discount,outside_discount,campaign_id,nick,search_channels,nonsearch_channels'.split(',')
+        cls.itemFields_get =['mobile_discount', 'outside_discount', 'campaign_id', 'modified_time', 'nick', 'create_time', 'search_channels', 'nonsearch_channels'] #'mobile_discount,outside_discount,campaign_id,nick,search_channels,nonsearch_channels'.split(',')
+        cls.itemFields_update = ['mobile_discount', 'outside_discount', 'campaign_id', 'modified_time', 'nick', 'create_time', 'search_channels', 'nonsearch_channels']#'mobile_discount,outside_discount,campaign_id,nick,search_channels,nonsearch_channels'.split(',')
 
     def setUp(self):
         pass
