@@ -40,7 +40,7 @@ class TestSimbaCampaignAreaGet(unittest.TestCase):
                               {'nick': 'chinchinstyle','campaign_id':3328400,'popException':False, 'exceptionClass':None}
                               ]
         cls.valueType = {'returnValue':dict}
-        cls.itemFields = 'nick,campaign_id,area'.split(',')
+        cls.itemFields = ['nick', 'create_time', 'campaign_id', 'modified_time', 'area'] #'nick,campaign_id,area'.split(',')
 
     def setUp(self):
         pass

@@ -39,15 +39,15 @@ class test_simba_keywordsvon_add(unittest.TestCase):
         pass
     #需要删除的关键词id动态获取
     def test_add_keywords(self):
-        data = [{'nick':'麦苗科技001','campaign_id':10528974,'adgroup_id':488978842,'price_list':[101,102],
+        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':608542533,'price_list':[101,102],
                  'expect_result':[{'word': 'test2', 
                                    'match_scope': '4', 
-                                   'campaign_id': 10528974, 
+                                   'campaign_id': 9214487, 
                                    'modified_time': datetime.datetime(2015, 4, 21, 11, 26, 21), 
                                    'nick': u'\u9ea6\u82d7\u79d1\u6280001', 
                                    'create_time': datetime.datetime(2015, 4, 21, 11, 26, 21), 
                                    'is_default_price': False, 
-                                   'adgroup_id': 488978842, 
+                                   'adgroup_id': 608542533, 
                                    'keyword_id': 106672476835, 
                                    'audit_status': 'audit_wait', 
                                    'max_price': 250, 

@@ -33,7 +33,8 @@ class TestClouddataMbpDataGet(unittest.TestCase):
     def setUpClass(cls):
         set_api_source('SDK_TEST')
         cls.tcinfo = 'API Test - taobao.clouddata.mbp.data.get'
-        cls.testInputDatas = [{'sql_id':7394, 'query_dict':{},'popException':True, 'exceptionClass':ErrorResponseException},
+        cls.testInputDatas = [#{'sql_id':7394, 'query_dict':{},'popException':True, 'exceptionClass':ErrorResponseException},
+                              {'sql_id':7394, 'query_dict':{},'popException':False, 'exceptionClass':None},
                               {'sql_id':7394, 'query_dict':{'shop_id': 1454483},'popException':False, 'exceptionClass':None}
                               ]
         cls.valueType = {'returnValue':list}

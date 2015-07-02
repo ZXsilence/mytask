@@ -45,11 +45,11 @@ class TestSimbaCampaignScheduleGetAndUpdate(unittest.TestCase):
                                   ]
         cls.testInputDatas_update = [{'nick': '__NotExistNick__','campaign_id':None,'schedule':None,'popException':True, 'exceptionClass':InvalidAccessTokenException},
                                      {'nick': 'chinchinstyle','campaign_id':9214487,'schedule':None,'popException':True, 'exceptionClass':ErrorResponseException},
-                                     {'nick': 'chinchinstyle','campaign_id':3328400,'schedule':'00:00-07:30:100;00:00-24:00:100;00:00-24:00:100;00:00-24:00:100;00:00-07:30:100;00:00-07:30:100;00:00-24:00:100','popException':False, 'exceptionClass':None},
+                                     {'nick': 'chinchinstyle','campaign_id':3328400,'schedule':'00:00-07:30:90;00:00-24:00:100;00:00-24:00:100;00:00-24:00:100;00:00-07:30:100;00:00-07:30:100;00:00-24:00:100','popException':False, 'exceptionClass':None},
                                      ]
         cls.valueType = {'returnValue_get':dict, 'returnValue_update':dict}
-        cls.itemFields_get = 'nick,campaign_id,schedule'.split(',')
-        cls.itemFields_update = 'nick,campaign_id,schedule'.split(',')
+        cls.itemFields_get = ['nick', 'create_time', 'campaign_id', 'modified_time', 'schedule'] #'nick,campaign_id,schedule'.split(',')
+        cls.itemFields_update = ['nick', 'create_time', 'campaign_id', 'modified_time', 'schedule'] #'nick,campaign_id,schedule'.split(',')
 
     def setUp(self):
         pass
