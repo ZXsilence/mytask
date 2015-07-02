@@ -37,8 +37,8 @@ class SimbaCreativeAdd(object):
 
 if __name__ == '__main__':
     nick = 'chinchinstyle'
-    adgroup_id =164302433 
+    adgroup_id = 602274295
     title = '测试推广内容test'
-    img_url = 'http://img.taobaocdn.com/bao/uploaded/i1/520500325/T2ZBhTXXNbXXXXXXXX_!!520500325.jpg'
+    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/520500325/TB2PEsobFXXXXbMXXXXXXXXXXXX_!!520500325.jpg_sum.jpg'
     print (SimbaCreativeAdd.add_creative(nick,adgroup_id,title,img_url))
 

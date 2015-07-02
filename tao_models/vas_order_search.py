@@ -108,7 +108,7 @@ class VasOrderSearch(object):
 
 
 if __name__ == '__main__':
-    nick = '易瑞达家居专营店'
+    nick = 'chinchinstyle'
     soft_code = 'SYB'
     start = datetime.datetime.now() - datetime.timedelta(89)
     today = datetime.datetime.now()
