@@ -7,6 +7,7 @@ import logging
 import traceback
 import inspect
 
+import random
 import time
 from time import  sleep
 from datetime import datetime
@@ -110,10 +111,16 @@ def mysql_exception(func):
             except OperationalError, e:
                 code = e.args[0]
                 retry_times += 1
-                if int(code) in [1213,2013,1040,2003,1213]:
+                if int(code) in [2013,1040,2003,1205]:
                     if retry_times > 20:
                         logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
                         raise e
+                elif int(code) in [1213]:
+                    if retry_times > 5:
+                        logging.exception("got an exception when operate on mysql. func:[%s] args:[%s],  **kwargs [%s]" % (func.__name__,str(args),  str(kwargs)))
+                        raise e
+                    sleep(random.randrange(3,15))
+                    continue
                 else:
                     raise e
                 sleep(3)
