@@ -58,7 +58,7 @@ class TestTradesSoldGet(unittest.TestCase):
 
     def seUp(self):
         pass
-    def test_get_user_seller(self):
+    def test_get_trades_sold_list_and_trade_info(self):
         for inputdata in self.testData:
             is_popped = False
             try:
@@ -66,7 +66,7 @@ class TestTradesSoldGet(unittest.TestCase):
                 self.assertEqual(type(res),list,self.errs['trades'])
                 if inputdata['nick']=='':
                     self.assertGreater( len(res), 0 , self.errs['trades'])
-                if len(res)>=0:
+                if len(res)>0:
                     tid = res[0]['tid']
                     trade = TradeFullinfoGet.get_trade_info(inputdata['nick'], tid) # test taobao_trade_fullinfo_get
                     self.assertEqual( type(trade), dict , self.errs['fullinfo'])
