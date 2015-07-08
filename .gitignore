@@ -46,4 +46,6 @@ tao_models/conf/settings.py
 .ropeproject
 rollback.history
 
-
+api_server/conf/set_env.py
+api_server/conf/settings.py
+db_pool/conf/settings.py
