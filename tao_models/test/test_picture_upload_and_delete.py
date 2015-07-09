@@ -49,29 +49,24 @@ class TestPictureUploadandDelete(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_upload_img(self):
+    def test_upload_and_delete_img(self):
         for inputdata in self.testInputDatas_upload:
             self.tcinfo_upload = 'API Test - taobao.picture.upload'
             self.tcinfo_upload += str(inputdata)
             is_poped = False
             try:
                 returnValue = PictureUpload.upload_img(inputdata['nick'],inputdata['image_path'])
+                pic_id=returnValue['picture']['picture_id']
                 self.assertTrue(type(returnValue) == self.valueType['returnValue'], self.tcinfo_upload)
                 self.assertTrue(returnValue.keys() == self.valueKeys, self.tcinfo_upload)
+                res = PictureDelete.delete_img(inputdata['nick'],[pic_id])
+                self.assertEqual(res,True)
             except Exception, e:
                 is_poped = True
                 self.assertRaises(inputdata['exceptionClass'])
             finally:
                 self.assertEqual(inputdata['popException'],is_poped,self.tcinfo_upload)
 
-    @unittest.expectedFailure
-    def test_delete_img(self):
-        self.assertTrue(False,"taobao.picture.delete接口有问题，无法使用；也没使用")
-
-    #@unittest.expectedFailure
-    #def test_expectedFailure(self):
-    #    """test"""
-    #    print self.testdata
 
     def tearDown(self):
         pass
