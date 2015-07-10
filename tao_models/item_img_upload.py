@@ -69,7 +69,8 @@ class ItemImgUpload(object):
             raise ErrorResponseException(code=27,msg='invalid-shop_info',sub_code='invalid-shop_info',sub_msg='can not find valid shop_info')
     
 if __name__ == '__main__':
-    nick = '麦苗科技001'
-    num_iid =18261147964 
-    image_path = '/alidata1/upload/syb/a.jpg'
-    print ItemImgUpload.upload_img(nick,num_iid,image_path)
+    nick = 'chinchinstyle'
+    num_iid =7794896442 
+    image_path = '/alidata1/upload/syb/test.jpg'
+    res=ItemImgUpload.upload_img(nick,num_iid,image_path)
+    print res
