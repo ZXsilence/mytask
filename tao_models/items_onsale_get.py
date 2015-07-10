@@ -38,7 +38,6 @@ class ItemsOnsaleGet(object):
 
 
     @classmethod
-    @tao_api_exception()
     def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS):
 
         total_item_list = []
