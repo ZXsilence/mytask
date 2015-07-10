@@ -70,9 +70,6 @@ class ItemImgUpload(object):
     
 if __name__ == '__main__':
     nick = '麦苗科技001'
-    num_iid =7794896442 
-    image_path = '/home/xiegf/quan.jpg'
+    num_iid =18261147964 
+    image_path = '/alidata1/upload/syb/a.jpg'
     print ItemImgUpload.upload_img(nick,num_iid,image_path)
-    
-
-

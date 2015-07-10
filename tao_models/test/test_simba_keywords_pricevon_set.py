@@ -36,7 +36,7 @@ class test_simba_keywords_pricevon_set(unittest.TestCase):
         pass
     #需要修改价格的关键词id动态获取
     def test_set_keywords_price(self):
-        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613509441,'price':101, 'match_scope':1,
+        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613289962,'price':101, 'match_scope':1,
                  'expect_result':[{'word': u'\u978b \u725b\u76ae \u5988\u5988', 
                                    'match_scope': '1', 
                                    'campaign_id': 9214487, 
@@ -44,7 +44,7 @@ class test_simba_keywords_pricevon_set(unittest.TestCase):
                                    'nick': u'\u9ea6\u82d7\u79d1\u6280001', 
                                    'create_time': datetime.datetime(2015, 4, 20, 14, 59, 4), 
                                    'is_default_price': False, 
-                                   'adgroup_id': 613509441, 
+                                   'adgroup_id': 613289962, 
                                    'keyword_id': 106565562332, 
                                    'audit_status': 'audit_pass',
                                    'max_price': 101, 
