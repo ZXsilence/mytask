@@ -30,7 +30,7 @@ class GetCampaignAdgroup(object):
         testShop=[{'nick':'chinchinstyle','sid':62847885,'soft_code':"SYB"},{'nick':'麦苗科技001','sid':101240238,'soft_code':"SYB"}]
         if test:
             return testShop[1]
-        all_shops = ShopInfo.get_valid_shop_infos_list(soft_code)
+        all_shops = ShopInfo.get_shop_infos_by_num(50,False,soft_code)
         for shop in all_shops:
             if shop:
                 nick = shop['nick']
