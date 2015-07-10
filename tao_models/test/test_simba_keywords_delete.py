@@ -36,14 +36,14 @@ class test_simba_keywords_delete(unittest.TestCase):
         pass
     #需要删除的关键词id动态获取
     def test_delete_keywords(self):
-        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613509441,
+        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613289962,
                  'expect_result':[{'word': u'\u679a\u7ea2\u8272\u62d6\u978b', 
                                    'campaign_id': 9214487, 
                                    'modified_time': datetime.datetime(2015, 4, 16, 11, 51, 33), 
                                    'nick': u'\u9ea6\u82d7\u79d1\u6280001', 
                                    'create_time': datetime.datetime(2015, 4, 16, 11, 51, 33),
                                    'is_default_price': False, 
-                                   'adgroup_id': 613509441, 
+                                   'adgroup_id': 613289962, 
                                    'keyword_id': 105677384979, 
                                    'audit_status': 'audit_pass',
                                    'max_price': 38, 
