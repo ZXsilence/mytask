@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 class SimbaRtRptCampaignGet(object):
 
     @classmethod
-    def get_campaign_rt_rpt_list(cls, nick, the_date):
+    def get_campaign_rt_rpt_list(cls, nick, the_date,source="SUMMARY"):
         """
         获取计划实时报表
         """
-        campaigns_rpt_list = cls.get_campaign_rt_detail_rpt_list(nick, the_date)
+        campaigns_rpt_list = cls.get_campaign_rt_detail_rpt_list(nick, the_date,source)
         campaigns_rpt_dict = {}
         for campaign_rpt in campaigns_rpt_list:
             campaign_id = campaign_rpt['campaign_id']
@@ -52,7 +52,7 @@ class SimbaRtRptCampaignGet(object):
                 campaign_rpt['cost'] / campaign_rpt['click']
             campaign_rpt['ctr'] = 0 if campaign_rpt['impressions'] <= 0 else\
                 100.0*campaign_rpt['click'] / campaign_rpt['impressions']
-            campaign_rpt['coverage'] = 0 if campaign_rpt['click'] <= 0 else \
+            campaign_rpt['cvr'] = 0 if campaign_rpt['click'] <= 0 else \
                 100.0*(campaign_rpt['directtransactionshipping'] + \
                      campaign_rpt['indirecttransactionshipping']) / campaign_rpt['click']
             campaign_rpt['cpm'] = 0 if campaign_rpt['impressions'] <= 0 else\
@@ -60,26 +60,24 @@ class SimbaRtRptCampaignGet(object):
             campaign_rpt['roi'] = 0 if campaign_rpt['cost'] <= 0 else\
                 (campaign_rpt['directtransaction'] + campaign_rpt['indirecttransaction']) \
                 / float(campaign_rpt['cost'])
-
         campaigns_rpt_list = campaigns_rpt_dict.values()
         return campaigns_rpt_list
-    
+
     @classmethod
     @tao_api_exception()
-    def get_campaign_rt_detail_rpt_list(cls, nick, the_date):
+    def get_campaign_rt_detail_rpt_list(cls, nick, the_date,source="SUMMARY"):
         """
         获取计划实时报表,分来源和类型
         """
         req = SimbaRtrptCampaignGetRequest()
         req.nick = nick
         req.the_date = datetime.datetime.strftime(the_date, '%Y-%m-%d')
-        
+
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         l = rsp.resultss
         if not l:
             l = []
-        
         campaigns_rpt_list = change2num(change_obj_to_dict_deeply(l))
         for campaign_rpt in campaigns_rpt_list:
             for key in KEYS_RT:
@@ -87,9 +85,20 @@ class SimbaRtRptCampaignGet(object):
                     campaign_rpt[key] = 0
             campaign_rpt['campaign_id'] = int(campaign_rpt['campaignid'])
             campaign_rpt['impressions'] = campaign_rpt.get('impression',0)
-        return campaigns_rpt_list
-    
-        
+            campaign_rpt['cvr'] = campaign_rpt.get('coverage',0)
+        campaigns_rpt_dict = {}
+        for campaign_rpt in campaigns_rpt_list:
+            if not campaigns_rpt_dict.has_key(campaign_rpt['source']):
+                campaigns_rpt_dict[campaign_rpt['source']] = [campaign_rpt]
+            else:
+                campaigns_rpt_dict[campaign_rpt['source']].append(campaign_rpt)
+        if source == "SUMMARY":
+            return campaigns_rpt_list
+        else:
+            return campaigns_rpt_dict.get(source,[])
+
+
+
 if __name__ == '__main__':
     nick = sys.argv[1]
     campaign_id = int(sys.argv[2])

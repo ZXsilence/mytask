@@ -77,7 +77,6 @@ class ItemsListGet(object):
         return rsp
 
     @classmethod
-    @tao_api_exception()
     def get_item_list(cls, nick, num_iids, fields=DEFAULT_FIELDS):
         if 'props_name' in fields and not 'property_alias' in fields:
             fields += ',property_alias'

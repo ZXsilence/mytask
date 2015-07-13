@@ -47,6 +47,7 @@ class TestVasOrderSearch(unittest.TestCase):
         cls.errs={'type_error':'assert return type error','value_error':'assert return value error','assert_error':'assert exception'}
     def seUp(self):
         pass
+    '''
     def test_search_vas_order_by_nick(self):
         for inputdata in self.testData_by_nick:
             is_popped = False
@@ -58,8 +59,8 @@ class TestVasOrderSearch(unittest.TestCase):
                 self.assertRaises(inputdata['exceptClass'])
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-    
-    def itest_search_vas_order_yesterday(self):
+    '''
+    def test_search_vas_order_yesterday(self):
         for inputdata in self.testData_yesterday:
             is_popped= False
             try:
@@ -72,6 +73,7 @@ class TestVasOrderSearch(unittest.TestCase):
                 self.assertRaises(inputdata['exceptClass'])
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
+    '''
     def itest_search_vas_order_all(self):
         for inputdata in self.testData_yesterday:
             is_popped= False
@@ -84,7 +86,7 @@ class TestVasOrderSearch(unittest.TestCase):
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
 
-    
+    '''
     def tearDown(self):
         pass
 

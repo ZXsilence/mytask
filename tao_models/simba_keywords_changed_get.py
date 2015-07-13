@@ -54,7 +54,6 @@ class SimbaKeywordsChangedGet(object):
         return change_obj_to_dict_deeply(keyword_list)
     
     @classmethod
-    @tao_api_exception()
     def get_total_page(cls,nick,start_time):
         req = SimbaKeywordsChangedGetRequest()
         req.nick = nick
@@ -68,7 +67,6 @@ class SimbaKeywordsChangedGet(object):
         return total_pages
     
     @classmethod
-    @tao_api_exception()
     def get_keywords_id_changed(cls,nick,start_time):
         keyword_list = []
         req = SimbaKeywordsChangedGetRequest()

@@ -1,10 +1,10 @@
+#encoding=utf8
 '''
 Created on 2012-9-4
 
 @author: dk
 
 '''
-#encoding=utf8
 import sys
 import os
 import json
@@ -66,9 +66,9 @@ class SimbaRptCampadgroupEffectGet(object):
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = '沃尔盾家居专营店'
+    campaign_id = 11219137 
+    adgroup_id = 604426910
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)

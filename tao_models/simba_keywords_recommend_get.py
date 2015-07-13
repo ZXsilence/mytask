@@ -38,7 +38,6 @@ class SimbaKeywordsRecommendGet(object):
         return rsp.recommend_words.recommend_word_list
     
     @classmethod
-    @tao_api_exception()
     def get_keywords_recommend_by_adgroup(cls, nick, adgroup_id):
         page_no = 1
         keywords_recommend = []

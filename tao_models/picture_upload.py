@@ -69,7 +69,7 @@ class PictureUpload(object):
     
 if __name__ == '__main__':
     nick = '麦苗科技001'
-    image_path = '/home/xiegf/quan.jpg'
+    image_path = '/alidata1/upload/syb/a.jpg'
     print PictureUpload.upload_img(nick,image_path)
     
 
