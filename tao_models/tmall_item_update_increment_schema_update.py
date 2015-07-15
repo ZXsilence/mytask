@@ -32,6 +32,7 @@ class TmallItemSchemaIncrementUpdate(object):
     def update_item_desc(cls,nick,num_iid,desc):
         req = TmallItemSchemaIncrementUpdateRequest()
         req.item_id = num_iid 
+        new_desc = desc.replace('<','&lt;').replace('>','&gt;')
         xml_data = '''
         <itemRule>
         <field id="update_fields" name="更新字段列表" type="multiCheck">
@@ -40,7 +41,7 @@ class TmallItemSchemaIncrementUpdate(object):
             </values>
         </field>
         <field id="description" name="商品描述" type="input">
-        <value>'''+ desc + '''</value>
+        <value>'''+ new_desc + '''</value>
         </field>
         </itemRule>
         '''
@@ -49,7 +50,10 @@ class TmallItemSchemaIncrementUpdate(object):
         print rsp
 
 if __name__ == '__main__':
-    nick = '麦苗科技001'
+    nick = '哲创家居专营店'
     num_iid = 45420792863
-    desc = '宝贝描述信息'
+    nick = '麦苗科技001'
+    num_iid = 39128684991
+    desc = '宝贝详情内容'
+    desc = desc.replace('<','&lt;').replace('>','&gt;')
     TmallItemSchemaIncrementUpdate.update_item_desc(nick,num_iid,desc)
