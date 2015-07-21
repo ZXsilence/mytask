@@ -36,7 +36,7 @@ class test_simba_insight_wordspricedata_get(unittest.TestCase):
     
     def test_get_words_price_data(self):
         '''
-        校验实际返回的词数目是否一致（可能不足），权重是够降序
+        校验实际返回的词数目是否一致（可能不足），权重是否降序
         '''
         data = [{'bidword':u'连衣裙','start_date_offset':2,'end_date_offset':1,
                  'expect_result':[{'impression': 230295, 
@@ -77,7 +77,8 @@ class test_simba_insight_wordspricedata_get(unittest.TestCase):
                         self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
                         #self.assertEqual(actual_result[index]['provincename'],actual_result[index]['cityname'])
                     else:
-                        self.assertIn(len(actual_result[index]),[15,18])
+                        #print len(actual_result[index])
+                        self.assertIn(len(actual_result[index]),[16])
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])
@@ -93,8 +94,3 @@ class test_simba_insight_wordspricedata_get(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_insight_wordspricedata_get)
-
-
-
-
-

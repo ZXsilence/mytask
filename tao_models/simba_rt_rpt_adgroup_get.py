@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 class SimbaRtRptAdgroupGet(object):
 
     @classmethod
-    def get_adgroup_rt_rpt_list(cls, nick, campaign_id, the_date):
+    def get_adgroup_rt_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
         """
         获取推广组实时报表
         """
-        adgroups_rpt_list = cls.get_adgroup_rt_detail_rpt_list(nick, campaign_id, the_date)
+        adgroups_rpt_list = cls.get_adgroup_rt_detail_rpt_list(nick, campaign_id, the_date,source)
         adgroups_rpt_dict = {}
         for adgroup_rpt in adgroups_rpt_list:
             adgroup_id = adgroup_rpt['adgroup_id']
@@ -66,7 +66,7 @@ class SimbaRtRptAdgroupGet(object):
     
     @classmethod
     @tao_api_exception()
-    def get_adgroup_rt_detail_rpt_list(cls, nick, campaign_id, the_date):
+    def get_adgroup_rt_detail_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
         """
         获取推广组实时报表,分来源和类型
         """
@@ -97,9 +97,20 @@ class SimbaRtRptAdgroupGet(object):
             adgroup_rpt['campaign_id'] = int(adgroup_rpt['campaignid'])
             adgroup_rpt['adgroup_id'] = int(adgroup_rpt['adgroupid'])
             adgroup_rpt['impressions'] = adgroup_rpt.get('impression',0)
+            adgroup_rpt['cvr'] = adgroup_rpt.get('coverage',0)
+        adgroups_rpt_dict = {}
+        for adgroup_rpt  in adgroups_rpt_list:
+            if not adgroups_rpt_dict.has_key(adgroup_rpt['source']):
+                adgroups_rpt_dict[adgroup_rpt['source']] = [adgroup_rpt]
+            else:
+                adgroups_rpt_dict[adgroup_rpt['source']].append(adgroup_rpt) 
+        if source=="SUMMARY":
+            return adgroups_rpt_list
+        else:
+            return adgroups_rpt_dict.get(source,[])
         return adgroups_rpt_list
-    
-        
+
+
 if __name__ == '__main__':
     nick = sys.argv[1]
     campaign_id = int(sys.argv[2])
@@ -109,4 +120,4 @@ if __name__ == '__main__':
     for rpt in rpt_list:
         if rpt['adgroup_id'] == adgroup_id:
             print rpt
-        
+

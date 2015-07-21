@@ -47,11 +47,11 @@ class SimbaAdgroupAdd(object):
 
 if __name__ == '__main__':
 
-    nick = 'chinchinstyle'
-    campaign_id = 3328400
-    default_price = '10'
-    title = '清仓 淘金币女士/男士围巾'
-    item_id = 36031977294
-    img_url = 'http://img01.taobaocdn.com/bao/uploaded/i1/10325030739286583/T1mhM1FkdbXXXXXXXX_!!0-item_pic.jpg'
+    nick = '惠童米奇专卖店'
+    campaign_id = 20285952
+    default_price = 3
+    title = '新款水壶 米奇不锈钢水壶  办公直饮用杯'
+    item_id = 2254142062
+    img_url = 'http://img02.taobaocdn.com/bao/uploaded/i2/TB11ewBGpXXXXXyXFXXXXXXXXXX_!!0-item_pic.jpg'
     print SimbaAdgroupAdd.add_adgroup(nick, campaign_id, item_id, default_price, title, img_url)
     

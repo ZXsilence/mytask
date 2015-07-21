@@ -80,7 +80,6 @@ import test_simba_tools_items_top_get
 import test_simba_rpt_custEffectBase_2apis
 import test_simba_rpt_campaignEffectBase_2api
 import test_simba_rpt_campadgroupEffectBase_2api
-import test_simba_rpt_adgroupnonsearchbaseEffect_2api
 import test_simba_rpt_adgroupbase_4api
 
 import test_simba_insight_catsdata_get
@@ -103,8 +102,9 @@ import test_simba_keywordsbyadgroupid_get
 import test_simba_keywordsbykeywordids_get
 import test_simba_keywordscat_qscore_get
 import test_simba_login_authsign_get
-
-
+import test_simba_keywords_pricevon_set 
+import test_simba_keywordsvon_add
+import test_simba_customers_authorized_get
 alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_login_authsign_get.alltests
                                ,test_fuwu_sale_link_gen.alltests
@@ -168,7 +168,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_rpt_custEffectBase_2apis.alltests
                                ,test_simba_rpt_campaignEffectBase_2api.alltests
                                ,test_simba_rpt_campadgroupEffectBase_2api.alltests
-                               ,test_simba_rpt_adgroupnonsearchbaseEffect_2api.alltests
                                ,test_simba_rpt_adgroupbase_4api.alltests
                                ,test_simba_insight_catsdata_get.alltests
                                ,test_simba_insight_catsforecastnew_get.alltests
@@ -187,7 +186,10 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                test_simba_keywords_qscore_get.alltests,
                                test_simba_keywords_recommend_get.alltests,
                                test_simba_keywordsbyadgroupid_get.alltests,
-                               test_simba_keywordsbykeywordids_get.alltests
+                               test_simba_keywordsbykeywordids_get.alltests,
+                               test_simba_keywords_pricevon_set.alltests,
+                               test_simba_keywordsvon_add.alltests,
+                               test_simba_customers_authorized_get.alltests
                                ])
 #alltests = unittest.TestSuite([test_simba_rpt_adgroupbase_4api.alltests])
 if __name__ == "__main__":

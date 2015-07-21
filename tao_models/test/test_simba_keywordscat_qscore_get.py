@@ -77,9 +77,3 @@ class test_simba_keywordscat_qscore_get(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_keywordscat_qscore_get)
-
-
-
-
-
-

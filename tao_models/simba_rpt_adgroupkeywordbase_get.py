@@ -73,7 +73,7 @@ class SimbaRptAdgroupkeywordbaseGet(object):
 
 if __name__ == '__main__':
     #搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH
-    nick = 'zhangyu_xql'
+    nick = ''
     campaign_id = 6765909
     adgroup_id =368440092 
     search_type = 'SEARCH,CAT'

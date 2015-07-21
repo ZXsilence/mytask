@@ -47,15 +47,12 @@ class TestItemImgDelete(unittest.TestCase):
         cls.tcinfo_upload = 'API Test - taobao.item.img.upload'
         cls.tcinfo_joint_img = 'API Test - taobao.item.joint.img'
         cls.testInputDatas_delete = [{'nick':'麦苗科技001','num_iid':35402689713,'popException':True, 'exceptionClass':ErrorResponseException},
-                                     {'nick':'','num_iid':35402689713,'popException':True, 'exceptionClass':ErrorResponseException},
                                      {'nick':'chinchinstyle','num_iid':35402689713,'popException':False, 'exceptionClass':None}
                                      ]
-        cls.testInputDatas_upload = [{'nick':'麦苗科技001','num_iid':35402689713,'image_path':'/alidata1/upload/syb/a.jpg','popException':True, 'exceptionClass':ErrorResponseException},
-                                     {'nick':'','num_iid':35402689713,'image_path':'/alidata1/upload/syb/a.jpg','popException':True, 'exceptionClass':ErrorResponseException},
-                                     {'nick':'chinchinstyle','num_iid':35402689713,'image_path':'/alidata1/upload/syb/a.jpg','popException':False, 'exceptionClass':None}
+        cls.testInputDatas_upload = [{'nick':'麦苗科技001','num_iid':35402689713,'image_path':'/alidata1/upload/syb/test.jpg','popException':True, 'exceptionClass':ErrorResponseException},
+                                     {'nick':'chinchinstyle','num_iid':35402689713,'image_path':'/alidata1/upload/syb/test.jpg','popException':False, 'exceptionClass':None}
                                      ]
         cls.testInputDatas_joint_img = [{'nick':'麦苗科技001','num_iid':8000023898,'image_path':'i1/520500325/T2ZBhTXXNbXXXXXXXX_!!520500325.jpg','popException':True, 'exceptionClass':ErrorResponseException},
-                                     {'nick':'','num_iid':8000023898,'image_path':'i1/520500325/T2ZBhTXXNbXXXXXXXX_!!520500325.jpg','popException':True, 'exceptionClass':ErrorResponseException},
                                      {'nick':'chinchinstyle','num_iid':8000023898,'image_path':'/i1/52055/T2ZBhTXXNbXXXXXX_!!5205025.jpg','popException':True, 'exceptionClass':ErrorResponseException},
                                      {'nick':'chinchinstyle','num_iid':8000023898,'image_path':'i1/520500325/T2ZBhTXXNbXXXXXXXX_!!520500325.jpg','popException':False, 'exceptionClass':None}
                                      ]
