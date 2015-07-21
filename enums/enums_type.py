@@ -170,6 +170,8 @@ class OperationType(object):
     STOP_OPTIMIZE_CAMPAIGN = 613
 
     UPGRADE_CAMPAIGN = 614
+    CHANGE_CAMPAIGN_SETTINGS = 700
+    CHANGE_ADGROUP_SETTINGS = 701
 
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
@@ -249,7 +251,9 @@ class OperationType(object):
         CHANGE_CAMPAIGN_PLATFORM_PC_DISCOUNT,
         CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT,
         OPEN_CAMPAIGN_PLATFORM_OPTIMIZE,
-        CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE
+        CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE,
+        CHANGE_CAMPAIGN_SETTINGS,
+        CHANGE_ADGROUP_SETTINGS
     ]
 
 
@@ -499,6 +503,8 @@ OPTTYPE_COMMENT = {
     ,OperationType.ADD_NEW_CAMPAIGN_SETTINGS:"新设置自动计划"
     ,OperationType.RISE_ADGROUP_CPC_MAX:"为了效果加大投入,推广单元最高出价增加10%"
     ,OperationType.DROP_ADGROUP_CPC_MAX:"为了效果减少投入,推广单元最高出价减少10%"
+    ,OperationType.CHANGE_CAMPAIGN_SETTINGS:"用户修改自动计划设置"
+    ,OperationType.CHANGE_ADGROUP_SETTINGS:"用户修改推广组设置"
 
 }
 
