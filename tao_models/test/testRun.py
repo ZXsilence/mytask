@@ -80,7 +80,6 @@ import test_simba_tools_items_top_get
 import test_simba_rpt_custEffectBase_2apis
 import test_simba_rpt_campaignEffectBase_2api
 import test_simba_rpt_campadgroupEffectBase_2api
-import test_simba_rpt_adgroupnonsearchbaseEffect_2api
 import test_simba_rpt_adgroupbase_4api
 
 import test_simba_insight_catsdata_get
@@ -169,7 +168,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_rpt_custEffectBase_2apis.alltests
                                ,test_simba_rpt_campaignEffectBase_2api.alltests
                                ,test_simba_rpt_campadgroupEffectBase_2api.alltests
-                               ,test_simba_rpt_adgroupnonsearchbaseEffect_2api.alltests
                                ,test_simba_rpt_adgroupbase_4api.alltests
                                ,test_simba_insight_catsdata_get.alltests
                                ,test_simba_insight_catsforecastnew_get.alltests
