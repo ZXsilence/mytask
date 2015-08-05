@@ -13,6 +13,8 @@
 """
 
 import xmltodict
+import simplejson
+from xml.dom import minidom,Node
 
 def change_xml_to_dict_deeply(obj):
     result_dict = {}
@@ -34,4 +36,13 @@ def change_xml_to_dict_deeply(obj):
         elif type(result_dict[key]) == type([]):
             result_dict[key] = [change_xml_to_dict_deeply(obj) for obj in result_dict[key]]
     return result_dict
+
+def change_xml_2_json(xml_string):
+    converted_dict = xmltodict.parse(xml_string)
+    json_data = simplejson.loads(simplejson.dumps(converted_dict, indent=1))
+    return json_data
+
+def change_json_2_xml(json_dict):
+    converted_xml = xmltodict.unparse(json_dict);
+    return converted_xml
 
