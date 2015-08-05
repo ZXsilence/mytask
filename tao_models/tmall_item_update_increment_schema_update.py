@@ -34,7 +34,7 @@ class TmallItemSchemaIncrementUpdate(object):
     def update_item_desc(cls,nick,num_iid,desc):
         req = TmallItemSchemaIncrementUpdateRequest()
         req.item_id = num_iid 
-        #new_desc = desc.replace('<','&lt;').replace('>','&gt;').replace('&nbsp;','')
+        new_desc = desc.replace('<','&lt;').replace('>','&gt;').replace('&nbsp;','')
         xml_data = '''
         <itemRule>
         <field id="update_fields" name="更新字段列表" type="multiCheck">
