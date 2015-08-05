@@ -43,14 +43,30 @@ class SchemaHelper:
         if field_name == 'description':
             if 'default-complex-values' not in data:
                 return None
-            field_json = [v for v in data['default-complex-values']['field'] if v['@id'] == 'desc_module_user_mods']
+            field_json = data['default-complex-values']['field']
+            field_json = self.__sort_description(field_json)
             if not field_json:
                 return None
             field_json = field_json[0]
-            field_json = [v for v in field_json['complex-values']['field'] if v['@id'] == 'desc_module_user_mod_content']
+            key = '%s_content' % (field_json['@id'].replace('mods','mod') if field_json['@id'].endswith('mods') else field_json['@id'])
+            field_json = [v for v in field_json['complex-values']['field'] if v['@id'] == key]
             if not field_json:
                 return None
             return self.__change_value(field_json[0]['value'])
+
+    def __sort_description(self,complex_values_fields):
+        field_orders  = []
+        for obj in complex_values_fields:
+            key = obj['@id']
+            order_key = '%s_order' %(key.replace('mods','mod') if key.endswith('mods') else key)
+            order = [k for k in obj['complex-values']['field'] if k['@id'] == order_key][0]['value']
+            field_orders.append({'@id':key,'value':int(order)})
+        field_orders.sort(key = lambda e:e['value'])
+        complex_values_fields_dict = dict((obj['@id'],obj) for obj in complex_values_fields)
+        ret_list = []
+        for obj in field_orders:
+            ret_list.append(complex_values_fields_dict[obj['@id']])
+        return ret_list
 
     def __change_value(self,value):
         if not value:
@@ -76,11 +92,13 @@ class SchemaHelper:
         if field_name == 'description':
             if 'default-complex-values' not in field_data:
                 return
-            field_json = [v for v in field_data['default-complex-values']['field'] if v['@id'] == 'desc_module_user_mods']
+            field_json = field_data['default-complex-values']['field']
+            field_json = self.__sort_description(field_json)
             if not field_json:
                 return None
             field_json = field_json[0]
-            field_json = [v for v in field_json['complex-values']['field'] if v['@id'] == 'desc_module_user_mod_content']
+            key = '%s_content' % (field_json['@id'].replace('mods','mod') if field_json['@id'].endswith('mods') else field_json['@id'])
+            field_json = [v for v in field_json['complex-values']['field'] if v['@id'] == key]
             if not field_json:
                 return None
             field_json[0]['value'] = self.__change_value(value)
