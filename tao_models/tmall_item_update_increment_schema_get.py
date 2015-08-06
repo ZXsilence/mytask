@@ -21,7 +21,7 @@ from TaobaoSdk import TmallItemIncrementUpdateSchemaGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService 
 from api_server.common.util import change_obj_to_dict_deeply
-
+from comm_tools.schema_helper import SchemaHelper
 logger = logging.getLogger(__name__)
 
 class TmallItemIncrementUpdateSchemaGet(object):
@@ -37,14 +37,18 @@ class TmallItemIncrementUpdateSchemaGet(object):
         rsp = ApiService.execute(req,nick)
         return change_obj_to_dict_deeply(rsp.update_item_result)
 
+    @classmethod
+    def get_item_desc(cls,nick,num_iid):
+        item_schema = cls.get_item_schema(nick,num_iid,'description')
+        helper = SchemaHelper(item_schema)
+        desc = helper.get_value('description')
+        return desc
+
 if __name__ == '__main__':
-    nick = '哲创家居专营店'
-    num_iid = 45420792863
-    data = TmallItemIncrementUpdateSchemaGet.get_item_schema(nick,num_iid,'description')
-    from comm_tools.xml_tool import change_xml_to_dict_deeply
-    import xmltodict
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
-    xml_dict = xmltodict.parse(data)    
-    data = change_xml_to_dict_deeply(xml_dict)
-    #data['itemRule']['field'][2]['@id']
+    nick = '瑜融数码专营店'
+    num_iid = 37724047487 
+    nick = '恒源图书专营店'
+    num_iid = 10371723382
+    data = TmallItemIncrementUpdateSchemaGet.get_item_schema(nick,num_iid,'description,title')
+    data = TmallItemIncrementUpdateSchemaGet.get_item_desc(nick,num_iid)
     print data
