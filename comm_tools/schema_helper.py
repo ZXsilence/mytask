@@ -59,7 +59,14 @@ class SchemaHelper:
         for obj in complex_values_fields:
             key = obj['@id']
             order_key = '%s_order' %(key.replace('mods','mod') if key.endswith('mods') else key)
-            order = [k for k in obj['complex-values']['field'] if k['@id'] == order_key][0]['value']
+            if 'field' in obj['complex-values']:
+                order = [k for k in obj['complex-values']['field'] if k['@id'] == order_key][0]['value']
+            else:
+                temp_orders = []
+                for inner_obj in obj['complex-values']:
+                    temp_order = [k for k in inner_obj ['field'] if k['@id'] == order_key][0]['value'] 
+                    temp_orders.append(temp_order)
+                order = min(temp_orders)
             field_orders.append({'@id':key,'value':int(order)})
         field_orders.sort(key = lambda e:e['value'])
         complex_values_fields_dict = dict((obj['@id'],obj) for obj in complex_values_fields)
