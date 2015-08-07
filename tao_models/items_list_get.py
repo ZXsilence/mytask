@@ -14,7 +14,8 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-from TaobaoSdk import ItemsListGetRequest
+#from TaobaoSdk import ItemsListGetRequest
+from TaobaoSdk import ItemsSellerListGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
@@ -66,7 +67,8 @@ class ItemsListGet(object):
     @classmethod
     @tao_api_exception()
     def _get_sub_items(cls,nick,sub_num_iid_list,fields):
-        req = ItemsListGetRequest()
+        #req = ItemsListGetRequest()
+        req = ItemsSellerListGetRequest()
         req.fields = fields
         req.num_iids = ",".join([str(num_iid) for num_iid in sub_num_iid_list])
         soft_code = None
@@ -109,11 +111,12 @@ class ItemsListGet(object):
 
 
 def test():
-    nick = 'chinchinstyle'
-    num_iids = [26796368149]
+    nick = '恒源图书专营店'
+    num_iids = [10371723382]
     ItemsListGet.MAX_NUM_IIDS = 20
-    fields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,list_time,delist_time,modified,freight_payer'
-    total_item_list = ItemsListGet.get_item_list(num_iids, fields)
+    fields = 'title,desc,desc_modules,desc_module_info'
+    total_item_list = ItemsListGet.get_item_list(nick,num_iids, fields)
+    print total_item_list[0]['desc']
 
 
 if __name__ == '__main__':
