@@ -374,6 +374,27 @@ def ysf_exception():
         return __func
     return _func
 
+def rt_check_retry():
+    #检测实时报表返回数据是否正常，不正常则重试一次
+    def _func(func):
+        def __func(*args, **kwargs):
+            report_list = func(*args, **kwargs)
+            retry_flag = False
+            for report in report_list:
+                if report['click'] > 0 and report['impressions'] <= 0:
+                    retry_flag = True
+                    break
+
+                elif (report['roi'] > 0 or report['carttotal'] or report['favtotal'] > 0) and report['click'] <= 0:
+                    retry_flag = True
+                    break
+
+            if retry_flag:
+                report_list = func(*args, **kwargs)
+            return report_list
+        return __func
+    return _func
+
 def server_timeout_check(func):
     def __wrappe_func(*args, **kwargs):
         name = args[0]

@@ -17,7 +17,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import SimbaRtrptAdgroupGetRequest 
-from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.decorator import  tao_api_exception, rt_check_retry
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num, KEYS_INT, KEYS_FLOAT, KEYS_RT
@@ -65,6 +65,7 @@ class SimbaRtRptAdgroupGet(object):
         return adgroups_rpt_list
     
     @classmethod
+    @rt_check_retry()
     @tao_api_exception()
     def get_adgroup_rt_detail_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
         """

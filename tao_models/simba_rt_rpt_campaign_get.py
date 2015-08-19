@@ -17,7 +17,7 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 from TaobaoSdk import SimbaRtrptCampaignGetRequest 
-from tao_models.common.decorator import  tao_api_exception
+from tao_models.common.decorator import  tao_api_exception, rt_check_retry
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num, KEYS_INT, KEYS_FLOAT, KEYS_RT
@@ -64,6 +64,7 @@ class SimbaRtRptCampaignGet(object):
         return campaigns_rpt_list
 
     @classmethod
+    @rt_check_retry()
     @tao_api_exception()
     def get_campaign_rt_detail_rpt_list(cls, nick, the_date,source="SUMMARY"):
         """
@@ -83,7 +84,7 @@ class SimbaRtRptCampaignGet(object):
             for key in KEYS_RT:
                 if not campaign_rpt.has_key(key):
                     campaign_rpt[key] = 0
-            campaign_rpt['campaign_id'] = int(campaign_rpt['campaignid'])
+            campaign_rpt['campaign_id'] = int(campaign_rpt.get('campaignid',0))
             campaign_rpt['impressions'] = campaign_rpt.get('impression',0)
             campaign_rpt['cvr'] = campaign_rpt.get('coverage',0)
         campaigns_rpt_dict = {}
