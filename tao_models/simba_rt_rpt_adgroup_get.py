@@ -27,7 +27,6 @@ logger = logging.getLogger(__name__)
 class SimbaRtRptAdgroupGet(object):
 
     @classmethod
-    @rt_check_retry()
     def get_adgroup_rt_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
         """
         获取推广组实时报表
@@ -66,6 +65,7 @@ class SimbaRtRptAdgroupGet(object):
         return adgroups_rpt_list
     
     @classmethod
+    @rt_check_retry()
     @tao_api_exception()
     def get_adgroup_rt_detail_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
         """

@@ -27,7 +27,6 @@ logger = logging.getLogger(__name__)
 class SimbaRtRptBidwordGet(object):
     
     @classmethod
-    @rt_check_retry()
     def get_bidword_rt_rpt_list(cls, nick, campaign_id, adgroup_id, the_date,source="SUMMARY"):
         """
         获取关键词实时报表
@@ -66,6 +65,7 @@ class SimbaRtRptBidwordGet(object):
         return keywords_rpt_list
     
     @classmethod
+    @rt_check_retry()
     @tao_api_exception()
     def get_bidword_rt_detail_rpt_list(cls, nick, campaign_id, adgroup_id, the_date,source="SUMMARY"):
         """
