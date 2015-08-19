@@ -35,7 +35,7 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
         pass
     
     def test_get_words_cats_data(self):
-        data = [{'nick':'晓迎','keyword_id':213203352285,
+        data = [{'nick':'晓迎','keyword_id':224363183595,
                 'expect_result':[{'prices': [417, 90, 59, 52, 52, 45, 40, 38, 38, 38, 
                                              38, 36, 36, 34, 33, 32, 29, 29, 29, 29, 
                                              29, 28, 27, 27, 25, 25, 25, 24, 24, 24, 
