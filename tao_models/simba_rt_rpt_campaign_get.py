@@ -84,7 +84,7 @@ class SimbaRtRptCampaignGet(object):
             for key in KEYS_RT:
                 if not campaign_rpt.has_key(key):
                     campaign_rpt[key] = 0
-            campaign_rpt['campaign_id'] = int(campaign_rpt['campaignid'])
+            campaign_rpt['campaign_id'] = int(campaign_rpt.get('campaignid',0))
             campaign_rpt['impressions'] = campaign_rpt.get('impression',0)
             campaign_rpt['cvr'] = campaign_rpt.get('coverage',0)
         campaigns_rpt_dict = {}
