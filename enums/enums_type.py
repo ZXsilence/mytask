@@ -523,6 +523,7 @@ class LoginFailType(object):
     UID_NOT_FOUND = 12
     NEED_TOP_AUTH = 13
     NO_SWITCH_PERMISSION = 14
+    NO_JUMP_PERMMISSION = 15
 
 class AdgroupHandleStatus(object):
     UNDEAL = 0
@@ -582,4 +583,5 @@ LOGFAILTYPE_COMMENT = {
         ,LoginFailType.UID_NOT_FOUND:'授权失败,关键性信息uid缺失'
         ,LoginFailType.NEED_TOP_AUTH:'需要OPEN授权'
         ,LoginFailType.NO_SWITCH_PERMISSION:'无权限切换用户，请尝试重新登录主账户'
+        ,LoginFailType.NO_JUMP_PERMMISSION:'没有权限从CRM进入用户管理后台'
 }
