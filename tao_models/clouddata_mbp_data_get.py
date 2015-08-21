@@ -153,7 +153,7 @@ class ClouddataMbpDataGet(object):
     def _get_data_list_between_dt(cls,sid,sql_id,sdate,edate,sub_offset=0,sub_limit=5000,other_param_dict=None):
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)
+        parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)+",dt1="+sdate_str+",dt2="+edate_str
         if other_param_dict:
             for k,v in other_param_dict.iteritems():
                 parameter += ",%s=%s" % (k,v)
@@ -366,7 +366,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '100148'
+        sql_id = '101315'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'platform_id':platform_id})
@@ -383,7 +383,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '100150'
+        sql_id = '101314'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'src_id':src_id})
@@ -400,7 +400,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '100149'
+        sql_id = '101312'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})

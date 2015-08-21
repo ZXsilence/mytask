@@ -27,7 +27,7 @@ class VasSubscribeGet(object):
     PAGE_SIZE = 200
 
     @classmethod
-    @tao_api_exception(30)
+    @tao_api_exception(5)
     def get_vas_subscribe(cls, nick, soft_code):
         """
         given a campaign_id, get the adgroup list in this campaign
@@ -40,7 +40,7 @@ class VasSubscribeGet(object):
         return change_obj_to_dict_deeply(rsp.article_user_subscribes)
 
     @classmethod
-    @tao_api_exception(20)
+    @tao_api_exception(5)
     def get_vas_subscribe_by_sdk(cls, nick,soft_code):
         req = VasSubscribeGetRequest()
         req.nick = nick
@@ -50,10 +50,14 @@ class VasSubscribeGet(object):
         params = ApiService.getReqParameters(req)
         taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
         rsp = ApiService.getResponseObj(taobao_client.execute(params, ''))
-        return change_obj_to_dict_deeply(rsp.article_user_subscribes)
+        if rsp.isSuccess():
+            return change_obj_to_dict_deeply(rsp.article_user_subscribes)
+        return []
+
+
 
 if __name__ == '__main__':
-    nick = '麦苗科技001'
+    nick = 'm优品'
     soft_code = 'SYB'
     article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, soft_code)
     for article_user_subscribe in article_user_subscribes:

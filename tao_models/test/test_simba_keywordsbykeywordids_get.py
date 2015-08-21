@@ -35,7 +35,7 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
         pass
     
     def test_sub_get_keyword_list_by_keyword_ids(self):
-        data = [{'nick':'晓迎','keywordids_list':[213203352285,213627522040,64799840462],
+        data = [{'nick':'晓迎','keywordids_list':[224363183563,224363183584,224363183595],
                  'expect_result':{'audit_desc': None, 
                                   'qscore': '10', 
                                   'word': u'\u94bb\u6212 \u4eff\u771f', 

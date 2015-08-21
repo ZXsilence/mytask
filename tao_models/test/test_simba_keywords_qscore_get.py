@@ -35,7 +35,7 @@ class test_simba_keywords_qscore_get(unittest.TestCase):
         pass
     
     def test_get_keywords_qscore(self):
-        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613509441,
+        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613289962,
                  'expect_result':[{'qscore': '6', 
                                    'word': u'\u5973\u5f0f\u6dbc\u62d6\u978b', 
                                    'campaign_id': 9214487, 
@@ -44,7 +44,7 @@ class test_simba_keywords_qscore_get(unittest.TestCase):
                                    'cvr_score': '5', 
                                    'keyword_id': 105734547011, 
                                    'creative_score': '4', 
-                                   'adgroup_id': 613509441}]} ]
+                                   'adgroup_id': 613289962}]} ]
                 #{'nick':'chinchinstyle','adgroup_id':111111,
                 # 'expect_result':[]},
                 #{'nick':'晓迎1','adgroup_id':69533299980,

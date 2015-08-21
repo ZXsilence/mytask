@@ -87,8 +87,13 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
         except Exception,e:
             self.assertTrue(False, "准备数据出错，无法执行")
         try:
-            if len(creatives) == 2:
+            if len(creatives) == 4:
                 SimbaCreativeDelete.delete_creative(self.nick,creatives[0]['creative_id'])
+            elif len(creatives) == 2:
+                SimbaCreativeAdd.add_creative(self.nick,self.adgroup_id,'add to 3',self.img_url)
+            elif len(creatives) == 1:
+                SimbaCreativeAdd.add_creative(self.nick,self.adgroup_id,'add to 3',self.img_url)
+                SimbaCreativeAdd.add_creative(self.nick,self.adgroup_id,'add to 3',self.img_url)
         except Exception,e:
             self.assertTrue(False, "准备数据出错，无法执行")
         self.creative_id_list = []
@@ -120,8 +125,7 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
             self.creative_id_list.append(creative['creative_id'])
         for inputdata in self.testInputDatas_delete:
             if not inputdata['popException'] and inputdata['creative_id'] == None:
-                self.id = self.creative_id_list[0]
-                self.creative_id_list.pop(0)
+                self.id = self.creative_id_list.pop(0)
             else:
                 self.id = inputdata['creative_id']
             self.tcinfo_delete = 'API Test - taobao.simba.creative.delete'

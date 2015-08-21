@@ -14,7 +14,6 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-#from TaobaoSdk import ItemsListGetRequest
 from TaobaoSdk import ItemsSellerListGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
@@ -23,7 +22,7 @@ from api_server.common.util import change_obj_to_dict_deeply
 logger = logging.getLogger(__name__)
 
 
-class ItemsListGet(object):
+class ItemsSellerListGet(object):
 
     DEFAULT_FIELDS = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias,seller_cids,freight_payer'
     MAX_NUM_IIDS = 20
@@ -65,9 +64,8 @@ class ItemsListGet(object):
         return props_name_alias
 
     @classmethod
-    @tao_api_exception()
+    @tao_api_exception(3)
     def _get_sub_items(cls,nick,sub_num_iid_list,fields):
-        #req = ItemsListGetRequest()
         req = ItemsSellerListGetRequest()
         req.fields = fields
         req.num_iids = ",".join([str(num_iid) for num_iid in sub_num_iid_list])
@@ -79,6 +77,7 @@ class ItemsListGet(object):
         return rsp
 
     @classmethod
+    @tao_api_exception()
     def get_item_list(cls, nick, num_iids, fields=DEFAULT_FIELDS):
         if 'props_name' in fields and not 'property_alias' in fields:
             fields += ',property_alias'
@@ -90,7 +89,7 @@ class ItemsListGet(object):
             sub_num_iid_list = num_iid_list[:cls.MAX_NUM_IIDS]
             num_iid_list = num_iid_list[cls.MAX_NUM_IIDS:]
             try:
-                rsp = ItemsListGet._get_sub_items(nick,sub_num_iid_list,fields)
+                rsp = cls._get_sub_items(nick,sub_num_iid_list,fields)
             except Exception,e:
                 if 'isp.top-remote-connection-timeout-tmall' in str(e) or 'isp.top-remote-service-unavailable-tmall' in str(e):
                     print 'continue!',str(e)
@@ -104,18 +103,19 @@ class ItemsListGet(object):
 
         if 'props_name' in fields and 'property_alias' in fields:
             for item in total_item_list:
-                props_name_alias = ItemsListGet.__reverse_props_name(item.props_name, item.property_alias)
+                props_name_alias = cls.__reverse_props_name(item.props_name, item.property_alias)
                 item.props_name = props_name_alias
 
         return change_obj_to_dict_deeply(total_item_list)
 
 
 def test():
-    nick = '恒源图书专营店'
-    num_iids = [10371723382]
-    ItemsListGet.MAX_NUM_IIDS = 20
-    fields = 'title,desc,desc_modules,desc_module_info'
-    total_item_list = ItemsListGet.get_item_list(nick,num_iids, fields)
+    nick = '哲创家居专营店'
+    num_iid = 45420792863
+    num_iids = [num_iid]
+    ItemsSellerListGet.MAX_NUM_IIDS = 20
+    fields = 'desc_modules,desc'
+    total_item_list = ItemsSellerListGet.get_item_list(nick,num_iids,fields)
     print total_item_list[0]['desc']
 
 
