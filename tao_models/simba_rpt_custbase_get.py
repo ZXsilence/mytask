@@ -48,7 +48,7 @@ class SimbaRptCustbaseGet(object):
         return change2num(change_obj_to_dict_deeply(l))
 
 if __name__ == "__main__":
-    nick = '晓迎'
+    nick = '' #'晓迎'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     start_time = datetime.datetime(2015,1,18)

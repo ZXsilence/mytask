@@ -47,6 +47,7 @@ class SimbaRtRptCustGet(object):
             if not cust_rpt.has_key(key):
                 cust_rpt[key] = 0
         cust_rpt['impressions'] = cust_rpt['impression']
+        cust_rpt['cvr'] = cust_rpt.get('coverage',0)
         return cust_rpt
     
         

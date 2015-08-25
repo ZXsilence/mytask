@@ -13,7 +13,7 @@ import time
 from threading import Thread
 
 from time import  sleep
-from datetime import datetime
+from datetime import datetime,date,timedelta
 import simplejson as json
 import copy
 
@@ -374,6 +374,27 @@ def ysf_exception():
         return __func
     return _func
 
+def rt_check_retry():
+    #检测实时报表返回数据是否正常，不正常则重试一次
+    def _func(func):
+        def __func(*args, **kwargs):
+            report_list = func(*args, **kwargs)
+            retry_flag = False
+            for report in report_list:
+                if report['click'] > 0 and report['impressions'] <= 0:
+                    retry_flag = True
+                    break
+
+                elif (report['roi'] > 0 or report['carttotal'] or report['favtotal'] > 0) and report['click'] <= 0:
+                    retry_flag = True
+                    break
+
+            if retry_flag:
+                report_list = func(*args, **kwargs)
+            return report_list
+        return __func
+    return _func
+
 def server_timeout_check(func):
     def __wrappe_func(*args, **kwargs):
         name = args[0]
@@ -392,4 +413,16 @@ def server_timeout_check(func):
             logger.info(message)
     return __wrappe_func
 
+def retry(func):
+    def _wrap(*args,**kwargs):
+        try:
+            tom = datetime.now( )+ timedelta(days=1)
+            retry_time = datetime(tom.year,tom.month,tom.day,1,0,0)
+            return func(*args,**kwargs)
+        except AppCallLimitedAllDayException as exc:
+            raise args[0].retry(exc=exc,max_retries=1,throw=True,eta=retry_time)
+        except TaoApiMaxRetryException ,e :
+            if 'reason:App Call Limited' in str(e):
+                raise args[0].retry(exc=TaoApiMaxRetryException,max_retries=1,throw=True,eta=retry_time)
+    return _wrap
 

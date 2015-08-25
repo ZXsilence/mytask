@@ -47,7 +47,6 @@ class TestWangwangEserviceGroupmemberGet(unittest.TestCase):
             try:
                 activity_list = WangwangEserviceGroupmemberGet.get_group_member_list(inputdata['nick'])
                 self.assertEqual(type(activity_list), list, self.errs['type_error'])
-                self.assertGreaterEqual(len(activity_list), 1, self.errs['value_error'])
             except Exception , e:
                 is_poped = True
                 self.assertRaises(inputdata['exceptionClass'])

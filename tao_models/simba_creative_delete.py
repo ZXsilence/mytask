@@ -34,8 +34,8 @@ class SimbaCreativeDelete(object):
         return change_obj_to_dict_deeply(rsp.creative)
 
 if __name__ == '__main__':
-    nick = '麦苗科技001'
-    creative_id = 496515057 
-    SimbaCreativeDelete.delete_creative(nick,creative_id) 
+    nick = 'chinchinstyle'
+    creative_id = 664482978
+    print SimbaCreativeDelete.delete_creative(nick,creative_id) 
 
 

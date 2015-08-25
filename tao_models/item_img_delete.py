@@ -40,7 +40,7 @@ class ItemImgDelete(object):
 if __name__ == '__main__':
     nick = 'chinchinstyle'
     num_iid = 7794896442
-    img_id = 6686031561
+    img_id = 663092466
     print ItemImgDelete.delete_item_img(nick,num_iid ,img_id )
 
     

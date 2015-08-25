@@ -40,7 +40,7 @@ class TestSimbaAdgroupOnlineitemsvonGet(unittest.TestCase):
                                   ]
         cls.valueType = {'returnValue':dict, 'item_list':list,'total_item':int,'returnValue_list_item':dict}
         cls.itemFields = ['item_list','total_item']
-        cls.itemFields_list_item = ['extra_attributes','price','num_id','title']
+        cls.itemFields_list_item = ['extra_attributes','price','num_id','title','img_url']
 
     def setUp(self):
         pass

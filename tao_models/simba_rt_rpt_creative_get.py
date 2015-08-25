@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 class SimbaRtRptCreativeGet(object):
 
     @classmethod
-    def get_creative_rt_rpt_list(cls, nick, campaign_id, adgroup_id, the_date):
+    def get_creative_rt_rpt_list(cls, nick, campaign_id, adgroup_id, the_date,source="SUMMARY"):
         """
         获取创意实时报表
         """
-        creatives_rpt_list = cls.get_creative_rt_detail_rpt_list(nick, campaign_id, adgroup_id, the_date)
+        creatives_rpt_list = cls.get_creative_rt_detail_rpt_list(nick, campaign_id, adgroup_id, the_date,source)
         creatives_rpt_dict = {}
         for creative_rpt in creatives_rpt_list:
             creative_id = creative_rpt['creative_id']
@@ -66,7 +66,7 @@ class SimbaRtRptCreativeGet(object):
     
     @classmethod
     @tao_api_exception()
-    def get_creative_rt_detail_rpt_list(cls, nick, campaign_id, adgroup_id, the_date):
+    def get_creative_rt_detail_rpt_list(cls, nick, campaign_id, adgroup_id, the_date,source="SUMMARY"):
         """
         获取创意实时报表,分来源和类型
         """
@@ -91,9 +91,17 @@ class SimbaRtRptCreativeGet(object):
             creative_rpt['adgroup_id'] = int(creative_rpt['adgroupid'])
             creative_rpt['creative_id'] = int(creative_rpt['creativeid'])
             creative_rpt['impressions'] = creative_rpt.get('impression',0)
-        return creatives_rpt_list
-    
-        
+        creatives_rpt_dict = {}
+        for creative_rpt in creatives_rpt_list:
+            if not creatives_rpt_dict.has_key(creative_rpt['source']):
+                creatives_rpt_dict[creative_rpt['source']]= [creative_rpt]
+            else:
+                creatives_rpt_dict[creative_rpt['source']].append(creative_rpt)
+        if source == "SUMMARY":
+            return creatives_rpt_list
+        else:
+            return creatives_rpt_dict.get(source,[])
+
 if __name__ == '__main__':
     nick = sys.argv[1]
     campaign_id = int(sys.argv[2])

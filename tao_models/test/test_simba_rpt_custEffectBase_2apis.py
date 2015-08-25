@@ -27,7 +27,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from simba_rpt_custeffect_get import SimbaRptCusteffectGet
 from simba_rpt_custbase_get import SimbaRptCustbaseGet
-
+from tao_models.test.getCampaignAdgroup import GetCampaignAdgroup
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaRptCusteffectGet(unittest.TestCase):
     '''
@@ -37,9 +37,15 @@ class TestSimbaRptCusteffectGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        cls.testData = [{'nick':'晓迎','start':datetime.datetime(2014,12,11),'end':datetime.datetime(2014,12,18),'popException':False,'exceptClass':None},
-                        {'nick':'','start':datetime.datetime(2014,12,11),'end':datetime.datetime(2014,12,18),'popException':True,'exceptClass':TypeError},
-                        {'nick':'晓迎','start':datetime.datetime(2014,12,18),'end':datetime.datetime(2014,12,11),'popException':True,'exceptClass':TypeError},
+
+        shop = GetCampaignAdgroup.get_a_valid_shop()
+        nick=shop['nick']
+        start = datetime.datetime.now()-datetime.timedelta(days=7)
+        end = datetime.datetime.now()-datetime.timedelta(days=1)
+
+        cls.testData = [{'nick':nick,'start':start,'end':end,'popException':False,'exceptClass':None},
+                        {'nick':'','start':start,'end':end,'popException':False,'exceptClass':None},
+                        #{'nick':nick,'start':start,'end':end,'popException':True,'exceptClass':TypeError},
                         ]
         cls.errs={'effect_error':'error find in API: simba_rpt_custeffect_get',
                   'base_error':'error find in API: simba_rpt_custbase_get',
@@ -54,11 +60,9 @@ class TestSimbaRptCusteffectGet(unittest.TestCase):
             try:
                 res = SimbaRptCusteffectGet.get_shop_rpt_effect(inputdata['nick'], inputdata['start'],inputdata['end'])
                 self.assertEqual(type(res),list,self.errs['effect_error'])
-                self.assertGreater( len(res), 0 , self.errs['effect_error'])
 
                 res = SimbaRptCustbaseGet.get_shop_rpt_base(inputdata['nick'],inputdata['start'],inputdata['end'])
                 self.assertEqual ( type(res), list, self.errs['base_error'])
-                self.assertGreater( len(res) , 0 , self.errs['base_error'])
 
             except Exception, e:
                 is_popped = True
