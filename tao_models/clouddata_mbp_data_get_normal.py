@@ -131,6 +131,47 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_pc_keyword_rpt(cls, sid, sdate, edate):
+        """获取pc关键词报表"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 4439
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_wx_keyword_rpt(cls, sid, sdate, edate):
+        """获取wx关键词报表"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id_list = [101426, 101425, 101427, 101428]
+        sql_id = sql_id_list[sid%4]
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_shop_out_order_d(cls, sid, sdate, edate):
+        """获取店铺站外订单日表详情"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        dt_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":dt_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 101374 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
     def get_all_pc_schedule_rpt(cls,sdate,edate):
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -237,32 +278,9 @@ def get_shop(shop_id):
     return len(ret)
 
 if __name__ == '__main__':
+    sdate = datetime.datetime.now() - datetime.timedelta(days=2)
+    edate = datetime.datetime.now() - datetime.timedelta(days=2) 
     shop_id = int(sys.argv[1])
-    #print "thedate,orderdate,shop_id,buyer_id,keyword,query,url_title,auction_id,gmv_auction_num,alipay_trade_amt,pay_status,gmv_time,alipay_time"
-    sdate = datetime.datetime.now() - datetime.timedelta(days=1)
-    edate = datetime.datetime.now() 
-    #res = ClouddataMbpDataGet.get_sid_nosearch_query_report(shop_id,sdate,edate)
-    #print 'start_time:',datetime.datetime.now()
-    #
-    #dt = datetime.datetime.now()-datetime.timedelta(days=1)
-    #edt = dt-datetime.timedelta(days=6)
-    #sdate = dt-datetime.timedelta(days=2)
-    #res = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, sdate, dt, dt, dt)
-    #
-    #while dt > edt:
-    #    dt = dt-datetime.timedelta(days=1)
-    #    sdate = dt-datetime.timedelta(days=2)
-    #    res.extend(ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, sdate, sdate, dt, dt))
-
-    #res = ClouddataMbpDataGet.get_uniq_query(res)
-    res = ClouddataMbpDataGet.get_pc_schedule_rpt(shop_id,sdate, edate)
-    #print 'end_time:',datetime.datetime.now()
-    sum_click = 0
-    sum_pay = 0
+    res = ClouddataMbpDataGet.get_wx_keyword_rpt(shop_id,sdate, edate)
     for item in res:
-        sum_click += int(item['click'])
-        sum_pay += int(item['pay'])
-        print item
-
-    print 'sum_click:',sum_click
-    print 'sum_pay:',sum_pay
+        print '%(query)s,%(click)s,%(alipay_auction_num)s' % item

@@ -40,9 +40,9 @@ class PictureDelete(object):
         req.nick = nick
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.picture_delete_response)
+        return rsp.isSuccess()
 
 
 if __name__ == '__main__':
-    picture_ids = [17117055981552098] 
+    picture_ids = [171170108501635074] 
     print PictureDelete.delete_img('麦苗科技001',picture_ids)

@@ -1,9 +1,9 @@
+#encoding=utf8
 '''
 Created on 2012-8-10
 
 @author: dk
 '''
-#encoding=utf8
 import sys
 import os
 import logging
@@ -76,9 +76,9 @@ class SimbaRptAdgroupBaseGet(object):
     
         
 if __name__ == '__main__':
-    nick = 'zhangyu_xql'
-    campaign_id = 6765909
-    adgroup_id =368440092 
+    nick = '天知我愿就实现'
+    campaign_id = 20147920
+    adgroup_id = 491607551
     search_type = 'SEARCH,CAT'
     source = '1,2'
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)

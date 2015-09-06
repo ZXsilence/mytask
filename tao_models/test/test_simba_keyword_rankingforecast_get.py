@@ -35,7 +35,7 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
         pass
     
     def test_get_words_cats_data(self):
-        data = [{'nick':'晓迎','keyword_id':69533299980,
+        data = [{'nick':'晓迎','keyword_id':224363183595,
                 'expect_result':[{'prices': [417, 90, 59, 52, 52, 45, 40, 38, 38, 38, 
                                              38, 36, 36, 34, 33, 32, 29, 29, 29, 29, 
                                              29, 28, 27, 27, 25, 25, 25, 24, 24, 24, 
@@ -46,11 +46,11 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
                                              17, 17, 17, 17, 17, 17, 17, 17, 17, 16, 
                                              16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 
                                              15, 15, 15, 14, 14, 14, 14, 14, 14, 14], 
-                                  'keyword_id': 69533299980, 
+                                  'keyword_id': 213203352285, 
                                   'nick': u'\u6653\u8fce'}] } ,
-                {'nick':'晓迎','keyword_id':69533287980,
+                {'nick':'晓迎','keyword_id':21113203352285,
                 'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'keyword.not.found'}},
-                {'nick':'晓迎1','keyword_id':69533299980,
+                {'nick':'晓迎1','keyword_id':213203352285,
                  'expect_result':{'exception':'access session expired or invalid'}}]
                # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
                #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.invalid-parameter','sub_msg':'类目id错误！'}}]
@@ -90,7 +90,3 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_keyword_rankingforecast_get)
-
-
-
-

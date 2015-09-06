@@ -75,8 +75,8 @@ class SimbaRptAdgroupnonsearchEffectGet(object):
     
 if __name__ == '__main__':
     nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    campaign_id = 3367690
+    adgroup_id = 602274295
     start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     print SimbaRptAdgroupnonsearchEffectGet.get_rpt_adgroupnonsearcheffect_list(nick, campaign_id, adgroup_id, start_time, end_time)
