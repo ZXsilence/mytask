@@ -11,7 +11,27 @@
 """
 import cProfile
 import pstats
+'''
+sort_stats()指定需要排序的维度
 
+Valid Arg       Meaning
+'calls'         call count
+'cumulative'    cumulative time
+'cumtime'       cumulative time
+'file'          file name
+'filename'      file name
+'module'        file name
+'ncalls'        call count
+'pcalls'        primitive call count
+'line'          line number
+'name'          function name
+'nfl'           name/file/line
+'stdname'       standard name
+'time'          internal time
+'tottime'       internal time
+
+print_stats()指定输出的条数
+'''
 def do_cprofile(func):
     def profiled_func(*args,**kwargs):
         prof = cProfile.Profile()
