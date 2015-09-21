@@ -3,8 +3,8 @@
 #rds实例1的连接池配置
 RDS1 = {
          'pool_addr':{
-                 'HOST':'10.242.173.131',
-                 'PORT':4040,
+                 'HOST':'121.199.172.49',
+                 'PORT':30001,
                  'USER':'maimiao_ops',
                  'PASSWD':'maimiaoadmin2014' 
                  }
@@ -22,8 +22,8 @@ RDS1 = {
 #rds2实例连接池配置
 RDS2 = {
          'pool_addr':{
-                 'HOST':'10.242.173.131',
-                 'PORT':4041,
+                 'HOST':'121.199.172.49',
+                 'PORT':30002,
                  'USER':'maimiao_ops2',
                  'PASSWD':'maimiaoadmin2014' 
                  }
@@ -36,22 +36,22 @@ RDS2 = {
 #rds3实例连接池配置
 RDS3 = {
          'pool_addr':{
-                 'HOST':'10.242.173.131',
-                 'PORT':4042,
+                 'HOST':'121.199.172.49',
+                 'PORT':30004,
                  'USER':'maimiao_ops3',
                  'PASSWD':'maimiaoadmin2014' 
                  }
              ,
          'db_list':[
-              'queryall','queryqueue','item_query_rpt','keywords_deleted','keywords_deleted_new'
+              'queryall','queryqueue','item_query_rpt','keywords_deleted'
              ]
         }
 
 #rds4实例连接池配置
 RDS4 = {
          'pool_addr':{
-                 'HOST':'10.242.173.131',
-                 'PORT':4043,
+                 'HOST':'121.199.172.49',
+                 'PORT':30005,
                  'USER':'maimiao_ops4',
                  'PASSWD':'maimiaoadmin2014' 
                  }
