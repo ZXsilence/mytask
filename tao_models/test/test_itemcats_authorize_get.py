@@ -35,10 +35,10 @@ class TestItemcatsAuthorizeGet(unittest.TestCase):
         set_api_source('SDK_TEST')
         cls.tcinfo = 'API Test - taobao.itemcats.authorize.get'
         cls.testInputDatas = [{'nick':'chinchinstyle','fields':'','popException':True, 'exceptionClass':ErrorResponseException, 'returnList':None},
-                              {'nick':'chinchinstyle','fields':'brand.vid, brand.name, item_cat.cid, item_cat.name,xinpin_item_cat.cid, xinpin_item_cat.name','popException':False, 'exceptionClass':None,
+                              {'nick':'chinchinstyle','fields':'brand.vid, brand.name, item_cat.cid, item_cat.name','popException':False, 'exceptionClass':None,
                                'returnList':['xinpin_item_cats']},
                               #{'nick':'','fields':'brand.vid, brand.name, item_cat.cid, item_cat.name,xinpin_item_cat.cid, xinpin_item_cat.name','popException':False, 'exceptionClass':None,'returnList':['brands','item_cats']},
-                              {'nick':'icoy旗舰店','fields':'brand.vid, brand.name, item_cat.cid, item_cat.name,xinpin_item_cat.cid, xinpin_item_cat.name','popException':False, 'exceptionClass':None,
+                              {'nick':'吉米家族旗舰店','fields':'brand.vid, brand.name, item_cat.cid, item_cat.name','popException':False, 'exceptionClass':None,
                                'returnList':['brands', 'item_cats']},
                               ]
         cls.valueType = {'returnValue':dict}
