@@ -43,7 +43,7 @@ RDS3 = {
                  }
              ,
          'db_list':[
-              'queryall','queryqueue','item_query_rpt','keywords_deleted'
+              'queryall','queryqueue','item_query_rpt','keywords_deleted','keywords_deleted_new'
              ]
         }
 
