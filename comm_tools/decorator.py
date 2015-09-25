@@ -36,9 +36,10 @@ def do_cprofile(func):
     def profiled_func(*args,**kwargs):
         prof = cProfile.Profile()
         try:
-            prof.runcall(func, *args, **kwargs)
+            ret = prof.runcall(func, *args, **kwargs)
             prof.dump_stats("prof.txt")
         finally:
             p = pstats.Stats("prof.txt")
             p.strip_dirs().sort_stats("cumulative").print_stats(30)
+            return ret
     return profiled_func
