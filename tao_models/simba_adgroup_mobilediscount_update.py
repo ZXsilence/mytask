@@ -30,8 +30,17 @@ from api_server.common.util import change_obj_to_dict_deeply
 
 class SimbaAdgroupMobilediscountUpdate(object):
     @classmethod
-    @tao_api_exception()
     def update_mobile_discount_by_adgroup_ids(cls,nick,adgroup_ids,mobile_discount):
+        success_num = 0
+        page_num = len(adgroup_ids) / 20 + 1
+        for i in range(page_num):
+            sub_adgroup_ids = adgroup_ids[i*20:(i+1)*20]
+            success_num += cls._update_mobile_discount_by_adgroup_ids(nick,sub_adgroup_ids,mobile_discount)
+        return success_num
+
+    @classmethod
+    @tao_api_exception()
+    def _update_mobile_discount_by_adgroup_ids(cls,nick,adgroup_ids,mobile_discount):
         req=SimbaAdgroupMobilediscountUpdateRequest()
         req.nick = nick
         req.adgroup_ids = ','.join([str(d) for d in adgroup_ids]) 
