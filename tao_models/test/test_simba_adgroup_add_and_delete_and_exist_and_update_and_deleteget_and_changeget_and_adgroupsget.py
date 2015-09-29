@@ -98,7 +98,7 @@ class TestSimbaAdgroupAddandDeleteandExistandUpdate(unittest.TestCase):
         cls.itemFields_update = ['default_price','nick','adgroup_id','online_status']
         cls.itemFields_changed_get = ['nick','adgroup_id','modified_time']
         #cls.itemFields_adgrouops_get = ['nick','adgroup_id','modified_time','default_price','online_status','num_iid','campaign_id','category_ids','create_time','offline_type']
-        cls.itemFields_adgrouops_get = ['default_price', 'item_price', 'title', 'img_url', 'online_status', 'num_iid', 'campaign_id', 'modified_time', 'category_ids', 'nick', 'create_time', 'offline_type', 'adgroup_id']
+        cls.itemFields_adgrouops_get = ['mobile_discount','default_price', 'item_price', 'title', 'img_url', 'online_status', 'num_iid', 'campaign_id', 'modified_time', 'category_ids', 'nick', 'create_time', 'offline_type', 'adgroup_id']
 
     def setUp(self):
         pass

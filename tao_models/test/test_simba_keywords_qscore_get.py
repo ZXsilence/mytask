@@ -35,7 +35,7 @@ class test_simba_keywords_qscore_get(unittest.TestCase):
         pass
     
     def test_get_keywords_qscore(self):
-        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':613289962,
+        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':628189528,
                  'expect_result':[{'qscore': '6', 
                                    'word': u'\u5973\u5f0f\u6dbc\u62d6\u978b', 
                                    'campaign_id': 9214487, 

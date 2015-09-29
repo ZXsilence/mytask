@@ -36,7 +36,7 @@ class test_simba_login_authsign_get(unittest.TestCase):
         data = [{'soft_code':'SYB', 'nick':'麦苗科技001', 'access_token':'62004155d9841cff42d5e4ceg02aa97dc7226246da446b5871727117',
                  'expect_result':'1105022720-31119527-1426061706571-88691be3'},
                 {'soft_code':'SYB', 'nick':'麦苗科技001', 'access_token':'',
-                 'expect_result':{'code':27,'msg':'Invalid session:session-is-blank','sub_code':'session-is-blank',
+                 'expect_result':{'code':26,'msg':'Missing session','sub_code':None,
                                   'exception':'access session expired or invalid'}},
                 {'soft_code':'SYB', 'nick':'麦苗科技001', 'access_token':'62004155d9841cff42d5e4ceg02aa97dc7226246da446b5871727171',
                  'expect_result':{'code':27,'msg':'Invalid session','sub_code':'sessionkey-not-generated-by-server',

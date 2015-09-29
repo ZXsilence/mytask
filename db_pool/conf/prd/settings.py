@@ -11,7 +11,7 @@ RDS1 = {
              ,
          'db_list':['adgroups','api','api_record',\
                  'auth_center','campaign','campaigns',\
-                 'crm','dbtest','items','keywords',\
+                 'crm','dbtest','keywords',\
                  'longtail','mobileapp','mysql','performance',\
                  'qianniu','shop_info','syb_comm_info',\
                  'syb_web','busi','syb_webpage' ,'sys_info','taoci'\
@@ -43,7 +43,7 @@ RDS3 = {
                  }
              ,
          'db_list':[
-              'queryall','queryqueue','item_query_rpt','keywords_deleted'
+              'queryall','queryqueue','item_query_rpt','keywords_deleted','keywords_deleted_new','items'
              ]
         }
 

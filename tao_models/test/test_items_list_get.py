@@ -39,7 +39,7 @@ class TestItemsListGet(unittest.TestCase):
                               {'nick':'chinchinstyle','num_iid':[35402689713,8000023898],'popException':False, 'exceptionClass':None}
                               ]
         cls.valueType = {'returnValue':list}
-        cls.itemFields = 'title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias,seller_cids,freight_payer'
+        cls.itemFields = 'newprepay,title,price,pic_url,num_iid,detail_url,props_name,cid,delist_time,list_time,property_alias,seller_cids,freight_payer'
 
     def setUp(self):
         pass
