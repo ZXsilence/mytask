@@ -4,6 +4,7 @@ __author__ = 'lym liyangmin@maimiaotech.com'
 
 import os
 import commands
+#import gc    
 import sys
 import re
 import logging
@@ -426,3 +427,14 @@ def retry(func):
                 raise args[0].retry(exc=TaoApiMaxRetryException,max_retries=1,throw=True,eta=retry_time)
     return _wrap
 
+#def auto_gc():        
+#    def _func(func):        
+#        def __func(*args, **kwargs):        
+#            gc.disable()      
+#            try:        
+#                return func(*args, **kwargs)        
+#            finally:        
+#                gc.enable()    
+#                gc.collect()    
+#        return __func        
+#    return _func  

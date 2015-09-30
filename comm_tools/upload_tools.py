@@ -48,6 +48,8 @@ def upload_file(file_obj,root_path,category,proj_path,mode=None,with_scp=False):
     flag = True
     if with_scp:
         flag = scp_file(root_path=root_path,ext_path=ext_path,file_name=file_name,dest_path='/home/static/'+proj_path)
+        #删除本地无用文件
+        os.remove(abs_file_path)
     return flag,relative_file_path
 
 def file_append_timestamp(file_name):

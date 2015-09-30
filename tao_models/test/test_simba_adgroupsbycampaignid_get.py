@@ -42,7 +42,8 @@ class TestSimbaAdgroupsbycampaignidGet(unittest.TestCase):
                                         {'nick': 'chinchinstyle','campaign_id':3328400,'popException':False, 'exceptionClass':None}
                                         ]
         cls.valueType = {'returnValue_get':list, 'returnValue_get_count':int}
-        cls.itemFields = ['default_price', 'item_price', 'title', 'img_url','online_status', 'num_iid', 'campaign_id', 'modified_time', 'category_ids', 'nick', 'create_time', 'offline_type', 'adgroup_id']
+        cls.itemFields = ['mobile_discount', 'default_price', 'item_price', 'title', 'img_url','online_status', 
+                          'num_iid', 'campaign_id', 'modified_time', 'category_ids', 'nick', 'create_time', 'offline_type', 'adgroup_id']
 
     def setUp(self):
         pass
