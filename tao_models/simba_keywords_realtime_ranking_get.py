@@ -27,6 +27,7 @@ from TaobaoSdk import SimbaKeywordsRealtimeRankingGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.common.exceptions import  *
 
 class SimbaKeywordsRealtimeRankingGet(object):
     @classmethod
@@ -39,12 +40,24 @@ class SimbaKeywordsRealtimeRankingGet(object):
         req.bidword_id = bidword_id
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
+        if rsp.message == 'keyword.not.found':
+            raise RankKeywordNotExisitException('抢排名关键词不存在') 
+        elif rsp.message == 'exception.bserv.client':
+            raise RankCreativeNotExisitException('抢排名关键所在推广组创意不存在')
+        elif rsp.message  and not rsp.result:
+            raise RankUnknownException('抢排名未知异常')
         return change_obj_to_dict_deeply(rsp.result)
 
 if __name__ == '__main__':
     bid_price_list = [10,20,30,40,50,60,70,80,90]
-    nick = '海立信旗舰店'
-    adgroup_id =627139286
-    bidword_id =230862053372
-    for bid_price in bid_price_list:
-        print SimbaKeywordsRealtimeRankingGet.get_keyword_realtime_ranking(nick,adgroup_id,bid_price,bidword_id), bid_price
+    nick = '杰瑞亚旗舰店'
+    adgroup_id = 629155588  
+    bidword_id = 232856400059  
+    #for bid_price in bid_price_list:
+    #nick = '麦苗科技001'
+    #adgroup_id = 635333906
+    #bidword_id = 235064217836
+    #bid_price = 190
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    bid_price = 259 
+    print SimbaKeywordsRealtimeRankingGet.get_keyword_realtime_ranking(nick,adgroup_id,bid_price,bidword_id)
