@@ -45,7 +45,7 @@ class SimbaKeywordsRealtimeRankingGet(object):
         elif rsp.message == 'exception.bserv.client':
             raise RankCreativeNotExisitException('抢排名关键所在推广组创意不存在')
         elif rsp.message  and not rsp.result:
-            raise RankUnknownException('抢排名未知异常')
+            raise RankUnknownException(rsp.message)
         return change_obj_to_dict_deeply(rsp.result)
 
 if __name__ == '__main__':
