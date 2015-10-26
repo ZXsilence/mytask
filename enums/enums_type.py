@@ -140,6 +140,9 @@ class OperationType(object):
     CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE = 333
     
     ADD_NEW_CAMPAIGN_SETTINGS = 334
+    IGNORE_CAMPAIGN_NO_ADGROUP = 335
+    IGNORE_SHOP_IN_DEBT = 336
+    IGNORE_RT_OPTIMIZE_OFFLINE = 337
 
     ADD_NORMAL = 401
     ADD_KEYWORD_NORMAL = 402 
@@ -301,6 +304,9 @@ class OperationType(object):
         IGNORE_CAMPAIGN_PLATFORM_NORMAL,
         IGNORE_CAMPAIGN_GIVE_UP,
         IGNORE_CAMPAIGN_BUDGET_OUT_LIMIT,
+        IGNORE_CAMPAIGN_NO_ADGROUP, 
+        IGNORE_SHOP_IN_DEBT,
+        IGNORE_RT_OPTIMIZE_OFFLINE,
 
         IGNORE_ADGROUP_NOT_INCREASE_COST,
         IGNORE_ADGROUP_NOT_DECREASE_COST
@@ -450,7 +456,8 @@ OPTTYPE_COMMENT = {
     , OperationType.IGNORE_CAMPAIGN_REPORT_NONE : "关键词所在计划报表未能获取，无需处理"
     , OperationType.IGNORE_ADGROUP_REPORT_NONE: "关键词所在推广组报表未能获取，无需处理"
     , OperationType.IGNORE_CAMPAIGN_STOPPED: "关键词所在计划展现过低，无需处理"
-
+    
+    
     , OperationType.IGNORE_CAMPAIGN_OFFLINE: "计划已暂停,不处理"
     , OperationType.IGNORE_CAMPAIGN_SETTINGS_NONE: "计划设置为空,不处理"
     , OperationType.IGNORE_CAMPAIGN_INIT_FAILED: "计划初始化失败,不处理" 
@@ -494,6 +501,9 @@ OPTTYPE_COMMENT = {
     , OperationType.IGNORE_CAMPAIGN_PLATFORM_NORMAL:"平台设置正常，跳过优化"
     , OperationType.IGNORE_CAMPAIGN_BUDGET_OUT_LIMIT:"省油宝低价版计划日限额超过100元，放弃优化"
     , OperationType.IGNORE_CAMPAIGN_GIVE_UP:"放弃计划优化"
+    , OperationType.IGNORE_CAMPAIGN_NO_ADGROUP:"计划内无推广组"
+    , OperationType.IGNORE_SHOP_IN_DEBT:"店铺欠费"
+    , OperationType.IGNORE_RT_OPTIMIZE_OFFLINE :"计划已下线,跳过实时优化"
     , OperationType.IGNORE_ADGROUP_NOT_INCREASE_COST: "不需要加大投入"
     , OperationType.IGNORE_ADGROUP_NOT_DECREASE_COST: "不需要减少投入"
     ,OperationType.CHANGE_CAMPAIGN_PLATFORM_PC_DISCOUNT:"调整pc平台折扣"
