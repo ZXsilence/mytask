@@ -31,8 +31,18 @@ from api_server.common.util import change_obj_to_dict_deeply
 
 class SimbaAdgroupMobilediscountDelete(object):
     @classmethod
-    @tao_api_exception()
     def delete_mobile_discount_by_adgroup_ids(cls,nick,adgroup_ids):
+        success_num = 0
+        page_num = len(adgroup_ids) / 200 + 1
+        for i in range(page_num):
+            sub_adgroup_ids = adgroup_ids[i*200:(i+1)*200]
+            success_num += cls._delete_mobile_discount_by_adgroup_ids(nick,sub_adgroup_ids)
+        return success_num
+
+
+    @classmethod
+    @tao_api_exception()
+    def _delete_mobile_discount_by_adgroup_ids(nick,adgroup_ids):
         req = SimbaAdgroupMobilediscountDeleteRequest()
         req.nick = nick
         req.adgroup_ids = ','.join([str(d) for d in adgroup_ids]) 
