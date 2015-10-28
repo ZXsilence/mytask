@@ -42,7 +42,7 @@ class SimbaAdgroupMobilediscountDelete(object):
 
     @classmethod
     @tao_api_exception()
-    def _delete_mobile_discount_by_adgroup_ids(nick,adgroup_ids):
+    def _delete_mobile_discount_by_adgroup_ids(cls,nick,adgroup_ids):
         req = SimbaAdgroupMobilediscountDeleteRequest()
         req.nick = nick
         req.adgroup_ids = ','.join([str(d) for d in adgroup_ids]) 
