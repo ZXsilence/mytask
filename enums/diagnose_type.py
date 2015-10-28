@@ -48,7 +48,8 @@ class CampaignType(object):
     CAMPAIGN_NO_ADGROUP_HANDLE = 152
     CAMPAIGN_STOP = 153
     CAMPAIGN_NO_HANDLE = 154
-    
+    RT_OPTIMIZE_OFFLINE = 155
+
     ALL_CAMPAIGN_TYPES = [
         CAMPAIGN_TEST,
         CAMPAIGN_TEST_TWO,
@@ -79,6 +80,7 @@ class CampaignType(object):
         
         CAMPAIGN_NO_ADGROUP,
         CAMPAIGN_NO_ADGROUP_HANDLE,
+        RT_OPTIMIZE_OFFLINE,
         CAMPAIGN_STOP,
         CAMPAIGN_NO_HANDLE
         ]
@@ -259,6 +261,7 @@ CODE_TO_TYPE = {
         ,152:'CAMPAIGN_NO_ADGROUP_HANDLE'
         ,153:'CAMPAIGN_STOP'
         ,154:'CAMPAIGN_NO_HANDLE'
+        ,155:'RT_OPTIMIZE_OFFLINE'
         ,20:'ADGROUP_OK'
         ,21:'ADGROUP_SMALL_CAT'
         ,22:'ADGROUP_LESS_KEYWORD'
@@ -338,6 +341,7 @@ CAMPAIGN_GIVEUP_REASON = {
         ,CampaignType.SHOP_IN_DEBT:"店铺欠费"
         ,CampaignType.SHOP_BE_PUNISH:"店铺直通车违禁"
         ,CampaignType.CAMPAIGN_BUDGET_OUT_LIMIT:"预算超出版本限制"
+        ,CampaignType.RT_OPTIMIZE_OFFLINE:"计划已下线,跳过实时优化"
         }
 
 CAMPAIGN_LOW_CLICK_REASON = {
