@@ -61,7 +61,7 @@ def file_append_timestamp(file_name):
     pre_name = '.'.join(buckets[:-1])
     return '%s_%s.%s' % (abs(hash(pre_name)),timestamp,suffix)
 
-def scp_file(root_path, ext_path, file_name,servers=['121.199.172.249','121.199.172.86'],port=22, username='static',password='Static_maimiao2014',dest_path='/home/static/',max_retry_times=5):
+def scp_file(root_path, ext_path, file_name,servers=['10.132.174.13','10.132.174.148'],port=22, username='static',password='Static_maimiao2014',dest_path='/home/static/',max_retry_times=5):
     for server in servers:
         retry_times=0
         while True:
