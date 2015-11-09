@@ -33,6 +33,26 @@ class InvalidAccessTokenException(Exception):
     def __str__(self):
         return "InvalidAccessTokenException:%s"%(self.msg)
 
+class RankKeywordNotExisitException(Exception):
+    def __init__(self, msg = None):
+        self.msg = msg
+
+    def __str__(self):
+        return "RankKeywordNotExisitException:%s"%(self.msg)
+
+class RankCreativeNotExisitException(Exception):
+    def __init__(self, msg = None):
+        self.msg = msg
+
+    def __str__(self):
+        return "RankCreativeNotExisitException:%s"%(self.msg)
+
+class RankUnknownException(Exception):
+    def __init__(self, msg = None):
+        self.msg = msg
+
+    def __str__(self):
+        return "RankUnknownException:%s"%(self.msg)
 
 
 class TBDataNotReadyException(Exception):

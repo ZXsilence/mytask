@@ -34,7 +34,6 @@ class ItemcatsAuthorizeGet(object):
         return change_obj_to_dict_deeply(rsp.seller_authorize)
 
 if __name__ == '__main__':
-    nick = 'icoy旗舰店'
+    nick = '吉米家族旗舰店'
     fields = 'brand.vid, brand.name, item_cat.cid, item_cat.name'
     print ItemcatsAuthorizeGet.get_itemcats_authorize(nick,fields)
-

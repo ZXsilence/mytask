@@ -46,7 +46,7 @@ class TestWangwangEserviceReceivenumGet(unittest.TestCase):
         dend = dend.strftime("%Y-%m-%d")
         dend = datetime.datetime.strptime(dend,"%Y-%m-%d")
 
-        cls.testInputdata = [{'nick':'麦苗科技001','serivce_nick_list':['cntaobao麦苗科技001:麦麦'],'start_time':dstart,'end_time':dend,'popException':False,'exceptionClass':None},
+        cls.testInputdata = [{'nick':'麦苗科技001','serivce_nick_list':['cntaobao麦苗科技001:测试'],'start_time':dstart,'end_time':dend,'popException':False,'exceptionClass':None},
                              {'nick':'','serivce_nick_list':['cntaobao麦苗科技001:麦麦'],'start_time':dstart,'end_time':dend,'popException':True,'exceptionClass':ErrorResponseException},
                              {'nick':'_nick_not_exsits_','serivce_nick_list':['cntaobao麦苗科技001:麦麦'],'start_time':dstart,'end_time':dend,'popException':True,'exceptionClass':ErrorResponseException},
                              {'nick':'麦苗科技001','serivce_nick_list':[''],'start_time':dstart,'end_time':dend,'popException':True,'exceptionClass':thrift.transport.TTransport.TTransportException}

@@ -194,6 +194,16 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_item_traffic_src_info(cls,sdate):
+        """获取商品流量来源维度信息"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        query_dict = {'sdate':sdate_str}
+        sql_id = 102915
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret 
+
+    @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='all'):
         """获取关键词_query报表"""
 
@@ -278,9 +288,8 @@ def get_shop(shop_id):
     return len(ret)
 
 if __name__ == '__main__':
-    sdate = datetime.datetime.now() - datetime.timedelta(days=2)
-    edate = datetime.datetime.now() - datetime.timedelta(days=2) 
-    shop_id = int(sys.argv[1])
-    res = ClouddataMbpDataGet.get_wx_keyword_rpt(shop_id,sdate, edate)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=1)
+    res = ClouddataMbpDataGet.get_item_traffic_src_info(sdate)
+    print 'device_type,src_id,src_name,src_parent_id,src_parent_name,src_level,is_leaf'
     for item in res:
-        print '%(query)s,%(click)s,%(alipay_auction_num)s' % item
+        print '%(device_type)s,%(src_id)s,%(src_name)s,%(src_parent_id)s,%(src_parent_name)s,%(src_level)s,%(is_leaf)s' % item
