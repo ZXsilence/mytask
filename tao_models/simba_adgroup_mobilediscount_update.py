@@ -32,9 +32,9 @@ class SimbaAdgroupMobilediscountUpdate(object):
     @classmethod
     def update_mobile_discount_by_adgroup_ids(cls,nick,adgroup_ids,mobile_discount):
         success_num = 0
-        page_num = len(adgroup_ids) / 20 + 1
+        page_num = len(adgroup_ids) / 200 + 1
         for i in range(page_num):
-            sub_adgroup_ids = adgroup_ids[i*20:(i+1)*20]
+            sub_adgroup_ids = adgroup_ids[i*200:(i+1)*200]
             success_num += cls._update_mobile_discount_by_adgroup_ids(nick,sub_adgroup_ids,mobile_discount)
         return success_num
 
