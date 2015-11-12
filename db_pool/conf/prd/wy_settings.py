@@ -29,7 +29,7 @@ RDS2 = {
                  }
              ,
          'db_list':[
-              'access_records','dbtest','operation_log'
+              'access_records','dbtest','operation_log', 'sample_analysis'
              ]
         }
 
