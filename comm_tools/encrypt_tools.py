@@ -19,8 +19,8 @@ SECRET_KEY = '^&maimiaotech!@#'
 BLOCK_SIZE = len(SECRET_KEY)
 PADDING = '{'
 
-def generate_ticket(nick,worker_id,article_code,timestamp):
-    origin_ticket = {'nick':nick,'worker_id':worker_id,'article_code':article_code,'timestamp':timestamp}
+def generate_ticket(nick,worker_id,article_code,timestamp,aliww='',is_cloud=False):
+    origin_ticket = {'nick':nick,'worker_id':worker_id,'article_code':article_code,'timestamp':timestamp,'aliww':aliww,'is_cloud':is_cloud}
     s = json.dumps(origin_ticket)
     return encode_AES(s)
 
