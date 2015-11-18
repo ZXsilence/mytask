@@ -98,7 +98,10 @@ class ApiCenterHandle(object):
             nick = shop_info['nick']
             app_key = APP_SETTINGS[soft_code]['app_key']
             app_secret = APP_SETTINGS[soft_code]['app_secret']
-            access_token = shop_info['access_token']
+            if api_source in ["yun_webpage","crm_webpage"]:
+                access_token = shop_info['sub_access_token'] if shop_info['sub_access_token'] else shop_info['access_token']
+            else:
+                access_token = shop_info['access_token']
             api_method = params['method']
             if api_method in ApiCenterHandle.WHITE_METHOD_LIST:
                 access_token = None
