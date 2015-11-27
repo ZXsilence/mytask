@@ -118,6 +118,32 @@ class ClouddataMbpDataGet(object):
         #sql_id = 6335 #pc
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
+    
+    @classmethod
+    def get_shop_schedule_rpt(cls, sid, sdate, edate):
+        #获取店铺分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+
+        sql_id = 104099
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_schedule_sum_rpt(cls, sdate, edate):
+        #获取店铺汇总分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+
+        sql_id = 104098 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
 
     @classmethod
     def get_pc_schedule_rpt(cls, sid, sdate, edate):
@@ -314,8 +340,8 @@ def get_shop(shop_id):
     return len(ret)
 
 if __name__ == '__main__':
-    edate = datetime.datetime.now() - datetime.timedelta(days=3)
-    sdate = datetime.datetime.now() - datetime.timedelta(days=3)
+    edate = datetime.datetime.now() - datetime.timedelta(days=1)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=2)
     res = ClouddataMbpDataGet.get_test_wc_web_log(int(sys.argv[1]), sdate, edate)
 
     #print 'device_type,src_id,src_name,src_parent_id,src_parent_name,src_level,is_leaf'
