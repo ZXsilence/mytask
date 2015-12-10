@@ -158,21 +158,21 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
-    def get_pc_keyword_rpt(cls, sid, sdate, edate):
-        """获取pc关键词报表"""
+    def get_shop_pc_nature_query(cls, sid, sdate, edate):
+        """获取店铺pc自然query"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id = 4439
+        sql_id = 104233 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
     
     @classmethod
-    def get_wx_keyword_rpt(cls, sid, sdate, edate):
-        """获取wx关键词报表"""
+    def get_shop_wx_nature_query(cls, sid, sdate, edate):
+        """获取店铺wx自然query"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -256,7 +256,7 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='pc'):
-        """获取关键词_query报表"""
+        """获取店铺pc付费query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -271,12 +271,6 @@ class ClouddataMbpDataGet(object):
             sql_id = 7387 if sid % 2 == 0 else 7389
             ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
             result_list.extend(ret)
-        
-        #wx query 不走weblog,走现成的结果表
-        #if flag == "all" or flag == "wx":
-        #    sql_id = 7388 if sid % 2 == 0 else 7390
-        #    ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
-        #    result_list.extend(ret)
         
         word_set = StringTools.load_word_set()
         for item in result_list:
@@ -342,7 +336,7 @@ def get_shop(shop_id):
 if __name__ == '__main__':
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
     sdate = datetime.datetime.now() - datetime.timedelta(days=2)
-    res = ClouddataMbpDataGet.get_test_wc_web_log(int(sys.argv[1]), sdate, edate)
+    res = ClouddataMbpDataGet.get_shop_pc_nature_query(int(sys.argv[1]), sdate, edate)
 
     #print 'device_type,src_id,src_name,src_parent_id,src_parent_name,src_level,is_leaf'
     #print 'thedate,refer_domain,sum_pv,sum_uv,sum_visit,sum_gmv_winner_num,sum_gmv_trade_amt,sum_gmv_trade_num,sum_gmv_auction_num,sum_alipay_winner_num,sum_alipay_trade_amt,sum_alipay_trade_num,sum_alipay_auction_num'
@@ -361,5 +355,6 @@ if __name__ == '__main__':
 
         #print '%(thedate)s,%(refer_domain)s,%(sum_pv)s,%(sum_uv)s,%(sum_visit)s,%(sum_gmv_winner_num)s,%(sum_gmv_trade_amt)s,%(sum_gmv_trade_num)s,%(sum_gmv_auction_num)s,%(sum_alipay_winner_num)s,%(sum_alipay_trade_amt)s,%(sum_alipay_trade_num)s,%(sum_alipay_auction_num)s' % item
         #print '%(device_type)s,%(src_id)s,%(src_name)s,%(src_parent_id)s,%(src_parent_name)s,%(src_level)s,%(is_leaf)s' % item
-        print '%(thedate)s,%(buyer_id)s,%(user_agent)s,%(user_ip)s,%(acookie)s,%(lz_session)s,%(access_url)s,%(refer_url)s,%(url_title)s,%(time_stamp)s' % item
+        #print '%(thedate)s,%(buyer_id)s,%(user_agent)s,%(user_ip)s,%(acookie)s,%(lz_session)s,%(access_url)s,%(refer_url)s,%(url_title)s,%(time_stamp)s' % item
         #print '%(thedate)s,%(buyer_id)s,%(auction_id)s,%(gmv_trade_amt)s,%(gmv_auction_num)s,%(alipay_trade_amt)s,%(pay_status)s,%(trade_type)s,%(trade_status)s,%(gmv_time)s,%(alipay_time)s' % item
+        print '%(query)s,%(uv)s' % item
