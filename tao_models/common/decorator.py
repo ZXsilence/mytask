@@ -236,6 +236,13 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                             logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
                             raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                         continue
+                    
+                    elif code == 40 and e.msg and 'Missing required arguments' in e.msg:
+                        sleep(5)
+                        if retry_times == MAX_RETRY_TIMES:
+                            logger.error('retry failed, total  retry_times:%s, reason:%s'%(retry_times, e))
+                            raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
+                        continue
 
                     elif code == 12 and e.sub_msg and '该子帐号无此操作权限' in e.sub_msg and '请通过主帐号设置开通相应权限' in e.sub_msg:
                         raise InvalidAccessTokenException('subuser has no permission')

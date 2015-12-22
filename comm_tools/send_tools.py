@@ -37,8 +37,8 @@ SEND_MESSAGE_URL = 'http://www.stongnet.com/sdkhttp/sendsms.aspx'
 MSG_REPORT = 'http://www.stongnet.com/sdkhttp/getmtreport.aspx'
 DIRECTOR = {
             'PHONE':'15068116152',
-            'EMAIL':'xieguanfu@maimiaotech.com',
-            'SECRET':'xgf612257'
+            'EMAIL':'monitor@maimiaotech.com',
+            'SECRET':'Mm@ops2015)'
             }
 
 def send_email_with_text(addressee, text, subject,cc = None, reply_to=None):
@@ -58,7 +58,7 @@ def send_email_with_text(addressee, text, subject,cc = None, reply_to=None):
         msg.add_header('reply-to',reply_to)
     try:
         smtp = smtplib.SMTP()
-        smtp.connect('smtp.ym.163.com', 25) 
+        smtp.connect('smtp.mxhichina.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
         smtp.sendmail(msg['From'], list(set(to_list+cc_list)), msg.as_string())
     except Exception,e:
@@ -82,7 +82,7 @@ def send_email_with_html(addressee, html, subject,cc = None,reply_to=None):
     msg.attach(html_att)
     try:
         smtp = smtplib.SMTP()
-        smtp.connect('smtp.ym.163.com', 25) 
+        smtp.connect('smtp.mxhichina.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
         smtp.sendmail(msg['From'], list(set(to_list + cc_list)), msg.as_string())
     except Exception,e:
@@ -110,7 +110,7 @@ def send_email_with_file(addressee, text, subject, file_list):
 
     try:
         smtp = smtplib.SMTP()
-        smtp.connect('smtp.ym.163.com', 25) 
+        smtp.connect('smtp.mxhichina.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET']) 
         smtp.sendmail(msg['From'], addressee, msg.as_string())
     except Exception,e:
@@ -198,8 +198,6 @@ def send_sms(cellphone, text, retry_times=3):
         return
     if type(text) == type(u''):
         text = text.encode('utf-8')
-    if '麦苗提醒:' not in  text and '新评价:' not in text and '验证码' not in text:
-        text = '麦苗提醒:' + text
     if '【麦苗】' not in text:
         text += '【麦苗】'
     text = filter_words(text)
@@ -237,13 +235,14 @@ def filter_words(msg):
     return msg
 
 if __name__ == '__main__':
-    #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
+    #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '新邮件切换', '新邮件地址')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
     #send_email_with_html('dongxuanliang@maimiaotech.com','网络延迟','标题',['dongxl123@163.com'],'245684715@qq.com')
     print get_msg_report()
     print get_balance()
     
     #send_sms('18612251466','省油宝会员激活验证码:988280。请勿告知他人并确认申请是您本人操作。')
-    #send_sms('15068116152','省油宝会员激活验证码:988288。请勿告知他人并确认申请是您本人操作。')
+    #send_sms('15068116152','麦苗提醒:尊敬的水冰月0426，您好！您的省油宝软件将于3天后到期，过期后软件推广设置将被清空，请尽快续费以免影响推广。【麦苗】 ')
+    #send_sms('13732249864','麦苗提醒:尊敬的水冰月0426，您好！您的省油宝软件将于3天后到期，过期后软件推广设置将被清空，请尽快续费以免影响推广。【麦苗】 ')
     #send_sms(DIRECTOR['PHONE'], u'省油宝新评价:小--漫,评分:1,用了两个多月 再来评价的！说句真心话，没有一点用！ 烧出去的关键词比系统自动添加的还差！每天开出去200多块左')
     #send_sms(DIRECTOR['PHONE'], '尊敬的客户你好！您的省油宝长期未登陆导致不能正常优化,请您及时登陆省油宝,方便我们进行优化!')

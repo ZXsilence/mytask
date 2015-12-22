@@ -61,12 +61,11 @@ class ClouddataMbpDataGet(object):
     def get_data_from_clouddata(cls, sql_id, query_dict):
         ret = []
         page_count = 0
-        while page_count <= 20:
+        while True:
             query_dict_single = copy.copy(query_dict)
             query_dict_single['sub_limit'] = 5000
             query_dict_single['sub_offset'] = page_count*query_dict_single['sub_limit']
             parameter = ",".join([str(k)+"="+str(v) for k,v in query_dict_single.items()])
-
             #parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)+',dt1='+sdate_str+',dt2='+edate_str
             req = ClouddataMbpDataGetRequest() 
             req.sql_id = sql_id
@@ -111,10 +110,37 @@ class ClouddataMbpDataGet(object):
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":sid, "dt":sdate_str, "sdate":sdate_str, "edate":edate_str}
+        query_dict = {"shop_id":sid, "dt":edate_str, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
         sql_id = 6612
+        #sql_id = 6335 #pc
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_shop_schedule_rpt(cls, sid, sdate, edate):
+        #获取店铺分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+
+        sql_id = 104099
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_schedule_sum_rpt(cls, sdate, edate):
+        #获取店铺汇总分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+
+        sql_id = 104098 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -131,21 +157,21 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
-    def get_pc_keyword_rpt(cls, sid, sdate, edate):
-        """获取pc关键词报表"""
+    def get_shop_pc_nature_query(cls, sid, sdate, edate):
+        """获取店铺pc自然query"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id = 4439
+        sql_id = 104233 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
     
     @classmethod
-    def get_wx_keyword_rpt(cls, sid, sdate, edate):
-        """获取wx关键词报表"""
+    def get_shop_wx_nature_query(cls, sid, sdate, edate):
+        """获取店铺wx自然query"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -157,6 +183,20 @@ class ClouddataMbpDataGet(object):
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
     
+    @classmethod
+    def get_shop_order(cls, sid, sdate, edate):
+        """获取店铺订单"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        dt_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":dt_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 6333
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
     @classmethod
     def get_shop_out_order_d(cls, sid, sdate, edate):
         """获取店铺站外订单日表详情"""
@@ -194,8 +234,28 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
-    def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='all'):
-        """获取关键词_query报表"""
+    def get_item_traffic_src_info(cls,sdate):
+        """获取商品流量来源维度信息"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        query_dict = {'sdate':sdate_str}
+        sql_id = 102915
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret 
+
+    @classmethod
+    def get_shop_out_effect_d(cls, sdate):
+        """获取店铺站外效果日表"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        query_dict = {'dt':sdate_str}
+        sql_id = 103858 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret 
+    
+    @classmethod
+    def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='pc'):
+        """获取店铺pc付费query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -208,11 +268,6 @@ class ClouddataMbpDataGet(object):
 
         if flag == "all" or flag == "pc":
             sql_id = 7387 if sid % 2 == 0 else 7389
-            ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
-            result_list.extend(ret)
-
-        if flag == "all" or flag == "wx":
-            sql_id = 7388 if sid % 2 == 0 else 7390
             ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
             result_list.extend(ret)
         
@@ -265,9 +320,40 @@ class ClouddataMbpDataGet(object):
 
         return 4
 
+    @classmethod
+    def get_item_pc_traffic_info(cls,item_id,dt1=None,dt2=None):
+        if not dt1 or not dt2:
+            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id = 104421
+        query_dict = {"auction_id":item_id,"dt1":dt1,"dt2":dt2}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+    
+    @classmethod
+    def get_item_comment(cls,item_id,dt1=None,dt2=None):
+        if not dt1 or not dt2:
+            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id = 104424 
+        query_dict = {"item_id":item_id,"dt1":dt1,"dt2":dt2}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+    
+    @classmethod
+    def get_item_asso_info(cls,sid,item_id,dt1=None,dt2=None):
+        if not dt1 or not dt2:
+            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id_dict = {1:104426,0:104427,2:104428}
+        sql_id = sql_id_dict[sid%3]
+        query_dict = {"auction_id_1":item_id,"dt1":dt1,"dt2":dt2}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+
 
 def get_shop(shop_id):
-    date = datetime.datetime.now() - datetime.timedelta(days=1)
+    date = datetime.datetime.now() - datetime.timedelta(days=2)
     ret = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, date, date)
     for item in ret:
         for key in ['auction_id', 'gmv_auction_num','alipay_trade_amt','pay_status','gmv_time','alipay_time','orderdate']:
@@ -277,10 +363,19 @@ def get_shop(shop_id):
         print "%(keyword)s,%(query)s,%(match_scope)s,%(auction_id)s,%(gmv_auction_num)s" % item
     return len(ret)
 
+
+
 if __name__ == '__main__':
+    edate = datetime.datetime.now() - datetime.timedelta(days=1)
     sdate = datetime.datetime.now() - datetime.timedelta(days=2)
-    edate = datetime.datetime.now() - datetime.timedelta(days=2) 
-    shop_id = int(sys.argv[1])
-    res = ClouddataMbpDataGet.get_wx_keyword_rpt(shop_id,sdate, edate)
+    #res = ClouddataMbpDataGet.get_shop_pc_nature_query(int(sys.argv[1]), sdate, edate)
+
+    #print 'device_type,src_id,src_name,src_parent_id,src_parent_name,src_level,is_leaf'
+    #print 'thedate,refer_domain,sum_pv,sum_uv,sum_visit,sum_gmv_winner_num,sum_gmv_trade_amt,sum_gmv_trade_num,sum_gmv_auction_num,sum_alipay_winner_num,sum_alipay_trade_amt,sum_alipay_trade_num,sum_alipay_auction_num'
+    #print 'thedate,buyer_id,user_agent,user_ip,acookie,lz_session,access_url,refer_url,url_title,time_stamp'
+    #print 'thedate,buyer_id,auction_id,gmv_trade_amt,gmv_auction_num,alipay_trade_amt,pay_status,trade_type,trade_status,gmv_time,alipay_time'
+    #res = ClouddataMbpDataGet.get_item_pc_traffic_info(20169675519)
+    res = ClouddataMbpDataGet.get_item_comment(20169675519)
+    #res = ClouddataMbpDataGet.get_item_asso_info(59434819,20169675519)
     for item in res:
-        print '%(query)s,%(click)s,%(alipay_auction_num)s' % item
+        print item
