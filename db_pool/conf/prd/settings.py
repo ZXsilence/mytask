@@ -15,7 +15,7 @@ RDS1 = {
                  'longtail','mobileapp','mysql','performance',\
                  'qianniu','shop_info','syb_comm_info',\
                  'syb_web','busi','syb_webpage' ,'sys_info','taoci'\
-                 ,'xiangqing','xuanciw','syb_layer','rpt_cache','busi_back','workflow'
+                 ,'xiangqing','xuanciw','syb_layer','rpt_cache','busi_back','workflow','yzb'
                  ]
         }
 
@@ -29,7 +29,7 @@ RDS2 = {
                  }
              ,
          'db_list':[
-              'access_records','dbtest','operation_log','sample_analysis'
+              'access_records','dbtest','operation_log','sample_analysis','user_item'
              ]
         }
 
