@@ -26,6 +26,7 @@ import time
 from tao_models.simba_keywordsvon_add import SimbaKeywordsvonAdd
 from tao_models.simba_keywords_delete import SimbaKeywordsDelete 
 from tao_models.simba_keywordsbyadgroupid_get import SimbaKeywordsbyadgroupidGet
+from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import InvalidAccessTokenException
 
@@ -39,7 +40,7 @@ class test_simba_keywordsvon_add(unittest.TestCase):
         pass
     #需要删除的关键词id动态获取
     def test_add_keywords(self):
-        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':628189528,'price_list':[101,102],
+        data = [{'nick':'麦苗科技001','campaign_id':9214487,'adgroup_id':649128895,'price_list':[101,102],
                  'expect_result':[{'word': 'test2', 
                                    'match_scope': '4', 
                                    'campaign_id': 9214487, 
@@ -57,7 +58,8 @@ class test_simba_keywordsvon_add(unittest.TestCase):
         for item in data:
             nick = item['nick']
             campaign_id = item['campaign_id']
-            adgroup_id = item['adgroup_id']
+            adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
+            adgroup_id = adgroups[0]['adgroup_id']
             price_list = item['price_list']
             word_price_list = []
             word_price_bak={}
