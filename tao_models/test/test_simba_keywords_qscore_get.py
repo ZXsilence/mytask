@@ -22,6 +22,7 @@ if __name__ == '__main__':
 import unittest
 import datetime
 from tao_models.simba_keywords_qscore_get import SimbaKeywordsQscoreGet 
+from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import InvalidAccessTokenException
 #from TaobaoSdk import  SimbaKeywordsChangedGetRequest
@@ -54,7 +55,8 @@ class test_simba_keywords_qscore_get(unittest.TestCase):
         for item in data:
             nick = item['nick']
             campaign_id = item['campaign_id']
-            adgroup_id = item['adgroup_id']
+            adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
+            adgroup_id = adgroups[0]['adgroup_id']
             expect_result = item['expect_result']
             try:
                 actual_result = SimbaKeywordsQscoreGet.get_keywords_qscore(nick,adgroup_id)

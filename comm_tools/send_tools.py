@@ -37,8 +37,8 @@ SEND_MESSAGE_URL = 'http://www.stongnet.com/sdkhttp/sendsms.aspx'
 MSG_REPORT = 'http://www.stongnet.com/sdkhttp/getmtreport.aspx'
 DIRECTOR = {
             'PHONE':'15068116152',
-            'EMAIL':'xieguanfu@maimiaotech.com',
-            'SECRET':'xgf612257'
+            'EMAIL':'monitor@maimiaotech.com',
+            'SECRET':'Mm@ops2015)'
             }
 
 def send_email_with_text(addressee, text, subject,cc = None, reply_to=None):
@@ -58,7 +58,7 @@ def send_email_with_text(addressee, text, subject,cc = None, reply_to=None):
         msg.add_header('reply-to',reply_to)
     try:
         smtp = smtplib.SMTP()
-        smtp.connect('smtp.ym.163.com', 25) 
+        smtp.connect('smtp.mxhichina.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
         smtp.sendmail(msg['From'], list(set(to_list+cc_list)), msg.as_string())
     except Exception,e:
@@ -82,7 +82,7 @@ def send_email_with_html(addressee, html, subject,cc = None,reply_to=None):
     msg.attach(html_att)
     try:
         smtp = smtplib.SMTP()
-        smtp.connect('smtp.ym.163.com', 25) 
+        smtp.connect('smtp.mxhichina.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET'])
         smtp.sendmail(msg['From'], list(set(to_list + cc_list)), msg.as_string())
     except Exception,e:
@@ -110,7 +110,7 @@ def send_email_with_file(addressee, text, subject, file_list):
 
     try:
         smtp = smtplib.SMTP()
-        smtp.connect('smtp.ym.163.com', 25) 
+        smtp.connect('smtp.mxhichina.com', 25) 
         smtp.login(msg['From'], DIRECTOR['SECRET']) 
         smtp.sendmail(msg['From'], addressee, msg.as_string())
     except Exception,e:
@@ -235,7 +235,7 @@ def filter_words(msg):
     return msg
 
 if __name__ == '__main__':
-    #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '你收到邮件了吗', 'subject')
+    #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '新邮件切换', '新邮件地址')
     #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
     #send_email_with_html('dongxuanliang@maimiaotech.com','网络延迟','标题',['dongxl123@163.com'],'245684715@qq.com')
     print get_msg_report()
