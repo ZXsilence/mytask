@@ -44,7 +44,7 @@ class ApiDataService(object):
 
     @classmethod
     def get_adboard_rpts(cls,nick,start_date,end_date):
-        '''关键词报表'''
+        '''创意报表'''
         return cls.__get_rpts(nick,start_date,end_date,'adboard')
 
     @classmethod

@@ -15,17 +15,14 @@ if pymongo.version.startswith("2.5"):
     sys.modules['pymongo.json_util'] = bson.json_util
 
 currDir = os.path.normpath(os.path.dirname(__file__))
-BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
-sys.path.append(BACKENDS)
-API_HOST = "121.199.170.144"
-API_PORT = 30002 
-SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
-
+home_path = os.path.normpath(os.path.join(currDir,'../../../comm_lib/'))
+sys.path.append(home_path)
+from service_server.conf import set_env
+set_env.getEnvReady()
 API_THRIFT = {
         'host':'183.131.0.206',
         'port':9999
     }
-
 
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/alidata1/logs/service_server.log')
@@ -35,4 +32,3 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
-
