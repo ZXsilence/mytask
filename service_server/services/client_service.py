@@ -21,9 +21,8 @@ class ClientService(object):
         #调用sdk
         rsp_obj = ClientService.query_rpts(params_str,nick)
         if not rsp_obj.get('success'):
-            pass
-            #raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
-        return rsp_obj 
+            raise ServerEerror(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
+        return rsp_obj['data']
 
     @staticmethod
     @sdk_exception(6)
@@ -37,4 +36,18 @@ class ClientService(object):
 
     @staticmethod
     def getResponseObj(rsp_dict):
-        return rsp_dict
+
+        return change_obj_to_dict_deeply(rsp_dict)
+
+def change_obj_to_dict_deeply(obj):
+    if type(obj) == type([]):
+        #列表转换
+        return [change_obj_to_dict_deeply(sub_obj) for sub_obj in obj]
+    elif type(obj) == type({}):
+        if len(obj) == 9 and len(set(obj.keys()) & set(['seconds','year','month','hours','time','date','minutes','day','timezoneOffset'])) == 9:
+            return datetime.fromtimestamp(obj['time']/1000)
+        else:
+            return dict((k,change_obj_to_dict_deeply(v)) for k,v in obj.iteritems())
+    else:
+        #基本类型，无需转换
+        return obj
