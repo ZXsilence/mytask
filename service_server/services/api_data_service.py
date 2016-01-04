@@ -53,7 +53,7 @@ class ApiDataService(object):
         return cls.__get_rpts(nick,start_date,end_date,'dest')
     
     @classmethod
-    def get_dest_rpts(cls,nick,start_date,end_date):
+    def get_adzone_rpts(cls,nick,start_date,end_date):
         '''资源位词报表'''
         return cls.__get_rpts(nick,start_date,end_date,'adzone')
 
