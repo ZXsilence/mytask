@@ -9,7 +9,8 @@ from datetime import datetime
 from TaobaoSdk.Exceptions import ErrorResponseException
 from service_server.conf.settings import API_THRIFT
 from service_server.thrift.client_py import JavaApiClient
-from api_server.common.decorator import sdk_exception
+from service_server.common.exceptions import ServerEerror
+from service_server.common.decorator import sdk_exception
 
 logger = logging.getLogger(__name__)
 
