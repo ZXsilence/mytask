@@ -56,7 +56,7 @@ def mongo_exception(func):
                 raise MongodbException(msg=('adgroup_mongo_exception:%s'%str(e)))
     return wrapped_func
 
-def sdk_exception(MAX_RETRY_TIMES = 20):
+def sdk_exception(MAX_RETRY_TIMES = 6):
     def _wrapper_func(func,*args,**kwargs):
 
         def __wrapped_func(*args, **kwargs):
