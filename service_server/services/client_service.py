@@ -20,7 +20,7 @@ class ClientService(object):
     def execute(params_dict,nick):
         params_str = simplejson.dumps(params_dict)
         #调用sdk
-        rsp_obj = ClientService.query_rpts(params_str,nick)
+        rsp_obj = ClientService.query_rpts(params_str,nick.encode('utf8'))
         if not rsp_obj.get('success'):
             raise ServerEerror(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
         return rsp_obj['data']
