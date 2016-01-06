@@ -166,13 +166,27 @@ class ClouddataMbpDataGet(object):
                        ('pay_byr_cnt','支付买家数'),('pay_amt','支付金额'), \
                        ('pay_item_qty','支付商品数'), ('item_clt_cnt','商品收藏数'), ('cart_item_qty','商品加购数'))
 
-        sdate_str = sdate.strftime("%Y%m%d")
-        edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id = 104483
-        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        sql_id = 104719
+        ret = []
+        all_days = (edate - sdate).days
+        page_count = 0
+        page_flag = True 
+        while page_flag:
+            new_sdate = sdate + datetime.timedelta(page_count * 6)
+            new_edate = new_sdate + datetime.timedelta(5)
+            if new_edate >= edate:
+                new_edate = edate
+                page_flag = False
+
+            sdate_str = new_sdate.strftime("%Y%m%d")
+            edate_str = new_edate.strftime("%Y%m%d")
+            query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+            sub_ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+            ret.extend(sub_ret)
+            page_count += 1
+
         return ret, return_keys
 
     @classmethod
@@ -222,11 +236,11 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-    get_all_shop_cats()
-    exit(0)
-    sdate = datetime.datetime(2015,12,21,0,0)
-    edate = datetime.datetime(2015,12,27,0,0)
+    sdate = datetime.datetime(2015,12,6,0,0)
+    edate = datetime.datetime(2016,1,4,0,0)
     res, return_keys = ClouddataMbpDataGet.get_shop_item_zz_effect_d(int(sys.argv[1]), sdate, edate)
+    print(len(res))
+    exit(0)
     keys = [t[0] for t in return_keys]
     heads = [t[1] for t in return_keys]
     print ','.join(heads)
