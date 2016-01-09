@@ -159,6 +159,23 @@ class ClouddataMbpDataGet(object):
         return ret, return_keys
     
     @classmethod
+    def get_item_info(cls, shop_id, sdate, edate, auction_id):
+        """获取店铺某宝贝信息"""
+
+        return_keys = (('seller_id','seller_id'), ('shop_id','shop_id'), ('auction_id','商品id') , \
+                       ('auction_name','商品名称'), ('on_sale_time','上架时间'), ('auction_price','商品价格'), \
+                       ('cate_level1_id','一级类目id'), ('cate_level2_id','二级类目id'), ('item_property_set','属性集合'))
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str, "auction_id":auction_id}
+        result_list = []
+
+        sql_id = 104756
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+    
+    @classmethod
     def get_shop_item_zz_effect_d(cls, shop_id, sdate, edate):
         return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), ('item_id','商品id') , \
                        ('src_id','来源id'), ('src_parent_id','父来源id'), ('src_name','平台'), ('ipv','ipv'), ('iuv','iuv'), \
