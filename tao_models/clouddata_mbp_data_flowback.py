@@ -44,19 +44,17 @@ class ClouddataMbpDataFlowback(object):
         encode_data = 'upload-multi-line;'
         keys = []
         for k in input_data[0].keys():
-            if k == "dt":
-                continue
             keys.append(k)
-        keys.append('dt')
+        if 'dt' not in keys:
+            keys.append('dt')
         encode_data += ','.join(keys) + ';'
         dt_value = (datetime.datetime.now()-datetime.timedelta(days=0)).strftime('%Y%m%d')
         for e in input_data:
             values_one = []
+            if 'dt' not in e.keys():
+                e['dt'] = dt_value
             for k in keys:
-                if k != 'dt':
-                    values_one.append(str(e.get(k, '')))
-                else:
-                    values_one.append(dt_value)
+                values_one.append(str(e.get(k, '')))
             encode_data += ','.join(values_one) + ';'
         return encode_data
     
