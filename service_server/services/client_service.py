@@ -9,7 +9,7 @@ from datetime import datetime
 from TaobaoSdk.Exceptions import ErrorResponseException
 from service_server.conf.settings import API_THRIFT
 from service_server.thrift.client_py import JavaApiClient
-from service_server.common.exceptions import ServerEerror
+from service_server.common.exceptions import ServerException,ZZAccountNotFoundException
 from service_server.common.decorator import sdk_exception
 
 logger = logging.getLogger(__name__)
@@ -22,7 +22,9 @@ class ClientService(object):
         #调用sdk
         rsp_obj = ClientService.query_rpts(params_str,nick.encode('utf8'))
         if not rsp_obj.get('success'):
-            raise ServerEerror(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
+            if rsp_obj.get('sub_code') =='403':
+                raise ZZAccountNotFoundException(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
+            raise ServerException(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
         return rsp_obj['data']
 
     @staticmethod

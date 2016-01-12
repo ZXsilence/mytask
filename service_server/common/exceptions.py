@@ -12,7 +12,7 @@
 
 
 
-class ServerEerror(Exception):
+class ServerException(Exception):
     """
     raise this exception when service server excute error  
     """
@@ -21,6 +21,17 @@ class ServerEerror(Exception):
         self.code = code
     
     def __str__(self):
-        return "ServerEerror:code:%smsg:%s"%(self.code,self.msg)
+        return "ServerException:code:%smsg:%s"%(self.code,self.msg)
+
+class ZZAccountNotFoundException(Exception):
+    """
+    not found account in taobao
+    """
+    def __init__(self, code=None,msg = None):
+        self.msg = msg 
+        self.code = code
+    
+    def __str__(self):
+        return "ZZAccountNotFoundException:code:%smsg:%s"%(self.code,self.msg)
 
 
