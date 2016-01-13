@@ -21,6 +21,7 @@ from service_server.conf import set_env
 set_env.getEnvReady()
 API_THRIFT = {
         'host':'183.131.0.206',
+        #'host':'10.117.3.35',
         'port':9999
     }
 
