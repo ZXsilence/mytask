@@ -62,3 +62,9 @@ class ApiDataService(object):
         '''类目词报表'''
         return cls.__get_rpts(nick,start_date,end_date,'category')
 
+    @classmethod
+    def get_item_list(cls,nick,max_page = 50):
+        '''获取宝贝 max_page <= 0 时表示全部获取'''
+        params = {'rpt_type':'onSaleItem','nick':nick,'max_page':max_page}
+        data = ClientService.execute(params,nick)
+        return data
