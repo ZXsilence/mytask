@@ -130,7 +130,7 @@ class SimbaParallelApi(object):
    
     @classmethod
     def get_keywords_split_qscore(cls,nick,adgroup_id,keyword_ids):
-        sub_ids_num = 20
+        sub_ids_num = 40
         task_ids = []
         while keyword_ids:
             task_ids.append(get_keywords_split_qscore_worker.delay(nick,adgroup_id,keyword_ids[:sub_ids_num]).task_id)
