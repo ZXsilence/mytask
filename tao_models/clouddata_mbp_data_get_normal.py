@@ -329,17 +329,17 @@ class ClouddataMbpDataGet(object):
         query_dict = {"auction_id":item_id,"dt1":dt1,"dt2":dt2}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
-    
+
     @classmethod
-    def get_item_comment(cls,item_id,dt1=None,dt2=None):
-        if not dt1 or not dt2:
-            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
-            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
-        sql_id = 104424 
-        query_dict = {"item_id":item_id,"dt1":dt1,"dt2":dt2}
+    def get_item_comment(cls,item_id,sdate=None,edate=None):
+        if not sdate or not edate:
+            edate= (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            sdate= (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id = 104870
+        query_dict = {"auction_id":item_id,"sdate":sdate,"edate":edate}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
-    
+
     @classmethod
     def get_item_asso_info(cls,sid,item_id,dt1=None,dt2=None):
         if not dt1 or not dt2:
@@ -350,10 +350,10 @@ class ClouddataMbpDataGet(object):
         query_dict = {"auction_id_1":item_id,"dt1":dt1,"dt2":dt2}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
-    
+
     @classmethod
     def get_shop_traffic_and_trade_info(cls,shop_id,sdate,edate):
-        sql_id = 104820 
+        sql_id = 104820
         now = datetime.datetime.now()
         if type(sdate) == type(now):
             query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
@@ -393,6 +393,4 @@ if __name__ == '__main__':
     #shop_id =111069814 
     shop_id = 63078762
     #res = ClouddataMbpDataGet.get_shop_item_traffic_and_trade_info(shop_id,sdate,edate)
-    res = ClouddataMbpDataGet.get_shop_traffic_and_trade_info(shop_id,sdate,edate)
-    for item in res:
-        print item
+    print ClouddataMbpDataGet.get_item_comment(524834187930)
