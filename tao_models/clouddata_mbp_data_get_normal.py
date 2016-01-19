@@ -364,13 +364,19 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     def get_shop_item_traffic_and_trade_info(cls,shop_id,sdate,edate):
-        sql_id = 104812
+        sql_id = 104937 
         now = datetime.datetime.now()
         if type(sdate) == type(now):
             query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
         else:
             query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res 
+
+    @classmethod    
+    def test(cls):
+        sql_id = 104879
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,{})
         return res
 
 
@@ -387,10 +393,14 @@ def get_shop(shop_id):
 
 
 
+
+
 if __name__ == '__main__':
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = datetime.datetime.now() - datetime.timedelta(days=1)
-    #shop_id =111069814 
-    shop_id = 63078762
-    #res = ClouddataMbpDataGet.get_shop_item_traffic_and_trade_info(shop_id,sdate,edate)
-    print ClouddataMbpDataGet.get_item_comment(524834187930)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=8)
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    res = ClouddataMbpDataGet.get_shop_item_traffic_and_trade_info(36314238,sdate,edate)
+    print len(res)
+
+
+
