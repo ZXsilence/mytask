@@ -94,18 +94,26 @@ def get_keywords_split_qscore_worker(nick,adgroup_id,keyword_ids):
 def get_result_by_task_ids(task_ids):
     done_ids = []
     res = []
+    total_time=0
     while 1:
+        if total_time>=60:
+            raise Exception('timeout error')
         time.sleep(0.1)
+        total_time+=0.1
         for task_id in task_ids:
             if task_id in done_ids:
                 continue
-            async_result = AsyncResult(task_id,backend=celery.backend)
-            if async_result.status == "SUCCESS":
-                done_ids.append(task_id)
-                res.extend(async_result.get())
-            elif async_result.status == "FAILURE":
-                #done_ids.append(task_id)
-                raise Exception('task error')
+            try:
+                async_result = AsyncResult(task_id,backend=celery.backend)
+                if async_result.status == "SUCCESS":
+                    done_ids.append(task_id)
+                    res.extend(async_result.get())
+                elif async_result.status == "FAILURE":
+                    #done_ids.append(task_id)
+                    raise Exception('task error')
+            except Exception ,e:
+                if "Can't connect to MySQL server on" in str(e):
+                    continue
         if len(done_ids) == len(task_ids):
             break
     return res
