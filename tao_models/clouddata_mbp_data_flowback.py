@@ -23,6 +23,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
+import time
 from TaobaoSdk import ClouddataMbpDataFlowbackRequest 
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService 
@@ -71,6 +72,21 @@ class ClouddataMbpDataFlowback(object):
         print rsp
         return rsp.status
 
+    @classmethod
+    def flowback_data_with_retry(cls,table_name,input_data,retry_times=5):
+        status = None
+        i = 0
+        while True:
+            try:
+                status = cls.flowback_data(table_name,input_data)
+            except:
+                i += 1
+                if i>=retry_times:
+                    time.sleep(30)
+                    break
+                else:
+                    continue
+        return status
 
 
 if __name__ == '__main__':
