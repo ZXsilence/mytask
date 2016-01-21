@@ -82,10 +82,9 @@ class ClouddataMbpDataFlowback(object):
             except:
                 i += 1
                 if i>=retry_times:
-                    time.sleep(30)
                     break
                 else:
-                    continue
+                    time.sleep(30)
             else:
                 break
         return status
