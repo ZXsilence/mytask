@@ -86,6 +86,8 @@ class ClouddataMbpDataFlowback(object):
                     break
                 else:
                     continue
+            else:
+                break
         return status
 
 
