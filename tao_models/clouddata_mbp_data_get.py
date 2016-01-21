@@ -418,7 +418,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '104801'
+        sql_id = '104993'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
