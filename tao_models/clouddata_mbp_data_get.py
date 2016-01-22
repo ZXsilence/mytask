@@ -418,7 +418,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '104993'
+        sql_id = '105008'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
@@ -435,7 +435,7 @@ class ClouddataMbpDataGet(object):
         rpt_list = []
         limit = 5000
         offset = 0
-        sql_id = '104807'
+        sql_id = '105007'
         while True:
             try:
                 rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
@@ -464,23 +464,6 @@ class ClouddataMbpDataGet(object):
                 return []
         return rpt_list
 
-    @classmethod
-    def get_rpt_hg_asso_auction(cls,sid,sdate,edate,auction_id):
-        rpt_list = []
-        limit = 5000
-        offset = 0
-        sql_id = '104828'
-        while True:
-            try:
-                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
-                rpt_list.extend(rpt_sub_list)
-                if len(rpt_sub_list) < limit:
-                    break
-                offset = offset + limit
-            except Exception,e:
-                return []
-        return rpt_list
-  
     @classmethod
     def get_rpt_hg_auction_region(cls,sid,sdate,edate,auction_id):
         rpt_list = []
