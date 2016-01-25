@@ -329,17 +329,17 @@ class ClouddataMbpDataGet(object):
         query_dict = {"auction_id":item_id,"dt1":dt1,"dt2":dt2}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
-    
+
     @classmethod
-    def get_item_comment(cls,item_id,dt1=None,dt2=None):
-        if not dt1 or not dt2:
-            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
-            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
-        sql_id = 104424 
-        query_dict = {"item_id":item_id,"dt1":dt1,"dt2":dt2}
+    def get_item_comment(cls,item_id,sdate=None,edate=None):
+        if not sdate or not edate:
+            edate= (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            sdate= (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id = 104870
+        query_dict = {"auction_id":item_id,"sdate":sdate,"edate":edate}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
-    
+
     @classmethod
     def get_item_asso_info(cls,sid,item_id,dt1=None,dt2=None):
         if not dt1 or not dt2:
@@ -349,6 +349,34 @@ class ClouddataMbpDataGet(object):
         sql_id = sql_id_dict[sid%3]
         query_dict = {"auction_id_1":item_id,"dt1":dt1,"dt2":dt2}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+
+    @classmethod
+    def get_shop_traffic_and_trade_info(cls,shop_id,sdate,edate):
+        sql_id = 104820
+        now = datetime.datetime.now()
+        if type(sdate) == type(now):
+            query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
+        else:
+            query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+    
+    @classmethod
+    def get_shop_item_traffic_and_trade_info(cls,shop_id,sdate,edate):
+        sql_id = 104937 
+        now = datetime.datetime.now()
+        if type(sdate) == type(now):
+            query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
+        else:
+            query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res 
+
+    @classmethod    
+    def test(cls):
+        sql_id = 104879
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,{})
         return res
 
 
@@ -365,17 +393,14 @@ def get_shop(shop_id):
 
 
 
+
+
 if __name__ == '__main__':
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = datetime.datetime.now() - datetime.timedelta(days=2)
-    #res = ClouddataMbpDataGet.get_shop_pc_nature_query(int(sys.argv[1]), sdate, edate)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=8)
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    res = ClouddataMbpDataGet.get_shop_item_traffic_and_trade_info(36314238,sdate,edate)
+    print len(res)
 
-    #print 'device_type,src_id,src_name,src_parent_id,src_parent_name,src_level,is_leaf'
-    #print 'thedate,refer_domain,sum_pv,sum_uv,sum_visit,sum_gmv_winner_num,sum_gmv_trade_amt,sum_gmv_trade_num,sum_gmv_auction_num,sum_alipay_winner_num,sum_alipay_trade_amt,sum_alipay_trade_num,sum_alipay_auction_num'
-    #print 'thedate,buyer_id,user_agent,user_ip,acookie,lz_session,access_url,refer_url,url_title,time_stamp'
-    #print 'thedate,buyer_id,auction_id,gmv_trade_amt,gmv_auction_num,alipay_trade_amt,pay_status,trade_type,trade_status,gmv_time,alipay_time'
-    #res = ClouddataMbpDataGet.get_item_pc_traffic_info(20169675519)
-    res = ClouddataMbpDataGet.get_item_comment(20169675519)
-    #res = ClouddataMbpDataGet.get_item_asso_info(59434819,20169675519)
-    for item in res:
-        print item
+
+

@@ -23,6 +23,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
+import time
 from TaobaoSdk import ClouddataMbpDataFlowbackRequest 
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService 
@@ -44,19 +45,17 @@ class ClouddataMbpDataFlowback(object):
         encode_data = 'upload-multi-line;'
         keys = []
         for k in input_data[0].keys():
-            if k == "dt":
-                continue
             keys.append(k)
-        keys.append('dt')
+        if 'dt' not in keys:
+            keys.append('dt')
         encode_data += ','.join(keys) + ';'
         dt_value = (datetime.datetime.now()-datetime.timedelta(days=0)).strftime('%Y%m%d')
         for e in input_data:
             values_one = []
+            if 'dt' not in e.keys():
+                e['dt'] = dt_value
             for k in keys:
-                if k != 'dt':
-                    values_one.append(str(e.get(k, '')))
-                else:
-                    values_one.append(dt_value)
+                values_one.append(str(e.get(k, '')))
             encode_data += ','.join(values_one) + ';'
         return encode_data
     
@@ -73,6 +72,22 @@ class ClouddataMbpDataFlowback(object):
         print rsp
         return rsp.status
 
+    @classmethod
+    def flowback_data_with_retry(cls,table_name,input_data,retry_times=5):
+        status = None
+        i = 0
+        while True:
+            try:
+                status = cls.flowback_data(table_name,input_data)
+            except:
+                i += 1
+                if i>=retry_times:
+                    break
+                else:
+                    time.sleep(30)
+            else:
+                break
+        return status
 
 
 if __name__ == '__main__':
