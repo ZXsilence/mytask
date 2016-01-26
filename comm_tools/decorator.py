@@ -11,6 +11,9 @@
 """
 import cProfile
 import pstats
+import coverage
+import random
+import time
 '''
 sort_stats()指定需要排序的维度
 
@@ -43,3 +46,15 @@ def do_cprofile(func):
             p.strip_dirs().sort_stats("cumulative").print_stats(30)
             return ret
     return profiled_func
+
+def do_code_coverage(func):
+    def code_func(*args,**kwargs):
+        cov = coverage.coverage()
+        str_int = time.time()
+        cov.start()
+        ret = func(*args, **kwargs)
+        cov.data_files.filename='.coverage.'+'%f'%str_int
+        cov.stop()
+        cov.save()
+        return ret
+    return code_func
