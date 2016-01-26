@@ -38,13 +38,14 @@ class ItemsOnsaleGet(object):
 
 
     @classmethod
-    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS):
+    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS,order_by = 'sold_quantity:desc'):
 
         total_item_list = []
 
         req = ItemsOnsaleGetRequest()
         req.fields = fields
-        req.order_by = "sold_quantity:desc"
+        if order_by:
+            req.order_by = order_by
         req.page_size = 200
         req.page_no = 1
 
