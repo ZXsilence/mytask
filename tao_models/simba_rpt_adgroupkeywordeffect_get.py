@@ -23,6 +23,7 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
@@ -57,9 +58,15 @@ class SimbaRptAdgroupkeywordeffectGet(object):
             soft_code = None
             rsp = ApiService.execute(req,nick,soft_code)
             l = json.loads(rsp.rpt_adgroupkeyword_effect_list.lower())
+            if type(l) == type({}) and 'sub_code' in l:
+                if '开始日期不能大于结束日期' == l['sub_msg'] and start_time.date() <= end_time.date():
+                    l['sub_code'] = '1515'
+                raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
             if l == {}:
                 l = []
             for rpt in l:
+                if type(rpt) != dict:
+                    print  start_time,end_time
                 rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
             effect_list.extend(l)
             if len(l) < 500:
