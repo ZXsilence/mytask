@@ -23,6 +23,7 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +59,10 @@ class SimbaRptAdgroupkeywordbaseGet(object):
             soft_code = None
             rsp = ApiService.execute(req,nick,soft_code)
             l = json.loads(rsp.rpt_adgroupkeyword_base_list.lower())
+            if type(l) == type({}) and 'sub_code' in l:
+                if '开始日期不能大于结束日期' == l['sub_msg'] and start_time.date() <= end_time.date():
+                    l['sub_code'] = '1515'
+                raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
             if l == {}:
                 l = []
             for rpt in l:
@@ -73,12 +78,12 @@ class SimbaRptAdgroupkeywordbaseGet(object):
 
 if __name__ == '__main__':
     #搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH
-    nick = ''
-    campaign_id = 6765909
-    adgroup_id =368440092 
+    nick = 'wumiaoxi111'
+    campaign_id = 9181745 
+    adgroup_id = 355109622
     search_type = 'SEARCH,CAT'
     source = '1,2'
-    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    start_time = datetime.datetime.now() - datetime.timedelta(days=6)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     res =  SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)
     for item in res:
