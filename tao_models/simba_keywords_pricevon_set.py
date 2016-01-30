@@ -41,7 +41,7 @@ class SimbaKeywordsPricevonSet(object):
                     "keywordId":element['kid']
                     , "maxPrice":element['price']
                     , "isDefaultPrice":0
-                    , "matchScope":element.get('match_scope',4)
+                    , "matchScope":element.get('match_scope',4) if element.get('match_scope',4) !=2 else 4
                     }
             word_price_dict_list.append(word_price_dict)
         req = SimbaKeywordsPricevonSetRequest()
@@ -96,7 +96,7 @@ class SimbaKeywordsPricevonSet(object):
                     "keywordId":kid
                     , "maxPrice":price
                     , "isDefaultPrice":0
-                    , "matchScope": match_scope
+                    , "matchScope": match_scope if match_scope!=2 else 4
                     }
             word_price_dict_list.append(word_price_dict)
 
