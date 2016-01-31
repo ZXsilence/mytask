@@ -53,7 +53,7 @@ def do_code_coverage(func):
         str_int = time.time()
         cov.start()
         ret = func(*args, **kwargs)
-        cov.data_files.filename='.coverage.'+'%f'%str_int
+        cov.data_files.filename='.coverage.'+func.__name__+'%f'%str_int
         cov.stop()
         cov.save()
         return ret
