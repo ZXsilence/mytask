@@ -1,9 +1,9 @@
-﻿'''
+﻿#encoding=utf8
+'''
 Created on 2012-9-4
 
 @author: dk
 '''
-#encoding=utf8
 import sys
 import os
 import json

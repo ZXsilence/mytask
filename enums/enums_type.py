@@ -177,6 +177,13 @@ class OperationType(object):
     CHANGE_ADGROUP_SETTINGS = 701
     CHANGE_ADGROUP_MOBILE_DISCOUNT = 702
 
+    ADD_RULE = 800
+    UPDATE_RULE = 801
+    DELETE_RULE = 802
+    ENABLED_RULE = 803
+    DISABLED_RULE = 804
+    EXECUTE_RULE = 805
+
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
@@ -389,6 +396,15 @@ class OperationType(object):
         ADD_ADGROUP_NORMAL
     ]
 
+    ALL_RULE_TYPES = [
+        ADD_RULE,
+        UPDATE_RULE,
+        DELETE_RULE,
+        ENABLED_RULE,
+        DISABLED_RULE,
+        EXECUTE_RULE
+    ]
+
 OPTTYPE_COMMENT = {
     OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
     , OperationType.DELETE_UNEXPECT: "关键词删除时未记录原因"
@@ -518,7 +534,12 @@ OPTTYPE_COMMENT = {
     ,OperationType.CHANGE_CAMPAIGN_SETTINGS:"用户修改自动计划设置"
     ,OperationType.CHANGE_ADGROUP_SETTINGS:"用户修改推广组设置"
     ,OperationType.CHANGE_ADGROUP_MOBILE_DISCOUNT:"修改推广组移动折扣"
-
+    ,OperationType.ADD_RULE:"新增"
+    ,OperationType.UPDATE_RULE:"修改"
+    ,OperationType.DELETE_RULE:"删除"
+    ,OperationType.DISABLED_RULE:"暂停"
+    ,OperationType.ENABLED_RULE:"开启"
+    ,OperationType.EXECUTE_RULE:"执行"
 }
 
 class LoginFailType(object):

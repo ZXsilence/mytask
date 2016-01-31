@@ -1,9 +1,9 @@
+#encoding=utf8
 '''
 Created on 2012-8-10
 
 @author: dk
 '''
-#encoding=utf8
 import sys
 import os
 import logging
