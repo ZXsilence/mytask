@@ -16,7 +16,12 @@ CELERYD_PREFETCH_MULTIPLIER = 1
 CELERY_ACKS_LATE = True
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_ENABLE_UTC = True
-CELERY_RESULT_BACKEND = 'db+mysql://root:123456@localhost:3036/celery'
+#CELERY_RESULT_BACKEND = 'db+mysql://root:123456@localhost:3036/celery'
+CELERY_RESULT_BACKEND = 'mongodb://127.0.0.1:2201/' 
+CELERY_MONGODB_BACKEND_SETTINGS = {
+        'database': 'mydb',
+        'taskmeta_collection': 'my_taskmeta_collection',
+}
 #CELERY_RESULT_BACKEND = 'amqp://guest:guest@localhost:5672//'
 CELERY_TASK_RESULT_EXPIRES = 43200 
 CELERY_ROUTES = {
