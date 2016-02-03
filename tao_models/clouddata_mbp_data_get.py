@@ -515,7 +515,27 @@ class ClouddataMbpDataGet(object):
                 return []
         return rpt_list
 
+    @classmethod
+    def get_hg_rpt_date_range(cls,sid):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '105111'
+        sdate = datetime.datetime.now()
+        edate = datetime.datetime.now()
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
 if __name__ == '__main__':
     sid = 114877660
     sdate = datetime.datetime(2015,12,23)
     edate = datetime.datetime(2015,12,23)
+    print ClouddataMbpDataGet.get_hg_rpt_date_range(61153312)
