@@ -183,6 +183,7 @@ class OperationType(object):
     ENABLED_RULE = 803
     DISABLED_RULE = 804
     EXECUTE_RULE = 805
+    EXECUTE_RULE_NOTICE = 806
 
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
@@ -402,7 +403,8 @@ class OperationType(object):
         DELETE_RULE,
         ENABLED_RULE,
         DISABLED_RULE,
-        EXECUTE_RULE
+        EXECUTE_RULE,
+        EXECUTE_RULE_NOTICE
     ]
 
 OPTTYPE_COMMENT = {
@@ -540,6 +542,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.DISABLED_RULE:"暂停"
     ,OperationType.ENABLED_RULE:"开启"
     ,OperationType.EXECUTE_RULE:"执行"
+    ,OperationType.EXECUTE_RULE_NOTICE:"自动执行"
 }
 
 class LoginFailType(object):
