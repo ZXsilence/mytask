@@ -23,6 +23,7 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 
+AliqinTaSmsNumSend = None
 SEND_COMMAND = 'MT_REQUEST' 
 SPID = '5208'
 SP_PASSWORD = 'Ad8@@yt011'
@@ -226,6 +227,28 @@ def send_sms(cellphone, text, retry_times=3):
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
         print 'send message to %s unsuccessfully:server error'%(cellphone,)
         #send_sms(cellphone,text,retry_times)
+
+def send_code_sms(cellphone,params_dict,sign_name='省油宝'):
+    '''发送验证码短信'''
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    sms_template_code = 'SMS_2840119'
+    sms_param = {'nick':u'用户','softname':params_dict['soft_name'],'code':str(params_dict['code'])}
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,sms_param,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
+
+def send_remind_sms(cellphone,params_dict,sign_name='省油宝'):
+    '''发送到期提醒短信'''
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    sms_template_code = 'SMS_2870061'
+    sms_param = {'nick':params_dict['nick'],'softname':params_dict['soft_name'],'days':str(params_dict['days'])}
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,sms_param,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
 
 def filter_words(msg):
     words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),\
