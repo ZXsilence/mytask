@@ -364,7 +364,7 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     def get_shop_item_traffic_and_trade_info(cls,shop_id,sdate,edate):
-        sql_id = 104937 
+        sql_id = 105138
         now = datetime.datetime.now()
         if type(sdate) == type(now):
             query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
