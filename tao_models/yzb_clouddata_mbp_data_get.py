@@ -109,6 +109,22 @@ class ClouddataMbpDataGet(object):
         return ret, return_keys
 
     @classmethod
+    def get_shop_platform_traffic_trade_d(cls, shop_id, sdate, edate):
+        return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), \
+                       ('platform_type','平台'), ('pv','pv'), ('uv','uv'), ('ipv','ipv'), ('iuv','iuv'), ('gmv_trade_num','下单订单数'), ('alipay_trade_num','支付订单数'), \
+                       ('gmv_winner_num','下单买家数'), ('alipay_winner_num','支付买家数'), ('gmv_auction_num','下单商品数'), \
+                       ('alipay_auction_num','支付商品数'), ('gmv_trade_amt','下单金额'), ('alipay_trade_amt','支付金额'))
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 105157
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+    
+    @classmethod
     def get_item_pc_page_effect_d(cls, shop_id, sdate, edate):
         return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), ('auction_id','商品id') , \
                        ('page_duration','页面停留时间'), ('bounce_cnt','一次入店次数'), ('landing_cnt','入店次数'), ('landing_uv','入店uv'), ('exit_cnt','出店次数'))
@@ -253,14 +269,35 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-    sdate = datetime.datetime(2015,12,6,0,0)
-    edate = datetime.datetime(2016,1,4,0,0)
-    res, return_keys = ClouddataMbpDataGet.get_shop_item_zz_effect_d(int(sys.argv[1]), sdate, edate)
-    print(len(res))
-    exit(0)
-    keys = [t[0] for t in return_keys]
-    heads = [t[1] for t in return_keys]
-    print ','.join(heads)
-    for item in res:
-        data_list = [item.get(key,'0') for key in keys]
-        print ','.join(data_list)
+    sdate = datetime.datetime(2016,1,22,0,0)
+    edate = datetime.datetime(2016,2,22,0,0)
+    from advert_service.service.philips_busi_service import PhilipsBusiService
+    shop_list = PhilipsBusiService.get_shop_relation(1)
+    shop_dict = {shop['sid']:shop['nick'] for shop in shop_list}
+    shop_list = ClouddataMbpDataGet.get_shop_list(edate)
+    
+    for shop in shop_list:
+        nick = shop_dict.get(int(shop['shop_id']), None)
+        if not nick:
+            continue
+        file_obj = file('philips_data/%s_shop_platform_traffic_trade_d.csv' % nick, 'w')
+        res, return_keys = ClouddataMbpDataGet.get_shop_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
+
+        keys = [t[0] for t in return_keys]
+        heads = [t[1] for t in return_keys]
+        file_obj.write(','.join(heads)+'\n')
+        for item in res:
+            data_list = [item.get(key,'0') for key in keys]
+            file_obj.write(','.join(data_list)+'\n')
+        file_obj.close()
+
+        file_obj = file('philips_data/%s_item_platform_traffic_trade_d.csv' % nick, 'w')
+        res, return_keys = ClouddataMbpDataGet.get_item_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
+
+        keys = [t[0] for t in return_keys]
+        heads = [t[1] for t in return_keys]
+        file_obj.write(','.join(heads)+'\n')
+        for item in res:
+            data_list = [item.get(key,'0') for key in keys]
+            file_obj.write(','.join(data_list)+'\n')
+        file_obj.close()
