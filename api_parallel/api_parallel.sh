@@ -33,7 +33,7 @@ function log_error()
 
 function start_celery()
 {
-     nohup celery worker -A workers -c 10 -Q api_parallel,celery -B -E -l INFO -f /tmp/api_parallel.log  1>> /tmp/nohup_api_parallel.out 2>&1 &
+     nohup celery worker -A workers -c 10 -Q api_parallel,celery -B -E -l INFO -f /alidata1/logs/api_parallel.log  1>> /alidata1/logs/nohup_api_parallel.out 2>&1 &
 }
 
 function stop_celery()
