@@ -68,7 +68,7 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_add_delete_changeget_creatives(self):
+    def testAddDeleteChangeGetCreatives(self):
         try:
             self.adgroup_id = None
             adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(self.nick, self.campaign_id)
@@ -81,7 +81,6 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
                 self.adgroup_id = returnValue['adgroup_id']
         except Exception,e:
             self.assertTrue(False, "准备数据出错，无法执行")
-
         try:
             creatives = SimbaCreativesGet.get_creative_list_by_adgroup(self.nick,self.adgroup_id)
         except Exception,e:
@@ -116,7 +115,6 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
                 self.assertRaises(inputdata['exceptionClass'])
             finally:
                 self.assertEqual(inputdata['popException'],is_poped,self.tcinfo_add)
-
         try:
             creatives = SimbaCreativesGet.get_creative_list_by_adgroup(self.nick,self.adgroup_id)
         except Exception,e:
@@ -142,8 +140,6 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
                 self.assertRaises(inputdata['exceptionClass'])
             finally:
                 self.assertEqual(inputdata['popException'],is_poped,self.tcinfo_delete)
-
-
         for inputdata in self.testInputDatas_changeget:
             self.tcinfo_changeget = 'API Test - taobao.simba.creativeids.changed.get'
             self.tcinfo_changeget += str(inputdata)
@@ -158,9 +154,6 @@ class TestSimbaCreativeAddAndDeleteAndChangeGet(unittest.TestCase):
                 self.assertRaises(inputdata['exceptionClass'])
             finally:
                 self.assertEqual(inputdata['popException'],is_poped,self.tcinfo_changeget)
-
-
-
 
     #@unittest.expectedFailure
     #def test_expectedFailure(self):
