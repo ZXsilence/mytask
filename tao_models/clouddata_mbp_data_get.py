@@ -40,9 +40,10 @@ class ClouddataMbpDataGet(object):
         if column_list == [] or row_list == []:
             return elements
         int_fields = ["shop_id", "seller_id", "auction_id", "impressions", "click", "uv", "alipay_winner_num", "alipay_auction_num", "alipay_trade_num",\
-                      "session_num","pv","visit_repeat_num","shop_collect_num","auction_collect_num","ipv","iuv","visit_platform","gmv_trade_num"]
+                      "session_num","pv","visit_repeat_num","shop_collect_num","auction_collect_num","ipv","iuv","visit_platform","gmv_trade_num",\
+                      "trade_status","alipay_num","hour","auction_id1","auction_id2"]
         date_fields = ["thedate", "dt"]
-        float_fields = ["alipay_trade_amt","bounce_rate"]
+        float_fields = ["alipay_trade_amt","bounce_rate","asso_money","alipay_money"]
         for row in row_list:
             values = row.values
             rpt = {}
@@ -412,11 +413,129 @@ class ClouddataMbpDataGet(object):
                 return []
         return rpt_list
 
-if __name__ == '__main__':
-    sid = int(sys.argv[1])
-    edate = datetime.datetime.now()
-    sdate = edate - datetime.timedelta(days=15)
-    rpt_list = ClouddataMbpDataGet.get_query_rpt(sid,sdate,edate)
-    print len(rpt_list)
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    @classmethod
+    def get_hg_pc_weblog(cls,sid,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '105103'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
 
+    @classmethod
+    def get_hg_shop_order(cls,sid,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '105102'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_hg_shop_list(cls,sdate,edate):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '104802'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(None, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_rpt_hg_auction_region(cls,sid,sdate,edate,auction_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '105104'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_rpt_hg_auction_hour(cls,sid,sdate,edate,auction_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '105105'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_rpt_auction(cls,sid,sdate,edate,auction_id):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '104868'
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit,{'auction_id':auction_id})
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+    @classmethod
+    def get_hg_rpt_date_range(cls,sid):
+        rpt_list = []
+        limit = 5000
+        offset = 0
+        sql_id = '105111'
+        sdate = datetime.datetime.now()
+        edate = datetime.datetime.now()
+        while True:
+            try:
+                rpt_sub_list = cls._get_data_list_between_dt(sid, sql_id, sdate, edate, offset, limit)
+                rpt_list.extend(rpt_sub_list)
+                if len(rpt_sub_list) < limit:
+                    break
+                offset = offset + limit
+            except Exception,e:
+                return []
+        return rpt_list
+
+if __name__ == '__main__':
+    sid = 114877660
+    sdate = datetime.datetime(2015,12,23)
+    edate = datetime.datetime(2015,12,23)
+    print ClouddataMbpDataGet.get_hg_rpt_date_range(61153312)

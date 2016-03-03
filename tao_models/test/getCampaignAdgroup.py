@@ -23,6 +23,8 @@ sys.path.append('../../../backends/')
 from adgroup_db.db_models.adgroups import Adgroups
 from campaign_db.db_models.campaigns import Campaigns
 from shop_db.db_models.shop_info import ShopInfo
+from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
+from tao_models.simba_keywordsbyadgroupid_get import  SimbaKeywordsbyadgroupidGet
 
 class GetCampaignAdgroup(object):
     @classmethod
@@ -64,7 +66,15 @@ class GetCampaignAdgroup(object):
                 if adgroup['online_status'] == 'online':
                     return adgroup
         return []
-
+    
+    @classmethod
+    def get_adgroup_has_keyword(cls,nick,campaign_id):
+        adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick,campaign_id)
+        for adgroup in adgroups:
+            kw_list = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup['adgroup_id'])
+            if len(kw_list)!=0:
+                return adgroup['adgroup_id']
+        return []
 
 if __name__=='__main__':
     soft_code = "SYB"
