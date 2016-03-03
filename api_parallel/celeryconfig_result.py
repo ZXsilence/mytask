@@ -1,1 +1,0 @@
-/home/wangy/syb/comm_lib/..//comm_lib/api_parallel/dev/celeryconfig_result.py
