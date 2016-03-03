@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class SimbaRptCampadgroupEffectGet(object):
 
     @classmethod
-    @tao_api_exception(10)
+    @tao_api_exception()
     def _get_rpt_adgroupeffect_list(cls, nick, campaign_id, start_time, end_time, search_type, source, page_no):
         req = SimbaRptCampadgroupeffectGetRequest()
         req.nick = nick 
