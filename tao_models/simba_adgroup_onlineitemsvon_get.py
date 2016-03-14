@@ -48,6 +48,8 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         req = SimbaAdgroupOnlineitemsvonGetRequest()
         req.nick = nick
         req.page_size = cls.PAGE_SIZE
+        req.order_field = 'bidCount'
+        req.order_by = 'true'
         req.page_no = 1
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
