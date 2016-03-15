@@ -32,12 +32,12 @@ CELERY_ROUTES = {
         'get_item_list_by_num_iids':{'queue':'api_parallel'},
         'get_keywords_split_qscore':{'queue':'api_parallel'},
 }
-CELERYBEAT_SCHEDULE = {
-        'clean_db': {
-                    'task': 'celery.backend_cleanup',
-                    'schedule': crontab(hour=0, minute=0, day_of_month='*/2'),
-                },
-}
+#CELERYBEAT_SCHEDULE = {
+#        'clean_db': {
+#                    'task': 'celery.backend_cleanup',
+#                    'schedule': crontab(hour=0, minute=0, day_of_month='*/2'),
+#                },
+#}
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_ENABLE_UTC = False
 
