@@ -80,6 +80,13 @@ APP_SETTINGS = {
             'app_secret':'048978dcef7e423d5b3a8dff8b22265e',
             'article_code':'ts-1817244',
             'soft_code':'TC'
+        },
+        'YZB':{
+            'name':'优钻宝',
+            'app_key':'23196049',
+            'app_secret':'2bb89aa556b1698b1a7225f521d41e42',
+            'article_code':'FW_GOODS-1000078795',
+            'soft_code':'YZB'
         }
         #'WY':{
         #    'name':'微页',

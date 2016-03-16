@@ -66,7 +66,6 @@ class ClouddataMbpDataGet(object):
             query_dict_single['sub_limit'] = 5000
             query_dict_single['sub_offset'] = page_count*query_dict_single['sub_limit']
             parameter = ",".join([str(k)+"="+str(v) for k,v in query_dict_single.items()])
-
             #parameter = "shop_id="+str(sid)+",sdate="+sdate_str+",edate="+edate_str+",dt="+dt_str+",sub_offset="+str(sub_offset)+",sub_limit="+str(sub_limit)+',dt1='+sdate_str+',dt2='+edate_str
             req = ClouddataMbpDataGetRequest() 
             req.sql_id = sql_id
@@ -158,21 +157,21 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
-    def get_pc_keyword_rpt(cls, sid, sdate, edate):
-        """获取pc关键词报表"""
+    def get_shop_pc_nature_query(cls, sid, sdate, edate):
+        """获取店铺pc自然query"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id = 4439
+        sql_id = 104233 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
     
     @classmethod
-    def get_wx_keyword_rpt(cls, sid, sdate, edate):
-        """获取wx关键词报表"""
+    def get_shop_wx_nature_query(cls, sid, sdate, edate):
+        """获取店铺wx自然query"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -256,7 +255,7 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='pc'):
-        """获取关键词_query报表"""
+        """获取店铺pc付费query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -271,12 +270,6 @@ class ClouddataMbpDataGet(object):
             sql_id = 7387 if sid % 2 == 0 else 7389
             ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
             result_list.extend(ret)
-        
-        #wx query 不走weblog,走现成的结果表
-        #if flag == "all" or flag == "wx":
-        #    sql_id = 7388 if sid % 2 == 0 else 7390
-        #    ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
-        #    result_list.extend(ret)
         
         word_set = StringTools.load_word_set()
         for item in result_list:
@@ -327,6 +320,65 @@ class ClouddataMbpDataGet(object):
 
         return 4
 
+    @classmethod
+    def get_item_pc_traffic_info(cls,item_id,dt1=None,dt2=None):
+        if not dt1 or not dt2:
+            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id = 104421
+        query_dict = {"auction_id":item_id,"dt1":dt1,"dt2":dt2}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+
+    @classmethod
+    def get_item_comment(cls,item_id,sdate=None,edate=None):
+        if not sdate or not edate:
+            edate= (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            sdate= (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id = 104870
+        query_dict = {"auction_id":item_id,"sdate":sdate,"edate":edate}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+
+    @classmethod
+    def get_item_asso_info(cls,sid,item_id,dt1=None,dt2=None):
+        if not dt1 or not dt2:
+            dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
+            dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
+        sql_id_dict = {1:104426,0:104427,2:104428}
+        sql_id = sql_id_dict[sid%3]
+        query_dict = {"auction_id_1":item_id,"dt1":dt1,"dt2":dt2}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+
+    @classmethod
+    def get_shop_traffic_and_trade_info(cls,shop_id,sdate,edate):
+        sql_id = 105140
+        now = datetime.datetime.now()
+        if type(sdate) == type(now):
+            query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
+        else:
+            query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res
+    
+    @classmethod
+    def get_shop_item_traffic_and_trade_info(cls,shop_id,sdate,edate):
+        sql_id = 105138
+        now = datetime.datetime.now()
+        if type(sdate) == type(now):
+            query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
+        else:
+            query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
+        return res 
+
+    @classmethod    
+    def test(cls):
+        sql_id = 104879
+        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,{})
+        return res
+
 
 def get_shop(shop_id):
     date = datetime.datetime.now() - datetime.timedelta(days=2)
@@ -339,27 +391,16 @@ def get_shop(shop_id):
         print "%(keyword)s,%(query)s,%(match_scope)s,%(auction_id)s,%(gmv_auction_num)s" % item
     return len(ret)
 
+
+
+
+
 if __name__ == '__main__':
     edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = datetime.datetime.now() - datetime.timedelta(days=2)
-    res = ClouddataMbpDataGet.get_test_wc_web_log(int(sys.argv[1]), sdate, edate)
+    sdate = datetime.datetime.now() - datetime.timedelta(days=8)
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    res = ClouddataMbpDataGet.get_shop_item_traffic_and_trade_info(36314238,sdate,edate)
+    print len(res)
 
-    #print 'device_type,src_id,src_name,src_parent_id,src_parent_name,src_level,is_leaf'
-    #print 'thedate,refer_domain,sum_pv,sum_uv,sum_visit,sum_gmv_winner_num,sum_gmv_trade_amt,sum_gmv_trade_num,sum_gmv_auction_num,sum_alipay_winner_num,sum_alipay_trade_amt,sum_alipay_trade_num,sum_alipay_auction_num'
-    #print 'thedate,buyer_id,user_agent,user_ip,acookie,lz_session,access_url,refer_url,url_title,time_stamp'
-    #print 'thedate,buyer_id,auction_id,gmv_trade_amt,gmv_auction_num,alipay_trade_amt,pay_status,trade_type,trade_status,gmv_time,alipay_time'
-    for item in res:
-        #item['auction_id'] = item.get('auction_id', '-1')
-        #item['gmv_trade_amt'] = item.get('gmv_trade_amt', '-1')
-        #item['gmv_auction_num'] = item.get('gmv_auction_num', '-1')
-        #item['alipay_trade_amt'] = item.get('alipay_trade_amt', '-1')
-        #item['pay_status'] = item.get('pay_status', '-1')
-        #item['trade_type'] = item.get('trade_type', '-1')
-        #item['trade_status'] = item.get('trade_status', '-1')
-        #item['gmv_time'] = item.get('gmv_time', '-1')
-        #item['alipay_time'] = item.get('alipay_time', '-1')
 
-        #print '%(thedate)s,%(refer_domain)s,%(sum_pv)s,%(sum_uv)s,%(sum_visit)s,%(sum_gmv_winner_num)s,%(sum_gmv_trade_amt)s,%(sum_gmv_trade_num)s,%(sum_gmv_auction_num)s,%(sum_alipay_winner_num)s,%(sum_alipay_trade_amt)s,%(sum_alipay_trade_num)s,%(sum_alipay_auction_num)s' % item
-        #print '%(device_type)s,%(src_id)s,%(src_name)s,%(src_parent_id)s,%(src_parent_name)s,%(src_level)s,%(is_leaf)s' % item
-        print '%(thedate)s,%(buyer_id)s,%(user_agent)s,%(user_ip)s,%(acookie)s,%(lz_session)s,%(access_url)s,%(refer_url)s,%(url_title)s,%(time_stamp)s' % item
-        #print '%(thedate)s,%(buyer_id)s,%(auction_id)s,%(gmv_trade_amt)s,%(gmv_auction_num)s,%(alipay_trade_amt)s,%(pay_status)s,%(trade_type)s,%(trade_status)s,%(gmv_time)s,%(alipay_time)s' % item
+

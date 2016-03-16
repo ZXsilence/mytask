@@ -49,3 +49,5 @@ rollback.history
 api_server/conf/set_env.py
 api_server/conf/settings.py
 db_pool/conf/settings.py
+service_server/conf/set_env.py
+service_server/conf/settings.py

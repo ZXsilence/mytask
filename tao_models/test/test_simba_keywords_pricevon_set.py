@@ -23,9 +23,10 @@ import unittest
 import datetime
 from tao_models.simba_keywords_pricevon_set import SimbaKeywordsPricevonSet 
 from tao_models.simba_keywordsbyadgroupid_get import SimbaKeywordsbyadgroupidGet
+from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import InvalidAccessTokenException
-
+from getCampaignAdgroup import GetCampaignAdgroup 
 class test_simba_keywords_pricevon_set(unittest.TestCase):
     maxDiff = None
     @classmethod
@@ -54,7 +55,8 @@ class test_simba_keywords_pricevon_set(unittest.TestCase):
         for item in data:
             nick = item['nick']
             campaign_id = item['campaign_id']
-            adgroup_id = item['adgroup_id']
+            adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
+            adgroup_id = GetCampaignAdgroup.get_adgroup_has_keyword(nick,campaign_id)
             expect_result = item['expect_result']
             keywords_list = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup_id)
             keyword_id_list = [keywords_list[0]['keyword_id'],keywords_list[1]['keyword_id']]

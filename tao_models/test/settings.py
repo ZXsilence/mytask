@@ -12,7 +12,7 @@
 
 '''['regression', 'new', 'key']'''
 RUNTYPE = ['regression']
-NeedLog = False
+NeedLog = True
 MAIL_RECEIVE = 'wangying@maimiaotech.com;maimiaotech_wy@126.com;luxiaowen@maimiaotech.com'
 DIRECTOR = {'EMAIL':'maimiaotech_wy@126.com',
             'SECRET':'Aa123456',

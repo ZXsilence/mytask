@@ -22,6 +22,8 @@ if __name__ == '__main__':
 import unittest
 import datetime
 from tao_models.simba_keyword_rankingforecast_get import SimbaKeywordRankingforecastGet 
+from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
+from tao_models.simba_keywordsbyadgroupid_get import SimbaKeywordsbyadgroupidGet
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import InvalidAccessTokenException
 
@@ -35,7 +37,7 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
         pass
     
     def test_get_words_cats_data(self):
-        data = [{'nick':'晓迎','keyword_id':224363183595,
+        data = [{'nick':'晓迎','keyword_id':224363183595,'valid':True,'campaign_id':7155359,
                 'expect_result':[{'prices': [417, 90, 59, 52, 52, 45, 40, 38, 38, 38, 
                                              38, 36, 36, 34, 33, 32, 29, 29, 29, 29, 
                                              29, 28, 27, 27, 25, 25, 25, 24, 24, 24, 
@@ -57,6 +59,12 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
         for item in data:
             nick = item['nick']
             keyword_id = item['keyword_id']
+            if item.get('valid',None):
+                campaign_id = item['campaign_id']
+                adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
+                adgroup_id = adgroups[0]['adgroup_id']
+                keywords_list = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup_id)
+                keyword_id = keywords_list[0]['keyword_id']
             expect_result = item['expect_result']
             try:
                 actual_result = SimbaKeywordRankingforecastGet.get_rankingforecast(keyword_id,nick)
@@ -72,8 +80,8 @@ class test_simba_keyword_rankingforecast_get(unittest.TestCase):
                 self.assertEqual(len(actual_result[0]['prices']),100)
                 for index in range(100):
                     self.assertEqual(type(actual_result[0]['prices'][index]),int)
-                    if index > 0:
-                        self.assertLessEqual(actual_result[0]['prices'][index],actual_result[0]['prices'][index-1])
+                    #if index > 0:
+                    #    self.assertLessEqual(actual_result[0]['prices'][index],actual_result[0]['prices'][index-1])
             except InvalidAccessTokenException,e:
                 self.assertEqual(e.msg,expect_result['exception'])
             except ErrorResponseException,e:
