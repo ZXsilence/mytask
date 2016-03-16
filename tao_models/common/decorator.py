@@ -104,7 +104,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                             raise CampaignIdNotBelongToUserException
                         elif api_method == 'taobao.simba.campaign.budget.update' and e.sub_msg \
                                 and u'限额不得小于' in e.sub_msg:
-                            raise CampaignBudgetLessThanCostException
+                            raise CampaignBudgetLessThanCostException(e.sub_msg,e.sub_msg)
                         elif api_method == 'taobao.simba.campaign.platform.update' and e.sub_msg \
                                 and u'用户无资格投放定向推广' in e.sub_msg:
                             raise NonsearchNotAllowedException
