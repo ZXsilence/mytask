@@ -319,32 +319,33 @@ def analyze(func):
 def task_manage(arg):
     def _wrapper_func(func):
         def __wrappe_func(*args, **kwargs):
-            task_name = arg
-            params = args[0]
-            status = 'doing'
-            start_time = datetime.now()
-            #减少数据存储量
-            save_params = copy.deepcopy(params)
-            del save_params['nick']
-            del save_params['soft_code']
-            #del save_params['sid']
-            task_id = save_params.get('task_id',0)
-            #如果参数中带有task_id，表示是老任务重试，而非新任务
-            if task_id:
-                TaskService.upset_task(task_id,{'status':'doing','start_time':start_time})
-            else:
-                task_id = TaskService.insert_task(task_name,params['nick'],status,params['soft_code'],save_params,start_time)
-            try:
-                a = func(*args, **kwargs)
-            except Exception,e:
-                end_time = datetime.now()
-                TaskService.upset_task(task_id,{'status':'failed','exception':str(e),'end_time':end_time})
-                logger.exception('task error!')
-                return None
-            else:
-                end_time = datetime.now()
-                TaskService.upset_task(task_id,{'status':'done','result':a,'end_time':end_time})
-            return a
+            return func(*args, **kwargs)
+            #task_name = arg
+            #params = args[0]
+            #status = 'doing'
+            #start_time = datetime.now()
+            ##减少数据存储量
+            #save_params = copy.deepcopy(params)
+            #del save_params['nick']
+            #del save_params['soft_code']
+            ##del save_params['sid']
+            #task_id = save_params.get('task_id',0)
+            ##如果参数中带有task_id，表示是老任务重试，而非新任务
+            #if task_id:
+            #    TaskService.upset_task(task_id,{'status':'doing','start_time':start_time})
+            #else:
+            #    task_id = TaskService.insert_task(task_name,params['nick'],status,params['soft_code'],save_params,start_time)
+            #try:
+            #    a = func(*args, **kwargs)
+            #except Exception,e:
+            #    end_time = datetime.now()
+            #    TaskService.upset_task(task_id,{'status':'failed','exception':str(e),'end_time':end_time})
+            #    logger.exception('task error!')
+            #    return None
+            #else:
+            #    end_time = datetime.now()
+            #    TaskService.upset_task(task_id,{'status':'done','result':a,'end_time':end_time})
+            #return a
         return __wrappe_func
     return _wrapper_func
 
