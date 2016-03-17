@@ -20,7 +20,8 @@ RDS1 = {
                  'xiangqing','xuanciw','syb_web','keywords_deleted',\
                  'syb_layer','rpt_all','rpt_cache','operation_log',\
                  'queryall','queryqueue','item_query_rpt','busi_back',\
-                 'sample_analysis','workflow','keywords_deleted_new','user_item','yzb']
+                 'sample_analysis','workflow','keywords_deleted_new',\
+                    'user_item','yzb','advert','ysf','rpt_all_new']
         }
 
 #rds2实例连接池配置
