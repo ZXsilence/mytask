@@ -101,7 +101,7 @@ class ApiCenterHandle(object):
             sub_flag = False
             if api_source in ["yun_webpage","crm_webpage"]:
                 access_token = shop_info['sub_access_token'] if shop_info['sub_access_token'] else shop_info['access_token']
-                sub_flag = True
+                sub_flag = True if  shop_info['sub_access_token'] else False
             else:
                 access_token = shop_info['access_token']
             api_method = params['method']
@@ -124,6 +124,7 @@ class ApiCenterHandle(object):
                 rsp_dict = taobao_client.execute(params, access_token,header)
                 #如果是子token过期的情况下再使用主token进行调用
                 if rsp_dict.has_key('error_response') and rsp_dict['error_response'].get('code',0)== 27 and sub_flag:
+                    ShopInfoService.update_shop_info(soft_code,nick,{'sub_access_token':''})
                     access_token = shop_info['access_token']
                     if params.has_key('sign'):
                         del params['sign']
