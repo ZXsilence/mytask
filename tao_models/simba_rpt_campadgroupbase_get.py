@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class SimbaRptCampadgroupBaseGet(object):
 
     @classmethod
-    @tao_api_exception(10)
+    @tao_api_exception()
     def _get_rpt_adgroupbase_list(cls, nick, campaign_id, start_time, end_time, search_type, source, page_no):
         req = SimbaRptCampadgroupbaseGetRequest()
         req.campaign_id = campaign_id
