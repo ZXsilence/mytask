@@ -57,7 +57,7 @@ RDS4 = {
                  }
              ,
          'db_list':[
-              'rpt_all'
+              'rpt_all','rpt_all_new'
              ]
         }
 
