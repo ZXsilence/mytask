@@ -21,7 +21,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-from TaobaoSdk import SimbaRptAdgroupcreativebaseGetRequest
+from TaobaoSdk import SimbaRptAdgroupcreativeeffectGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
@@ -30,15 +30,15 @@ from tao_models.num_tools import change2num
 
 logger = logging.getLogger(__name__)
 
-class SimbaRptAdgroupcreativeBaseGet(object):
+class SimbaRptAdgroupcreativeEffectGet(object):
 
     @classmethod
-    def get_rpt_adgroupcreativebase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
+    def get_rpt_adgroupcreativeeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
                 because of taobao API access-times limit,so we recommend that (end_time - start_time) do not more than a day
         """
-        req = SimbaRptAdgroupcreativebaseGetRequest()
+        req = SimbaRptAdgroupcreativeeffectGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
         req.campaign_id = campaign_id
@@ -51,7 +51,7 @@ class SimbaRptAdgroupcreativeBaseGet(object):
         base_list = []
         
         while True:  
-            l = cls._sub_get_rpt_adgroupcreativebase_list(req,nick)
+            l = cls._sub_get_rpt_adgroupcreativeeffect_list(req,nick)
             base_list.extend(l)
             if len(l) < 500:
                 break
@@ -60,9 +60,9 @@ class SimbaRptAdgroupcreativeBaseGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _sub_get_rpt_adgroupcreativebase_list(cls,req,nick,soft_code=None): 
+    def _sub_get_rpt_adgroupcreativeeffect_list(cls,req,nick,soft_code=None): 
         rsp = ApiService.execute(req,nick,soft_code)
-        l = json.loads(rsp.rpt_adgroupcreative_base_list.lower())
+        l = json.loads(rsp.rpt_adgroupcreative_effect_list.lower())
         if type(l) == type({}) and 'sub_code' in l:
             if '开始日期不能大于结束日期' == l['sub_msg'] and req.start_time.date() <= req.end_time.date():
                 l['sub_code'] = '1515'
@@ -76,20 +76,14 @@ class SimbaRptAdgroupcreativeBaseGet(object):
         
 if __name__ == '__main__':
 
-    nick = '御森旗舰店'
-    campaign_id = 18819261 
-    adgroup_id = 448284862
-    #nick = '牙齿天天晒'
-    #campaign_id = 6965418 
-    #adgroup_id = 441729311 
-    nick = 'chinchinstyle'
-    campaign_id = 3328400
-    adgroup_id = 458765944
+    nick = '百贤家居专营店'
+    campaign_id = 11225241
+    adgroup_id = 614441143
     search_type = 'SEARCH,NOSEARCH,CAT'
     source = 'SUMMARY'
     start_time = datetime.datetime.now() - datetime.timedelta(days=1)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    try_list = SimbaRptAdgroupcreativeBaseGet.get_rpt_adgroupcreativebase_list(nick, campaign_id, adgroup_id, start_time, end_time, search_type, source)
+    try_list = SimbaRptAdgroupcreativeEffectGet.get_rpt_adgroupcreativeeffect_list(nick, campaign_id, adgroup_id, start_time, end_time, search_type, source)
     for obj in try_list:
         print obj
         

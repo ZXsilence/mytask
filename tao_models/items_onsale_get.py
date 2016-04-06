@@ -38,13 +38,14 @@ class ItemsOnsaleGet(object):
 
 
     @classmethod
-    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS):
+    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS,order_by = 'sold_quantity:desc'):
 
         total_item_list = []
 
         req = ItemsOnsaleGetRequest()
         req.fields = fields
-        req.order_by = "sold_quantity:desc"
+        if order_by:
+            req.order_by = order_by
         req.page_size = 200
         req.page_no = 1
 
@@ -64,6 +65,18 @@ class ItemsOnsaleGet(object):
             req.page_no += 1
 
         return change_obj_to_dict_deeply(total_item_list)
+
+    @classmethod
+    def get_item_list_with_page_no(cls,nick,page_no,fields=DEFAULT_FIELDS):
+        req = ItemsOnsaleGetRequest()
+        req.fields = fields
+        req.order_by = "sold_quantity:desc"
+        req.page_size = 200
+        req.page_no = page_no
+        rsp = cls._get_page_items(req,nick)
+        if rsp.items:
+            return change_obj_to_dict_deeply(rsp.items)
+        return []
 
     @classmethod
     @tao_api_exception()
@@ -120,15 +133,12 @@ def test():
     total_item_list = ItemsOnsaleGet.get_item_list(nick)
 
 def test_overview():
-    nick = '雅典娜永恒的泪光'
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    nick = '麦苗科技001'
     items_overview = ItemsOnsaleGet.get_item_list_with_overview(nick)
     print items_overview['total_results']
-    for item in items_overview['item_list']:
-        print item
 
 if __name__ == '__main__':
-    import datetime
-    print datetime.datetime.now()
-    test()
-    print datetime.datetime.now()
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    nick = "麦苗科技001"
+    print ItemsOnsaleGet.get_item_list_with_page_no(nick,2)
+    test_overview()

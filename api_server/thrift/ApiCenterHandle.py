@@ -98,8 +98,10 @@ class ApiCenterHandle(object):
             nick = shop_info['nick']
             app_key = APP_SETTINGS[soft_code]['app_key']
             app_secret = APP_SETTINGS[soft_code]['app_secret']
+            sub_flag = False
             if api_source in ["yun_webpage","crm_webpage"]:
                 access_token = shop_info['sub_access_token'] if shop_info['sub_access_token'] else shop_info['access_token']
+                sub_flag = True if  shop_info['sub_access_token'] else False
             else:
                 access_token = shop_info['access_token']
             api_method = params['method']
@@ -120,6 +122,13 @@ class ApiCenterHandle(object):
             try:
                 taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
                 rsp_dict = taobao_client.execute(params, access_token,header)
+                #如果是子token过期的情况下再使用主token进行调用
+                if rsp_dict.has_key('error_response') and rsp_dict['error_response'].get('code',0)== 27 and sub_flag:
+                    ShopInfoService.update_shop_info(soft_code,nick,{'sub_access_token':''})
+                    access_token = shop_info['access_token']
+                    if params.has_key('sign'):
+                        del params['sign']
+                    rsp_dict = taobao_client.execute(params, access_token,header)
             except SDKRetryException:
                 logger.exception('api error, sdk retry failed, params:%s,nick:%s,soft_code:%s,api_source:%s'%(params,nick,soft_code,api_source))
                 return ApiCenterHandle.get_sdk_retry_rsp()

@@ -35,6 +35,7 @@ then
 
     ln -s "${proPath}/comm_lib/service_server/conf/dev/set_env.py" "${proPath}/comm_lib/service_server/conf/"
     ln -s "${proPath}/comm_lib/service_server/conf/dev/settings.py" "${proPath}/comm_lib/service_server/conf/"
+    ln -s "${proPath}/comm_lib/api_parallel/dev/celeryconfig_result.py" "${proPath}/comm_lib/api_parallel/"
 
 elif [ $1_ == "prd_" ]
 then
@@ -43,6 +44,7 @@ then
 
     ln -s "${proPath}/comm_lib/service_server/conf/prd/set_env.py" "${proPath}/comm_lib/service_server/conf/"
     ln -s "${proPath}/comm_lib/service_server/conf/prd/settings.py" "${proPath}/comm_lib/service_server/conf/"
+    ln -s "${proPath}/comm_lib/api_parallel/prd/celeryconfig_result.py" "${proPath}/comm_lib/api_parallel/"
 
     ln -s "${proPath}/comm_lib/api_server/conf/prd/set_env.py" "${proPath}/comm_lib/api_server/conf/"
     if [ 'wy' == $isWyIp ];then
@@ -67,6 +69,7 @@ then
     rm -f "${proPath}/comm_lib/api_server/conf/set_env.py"
     rm -f "${proPath}/comm_lib/db_pool/conf/set_env.py"
     rm -f "${proPath}/comm_lib/db_pool/conf/settings.py"
+    rm -f "${proPath}/comm_lib/api_parallel/celeryconfig_result.py"
 
     rm -f "${proPath}/comm_lib/service_server/conf/settings.py"
     rm -f "${proPath}/comm_lib/service_server/conf/set_env.py"
