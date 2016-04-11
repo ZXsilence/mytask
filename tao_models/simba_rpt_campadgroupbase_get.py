@@ -1,9 +1,9 @@
-﻿'''
+﻿# -*- coding: utf-8 -*-
+'''
 Created on 2012-9-4
 
 @author: dk
 '''
-#encoding=utf8
 import sys
 import os
 import json
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class SimbaRptCampadgroupBaseGet(object):
 
     @classmethod
-    @tao_api_exception(10)
+    @tao_api_exception()
     def _get_rpt_adgroupbase_list(cls, nick, campaign_id, start_time, end_time, search_type, source, page_no):
         req = SimbaRptCampadgroupbaseGetRequest()
         req.campaign_id = campaign_id
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     adgroup_id = 604426910
     search_type = 'SEARCH,CAT'
     source = '1,2'
-    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    start_time = datetime.datetime.now() - datetime.timedelta(days=1)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     print SimbaRptCampadgroupBaseGet.get_rpt_adgroupbase_list(nick, campaign_id, start_time, end_time, search_type, source)
 

@@ -29,7 +29,7 @@ RDS2 = {
                  }
              ,
          'db_list':[
-              'access_records','dbtest','operation_log','sample_analysis','user_item'
+              'access_records','dbtest','operation_log','sample_analysis','user_item','ysf'
              ]
         }
 
@@ -57,7 +57,7 @@ RDS4 = {
                  }
              ,
          'db_list':[
-              'rpt_all'
+              'rpt_all','rpt_all_new'
              ]
         }
 

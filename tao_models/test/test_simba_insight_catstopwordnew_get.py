@@ -98,9 +98,7 @@ class test_simba_insight_catstopwordnew_get(unittest.TestCase):
                 else:
                     actual_result = SimbaInsightCatstopwordnewGet.get_cats_top_words(cat_id,sdate,edate,dimension,page_size)
                 self.assertEqual(type(actual_result),list)
-                if page_size==0:
-                    self.assertEqual(len(actual_result),20)
-                else:
+                if page_size!=0:
                     self.assertEqual(len(actual_result),page_size)
                 for index in range(len(actual_result)):
                     self.assertEqual(type(actual_result[index]),dict)
