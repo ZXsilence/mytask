@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 class SimbaRptAdgroupEffectGet(object):
 
     @classmethod
-    @tao_api_exception()
     def get_rpt_adgroupeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
@@ -47,20 +46,9 @@ class SimbaRptAdgroupEffectGet(object):
         req.page_no = 1
         req.page_size = 500
         effect_list = []
-        
         while True:
-            soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
-            l = json.loads(rsp.rpt_adgroup_effect_list.lower())
-            if type(l) == type({}) and 'sub_code' in l:
-                if '开始日期不能大于结束日期' == l['sub_msg'] and start_time.date() <= end_time.date():
-                    l['sub_code'] = '1515'
-                raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
-            if l == {}:
-                l = []
-            for rpt in l:
-                rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
-
+            print req.page_no
+            l = cls._sub_get_rpt_adgroupeffect_list(req,nick)
             effect_list.extend(l)
             if len(l) < 500:
                 break
@@ -74,13 +62,31 @@ class SimbaRptAdgroupEffectGet(object):
         """
         return change2num(change_obj_to_dict_deeply(effect_list))
     
+    @classmethod
+    @tao_api_exception()
+    def _sub_get_rpt_adgroupeffect_list(cls,req,nick,soft_code=None):
+        rsp = ApiService.execute(req,nick,soft_code)
+        l = json.loads(rsp.rpt_adgroup_effect_list.lower())
+        if type(l) == type({}) and 'sub_code' in l:
+            if '开始日期不能大于结束日期' == l['sub_msg'] and req.start_time.date() <= req.end_time.date():
+                l['sub_code'] = '1515'
+            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
+        if l == {}:
+            l = []
+        for rpt in l:
+            rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
+        return l
+
+
+
+    
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    campaign_id = 3367748
-    adgroup_id = 336844923
+    nick = '大雪1'
+    campaign_id = 2617648
+    adgroup_id = 645184372 
     search_type = 'SEARCH,CAT'
-    source = '1,2'
-    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    source = '1,2,4,5'
+    start_time = datetime.datetime.now() - datetime.timedelta(days=40)
     end_time = datetime.datetime.now() - datetime.timedelta(days=1)
     try_list = SimbaRptAdgroupEffectGet.get_rpt_adgroupeffect_list(nick, campaign_id, adgroup_id, start_time, end_time, search_type, source)
-    print try_list
+    print len(try_list)
