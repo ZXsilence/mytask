@@ -123,6 +123,24 @@ class ClouddataMbpDataGet(object):
         sql_id = 105157
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
+
+    @classmethod
+    def get_shop_traffic_trade_d(cls, shop_id, sdate, edate):
+        return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), \
+                       ('pv','pv'), ('uv','uv'), ('ipv','ipv'), ('iuv','iuv'),('visit_repeat_num','visit_repeat_num'),
+                       ('trade_repeat_num','trade_repeat_num'),\
+                       ('gmv_trade_num','下单订单数'), ('alipay_trade_num','支付订单数'), \
+                       ('gmv_winner_num','下单买家数'), ('alipay_winner_num','支付买家数'), ('gmv_auction_num','下单商品数'), \
+                       ('alipay_auction_num','支付商品数'), ('gmv_trade_amt','下单金额'), ('alipay_trade_amt','支付金额'))
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 106777
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
     
     @classmethod
     def get_item_pc_page_effect_d(cls, shop_id, sdate, edate):
