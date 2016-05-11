@@ -16,7 +16,8 @@ CELERYD_PREFETCH_MULTIPLIER = 1
 CELERY_ACKS_LATE = True
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_ENABLE_UTC = True
-CELERY_RESULT_BACKEND = 'mongodb://mm_yun11_in:31000' 
+#CELERY_RESULT_BACKEND = 'mongodb://mm_yun11_in:31000' 
+CELERY_RESULT_BACKEND = 'mongodb://183.129.161.28:2201' 
 CELERY_MONGODB_BACKEND_SETTINGS = {
         'database': 'celery',
         'taskmeta_collection': 'celery_taskmeta'
