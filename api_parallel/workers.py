@@ -34,6 +34,8 @@ SimbaRptCampadgroupBaseGet = None
 SimbaRptCampadgroupEffectGet = None
 SimbaKeywordsQscoreSplitGet = None
 import time
+import logging
+logger = logging.getLogger(__name__)
 celery = Celery()
 celery.config_from_object(celeryconfig_result)
 
@@ -97,9 +99,11 @@ def get_result_by_task_ids(task_ids):
     total_time=0
     while 1:
         if total_time>=60:
+            for task_id in task_ids:
+                logger.info('task_id:%s timeout!'%task_id)
             raise Exception('timeout error')
-        time.sleep(0.1)
-        total_time+=0.1
+        time.sleep(0.2)
+        total_time+=0.2
         for task_id in task_ids:
             if task_id in done_ids:
                 continue
@@ -109,14 +113,14 @@ def get_result_by_task_ids(task_ids):
                     done_ids.append(task_id)
                     res.extend(async_result.get())
                 elif async_result.status == "FAILURE":
-                    #done_ids.append(task_id)
                     raise Exception('task error')
             except Exception ,e:
                 if "Can't connect to MySQL server on" in str(e):
                     continue
+                raise e
         if len(done_ids) == len(task_ids):
             break
     return res
 
 if __name__ == '__main__':
-    pass
+    get_result_by_task_ids([123])
