@@ -14,6 +14,19 @@ import pstats
 import coverage
 import random
 import time
+
+import os, sys
+import logging
+sys.path.append(os.path.join(os.path.dirname(__file__),'../..'))
+logger = logging.getLogger("decorator")
+hdlr = logging.FileHandler('/tmp/set_log.log')
+hdlr.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)s:%(lineno)-15d %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr)
+logger.setLevel(logging.INFO)
+logger.propagate = False
+
 '''
 sort_stats()指定需要排序的维度
 
@@ -58,3 +71,10 @@ def do_code_coverage(func):
         cov.save()
         return ret
     return code_func
+
+def set_log(func):
+    def setlog(*args,**kwargs):
+        ret=func(*args,**kwargs)
+        logger.info("_set_log_")
+        return ret
+    return setlog
