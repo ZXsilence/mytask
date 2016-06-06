@@ -96,8 +96,8 @@ def send_email_with_file(addressee, text, subject, file_list):
     msg.attach(MIMEText(text, _charset='utf-8'))
     msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = DIRECTOR['EMAIL']
-    msg['To'] = addressee
-
+    to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+    msg['To'] = ';'.join(to_list) 
     for file_name in file_list:
         ctype, encoding = mimetypes.guess_type(file_name)
         if ctype is None or encoding is not None:
