@@ -239,6 +239,17 @@ def send_code_sms(cellphone,params_dict,sign_name='省油宝'):
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
 
+def send_gw_code_sms(cellphone,params_dict,sign_name='省油宝'):
+    '''发送验证码短信'''
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    sms_template_code = 'SMS_10235868'
+    sms_param = {'usercode':str(params_dict['code'])}
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,sms_param,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
+
 def send_remind_sms(cellphone,params_dict,sign_name='省油宝'):
     '''发送到期提醒短信'''
     global AliqinTaSmsNumSend
