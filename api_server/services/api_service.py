@@ -16,13 +16,15 @@ from api_server.thrift.ApiCenterClient import ApiCenterClient
 from api_server.conf.settings import API_SOURCE
 from api_server.conf.settings import get_api_source 
 from api_server.common.decorator import sdk_exception
+from api_server.services.api_cache_service import ApiCacheService
+from api_server.services.api_cache_config import ApiCacheConfig
 
 logger = logging.getLogger(__name__)
 
 class ApiService(object):
 
     @staticmethod
-    def execute(req,nick=None,soft_code=None):
+    def execute(req,nick=None,soft_code=None,cache = True):
         api_source = get_api_source()
         params_dict = ApiService.getReqParameters(req)
         params_str = simplejson.dumps(params_dict)
@@ -33,20 +35,39 @@ class ApiService(object):
         if api_source is None:
             api_source = ''
         #调用sdk
-        rsp_obj = ApiService.call_sdk(params_str,nick,soft_code,api_source)
+        method_config = ApiCacheConfig.API_METHOD_CONFIG.get(params_dict['method'])
+        is_get = True
+        cache_key = None
+        if cache and method_config:
+            is_get = method_config.get('is_get',False)
+            cache_key = ApiCacheService.get_cache_key(params_dict)
+        if cache and is_get and cache_key:
+            cache_data = ApiCacheService.get_cache(cache_key,params_dict)
+            if cache_data:
+                rsp_obj = ApiService.getResponseObj(cache_data)
+                return rsp_obj
+        rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
+        rsp_obj = ApiService.getResponseObj(rsp_dict)
         if not rsp_obj.isSuccess():
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
+        #update清理cache
+        if cache and method_config:
+            if is_get and cache_key:
+                ApiCacheService.set_cache(cache_key,rsp_dict,{'nick':nick or params_dict.get('nick'),'cache_name':method_config['cache_name']},params_dict)
+            elif not is_get:
+                ApiCacheService.clear_cache(nick or params_dict.get('nick'),params_dict)
         return rsp_obj 
 
     @staticmethod
-    @sdk_exception(20)
+    @sdk_exception(5)
     def call_sdk(params_str,nick,soft_code,api_source):
         #sdk调用函数，有重试机制
         api_client = ApiCenterClient(API_THRIFT['host'],API_THRIFT['port'])
         rsp_str = api_client.execute(params_str,nick,soft_code,api_source)
         rsp_dict = simplejson.loads(rsp_str)
-        rsp_obj = ApiService.getResponseObj(rsp_dict)
-        return rsp_obj
+        return rsp_dict
+        #rsp_obj = ApiService.getResponseObj(rsp_dict)
+        #return rsp_obj
 
     @staticmethod
     def getReqParameters(req):
@@ -117,4 +138,5 @@ class ApiService(object):
             if appkey == app_settings['app_key']:
                 return app_settings
         return {}
+
 
