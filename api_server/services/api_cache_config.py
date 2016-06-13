@@ -144,18 +144,18 @@ class ApiCacheConfig(object):
         #'taobao.simba.rtrpt.bidword.get':
         #'taobao.simba.rtrpt.campaign.get':
         #'taobao.simba.rtrpt.creative.get':
-        ##'taobao.simba.tools.items.top.get':
-        ##'taobao.time.get':
-        ##'taobao.topats.result.get':
+        #'taobao.simba.tools.items.top.get':
+        #'taobao.time.get':
+        #'taobao.topats.result.get':
         #'taobao.topats.simba.campkeywordbase.get':
         #'taobao.topats.simba.campkeywordeffect.get':
-        ##'taobao.topats.task.delete':
+        #'taobao.topats.task.delete':
         #'taobao.trade.fullinfo.get':
         #'taobao.trades.sold.get':
         #'taobao.user.seller.get':
-        ##'taobao.vas.order.search':
-        ##'taobao.vas.subscribe.get':
-        ##'taobao.wangwang.eservice.groupmember.get':
+        #'taobao.vas.order.search':
+        #'taobao.vas.subscribe.get':
+        #'taobao.wangwang.eservice.groupmember.get':
 
     }
 
