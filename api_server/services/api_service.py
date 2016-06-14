@@ -35,9 +35,12 @@ class ApiService(object):
         if api_source is None:
             api_source = ''
         #调用sdk
+        if not params_dict.get('nick') and nick:
+            params_dict['nick'] = nick
         method_config = ApiCacheConfig.API_METHOD_CONFIG.get(params_dict['method'])
         is_get = True
         cache_key = None
+        
         if cache and method_config:
             is_get = method_config.get('is_get',False)
             cache_key = ApiCacheService.get_cache_key(params_dict)
