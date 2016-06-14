@@ -75,9 +75,8 @@ class SimbaAdgroupsbycampaignidGet(object):
         req.campaign_id = campaign_id
         req.page_no = 1 
         soft_code = None
-        #rsp = ApiService.execute(req,nick,soft_code,cache)
         try:
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
         except ErrorResponseException,e:
             if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
                 return 0
