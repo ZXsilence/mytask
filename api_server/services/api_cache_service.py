@@ -89,7 +89,7 @@ class ApiCacheService(object):
             remove_cache_filter = {}
             if cache_key_config:
                 remove_cache_filter = dict((k,params_dict[k]) for k in cache_key_config['remove_keys'] if k in params_dict) if cache_key_config else {}
-                remove_cache_filter.update(add_info_dict)
+            remove_cache_filter.update(add_info_dict)
             cls.set_api_cache(cache_key,cache_data,remove_cache_filter)
         except Exception,e:
             logger.warning('set api cache error: %s' % e.__str__())
