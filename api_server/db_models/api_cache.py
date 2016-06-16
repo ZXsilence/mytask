@@ -34,7 +34,7 @@ class ApiCache(object):
             cls._conn = db_settings.get_conn()
 
     @classmethod
-    @mongo_exception
+    #@mongo_exception
     def upsert_api_cache(cls,cache_key,cache_data,add_info_dict = {}):
         cls.check_conn()
         now = datetime.now()
@@ -44,21 +44,21 @@ class ApiCache(object):
         cls._conn[cls._db][table_name].save(data)
 
     @classmethod
-    @mongo_exception
+    #@mongo_exception
     def get_api_cache(cls,cache_key):
         cls.check_conn()
         table_name = cls.get_coll_name()
         return cls._conn[cls._db][table_name].find_one({'_id':cache_key})
 
     @classmethod
-    @mongo_exception
+    #@mongo_exception
     def clear_cache_by_cache_key(cls,cache_key):
         cls.check_conn()
         table_name = cls.get_coll_name()
         cls._conn[cls._db][table_name].remove({'_id':cache_key})
 
     @classmethod
-    @mongo_exception
+    #@mongo_exception
     def clear_cache(cls,cache_name,nick,add_info_dict = {}):
         cls.check_conn()
         table_name = cls.get_coll_name()
