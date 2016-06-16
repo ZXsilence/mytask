@@ -58,11 +58,11 @@ class SimbaKeywordsbykeywordidsGet(object):
             sub_keyword_id_list = keyword_id_list[:MAX_KEYWORD_IDS]
             keyword_id_list = keyword_id_list[MAX_KEYWORD_IDS:]
             sub_keywords = cls._sub_get_keyword_list_by_keyword_ids(nick, sub_keyword_id_list)
+            sub_keywords = change_obj_to_dict_deeply(sub_keywords)
             for k in sub_keywords:
-                k = k.__dict__
                 k_obj = Keyword((k['keyword_id'],k['adgroup_id'],k['campaign_id'],sid,nick,k['word'],k['audit_status'],k.get('qscore',-1),\
                 k.get('rele_score',-1),k.get('cvr_score',-1),k.get('cust_score',-1),k.get('creative_score',-1),k.get('match_scope',4),\
-                k['max_price'],k['max_moblie_price'],k['is_default_price'],k['mobile_is_default_price'],k['is_garbage'],k['create_time'],k['modified_time']))
+                k['max_price'],k['max_mobile_price'],k['is_default_price'],k['mobile_is_default_price'],k['is_garbage'],k['create_time'],k['modified_time']))
                 total_keyword_list.append(k_obj)
         return total_keyword_list
 
