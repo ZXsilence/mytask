@@ -27,7 +27,7 @@ class SimbaAdgroupsbyadgroupidsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_adgroup_list_by_adgroup_ids(cls, nick, adgroup_id_list):
+    def get_adgroup_list_by_adgroup_ids(cls, nick, adgroup_id_list,cache = True):
         origin_id_list = copy.deepcopy(adgroup_id_list)
         req = SimbaAdgroupsbyadgroupidsGetRequest()
         req.nick = nick
@@ -41,7 +41,7 @@ class SimbaAdgroupsbyadgroupidsGet(object):
             req.adgroup_ids = ",".join([str(k) for k in sub_adgroup_id_list])
             logger.debug("get adgroup info adgroup_length:%s nick:%s"%(len(sub_adgroup_id_list), nick))
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             result_adgroup_list = rsp.adgroups.adgroup_list
             for adgroup_object in result_adgroup_list:
                 adgroup_id = adgroup_object.toDict()['adgroup_id']
