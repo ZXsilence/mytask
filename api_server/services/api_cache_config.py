@@ -46,10 +46,12 @@ class ApiCacheConfig(object):
         'taobao.areas.get':{'cache_name':'areas','max_age':MAX_AGE_1,'is_get':IS_GET_YES},
         'taobao.itemcats.authorize.get':{'cache_name':'itemcats_authorize','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
         'taobao.itemcats.get':{'cache_name':'itemcats','max_age':MAX_AGE_1,'is_get':IS_GET_YES},
-        'taobao.item.img.delete':{'cache_name':'item_img','is_get':IS_GET_NO},
-        'taobao.item.img.upload':{'cache_name':'item_img','is_get':IS_GET_NO},
-        'taobao.item.joint.img':{'cache_name':'item_img','is_get':IS_GET_NO},
-        'taobao.item.update':{'cache_name':'item_img','is_get':IS_GET_NO},
+
+        #'taobao.item.img.delete':{'cache_name':'item_img','is_get':IS_GET_NO},
+        #'taobao.item.img.upload':{'cache_name':'item_img','is_get':IS_GET_NO},
+        #'taobao.item.joint.img':{'cache_name':'item_img','is_get':IS_GET_NO},
+        #'taobao.item.update':{'cache_name':'item_img','is_get':IS_GET_NO},
+
         'taobao.items.onsale.get':{'cache_name':'item','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
         'taobao.items.seller.list.get':{'cache_name':'item','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
         'taobao.simba.adgroup.onlineitemsvon.get':{'cache_name':'item','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
@@ -115,16 +117,21 @@ class ApiCacheConfig(object):
         #'taobao.simba.insight.wordssubdata.get':
         #'taobao.simba.keywordids.deleted.get':
         #'taobao.simba.keyword.rankingforecast.get':
+
+        #=============关键词缓存暂不开启================
         'taobao.simba.keywordsbyadgroupid.get':{'cache_name':'keywords','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
         'taobao.simba.keywordsbykeywordids.get':{'cache_name':'keywords','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
         #'taobao.simba.keywords.changed.get':
         'taobao.simba.keywords.delete':{'cache_name':'keywords','is_get':IS_GET_NO},
         'taobao.simba.keywords.pricevon.set':{'cache_name':'keywords','is_get':IS_GET_NO},
+        'taobao.simba.keywordsvon.add':{'cache_name':'keywords','is_get':IS_GET_NO},
+
+
+
         #'taobao.simba.keywords.qscore.get':
         #'taobao.simba.keywords.qscore.split.get':
         #'taobao.simba.keywords.realtime.ranking.get':
         #'taobao.simba.keywords.recommend.get':
-        'taobao.simba.keywordsvon.add':{'cache_name':'keywords','is_get':IS_GET_NO},
         #'taobao.simba.login.authsign.get':
         #'taobao.simba.nonsearch.adgroupplaces.add':
         #'taobao.simba.nonsearch.adgroupplaces.get':
@@ -132,6 +139,8 @@ class ApiCacheConfig(object):
         #'taobao.simba.rpt.adgroupcreativebase.get':
         #'taobao.simba.rpt.adgroupcreativeeffect.get':
         #'taobao.simba.rpt.adgroupeffect.get':
+
+        #=============关键词报表暂时不开启============
         'taobao.simba.rpt.adgroupkeywordbase.get':{'cache_name':'rpt_keyword_base','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
         'taobao.simba.rpt.adgroupkeywordeffect.get':{'cache_name':'rpt_keyword_effect','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
         #'taobao.simba.rpt.campadgroupbase.get':
