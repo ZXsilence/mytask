@@ -119,12 +119,12 @@ class ApiCacheConfig(object):
         #'taobao.simba.keyword.rankingforecast.get':
 
         #=============关键词缓存暂不开启================
-        'taobao.simba.keywordsbyadgroupid.get':{'cache_name':'keywords','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
-        'taobao.simba.keywordsbykeywordids.get':{'cache_name':'keywords','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
-        #'taobao.simba.keywords.changed.get':
-        'taobao.simba.keywords.delete':{'cache_name':'keywords','is_get':IS_GET_NO},
-        'taobao.simba.keywords.pricevon.set':{'cache_name':'keywords','is_get':IS_GET_NO},
-        'taobao.simba.keywordsvon.add':{'cache_name':'keywords','is_get':IS_GET_NO},
+        #'taobao.simba.keywordsbyadgroupid.get':{'cache_name':'keywords','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
+        #'taobao.simba.keywordsbykeywordids.get':{'cache_name':'keywords','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
+        ##'taobao.simba.keywords.changed.get':
+        #'taobao.simba.keywords.delete':{'cache_name':'keywords','is_get':IS_GET_NO},
+        #'taobao.simba.keywords.pricevon.set':{'cache_name':'keywords','is_get':IS_GET_NO},
+        #'taobao.simba.keywordsvon.add':{'cache_name':'keywords','is_get':IS_GET_NO},
 
 
 
@@ -141,8 +141,9 @@ class ApiCacheConfig(object):
         #'taobao.simba.rpt.adgroupeffect.get':
 
         #=============关键词报表暂时不开启============
-        'taobao.simba.rpt.adgroupkeywordbase.get':{'cache_name':'rpt_keyword_base','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
-        'taobao.simba.rpt.adgroupkeywordeffect.get':{'cache_name':'rpt_keyword_effect','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
+        #'taobao.simba.rpt.adgroupkeywordbase.get':{'cache_name':'rpt_keyword_base','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
+        #'taobao.simba.rpt.adgroupkeywordeffect.get':{'cache_name':'rpt_keyword_effect','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
+
         #'taobao.simba.rpt.campadgroupbase.get':
         #'taobao.simba.rpt.campadgroupeffect.get':
         #'taobao.simba.rpt.campaignbase.get':
