@@ -58,18 +58,21 @@ class SimbaKeywordsbykeywordidsGet(object):
             sub_keyword_id_list = keyword_id_list[:MAX_KEYWORD_IDS]
             keyword_id_list = keyword_id_list[MAX_KEYWORD_IDS:]
             sub_keywords = cls._sub_get_keyword_list_by_keyword_ids(nick, sub_keyword_id_list)
+            sub_keywords = change_obj_to_dict_deeply(sub_keywords)
             for k in sub_keywords:
-                k = k.__dict__
-                k_obj = Keyword((k['keyword_id'],k['adgroup_id'],k['campaign_id'],sid,nick,k['word'],k['audit_status'],k.get('qscore',5),k.get('rele_score',None),k.get('cvr_score',None),k.get('cust_score',None),k.get('creative_score',None),k.get('match_scope',4),k['max_price'],k['is_default_price'],k['is_garbage'],k['create_time'],k['modified_time']))
+                k_obj = Keyword((k['keyword_id'],k['adgroup_id'],k['campaign_id'],sid,nick,k['word'],k['audit_status'],k.get('qscore',-1),\
+                k.get('rele_score',-1),k.get('cvr_score',-1),k.get('cust_score',-1),k.get('creative_score',-1),k.get('match_scope',4),\
+                k['max_price'],k['max_mobile_price'],k['is_default_price'],k['mobile_is_default_price'],k['is_garbage'],k['create_time'],k['modified_time']))
                 total_keyword_list.append(k_obj)
         return total_keyword_list
 
 def test():
     nick = 'chinchinstyle'
-    keyword_ids = [66671648550, 66671648549, 66671648548, 66671648547, 66671648546]
-    keywords = SimbaKeywordsbykeywordidsGet.get_keyword_list_by_keyword_ids_new(nick, 123,keyword_ids)
+    keyword_ids = [271675020887, 271675020888, 271675020889, 271675020890] 
+    keywords = SimbaKeywordsbykeywordidsGet.get_keyword_list_by_keyword_ids(nick,keyword_ids)
     for keyword in keywords:
-        print keyword['keyword_id'],keyword['cvr_score']
+        print keyword
+        break
 
 if __name__ == '__main__':
     test()
