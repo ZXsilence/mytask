@@ -5,11 +5,9 @@
 
 import sys
 import os
-import  copy
 import json
 import logging
 import logging.config
-import copy
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
@@ -58,7 +56,7 @@ class SimbaKeywordsPricevonSet(object):
         return change_obj_to_dict_deeply(keywords)
 
     @classmethod
-    @tao_api_exception(20)
+    @tao_api_exception(10)
     def _set_price2(cls, nick, word_price_list, soft_code, safe=True):
         keywords = []
         try:
@@ -71,17 +69,16 @@ class SimbaKeywordsPricevonSet(object):
                 if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
                     return keywords
                 raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_code, sub_msg=rsp.sub_msg)
-        except Exception,e:
+        except Exception:
             if safe is True:
                 raise
         else:
             keywords = rsp.keywords
-
         return keywords
         
 
     @classmethod
-    @tao_api_exception(20)
+    @tao_api_exception(10)
     def _set_price(cls, nick, keywordid_prices):
         """
         args:
@@ -151,15 +148,10 @@ class SimbaKeywordsPricevonSet(object):
     @classmethod
     def set_price(cls, nick, wordid_price_list,safe=True):
         wordid_price_list = SimbaKeywordsPricevonSet._del_duplicates(wordid_price_list)
-
         size = PageSize.KEYWORDS_SET
-        package_num = len(wordid_price_list)/size+ 1
-        if len(wordid_price_list) % size== 0:
-            package_num -= 1
-
+        package_num = (len(wordid_price_list)+size-1)/size
         keywords = []
         for i in range(package_num):
-            
             keywordid_prices = wordid_price_list[i*size:(i+1)*size]
             try:
                 subkeywords = SimbaKeywordsPricevonSet._set_price(nick, keywordid_prices)
@@ -170,6 +162,55 @@ class SimbaKeywordsPricevonSet(object):
                     continue
             keywords.extend(subkeywords)
         return change_obj_to_dict_deeply(keywords)
+
+    @classmethod
+    @tao_api_exception(10)
+    def _set_mobile_price(cls, nick, keywordid_prices):
+        word_price_dict_list = []
+        for k in keywordid_prices:
+            word_price_dict = {
+                    "keywordId":k['kid']
+                    , "maxMobilePrice":k['price']
+                    , "mobileIsDefaultPrice":k['mobile_is_default_price']
+                    }
+            word_price_dict_list.append(word_price_dict)
+        req = SimbaKeywordsPricevonSetRequest()
+        req.nick = nick
+        req.keywordid_prices = json.dumps(word_price_dict_list) 
+        soft_code = None
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            rsp = e.rsp
+            if not rsp.isSuccess():
+                logger.debug("set_price error nick [%s] msg [%s] sub_msg [%s]" %(nick
+                    ,rsp.msg, rsp.sub_msg))
+                if rsp.sub_msg and ('关键词不能为空' in rsp.sub_msg or '包含了不属于该客户的关键词Id' in rsp.sub_msg):
+                    logger.warning('[%s] keywords_add failed,keywordid_prices:%s  :%s,%s'%(nick,word_price_dict_list,rsp.msg,rsp.sub_msg))
+                    return []
+                raise e
+
+        return rsp.keywords
+    
+    @classmethod
+    def set_mobile_prices(cls,nick,word_price_list,safe=True):
+        size = PageSize.KEYWORDS_SET
+        package_num = (len(word_price_list)+size-1)/size
+        keywords = []
+        for i in range(package_num):
+            keyword_prices = word_price_list[i*size:(i+1)*size]
+            try:
+                sub_keywords = cls._set_mobile_price(nick,keyword_prices)
+                keywords.extend(sub_keywords)
+            except Exception:
+                if safe:
+                    raise 
+                else:
+                    continue
+        return change_obj_to_dict_deeply(keywords)
+
+
+
 
 def test():
     nick = 'chinchinstyle'
