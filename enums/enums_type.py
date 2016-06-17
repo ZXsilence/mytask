@@ -102,6 +102,8 @@ class OperationType(object):
     UPDATE_PRICE_ITEM_BAD_DECRE_PRICE = 131
     UPDATE_PRICE_NOCLICK_INCRE_PRICE = 132
     KEEP_NORMAL = 201
+    #无线改价新增
+    UPDATE_KEYWORD_MOBILE_PRICE_NORMAL = 210
 
     IGNORE_KEYWORD_NOT_EXIST = 301
     IGNORE_KEYWORD_NOT_HANDLE = 302
@@ -230,6 +232,7 @@ class OperationType(object):
         UPDATE_PRICE_TO_APPROVE_ROI,
         UPDATE_PRICE_DIRECTOR,
         UPDATE_PRICE_HISTORY_NORMAL,
+        UPDATE_KEYWORD_MOBILE_PRICE_NORMAL,
         UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE,
         UPDATE_PRICE_CUSTOM,
         UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE,
@@ -373,6 +376,7 @@ class OperationType(object):
         UPDATE_PRICE_TO_APPROVE_ROI,
         UPDATE_PRICE_DIRECTOR,
         UPDATE_PRICE_HISTORY_NORMAL,
+        UPDATE_KEYWORD_MOBILE_PRICE_NORMAL,
         UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE,
         UPDATE_PRICE_CUSTOM,
         UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE,
@@ -450,6 +454,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_TO_APPROVE_ROI : "为了提高计划效果，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_DIRECTOR : "为了优化加力计划效果，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_HISTORY_NORMAL: "关键词价格进行调整(历史记录未区分类型)"
+    , OperationType.UPDATE_KEYWORD_MOBILE_PRICE_NORMAL: "关键词无线价格进行调整(历史记录未区分类型)"
     , OperationType.UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE: "计划花费未达到最低花费设置，关键词加大投入"
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
