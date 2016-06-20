@@ -76,8 +76,8 @@ class ApiCacheConfig(object):
         'taobao.simba.adgroup.add':{'cache_name':'adgroup','is_get':IS_GET_NO},
         'taobao.simba.adgroup.delete':{'cache_name':'adgroup','is_get':IS_GET_NO},
         #'taobao.simba.adgroupids.deleted.get':
-        #'taobao.simba.adgroup.mobilediscount.delete':
-        #'taobao.simba.adgroup.mobilediscount.update':
+        'taobao.simba.adgroup.mobilediscount.delete':{'cache_name':'adgroup','is_get':IS_GET_NO},
+        'taobao.simba.adgroup.mobilediscount.update':{'cache_name':'adgroup','is_get':IS_GET_NO},
         #'taobao.simba.adgroup.nonsearchprices.update':
         'taobao.simba.adgroupsbyadgroupids.get':{'cache_name':'adgroup','max_age':MAX_AGE_4,'is_get':IS_GET_YES}, 
         'taobao.simba.adgroupsbycampaignid.get':{'cache_name':'adgroup','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
