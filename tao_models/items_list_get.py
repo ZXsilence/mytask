@@ -66,20 +66,20 @@ class ItemsListGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _get_sub_items(cls,nick,sub_num_iid_list,fields):
+    def _get_sub_items(cls,nick,sub_num_iid_list,fields,cache):
         #req = ItemsListGetRequest()
         req = ItemsSellerListGetRequest()
         req.fields = fields
         req.num_iids = ",".join([str(num_iid) for num_iid in sub_num_iid_list])
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache = cache)
         if rsp.items is None:
             logger.info("get item info, expect %s, actually return: %s"%(len(sub_num_iid_list), 0))
             return None 
         return rsp
 
     @classmethod
-    def get_item_list(cls, nick, num_iids, fields=DEFAULT_FIELDS):
+    def get_item_list(cls, nick, num_iids, fields=DEFAULT_FIELDS,cache= True):
         if 'props_name' in fields and not 'property_alias' in fields:
             fields += ',property_alias'
 
@@ -90,7 +90,7 @@ class ItemsListGet(object):
             sub_num_iid_list = num_iid_list[:cls.MAX_NUM_IIDS]
             num_iid_list = num_iid_list[cls.MAX_NUM_IIDS:]
             try:
-                rsp = ItemsListGet._get_sub_items(nick,sub_num_iid_list,fields)
+                rsp = ItemsListGet._get_sub_items(nick,sub_num_iid_list,fields,cache)
             except Exception,e:
                 if 'isp.top-remote-connection-timeout-tmall' in str(e) or 'isp.top-remote-service-unavailable-tmall' in str(e):
                     print 'continue!',str(e)
