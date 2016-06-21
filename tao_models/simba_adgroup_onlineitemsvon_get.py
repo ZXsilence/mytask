@@ -29,7 +29,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_items_online(cls, nick, max_page = 50):
+    def get_items_online(cls, nick, max_page = 50,cache = True):
         """
         get items online
 
@@ -52,7 +52,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         req.order_by = 'true'
         req.page_no = 1
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache)
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
             return item_online_list
@@ -64,7 +64,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             item_online_list.extend(rsp.page_item.item_list)
             if len(item_online_list)>=10000:
                 break
