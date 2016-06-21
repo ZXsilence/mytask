@@ -29,9 +29,9 @@ class SimbaAccountBalanceGet(object):
         req.nick = nick
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code,cache)
-        return change_obj_to_dict_deeply(rsp.balance)
+        return float(change_obj_to_dict_deeply(rsp.balance))
 
 if __name__ == '__main__':
-    balance = SimbaAccountBalanceGet.get_account_balance('麦苗科技001')
-    print balance
+    balance = SimbaAccountBalanceGet.get_account_balance('麦苗科技001',False)
+    print balance,type(balance)
 

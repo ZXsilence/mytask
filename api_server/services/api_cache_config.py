@@ -141,8 +141,8 @@ class ApiCacheConfig(object):
         #'taobao.simba.rpt.adgroupeffect.get':
 
         #=============关键词报表暂时不开启============
-        #'taobao.simba.rpt.adgroupkeywordbase.get':{'cache_name':'rpt_keyword_base','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
-        #'taobao.simba.rpt.adgroupkeywordeffect.get':{'cache_name':'rpt_keyword_effect','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
+        'taobao.simba.rpt.adgroupkeywordbase.get':{'cache_name':'rpt_keyword_base','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
+        'taobao.simba.rpt.adgroupkeywordeffect.get':{'cache_name':'rpt_keyword_effect','max_age':MAX_AGE_2,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
 
         #'taobao.simba.rpt.campadgroupbase.get':
         #'taobao.simba.rpt.campadgroupeffect.get':
