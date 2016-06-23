@@ -36,11 +36,11 @@ class SimbaCampaignsGet(object):
     """
     @classmethod
     @tao_api_exception()
-    def get_campaign_list(cls, nick):
+    def get_campaign_list(cls, nick,cache = True):
         req = SimbaCampaignsGetRequest()
         req.nick = nick
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache = cache)
         return change_obj_to_dict_deeply(rsp.campaigns)
 
 if __name__ == '__main__':

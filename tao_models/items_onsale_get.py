@@ -31,14 +31,14 @@ class ItemsOnsaleGet(object):
 
     @classmethod
     @tao_api_exception()
-    def _get_page_items(cls,req,nick):
+    def _get_page_items(cls,req,nick,cache):
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache)
         return rsp
 
 
     @classmethod
-    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS,order_by = 'sold_quantity:desc'):
+    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS,order_by = 'sold_quantity:desc',cache = True):
 
         total_item_list = []
 
@@ -50,7 +50,7 @@ class ItemsOnsaleGet(object):
         req.page_no = 1
 
         while True:
-            rsp = cls._get_page_items(req,nick)
+            rsp = cls._get_page_items(req,nick,cache)
             if rsp.items is None:
                 logger.info("get item info, but none return")
                 break
@@ -67,20 +67,20 @@ class ItemsOnsaleGet(object):
         return change_obj_to_dict_deeply(total_item_list)
 
     @classmethod
-    def get_item_list_with_page_no(cls,nick,page_no,fields=DEFAULT_FIELDS):
+    def get_item_list_with_page_no(cls,nick,page_no,fields=DEFAULT_FIELDS,cache = True):
         req = ItemsOnsaleGetRequest()
         req.fields = fields
         req.order_by = "sold_quantity:desc"
         req.page_size = 200
         req.page_no = page_no
-        rsp = cls._get_page_items(req,nick)
+        rsp = cls._get_page_items(req,nick,cache)
         if rsp.items:
             return change_obj_to_dict_deeply(rsp.items)
         return []
 
     @classmethod
     @tao_api_exception()
-    def get_item_list_with_overview(cls, nick, max_pages=1, fields=DEFAULT_FIELDS):
+    def get_item_list_with_overview(cls, nick, max_pages=1, fields=DEFAULT_FIELDS,cache = True):
 
         total_item_list = []
 
@@ -92,7 +92,7 @@ class ItemsOnsaleGet(object):
 
         while True:
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             if rsp.items is None:
                 logger.info("get item info, but none return")
                 return {'total_results':0, 'item_list':total_item_list}

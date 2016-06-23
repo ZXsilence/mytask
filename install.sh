@@ -31,6 +31,7 @@ then
 
     ln -s "${proPath}/comm_lib/api_server/conf/dev/set_env.py" "${proPath}/comm_lib/api_server/conf/"
     ln -s "${proPath}/comm_lib/api_server/conf/dev/settings.py" "${proPath}/comm_lib/api_server/conf/"
+    ln -s "${proPath}/comm_lib/api_server/conf/dev/db_settings.py" "${proPath}/comm_lib/api_server/conf/"
     ln -s "${proPath}/comm_lib/db_pool/conf/dev/settings.py" "${proPath}/comm_lib/db_pool/conf/"
 
     ln -s "${proPath}/comm_lib/service_server/conf/dev/set_env.py" "${proPath}/comm_lib/service_server/conf/"
@@ -47,6 +48,7 @@ then
     ln -s "${proPath}/comm_lib/api_parallel/prd/celeryconfig_result.py" "${proPath}/comm_lib/api_parallel/"
 
     ln -s "${proPath}/comm_lib/api_server/conf/prd/set_env.py" "${proPath}/comm_lib/api_server/conf/"
+    ln -s "${proPath}/comm_lib/api_server/conf/prd/db_settings.py" "${proPath}/comm_lib/api_server/conf/"
     if [ 'wy' == $isWyIp ];then
         ln -s "${proPath}/comm_lib/api_server/conf/prd/wy_settings.py" "${proPath}/comm_lib/api_server/conf/settings.py"
         ln -s "${proPath}/comm_lib/db_pool/conf/prd/wy_settings.py" "${proPath}/comm_lib/db_pool/conf/settings.py"
@@ -66,6 +68,7 @@ then
     rm -f "${proPath}/comm_lib/tao_models/conf/set_env.py"
 
     rm -f "${proPath}/comm_lib/api_server/conf/settings.py"
+    rm -f "${proPath}/comm_lib/api_server/conf/db_settings.py"
     rm -f "${proPath}/comm_lib/api_server/conf/set_env.py"
     rm -f "${proPath}/comm_lib/db_pool/conf/set_env.py"
     rm -f "${proPath}/comm_lib/db_pool/conf/settings.py"
