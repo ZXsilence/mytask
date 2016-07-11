@@ -91,7 +91,6 @@ import test_simba_insight_wordsareadata_get
 import test_simba_insight_wordsdata_get
 import test_simba_insight_wordspricedata_get
 import test_simba_insight_wordssubdata_get
-import test_simba_keyword_rankingforecast_get
 import test_simba_keywordids_deleted_get
 import test_simba_keywords_changed_get
 import test_simba_keywords_delete
@@ -178,7 +177,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                test_simba_insight_wordsdata_get.alltests,
                                test_simba_insight_wordspricedata_get.alltests,
                                test_simba_insight_wordssubdata_get.alltests,
-                               test_simba_keyword_rankingforecast_get.alltests,
                                test_simba_keywordids_deleted_get.alltests,
                                test_simba_keywords_changed_get.alltests,
                                test_simba_keywords_delete.alltests,
