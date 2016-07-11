@@ -50,6 +50,11 @@ class test_mobile_discount(unittest.TestCase):
                 if it['adgroup_id']== adgroups[0]['adgroup_id']:
                     actual_result = it['mobile_discount']
             returnValue = SimbaCampaignPlatformGet.get_campaign_platform(nick,campaign_id)
+            expect_value = 100
+            if 8 in returnValue['search_channels']:
+                expect_value = returnValue['mobile_discount']
+            if 16 in returnValue['search_channels']:
+                expect_value = returnValue['mobile_discount']
             campaign_mobile_discount = returnValue['mobile_discount']
             self.assertEqual(actual_result,campaign_mobile_discount)
     
