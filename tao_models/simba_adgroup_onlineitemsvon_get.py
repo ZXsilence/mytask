@@ -29,7 +29,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_items_online(cls, nick, max_page = 50):
+    def get_items_online(cls, nick, max_page = 50,cache = True):
         """
         get items online
 
@@ -52,7 +52,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         req.order_by = 'true'
         req.page_no = 1
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache)
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
             return item_online_list
@@ -64,7 +64,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             item_online_list.extend(rsp.page_item.item_list)
             if len(item_online_list)>=10000:
                 break
@@ -75,14 +75,14 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_items_online_with_overview(cls, nick, max_page = 3):
+    def get_items_online_with_overview(cls, nick, max_page = 1,cache = True):
         item_online_list = []
         req = SimbaAdgroupOnlineitemsvonGetRequest()
         req.nick = nick
         req.page_size = cls.PAGE_SIZE
         req.page_no = 1
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache)
 
         if not rsp.page_item.total_item:
             logger.info("surprise.. , no items online  nick:%s"%nick)
@@ -95,7 +95,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             item_online_list.extend(rsp.page_item.item_list)
             if len(item_online_list)>=10000:
                 break
@@ -105,7 +105,7 @@ class SimbaAdgroupOnlineitemsvonGet(object):
 
     @classmethod
     @tao_api_exception(10)
-    def get_item_count(cls, nick):
+    def get_item_count(cls, nick,cache = True):
         req = SimbaAdgroupOnlineitemsvonGetRequest()
         req.nick = nick
         req.page_size = cls.PAGE_SIZE
@@ -113,12 +113,12 @@ class SimbaAdgroupOnlineitemsvonGet(object):
         req.order_by = 'true'
         req.page_no = 1 
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache)
         return change_obj_to_dict_deeply(rsp.page_item.total_item)
 
 
 def test():
-    nick = 'chinchinstyle'
+    nick = '大雪1'
     #items = SimbaAdgroupOnlineitemsvonGet.get_items_online(nick)
     #items = SimbaAdgroupOnlineitemsvonGet.get_item_count(nick)
     items = SimbaAdgroupOnlineitemsvonGet.get_items_online_with_overview(nick)
