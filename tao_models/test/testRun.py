@@ -19,7 +19,6 @@ import datetime
 
 import test_arears_get
 import test_fuwu_sale_link_gen
-import test_clouddata_mbp_data_flowback
 import test_clouddata_mbp_data_get_normal
 import test_itemcats_authorize_get
 import test_itemcats_get
@@ -109,7 +108,6 @@ import test_mobile_discount
 alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_login_authsign_get.alltests
                                ,test_fuwu_sale_link_gen.alltests
-                               ,test_clouddata_mbp_data_flowback.alltests
                                ,test_clouddata_mbp_data_get_normal.alltests
                                ,test_itemcats_authorize_get.alltests
                                ,test_itemcats_get.alltests

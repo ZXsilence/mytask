@@ -40,7 +40,7 @@ class TestMMSimbaToolsItemsTopGet(unittest.TestCase):
                               {'nick':'chinchinstyle','soft_code':'SYB','keyword':'','popException':True, 'exceptionClass':ErrorResponseException},
                               ]
         cls.valueType = {'returnValue':list}
-        cls.itemFields = 'link_url,order,title'
+        cls.itemFields = 'link_url,order,title,rank_score,max_price'
 
     def setUp(self):
         pass
