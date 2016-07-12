@@ -15,6 +15,7 @@ function stop_api(){
         return
     fi
     kill -9 `ps -ef|grep $USER|grep -v grep|grep ApiCenterServer|awk '{print $2}'`
+    sleep 5
     pids=`ps -ef|grep "$USER"|grep ApiCenterServer|grep -v 'grep'|awk '{print $2}'`
     if [ "$pids" != '' ] ; then
         echo -e "\033[31mstop api server failed\033[0m"
@@ -46,7 +47,7 @@ function restart_api(){
 }
 
 function rebuild_api(){
-    cd ~ && sh update.sh
+    # cd ~ && sh update.sh
     restart_api
 }
 

@@ -64,8 +64,6 @@ import test_promotionmisc_item_activity_get
 import test_promotionmisc_item_activity_list_get
 import test_promotionmisc_item_activity_update
 import test_promotionmisc_mjs_activity_all_API_total_test
-import test_wangwang_eservice_groupmember_get
-import test_wangwang_eservice_receivenum_get
 
 import test_vas_subscribe_get
 import test_vas_order_search
@@ -91,7 +89,6 @@ import test_simba_insight_wordsareadata_get
 import test_simba_insight_wordsdata_get
 import test_simba_insight_wordspricedata_get
 import test_simba_insight_wordssubdata_get
-import test_simba_keyword_rankingforecast_get
 import test_simba_keywordids_deleted_get
 import test_simba_keywords_changed_get
 import test_simba_keywords_delete
@@ -153,8 +150,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                #,test_promotionmisc_item_activity_list_get.alltests
                                #,test_promotionmisc_item_activity_update.alltests
                                #,test_promotionmisc_mjs_activity_all_API_total_test.alltests
-                               ,test_wangwang_eservice_groupmember_get.alltests
-                               ,test_wangwang_eservice_receivenum_get.alltests
                                ,test_vas_subscribe_get.alltests
                                ,test_vas_order_search.alltests
                                ,test_user_seller_get.alltests
@@ -178,7 +173,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                test_simba_insight_wordsdata_get.alltests,
                                test_simba_insight_wordspricedata_get.alltests,
                                test_simba_insight_wordssubdata_get.alltests,
-                               test_simba_keyword_rankingforecast_get.alltests,
                                test_simba_keywordids_deleted_get.alltests,
                                test_simba_keywords_changed_get.alltests,
                                test_simba_keywords_delete.alltests,

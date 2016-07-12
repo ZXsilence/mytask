@@ -39,8 +39,8 @@ class TestPictureUploadandDelete(unittest.TestCase):
         set_api_source('SDK_TEST')
         cls.tcinfo_delete = 'API Test - taobao.picture.delete'
         cls.tcinfo_upload = 'API Test - taobao.picture.upload'
-        cls.testInputDatas_upload = [{'nick':'__NotExistNick__','image_path':'/alidata1/upload/syb/a.jpg','popException':True, 'exceptionClass':InvalidAccessTokenException}
-                                     ,{'nick':'麦苗科技001','image_path':'/alidata1/upload/syb/a.jpg','popException':False, 'exceptionClass':None}
+        cls.testInputDatas_upload = [{'nick':'__NotExistNick__','image_path':'/alidata1/sdk_test/test.jpg','popException':True, 'exceptionClass':InvalidAccessTokenException}
+                                     ,{'nick':'麦苗科技001','image_path':'/alidata1/sdk_test/test.jpg','popException':False, 'exceptionClass':None}
                                      ]
         cls.testInputDatas_delete = []
         cls.valueType = {'returnValue':dict}
