@@ -27,7 +27,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_adgroup_list_by_campaign(cls, nick, campaign_id, max_pages=30):
+    def get_adgroup_list_by_campaign(cls, nick, campaign_id, max_pages=30,cache = True):
 
         adgroup_list = []
 
@@ -39,7 +39,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
         soft_code = None
         try:
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
         except ErrorResponseException,e:
             if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
                 return adgroup_list
@@ -59,7 +59,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
         logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))
@@ -68,16 +68,15 @@ class SimbaAdgroupsbycampaignidGet(object):
 
     @classmethod
     @tao_api_exception(8)
-    def get_adgroup_count(cls, nick, campaign_id):
+    def get_adgroup_count(cls, nick, campaign_id,cache = True):
         req = SimbaAdgroupsbycampaignidGetRequest()
         req.page_size = cls.PAGE_SIZE
         req.nick = nick
         req.campaign_id = campaign_id
         req.page_no = 1 
         soft_code = None
-        #rsp = ApiService.execute(req,nick,soft_code)
         try:
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
         except ErrorResponseException,e:
             if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
                 return 0
@@ -89,7 +88,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_adgroup_list_by_campaign_with_overview(cls, nick, campaign_id, max_pages=1):
+    def get_adgroup_list_by_campaign_with_overview(cls, nick, campaign_id, max_pages=1,cache = True):
         adgroup_list = []
         req = SimbaAdgroupsbycampaignidGetRequest()
         req.page_size = cls.PAGE_SIZE
@@ -99,7 +98,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         soft_code = None
         #rsp = ApiService.execute(req,nick,soft_code)
         try:
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache = cache)
         except ErrorResponseException,e:
             if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
                 return {'total_item':0, 'adgroup_list':adgroup_list}
@@ -120,7 +119,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         for page_no in range(2,total_pages+1):
             req.page_no = page_no
             soft_code = None
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
             adgroup_list.extend(rsp.adgroups.adgroup_list)
 
         logger.debug("actually get [%i] adgroups in campaign_id [%i]"%(len(adgroup_list), campaign_id))
@@ -128,7 +127,7 @@ class SimbaAdgroupsbycampaignidGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_adgroup_count_by_campaign_id(cls, nick, campaign_id):
+    def get_adgroup_count_by_campaign_id(cls, nick, campaign_id,cache = True):
         req = SimbaAdgroupsbycampaignidGetRequest()
         req.page_size = 1
         req.nick = nick
@@ -137,7 +136,7 @@ class SimbaAdgroupsbycampaignidGet(object):
         soft_code = None
         count = 0
         try:
-            rsp = ApiService.execute(req,nick,soft_code)
+            rsp = ApiService.execute(req,nick,soft_code,cache)
         except ErrorResponseException,e:
             if e.sub_code == 'isp.internal-error' and e.sub_msg == 'getADGroupsByCampaignId':
                 return count

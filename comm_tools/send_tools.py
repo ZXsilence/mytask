@@ -96,8 +96,8 @@ def send_email_with_file(addressee, text, subject, file_list):
     msg.attach(MIMEText(text, _charset='utf-8'))
     msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = DIRECTOR['EMAIL']
-    msg['To'] = addressee
-
+    to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+    msg['To'] = ';'.join(to_list) 
     for file_name in file_list:
         ctype, encoding = mimetypes.guess_type(file_name)
         if ctype is None or encoding is not None:
@@ -234,6 +234,17 @@ def send_code_sms(cellphone,params_dict,sign_name='省油宝'):
     if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
     sms_template_code = 'SMS_2840119'
     sms_param = {'nick':u'用户','softname':params_dict['soft_name'],'code':str(params_dict['code'])}
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,sms_param,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
+
+def send_gw_code_sms(cellphone,params_dict,sign_name='省油宝'):
+    '''发送验证码短信'''
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    sms_template_code = 'SMS_10235868'
+    sms_param = {'usercode':str(params_dict['code'])}
     try:
         AliqinTaSmsNumSend.send_sms_sdk(cellphone,sms_param,sms_template_code,sign_name)
     except Exception,e:

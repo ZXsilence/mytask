@@ -20,9 +20,12 @@ class Keyword(object):
         "creative_score",
         "match_scope",
         "max_price",
+        "max_mobile_price",
         "is_default_price",
+        "mobile_is_default_price",
         "is_garbage",
         "create_time"
+        "modified_time"
     ]
 
     def __init__(self, kwd_data):
@@ -71,12 +74,18 @@ class Keyword(object):
                 'word':self.data[5],
                 'audit_pass':self.data[6],
                 'qscore':self.data[7],
-                'match_scope':self.data[8],
-                'max_price':self.data[9],
-                'is_default_price':self.data[10],
-                'is_garbage':self.data[11],
-                'create_time':self.data[12],
-                'modified_time':self.data[13]
+                'rele_score':self.data[8],
+                'cvr_score':self.data[9],
+                'cust_score':self.data[10],
+                'creative_score':self.data[11],
+                'match_scope':self.data[12],
+                'max_price':self.data[13],
+                'max_mobile_price':self.data[14],
+                'is_default_price':self.data[15],
+                'mobile_is_default_price':self.data[16],
+                'is_garbage':self.data[17],
+                'create_time':self.data[18],
+                'modified_time':self.data[19]
                 }
 
     def __get_index_by_field(self,key):
@@ -108,14 +117,18 @@ class Keyword(object):
             return 12
         if key == "max_price":
             return 13
-        if key == "is_default_price":
+        if key == "max_mobile_price":
             return 14
-        if key == "is_garbage":
+        if key == "is_default_price":
             return 15
-        if key == "create_time":
+        if key == "mobile_is_default_price":
             return 16
-        if key == "modified_time":
+        if key == "is_garbage":
             return 17
+        if key == "create_time":
+            return 18
+        if key == "modified_time":
+            return 19
 
 if __name__== '__main__':
     keyword = Keyword((53508752000, 303723495, 13313745, 66463677, u'\u4e9a\u4f50\u670d\u9970\u4e13\u8425\u5e97', u'\u5e03 \u88e4', 'audit_pass', 5, '4', 70, False, False, datetime.datetime(2014, 2, 9, 16, 54, 57), datetime.datetime(2014, 5, 5, 5, 6, 47)))

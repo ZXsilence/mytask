@@ -24,12 +24,12 @@ class SimbaCampaignBudgetGet(object):
 
     @classmethod
     @tao_api_exception(5)
-    def campaign_budget_get(cls, nick, campaign_id):
+    def campaign_budget_get(cls, nick, campaign_id,cache = True):
         req = SimbaCampaignBudgetGetRequest()
         req.nick = nick
         req.campaign_id = campaign_id 
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache = cache)
         #if not rsp.isSuccess():
         #    if rsp.sub_msg and "未找到指定客户" in rsp.sub_msg:
         #        raise CampaignIdNotBelongToUserException 
