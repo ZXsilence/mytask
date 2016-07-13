@@ -261,6 +261,15 @@ def send_remind_sms(cellphone,params_dict,sign_name='省油宝'):
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
 
+def send_aliqinta_sms(cellphone,sms_param,sms_template_code,sign_name='省油宝'):
+    '''发送到期提醒短信'''
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,sms_param,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
+
 def filter_words(msg):
     words = [('**','--'),('服务','服&务'),('双11','双&11'),('黄色','黄&色'),('双十一','双&十&一'),('转化','转&化'),\
              ('傻逼','傻&逼'),('脑残','脑&残'),('二货','二&货'),('骚扰','骚&扰')]
