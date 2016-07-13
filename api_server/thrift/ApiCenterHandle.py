@@ -17,6 +17,7 @@ from TaobaoSdk import  TaobaoClient
 from api_server.services.api_record_service import ApiRecordService
 from api_server.conf.settings import logger
 from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
+from api_server.services.api_cache_service import ApiCacheService
    
 class ApiCenterHandle(object):
 

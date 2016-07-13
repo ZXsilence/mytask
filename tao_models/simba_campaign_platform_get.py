@@ -28,7 +28,7 @@ class SimbaCampaignPlatformGet(object):
 
     @classmethod
     @tao_api_exception(5)
-    def get_campaign_platform(cls, nick, campaign_id):
+    def get_campaign_platform(cls, nick, campaign_id,cache = True):
         """
         获得一个计划的推广平台设置 
         """
@@ -37,7 +37,7 @@ class SimbaCampaignPlatformGet(object):
         req.nick = nick
         req.campaign_id = campaign_id
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code,cache = cache)
         return change_obj_to_dict_deeply(rsp.campaign_platform)
 
 

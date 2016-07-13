@@ -11,6 +11,7 @@ from service_server.conf.settings import API_THRIFT
 from service_server.thrift.client_py import JavaApiClient
 from service_server.common.exceptions import ServerException,ZZAccountNotFoundException
 from service_server.common.decorator import sdk_exception
+from tao_models.common.exceptions import InvalidAccessTokenException
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,9 @@ class ClientService(object):
         if not rsp_obj.get('success'):
             if rsp_obj.get('sub_code') =='403':
                 raise ZZAccountNotFoundException(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
-            raise ServerException(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'))
+            if rsp_obj.get('sub_code') == 'invalid-sessionkey':
+                raise InvalidAccessTokenException()
+            raise ServerException(code = rsp_obj.get('code'),msg = rsp_obj.get('msg'),sub_code = rsp_obj.get('sub_code'),sub_msg = rsp_obj.get('sub_msg'))
         return rsp_obj['data']
 
     @staticmethod

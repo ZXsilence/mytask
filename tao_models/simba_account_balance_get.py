@@ -24,14 +24,14 @@ class SimbaAccountBalanceGet(object):
 
     @classmethod
     @tao_api_exception(3)
-    def get_account_balance(cls, nick):
+    def get_account_balance(cls, nick,cache = True):
         req = SimbaAccountBalanceGetRequest()
         req.nick = nick
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.balance)
+        rsp = ApiService.execute(req,nick,soft_code,cache)
+        return float(change_obj_to_dict_deeply(rsp.balance))
 
 if __name__ == '__main__':
-    balance = SimbaAccountBalanceGet.get_account_balance('麦苗科技001')
-    print balance
+    balance = SimbaAccountBalanceGet.get_account_balance('麦苗科技001',False)
+    print balance,type(balance)
 

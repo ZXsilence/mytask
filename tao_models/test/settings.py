@@ -13,7 +13,7 @@
 '''['regression', 'new', 'key']'''
 RUNTYPE = ['regression']
 NeedLog = True
-MAIL_RECEIVE = 'wangying@maimiaotech.com;maimiaotech_wy@126.com;luxiaowen@maimiaotech.com'
+MAIL_RECEIVE = 'luxiaowen@maimiaotech.com,tanglingling@maimiaotech.com'
 DIRECTOR = {'EMAIL':'maimiaotech_wy@126.com',
             'SECRET':'Aa123456',
             'sendserverip':'smtp.126.com',
