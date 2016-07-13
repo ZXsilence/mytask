@@ -40,6 +40,7 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
     def setUpClass(cls):
         set_api_source('SDK_TEST')
         nick,campaign_id = GetCampaignAdgroup.get_has_adgroup_rpt_nick()
+        print 'Test nick:',nick
         start = datetime.datetime.now()-datetime.timedelta(days=7)
         end = datetime.datetime.now()-datetime.timedelta(days=1)
         cls.testData = [{'nick':nick,'campaign_id':campaign_id,'search_type':'SEARCH,CAT','source':'1,2,4,5','start':start,'end':end,'popException':False,'exceptClass':None},
@@ -52,7 +53,6 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
                   }
         #如果click=0，不返回cpc
         cls.assertDefaultBase=['avgpos','ctr','adgroupid','cpm','searchtype','campaignid','nick','cost','source','date','impressions','click'] 
-        #如果有效果数据，多返回['favshopcount', 'directpay', 'indirectpay', 'favitemcount', 'indirectcarttotal', 'indirectpaycount', 'carttotal', 'directpaycount', 'directcarttotal']
         cls.assertHasRPT=['favshopcount', 'directpay', 'indirectpay', 'favitemcount', 'indirectcarttotal', 'indirectpaycount', 'carttotal', 'directpaycount',                'directcarttotal']
         cls.assertDefaultEffect=['adgroupid','searchtype','source','campaignid','nick','date']
     def seUp(self):
@@ -62,7 +62,7 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
             is_popped = False
             try:
                 res = SimbaRptCampadgroupBaseGet.get_rpt_adgroupbase_list(inputdata['nick'], inputdata['campaign_id'],inputdata['start'], inputdata['end'], inputdata['search_type'],inputdata['source'])
-                self.assertEqual(type(res), list, self.errs['base_error'])
+                self.assertEqual(type(res), list,"预期返回类型为list，api却返回%s类型"%(type(res),) )
                 if len(res)>0:
                     for res0 in res:
                         #如果点击>0会返回cpc
@@ -71,7 +71,7 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
                         for k in self.assertDefaultBase:
                             self.assertTrue(res0.has_key(k),self.errs['base_error'])
                 res =  SimbaRptCampadgroupEffectGet.get_rpt_adgroupeffect_list(inputdata['nick'], inputdata['campaign_id'],inputdata['start'],inputdata['end'],inputdata['search_type'],inputdata['source'])
-                self.assertEqual(type(res), list, self.errs['effect_error'])
+                self.assertEqual(type(res), list, "预期返回类型为list，api却返回%s类型"%(type(res),))
                 if len(res)>0:
                     for res0 in res:
                         #如果有有效数据时，会返回这些
@@ -82,7 +82,10 @@ class TestSimbaRptCampadgroupBaseEffectGet(unittest.TestCase):
                             self.assertTrue(res0.has_key(k),self.errs['effect_error'])
             except Exception, e:
                 is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
+                try:
+                    self.assertRaises(inputdata['exceptClass'])
+                except Exception, e:
+                    print e
             finally:
                 self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
 
