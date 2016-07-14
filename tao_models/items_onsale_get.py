@@ -38,7 +38,7 @@ class ItemsOnsaleGet(object):
 
 
     @classmethod
-    def get_item_list(cls, nick, max_pages=50, fields=DEFAULT_FIELDS,order_by = 'sold_quantity:desc',cache = True):
+    def get_item_list(cls, nick, max_pages=200, fields=DEFAULT_FIELDS,order_by = 'sold_quantity:desc',cache = True):
 
         total_item_list = []
 
@@ -56,8 +56,6 @@ class ItemsOnsaleGet(object):
                 break
             logger.info("get item info, actually return: %s"%(len(rsp.items)))
             total_item_list.extend(rsp.items)
-            print req.page_no
-
             if len(rsp.items) != req.page_size:
                 break
             if req.page_no == max_pages:
@@ -129,8 +127,9 @@ class ItemsOnsaleGet(object):
 
 
 def test():
-    nick = '纸老虎图书专营店'
+    nick = '杰城图书专营店'
     total_item_list = ItemsOnsaleGet.get_item_list(nick)
+    print len(total_item_list)
 
 def test_overview():
     nick = '麦苗科技001'
@@ -138,7 +137,4 @@ def test_overview():
     print items_overview['total_results']
 
 if __name__ == '__main__':
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
-    nick = "麦苗科技001"
-    print ItemsOnsaleGet.get_item_list_with_page_no(nick,2)
-    test_overview()
+    test()
