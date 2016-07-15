@@ -26,7 +26,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 #from tao_models.common.exceptions import InvalidAccessTokenException
 
 class test_simba_insight_catsforecastnew_get(unittest.TestCase):
-    maxDiff = None
+    #maxDiff = None
     @classmethod
     def setUpClass(cls):
         pass
@@ -59,9 +59,13 @@ class test_simba_insight_catsforecastnew_get(unittest.TestCase):
             try:
                 actual_result = SimbaInsightCatsforecastnewGet.get_words_forecast_cats(words_list)
                 self.assertEqual(type(actual_result),list)
+                bb = expect_result[0].keys()
+                bb.sort()
                 for index in range(len(actual_result)):
+                    aa = actual_result[index].keys()
+                    aa.sort()
+                    self.assertEqual(aa,bb)
                     self.assertEqual(type(actual_result[index]),dict)
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
                     self.assertEqual(actual_result[index]['bidword'],expect_result[0]['bidword'])
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])

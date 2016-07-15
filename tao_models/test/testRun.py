@@ -102,6 +102,7 @@ import test_simba_keywords_pricevon_set
 import test_simba_keywordsvon_add
 import test_simba_customers_authorized_get
 import test_mobile_discount
+import test_simba_keywords_realtime_ranking_batch_get
 alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_login_authsign_get.alltests
                                ,test_fuwu_sale_link_gen.alltests
@@ -183,9 +184,10 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                test_simba_keywords_pricevon_set.alltests,
                                test_simba_keywordsvon_add.alltests,
                                test_simba_customers_authorized_get.alltests,
-                               test_mobile_discount.alltests
+                               test_mobile_discount.alltests,
+                               test_simba_keywords_realtime_ranking_batch_get.alltests
                                ])
-#alltests = unittest.TestSuite([test_simba_rpt_adgroupbase_4api.alltests])
+#alltests = unittest.TestSuite([test_simba_insight_catsforecastnew_get.alltests])
 if __name__ == "__main__":
     if settings.NeedLog:
         fb = file('./report/report_%s.html'%datetime.date.today(),'wb')

@@ -70,4 +70,4 @@ class test_simba_keywords_realtime_ranking_get(unittest.TestCase):
         pass
 if __name__ == "__main__":
     unittest.main()
-alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_keywords_realtime_ranking_batch_get)
+alltests = unittest.TestLoader().loadTestsFromTestCase(test_simba_keywords_realtime_ranking_get)
