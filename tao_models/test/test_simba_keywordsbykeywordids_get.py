@@ -64,7 +64,9 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
                                   'keyword_id': 96000635553, 
                                   'audit_status': 'audit_pass', 
                                   'max_price': 50, 
-                                  'adgroup_id': 407767758}},
+                                  'adgroup_id': 407767758,
+                                  'max_mobile_price':100,
+                                  'mobile_is_default_price':1}},
                 {'nick':'晓迎','keywordids_list':[96000635553,101461016943,99975482757]*100,
                  'expect_result':{'code':41,'msg':'Invalid arguments:keyword_ids','sub_code':None,'sub_msg':None}},
                 {'nick':'晓迎','keywordids_list':[122],
@@ -92,10 +94,14 @@ class test_simba_keywordsbykeywordids_get(unittest.TestCase):
                     self.assertEqual(actual_result,expect_result)
                     continue
                 self.assertEqual(len(actual_result),len(keywordids_list))
+                bb = expect_result.keys()
+                bb.sort()
                 for index in range(len(actual_result)):
                     actual_res =  actual_result[index].__dict__
                     #self.assertEqual(type(actual_result[index]),<class 'Domain.Keyword.Keyword'>)
-                    self.assertEqual(actual_res.keys().sort(),expect_result.keys().sort())
+                    aa = actual_res.keys()
+                    aa.sort()
+                    self.assertEqual(aa,bb)
                     self.assertIn(actual_res['keyword_id'],keywordids_list)
                     #self.assertEqual(actual_result[index]['adgroup_id'],adgroup_id)
             except InvalidAccessTokenException,e:
