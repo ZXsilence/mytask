@@ -58,9 +58,13 @@ class test_simba_keywordscat_qscore_get(unittest.TestCase):
                     self.assertEqual(actual_result,expect_result)
                     continue
                 self.assertEqual(actual_result.keys(),['keyword_qscore_list'])
+                bb = expect_result['keyword_qscore_list'][0].keys()
+                bb.sort()
                 for index in range(len(actual_result['keyword_qscore_list'])):
+                    aa = actual_result['keyword_qscore_list'][index].keys()
+                    aa.sort()
+                    self.assertEqual(aa,bb)
                     self.assertEqual(type(actual_result['keyword_qscore_list'][index]),dict)
-                    self.assertEqual(actual_result['keyword_qscore_list'][index].keys().sort(),expect_result['keyword_qscore_list'][0].keys().sort())
             except InvalidAccessTokenException,e:
                 self.assertEqual(e.msg,expect_result['exception'])
             except ErrorResponseException,e:

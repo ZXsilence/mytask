@@ -36,11 +36,11 @@ class test_simba_insight_catstopwordnew_get(unittest.TestCase):
     def setUp(self):
         pass
     
-    def test_get_cats_top_words(self):
+    def itest_get_cats_top_words(self):
         '''
         获取制定类目在某个维度下的热门关键词
         '''
-        data = [{'cat_id':50023582,'start_date_offset':7,'end_date_offset':1,'dimension':'click',
+        data = [{'cat_id':50023582,'start_date_offset':7,'end_date_offset':1,'dimension':'roi',
                  'expect_result':[{'impression': 1537, 
                                    'cpc': '64.53', 
                                    'transactiontotal': 13982, 
@@ -100,9 +100,16 @@ class test_simba_insight_catstopwordnew_get(unittest.TestCase):
                 self.assertEqual(type(actual_result),list)
                 if page_size!=0:
                     self.assertEqual(len(actual_result),page_size)
+                bb = expect_result[0].keys()
+                bb.sort()
                 for index in range(len(actual_result)):
+                    aa = actual_result[index].keys()
+                    aa.sort()
+                    #if aa!=bb:
+                    #    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+                    #    print 1
+                    self.assertEqual(aa,bb)
                     self.assertEqual(type(actual_result[index]),dict)
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
                     self.assertEqual(actual_result[index]['cat_id'],expect_result[0]['cat_id'])
                     if index > 0:
                         self.assertLessEqual(actual_result[index][dimension],actual_result[index-1][dimension])

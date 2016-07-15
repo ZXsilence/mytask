@@ -28,11 +28,11 @@ from shop_db.db_models.shop_info import ShopInfo
 from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from tao_models.simba_keywordsbyadgroupid_get import  SimbaKeywordsbyadgroupidGet
 
-from simba_rpt_campadgroupbase_get import   SimbaRptCampadgroupBaseGet
-from simba_rpt_campadgroupeffect_get import SimbaRptCampadgroupEffectGet
+from tao_models.simba_rpt_campadgroupbase_get import   SimbaRptCampadgroupBaseGet
+from tao_models.simba_rpt_campadgroupeffect_get import SimbaRptCampadgroupEffectGet
 from user_center.db_models.join_query import JoinQuery
 
-from simba_campaigns_get import SimbaCampaignsGet 
+from tao_models.simba_campaigns_get import SimbaCampaignsGet 
 
 
 class GetCampaignAdgroup(object):  

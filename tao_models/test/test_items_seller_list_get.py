@@ -53,9 +53,12 @@ class test_items_seller_list_get(unittest.TestCase):
                     actual_result = ItemsSellerListGet.get_item_list(nick,num_iids)
                 elif item['type']==2:
                     actual_result = ItemsSellerListGet.get_item_list(nick,num_iids,item['fields'])
+                expect_result.sort()
                 for item in range(len(actual_result)):
                     self.assertEqual(type(item),dict)
-                    self.assertEqual(item.keys().sort(),expect_result.sort())
+                    aa = item.keys()
+                    aa.sort()
+                    self.assertEqual(aa,expect_result)
             except:
                 pass
     def tearDown(self):

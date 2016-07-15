@@ -65,8 +65,12 @@ class test_simba_keywords_realtime_ranking_get(unittest.TestCase):
             try:
                 actual_result = SimbaKeywordsQscoreSplitGet.get_keywords_split_qscore(nick, adgroup_id, keyword_id_list)
                 self.assertEqual(type(actual_result),list)
+                bb = expect_result.keys()
+                bb.sort()
                 for index in range(len(actual_result)):
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result.keys().sort())
+                    aa = actual_result[index].keys()
+                    aa.sort()
+                    self.assertEqual(aa,bb)
             except RankKeywordNotExisitException,e:
                 pass
     def tearDown(self):
