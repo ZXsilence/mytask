@@ -45,12 +45,9 @@ class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):
     def setUpClass(cls):
         set_api_source('SDK_TEST')
         
-        #nick,campaign_id=GetCampaignAdgroup.get_has_adgroup_rpt_nick()
-        #adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,[campaign_id])
-        #adgroup_id = adgroup['adgroup_id']
-        nick = "caolu528"
-        campaign_id = 2752170
-        adgroup_id = 481336767
+        nick,campaign_id=GetCampaignAdgroup.get_has_adgroup_rpt_nick()
+        adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,[campaign_id])
+        adgroup_id = adgroup['adgroup_id']
 
         start = datetime.datetime.now()-datetime.timedelta(days=7)
         end = datetime.datetime.now()-datetime.timedelta(days=1)
