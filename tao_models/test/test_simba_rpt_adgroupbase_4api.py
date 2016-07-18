@@ -40,67 +40,83 @@ class TestSimbaRptAdgroupnonsearchBaseGet(unittest.TestCase):
     simba_rpt_adgroupeffect_get推广组效果报表数据对象
     simba_rpt_adgroupbase_get推广组基础报表数据对象
     '''
+    maxDiff=None
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
         
-        shop = GetCampaignAdgroup.get_a_valid_shop()
-        nick=shop['nick']
-        campaign=GetCampaignAdgroup.get_a_valid_campaign(nick)
-        campaign_id = campaign['campaign_id']
-        adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,"SYB",shop['sid'])
-        adgroup_id = adgroup['adgroup_id']    
+        #nick,campaign_id=GetCampaignAdgroup.get_has_adgroup_rpt_nick()
+        #adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,[campaign_id])
+        #adgroup_id = adgroup['adgroup_id']
+        nick = "caolu528"
+        campaign_id = 2752170
+        adgroup_id = 481336767
+
         start = datetime.datetime.now()-datetime.timedelta(days=7)
         end = datetime.datetime.now()-datetime.timedelta(days=1)
-        cls.testData = [{'nick':nick,'campaign_id':campaign_id,'adgroup_id':adgroup_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
-                        {'nick':'','campaign_id':campaign_id,'adgroup_id':adgroup_id,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
-                        {'nick':nick,'campaign_id':0,'adgroup_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
+
+        cls.testData = [{'nick':nick,u'campaign_id':campaign_id,u'adgroup_id':adgroup_id,u'search_type':'SEARCH,CAT',u'source':'1,2',u'start':start,u'end':end,u'popException':False,u'exceptClass':None},
+                        {'nick':'',u'campaign_id':campaign_id,u'adgroup_id':adgroup_id,u'search_type':'SEARCH,CAT',u'source':'1,2',u'start':start,u'end':end,u'popException':False,u'exceptClass':None},
+                        {'nick':nick,u'campaign_id':0,u'adgroup_id':0,u'search_type':'SEARCH,CAT',u'source':'1,2',u'start':start,u'end':end,u'popException':False,u'exceptClass':None},
                         ]
-        cls.errs={'adgroupbase_error':'error find in API: simba_rpt_adgroupbase_get',
-                  'adgroupeffec_error':'error find in API: simba_rpt_adgroupeffect_get',
-                  'creativebase_error':'error find in API: simba_rpt_adgroupcreativebase_get',
-                  'keywordbase_error':'error find in API:  simba_rpt_adgroupkeywordbase_get',
-                  'assert_error':'assert exception',
-                  }
-        cls.adgroupbaseKeys=['avgpos','ctr','adgroupid','cpm','searchtype','campaignid','nick','cost','source','date','impressions','click']
-        cls.adgroupeffectKeys=['adgroupid','searchtype','source','campaignid','nick','date']
-        cls.creativebaseKeys=['avgpos','ctr','adgroupid','cpm','searchtype','campaignid','nick','source','cost','date','impressions','creativeid','click']
-        cls.keywordbaseKeys=['avgpos','adgroupid','cpm','ctr','campaignid','nick','click','cost','keywordstr','source','searchtype','keywordid','date','impressions']
+        cls.adgroupBaseDefault=[u'avgpos', u'ctr', u'adgroupid', u'cpm', u'searchtype', u'campaignid', u'nick', u'cost', u'source', u'date', u'impressions', u'click']
+        cls.adgroupHasClick=[u'cpc']
+
+        cls.adgroupEffectDefault=[u'adgroupid', u'searchtype', u'source', u'campaignid', u'nick', u'date']
+        
+        cls.creativeBaseDefault=[u'avgpos', u'ctr', u'adgroupid', u'cpm', u'searchtype', u'campaignid', u'nick', u'cost', u'source', u'date', u'impressions', u'creativeid', u'click']
+        cls.creativeBaseHasClick=[u'cpc']
+
+        cls.keywordBaseDefault=[u'avgpos',u'adgroupid',u'cpm',u'ctr',u'campaignid',u'nick',u'click',u'cost',u'keywordstr',u'source',u'searchtype',u'keywordid',u'date',u'impressions']
+        cls.keywordBaseHasClick=[u'cpc']
     
     def seUp(self):
         pass
+
     def test_simba_rpt_adgroupbaseEffect_get(self):
+        import copy
         for inputdata in self.testData:
             is_popped = False
             try:
+                #推广组基础报表
                 res = SimbaRptAdgroupBaseGet.get_rpt_adgroupbase_list(inputdata['nick'], inputdata['campaign_id'],inputdata['adgroup_id'],inputdata['start'], inputdata['end'],inputdata['search_type'],inputdata['source'])
-                self.assertEqual(type(res), list, self.errs['adgroupbase_error'])
                 if len(res)>0:
-                    for k in self.adgroupbaseKeys:
-                        self.assertTrue(res[0].has_key(k), self.errs['adgroupbase_error'])
-
+                    for res0 in res:
+                        preKeys= copy.deepcopy(self.adgroupBaseDefault)
+                        if res0['click']>0:
+                            preKeys += self.adgroupHasClick
+                        self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+                #推广组效果报表
                 res =   SimbaRptAdgroupEffectGet.get_rpt_adgroupeffect_list(inputdata['nick'], inputdata['campaign_id'],inputdata['adgroup_id'],inputdata['start'],inputdata['end'],inputdata['search_type'],inputdata['source'])
-                self.assertEqual(type(res), list, self.errs['adgroupeffec_error'])
+                self.assertEqual(type(res), list)
                 if len(res)>0:
-                    for k in self.adgroupeffectKeys:
-                        self.assertTrue(res[0].has_key(k), self.errs['adgroupeffec_error'])
+                    for res0 in res:
+                        preKeys = copy.deepcopy(self.adgroupEffectDefault)
+                        self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+                #推广组创意基础报表
                 res = SimbaRptAdgroupcreativeBaseGet.get_rpt_adgroupcreativebase_list(inputdata['nick'], inputdata['campaign_id'],inputdata['adgroup_id'],inputdata['start'], inputdata['end'],inputdata['search_type'],inputdata['source'])
-                self.assertEqual(type(res), list, self.errs['creativebase_error'])
+                self.assertEqual(type(res), list)
                 if len(res)>0:
-                    for k in self.creativebaseKeys:
-                        self.assertTrue(res[0].has_key(k), self.errs['creativebase_error'])
-
+                    for res0 in res:
+                        preKeys= copy.deepcopy(self.creativeBaseDefault)
+                        if res0['click']>0:
+                            preKeys += self.creativeBaseHasClick
+                        self.assertEqual(sorted(res0.keys()),sorted(preKeys)) 
+                #推广组下的词基础报表数据查询
                 res = SimbaRptAdgroupkeywordbaseGet.get_rpt_adgroupkeywordbase_list(inputdata['nick'], inputdata['campaign_id'],inputdata['adgroup_id'],inputdata['start'], inputdata['end'],inputdata['source'],inputdata['search_type'])
-                self.assertEqual(type(res), list, self.errs['keywordbase_error'])
+                self.assertEqual(type(res), list)
                 if len(res)>0:
-                    for k in self.keywordbaseKeys:
-                        self.assertTrue(res[0].has_key(k), self.errs['keywordbase_error'])
-
+                    for res0 in res:
+                        preKeys=copy.deepcopy(self.keywordBaseDefault)
+                        if res0.get('click') > 0:
+                            preKeys += self.keywordBaseHasClick
+                        self.assertEqual(sorted(res0.keys()),sorted(preKeys))
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc() 
+                    raise e
+                else:
+                    self.assertRaises(inputdata['exceptClass'])
 
 
     def tearDown(self):
