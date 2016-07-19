@@ -54,8 +54,59 @@ class  SimbaInsightCatsinfoGet(object):
             first_cat_list.extend(cls.get_all_cats_info(first_cat_ids[i*20: i*20+20]))
 
         return first_cat_list
+    
+    @classmethod
+    def get_all_cats(cls):
+        cat_list = []
+        #get first level cat, ready to traverse all cats 
+        cat_queue_list = cls.get_cats_info(0, [])
+        
+        loop_count = 0
 
+        while len(cat_queue_list) > 0:
+            cut_len = min(len(cat_queue_list), 20)
+
+            temp_cat_list = cat_queue_list[:cut_len]
+            cat_queue_list = cat_queue_list[cut_len:]
+
+            cat_id_list = []
+
+            for i in range(0, cut_len):
+                cat_id_list.append(temp_cat_list[i]["cat_id"])
+            
+            child_cat_list = cls.get_cats_info(2, cat_id_list)
+            
+            # shows cat has child ro not
+            leaf_flag_list = [True for i in range(0, cut_len)]
+            
+            for child in child_cat_list:
+                parent_id = child["parent_cat_id"]
+                leaf_flag_list[cat_id_list.index(parent_id)] = False
+            
+            for i in range(0, cut_len):
+                if leaf_flag_list[i]:
+                    temp_cat_list[i]["isLeaf"] = 1
+                else:
+                    temp_cat_list[i]["isLeaf"] = 0
+            
+            cat_list.extend(temp_cat_list)
+            cat_queue_list.extend(child_cat_list)
+            loop_count +=1
+            if loop_count >= 20:
+                break
+
+        return cat_list
+        
 if __name__ == '__main__':
-    cat_list = SimbaInsightCatsinfoGet.get_all_cats_info()
+    '''cat_list = SimbaInsightCatsinfoGet.get_all_cats_info()
     for cat in cat_list:
-        print '%d: %s' % (cat['cat_id'], cat['cat_name'])
+        print '%d: %s' % (cat['cat_id'], cat['cat_name'])'''
+    
+    cat_list = SimbaInsightCatsinfoGet.get_cats_info(2, ["124082001"])
+    print cat_list
+    #for cat in cat_list:                               
+        #print '%d: %s %d' % (cat['cat_id'], cat['cat_name'], cat['cat_level']) 
+
+    '''cat_list = SimbaInsightCatsinfoGet.get_all_cats()
+    for cat in cat_list:
+        print "%d\t%s\t%d\t%d\t%d" % (cat["cat_id"], cat["cat_name"], cat["cat_level"],cat["parent_cat_id"], cat["isLeaf"])'''
