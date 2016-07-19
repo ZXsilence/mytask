@@ -40,21 +40,28 @@ class TestUserSellerGet(unittest.TestCase):
                         {'nick':'chinchinstyle','popException':False,'exceptClass':None},
                         {'nick':'_nick_not_exists_','popException':True,'exceptClass':InvalidAccessTokenException},
                         ]
-        cls.errs={'type_error':'assert return type error','value_error':'assert return value error','assert_error':'assert exception'}
-    
+        cls.assertKeys=['has_more_pic', 'is_golden_seller', 'item_img_num', 'magazine_subscribe', 'sex', 'liangpin', 'sign_food_seller_promise', 'promoted_type', 'prop_img_size', 'seller_credit', 'user_id', 'item_img_size', 'online_gaming', 'nick', 'is_lightning_consignment', 'type', 'status', 'consumer_protection', 'has_sub_stock', 'auto_repost', 'vip_info', 'avatar', 'vertical_market', 'alipay_bind', 'prop_img_num']
+        cls.hasNick=['sex']
     def seUp(self):
         pass
     def test_get_user_seller(self):
+        import copy
         for inputdata in self.testData:
-            is_popped = False
             try:
                 res = UserSellerGet.get_user_seller(inputdata['nick'])
-                self.assertEqual(type(res),dict,self.errs['type_error'])
+                self.assertEqual(type(res),dict)
+                preKeys=copy.deepcopy(self.assertKeys)
+                if inputdata.get('nick'):
+                    preKeys = list(set(preKeys)-set(self.hasNick))
+                self.assertEqual(sorted(res.keys()),sorted(preKeys))
+            except InvalidAccessTokenException , e:
+                self.assertTrue(inputdata['popException'])
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
+                if inputdata['popException'] ==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
+                    self.assertRaises(inputdata['exceptClass'])
 
 
     def tearDown(self):

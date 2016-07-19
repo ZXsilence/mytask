@@ -34,59 +34,38 @@ class TestVasOrderSearch(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        cls.testData_by_nick = [#{'nick':'','soft_code':'SYB','start':datetime.datetime.now() - datetime.timedelta(1),'end':datetime.datetime.now(),'popException':False,'exceptClass':None},# 拉取全部内容太耗时了
-                        {'nick':'chinchinstyle','soft_code':'SYB','start':datetime.datetime.now()-datetime.timedelta(89),'end':datetime.datetime.now(),'popException':False,'exceptClass':None},
-                        {'nick':'chinchinstyle','soft_code':'','start':datetime.datetime.now()-datetime.timedelta(89),'end':datetime.datetime.now(),'popException':True,'exceptClass':KeyError},
-                        {'nick':'chinchinstyle','soft_code':'SYB','start':datetime.datetime.now()-datetime.timedelta(90),'end':datetime.datetime.now(),'popException':True,'exceptClass':TaoApiMaxRetryException},
-                        ]
-
         cls.testData_yesterday = [{'soft_code':'SYB','popException':False,'exceptClass':None},
                                   {'soft_code':'','popException':True,'exceptClass':KeyError},
                                   {'soft_code':'ZZ','popException':True,'exceptClass':InvalidAccessTokenException},
                                   ]
-        cls.errs={'type_error':'assert return type error','value_error':'assert return value error','assert_error':'assert exception'}
+        cls.assertKeys= ['order_cycle_end', 'article_item_name', 'total_pay_fee', 'article_code', 'article_name', 'create', 'order_id', 'item_code', 'prom_fee', 'order_cycle', 'nick', 'biz_type', 'fee', 'order_cycle_start', 'refund_fee', 'biz_order_id']
+        cls.hasActivity = ['activity_code']
     def seUp(self):
         pass
-    '''
-    def test_search_vas_order_by_nick(self):
-        for inputdata in self.testData_by_nick:
-            is_popped = False
-            try:
-                res = VasOrderSearch.search_vas_order_by_nick(inputdata['start'], inputdata['end'],inputdata['soft_code'],inputdata['nick'])
-                self.assertEqual(type(res),list,self.errs['type_error'])
-            except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-    '''
     def test_search_vas_order_yesterday(self):
         for inputdata in self.testData_yesterday:
             is_popped= False
             try:
                 res = VasOrderSearch.search_vas_order_yesterday(inputdata['soft_code'])
-                self.assertEqual(type(res),list ,self.errs['type_error'])
-                self.assertGreaterEqual(len(res),1,self.errs['value_error'])
-
+                self.assertEqual(type(res),list )
+                self.assertGreaterEqual(len(res),1)
+                import copy
+                preKeys = copy.deepcopy(self.assertKeys)
+                for res0 in res:
+                    self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+            except AssertionError , e :
+                preKeys += self.hasActivity  #将activity_code 校验放到异常中来
+                self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+            except InvalidAccessTokenException , e:
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-    '''
-    def itest_search_vas_order_all(self):
-        for inputdata in self.testData_yesterday:
-            is_popped= False
-            try:
-                res = VasOrderSearch.search_vas_order_all(inputdata['soft_code'])
-                self.assertEqual(type(res), list ,self.errs['type_error'])
-            except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-
-    '''
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
+                    self.assertRaises(inputdata['exceptClass'])
     def tearDown(self):
         pass
 
