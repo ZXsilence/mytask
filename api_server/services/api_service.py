@@ -40,7 +40,8 @@ class ApiService(object):
         method_config = ApiCacheConfig.API_METHOD_CONFIG.get(params_dict['method'])
         is_get = True
         cache_key = None
-        
+        #北斗临时单独处理
+        cache = False
         if cache and method_config:
             is_get = method_config.get('is_get',False)
             cache_key = ApiCacheService.get_cache_key(params_dict)
