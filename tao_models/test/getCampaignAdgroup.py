@@ -19,6 +19,8 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
+import datetime as dt
+from datetime import datetime
 sys.path.append('../../../backends/')
 from adgroup_db.db_models.adgroups import Adgroups
 from campaign_db.db_models.campaigns import Campaigns
@@ -26,7 +28,14 @@ from shop_db.db_models.shop_info import ShopInfo
 from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from tao_models.simba_keywordsbyadgroupid_get import  SimbaKeywordsbyadgroupidGet
 
-class GetCampaignAdgroup(object):
+from tao_models.simba_rpt_campadgroupbase_get import   SimbaRptCampadgroupBaseGet
+from tao_models.simba_rpt_campadgroupeffect_get import SimbaRptCampadgroupEffectGet
+from user_center.db_models.join_query import JoinQuery
+
+from tao_models.simba_campaigns_get import SimbaCampaignsGet 
+
+
+class GetCampaignAdgroup(object):  
     @classmethod
     def get_a_valid_shop(cls,soft_code="SYB",test=False):
         testShop=[{'nick':'chinchinstyle','sid':62847885,'soft_code':"SYB"},{'nick':'麦苗科技001','sid':101240238,'soft_code':"SYB"}]
@@ -75,6 +84,41 @@ class GetCampaignAdgroup(object):
             if len(kw_list)!=0:
                 return adgroup['adgroup_id']
         return []
+    @classmethod
+    def get_has_adgroup_rpt_nick(cls):
+        #
+        # 无脑遍历，耗时.暂时没找到其他方法，返回一个有报表的推广组
+        #
+
+        #1,找出有效nick
+        deadline_start=datetime.now()
+        start = datetime.now()-dt.timedelta(days=7)
+        end = datetime.now()-dt.timedelta(days=1)
+        from user_center.services.crm_db_service import CrmDBService
+        customers = CrmDBService.get_customer_list_by_deadline_start(deadline_start)
+        for customer in customers:
+            nick = customer['nick']
+            #2,找出该nick有效campaign
+            campaigns = SimbaCampaignsGet.get_campaign_list(nick)
+            if len(campaigns)==0:
+                continue
+            campaign_ids = [k['campaign_id'] for k in campaigns]
+            for campaign_id in campaign_ids:
+                #3,找出计划下的有效adgroup
+                adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick,campaign_id)
+                if len(adgroups)==0:
+                    continue
+                #4,找出有报表的推广组
+                res =SimbaRptCampadgroupEffectGet.get_rpt_adgroupeffect_list(nick,campaign_id,start ,end,'SEARCH,CAT', '1,2,4,5')
+                if not res:
+                    continue
+                return (nick,campaign_id)
+        return (None,None)
+
+
+
+
+
 
 if __name__=='__main__':
     soft_code = "SYB"

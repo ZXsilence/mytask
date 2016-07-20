@@ -20,7 +20,6 @@ if __name__ == '__main__':
     set_api_source('normal_test')
 
 import unittest
-import datetime
 from tao_models.simba_keywords_recommend_get import SimbaKeywordsRecommendGet 
 from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from TaobaoSdk.Exceptions import ErrorResponseException
@@ -39,22 +38,32 @@ class test_simba_keywords_recommend_get(unittest.TestCase):
                  'expect_result':[{'pertinence': '100.0', 
                                    'average_price': '0.53', 
                                    'pv': '13090986', 
+                                   'word': u'\u98ce\u8863'}],
+                 'expect_result1':[{'pertinence': '100.0',  
                                    'word': u'\u98ce\u8863'}]}]
-               # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
-               #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.missing-parameter','sub_msg':'date.must.lt.one.month'}}]
         for item in data:
             nick = item['nick']
             campaign_id = item['campaign_id']
             adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick, campaign_id)
             adgroup_id = adgroups[0]['adgroup_id']
             expect_result = item['expect_result']
+            expect_result1 = item['expect_result1']
             try:
                 actual_result = SimbaKeywordsRecommendGet.get_keywords_recommend_by_adgroup(nick, adgroup_id)
                 self.assertEqual(type(actual_result),list)
                 if len(actual_result) == 0:
                     self.assertEqual(actual_result,expect_result)
+                bb = expect_result[0].keys()
+                bb.sort()
+                cc = expect_result1[0].keys()
+                cc.sort()
                 for index in range(len(actual_result)):
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
+                    aa = actual_result[index].keys()
+                    aa.sort()
+                    try:
+                        self.assertEqual(aa,bb)
+                    except:
+                        self.assertEqual(aa,cc)
             except InvalidAccessTokenException,e:
                 self.assertEqual(e.msg,expect_result['exception'])
             except ErrorResponseException,e:

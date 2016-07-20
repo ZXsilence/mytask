@@ -33,6 +33,9 @@ class ApiCacheConfig(object):
     #有效期10分钟
     MAX_AGE_6 = 10
 
+    #有效期5分钟
+    MAX_AGE_7 = 5
+
     start_cache_hour_1 = 8
 
     IS_GET_YES = True
@@ -84,9 +87,11 @@ class ApiCacheConfig(object):
         'taobao.simba.adgroups.changed.get':{'cache_name':'adgroup','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
         'taobao.simba.adgroup.update':{'cache_name':'adgroup','is_get':IS_GET_NO},
         #'taobao.simba.adgroups.item.exist':
-        'taobao.simba.campaign.area.get':{'cache_name':'campaign_area','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
+
+        #campaign_area 不走缓存,总共调用量也不高,避免用户在直通车后台修改而不一致
+        #'taobao.simba.campaign.area.get':{'cache_name':'campaign_area','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
+        #'taobao.simba.campaign.area.update':{'cache_name':'campaign_area','is_get':IS_GET_NO},
         'taobao.simba.campaign.areaoptions.get':{'cache_name':'campaign_areaoptions','max_age':MAX_AGE_1,'is_get':IS_GET_YES},
-        'taobao.simba.campaign.area.update':{'cache_name':'campaign_area','is_get':IS_GET_NO},
         'taobao.simba.campaign.budget.get':{'cache_name':'budget','max_age':MAX_AGE_3,'is_get':IS_GET_YES}, 
         'taobao.simba.campaign.budget.update':{'cache_name':'budget','is_get':IS_GET_NO},
         'taobao.simba.campaign.channeloptions.get':{'cache_name':'channeloptions','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
@@ -97,11 +102,14 @@ class ApiCacheConfig(object):
         'taobao.simba.campaigns.get':{'cache_name':'campaign','max_age':MAX_AGE_1,'is_get':IS_GET_YES},
         'taobao.simba.campaign.update':{'cache_name':'campaign','is_get':IS_GET_NO},
         'taobao.simba.campaign.add':{'cache_name':'campaign','is_get':IS_GET_NO}, 
-        'taobao.simba.creative.add':{'cache_name':'creative','is_get':IS_GET_NO},
-        'taobao.simba.creative.delete':{'cache_name':'creative','is_get':IS_GET_NO},
-        #'taobao.simba.creativeids.changed.get':
-        'taobao.simba.creatives.get':{'cache_name':'creative','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
-        'taobao.simba.creative.update':{'cache_name':'creative','is_get':IS_GET_NO},
+
+        #创意取消cache
+        #'taobao.simba.creative.add':{'cache_name':'creative','is_get':IS_GET_NO},
+        #'taobao.simba.creative.delete':{'cache_name':'creative','is_get':IS_GET_NO},
+        ##'taobao.simba.creativeids.changed.get':
+        #'taobao.simba.creatives.get':{'cache_name':'creative','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
+        #'taobao.simba.creative.update':{'cache_name':'creative','is_get':IS_GET_NO},
+
         #'taobao.simba.customers.authorized.get':
 
         #==============以下待修改==============
