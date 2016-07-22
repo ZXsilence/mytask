@@ -49,7 +49,8 @@ class GetCampaignAdgroup(object):
                 sid = shop['sid']
                 campaign = GetCampaignAdgroup.get_a_valid_campaign(nick,soft_code)
                 if campaign:
-                    adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,soft_code,sid)
+                    campaign_id = campaign['campaign_id']
+                    adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,[campaign_id],soft_code,sid)
                     if adgroup:
                         return shop
         return testShop[0]
@@ -62,15 +63,14 @@ class GetCampaignAdgroup(object):
         return  campaigns[0]
 
     @classmethod
-    def get_a_valid_adgroup(cls,nick,campaign_list,soft_code='SYB',sid=None):
+    def get_a_valid_adgroup(cls,nick,campaign_ids,soft_code='SYB',sid=None):
         if None==sid:
             shop_info = ShopInfo.get_shop_info_by_nick(soft_code,nick)
             sid = shop_info['sid']
-        if type(campaign_list) == dict:
-            campaign_list=[campaign_list]
-        for campaign in campaign_list:
-            campaign_id = campaign['campaign_id']
-            adgroups = Adgroups.get_adgroups_by_campaign_id(sid,campaign_id)
+        if type(campaign_ids) == dict:
+            campaign_ids=[campaign_ids]
+        for campaign_id in campaign_ids:
+            adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick,campaign_id)
             for adgroup in adgroups:
                 if adgroup['online_status'] == 'online':
                     return adgroup
