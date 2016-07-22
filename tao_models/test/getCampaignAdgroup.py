@@ -52,6 +52,7 @@ class GetCampaignAdgroup(object):
                     campaign_id = campaign['campaign_id']
                     adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,[campaign_id],soft_code,sid)
                     if adgroup:
+                        print '--get_a_valid_shop:',shop
                         return shop
         return testShop[0]
 
@@ -60,6 +61,7 @@ class GetCampaignAdgroup(object):
         campaigns = Campaigns.get_all_online_campaigns_by_nick(nick)
         if len(campaigns)==0:
             return []
+        print '--get_a_valid_campaign:',campaigns[0]
         return  campaigns[0]
 
     @classmethod
@@ -73,6 +75,7 @@ class GetCampaignAdgroup(object):
             adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick,campaign_id)
             for adgroup in adgroups:
                 if adgroup['online_status'] == 'online':
+                    print '--get_a_valid_adgroup:',adgroup
                     return adgroup
         return []
     
@@ -82,6 +85,7 @@ class GetCampaignAdgroup(object):
         for adgroup in adgroups:
             kw_list = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup['adgroup_id'])
             if len(kw_list)!=0:
+                print '--get_adgroup_has_keyword:',adgroup['adgroup_id']
                 return adgroup['adgroup_id']
         return []
     @classmethod
@@ -112,6 +116,7 @@ class GetCampaignAdgroup(object):
                 res =SimbaRptCampadgroupEffectGet.get_rpt_adgroupeffect_list(nick,campaign_id,start ,end,'SEARCH,CAT', '1,2,4,5')
                 if not res:
                     continue
+                print '--get_has_adgroup_rpt_nick:\n--nick:%s\n--campaign_id:%s' %(nick,campaign_id)
                 return (nick,campaign_id)
         return (None,None)
 
