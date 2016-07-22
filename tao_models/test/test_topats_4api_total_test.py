@@ -40,51 +40,79 @@ class TestTopatsTask4APIs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        cls.testData = [{'nick':'chinchinstyle','soft_code':'SYB','campaign_id':3367748,'time_slot':'7DAY','popException':False,'exceptClass':None},
-                        #{'nick':'','soft_code':'SYB','campaign_id':3367748,'time_slot':'7DAY','popException':True,'exceptClass':TaoApiMaxRetryException}, # nick is none , result_get throw exception
-                        {'nick':'chinchinstyle','soft_code':'','campaign_id':3367748,'time_slot':'7DAY','popException':False,'exceptClass':None}, # soft_code is none 
-                        {'nick':'chinchinstyle','soft_code':'SYB','campaign_id':3367748,'time_slot':'','popException':True,'exceptClass':ErrorResponseException}, # time_slot is none, effect_get throw exception
+        cls.testData = [
+                        {'nick':'chinchinstyle','soft_code':'SYB','campaign_id':3367748,'time_slot':'7DAY', # normal case, goes well
+                                    'effect_get_except':{'popException':False,'exceptClass':None},
+                                    'base_get_except':{'popException':False,'exceptClass':None},
+                                    'result_get_except':{'popException':False,'exceptClass':None},
+                                    'delete_task_except':{'popException':False,'exceptClass':None},'case':1},
+                        {'nick':'','soft_code':'SYB','campaign_id':3367748,'time_slot':'7DAY',
+                                    'effect_get_except':{'popException':False,'exceptClass':None},
+                                    'base_get_except':{'popException':False,'exceptClass':None},
+                                    'result_get_except':{'popException':True,'exceptClass':TaoApiMaxRetryException},  # nick is None, result_get got exception
+                                    'delete_task_except':{'popException':False,'exceptClass':None},'case':2},
+                        {'nick':'chinchinstyle','soft_code':'','campaign_id':3367748,'time_slot':'7DAY', #soft_code is None, everything is ok
+                                    'effect_get_except':{'popException':False,'exceptClass':None},
+                                    'base_get_except':{'popException':False,'exceptClass':None},
+                                    'result_get_except':{'popException':False,'exceptClass':None},
+                                    'delete_task_except':{'popException':False,'exceptClass':None},'case':3},
+                        {'nick':'chinchinstyle','soft_code':'SYB','campaign_id':0,'time_slot':'7DAY', #campaign_id=0 , everything is ok
+                                    'effect_get_except':{'popException':False,'exceptClass':None},
+                                    'base_get_except':{'popException':False,'exceptClass':None},
+                                    'result_get_except':{'popException':False,'exceptClass':None},
+                                    'delete_task_except':{'popException':False,'exceptClass':None},'case':4},
+                        #{'nick':'chinchinstyle','soft_code':'SYB','campaign_id':3367748,'time_slot':'', #time_slot is None, effect_get got exception;   cost time!!,so comment out
+                        #            'effect_get_except':{'popException':False,'exceptClass':None},
+                        #            'base_get_except':{'popException':False,'exceptClass':None},
+                        #            'result_get_except':{'popException':True,'exceptClass':TaoApiMaxRetryException},
+                        #            'delete_task_except':{'popException':False,'exceptClass':None},'case':5},
                         ]
-
-        cls.errs = {'task_delete':'error find in API: topats_task_delete',
-                      'base_get':'error find in API: topats_simba_campkeywordbase_get',
-                      'effect_get':'error find in API: topats_simba_campkeywordeffect_get',
-                      'result_get':'error find in API: topats_result_get',
-                      'assert_error':'assert exception',
-                      }
-    
+        cls.assertKeys=['status', 'method', 'task_id', 'created']
     def seUp(self):
         pass
     def test_topat_apis(self):
         for inputdata in self.testData:
-            is_popped = False
+            task_id_list=[]
             try:
                 # test topats_simba_campkeywordeffect_get
                 task_id = TopatsSimbaCampkeywordeffectGet.get_camp_keywordeffect_task(inputdata['nick'], inputdata['campaign_id'], inputdata['time_slot'], inputdata['soft_code'])
-                self.assertEqual( type(task_id), int , self.errs['effect_get'])
-                self.assertGreater(task_id,0,self.errs['effect_get'])
-
+                task_id_list.append(task_id)
+                self.assertEqual( type(task_id), int )
+                self.assertGreater(task_id,0)
+                
                 #topats_simba_campkeywordbase_get
                 task_id2 = TopatsSimbaCampkeywordbaseGet.get_camp_keywordbase_task(inputdata['nick'], inputdata ['campaign_id'], inputdata['time_slot'], inputdata['soft_code'])
-                self.assertEqual(  type(task_id2) , int , self.errs['base_get'])
-                self.assertGreater(task_id2, 0 , self.errs['base_get'])
-
+                task_id_list.append(task_id2)
+                self.assertEqual(  type(task_id2) , int)
+                self.assertGreater(task_id2, 0)
+                
                 # test topats_result_get  
                 res = TopatsResultGet.get_task_result(task_id,inputdata['soft_code'],inputdata['nick'])
-                self.assertEqual( type(res) , dict , self.errs['result_get'])
-                self.assertEqual(res['task_id'], task_id, self.errs['result_get'])
-
-                # test topats_task_delete
-                TopatsTaskDelete.delete_task(task_id,inputdata['nick'],inputdata['soft_code'])
-                TopatsTaskDelete.delete_task(task_id2,inputdata['nick'],inputdata['soft_code'])
-
-            except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
+                self.assertEqual( type(res) , dict )
+                self.assertEqual(res['task_id'], task_id)
+                self.assertEqual(sorted(res.keys()),sorted(self.assertKeys))
+                
+            except TaoApiMaxRetryException , e :
+                if inputdata['case'] not in [2,5]:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
+                    pass
+            except Exception ,e :
+                if inputdata['effect_get_except']['popException']==False \
+                        or inputdata['base_get_except']['popException'] == False \
+                        or inputdata['result_get_except']['popException'] == False\
+                        or inputdata['delete_task_except']['popException'] == False:
+                    import traceback; traceback.print_exc()
+                    raise e
+                else:
+                    pass
             finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
+                # test topats_task_delete
+                for task_id in task_id_list:
+                    TopatsTaskDelete.delete_task(task_id,inputdata['nick'],inputdata['soft_code'])
 
-
+    @classmethod
     def tearDown(self):
         pass
 

@@ -50,10 +50,6 @@ class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
                             {'nick':nick,'campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
                             {'nick':"_nick_not_exists_",'campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':True,'exceptClass':InvalidAccessTokenException},
                             ]
-        cls.errs={'effet_error':'error found in API: simba_rpt_campaigneffect_get',
-                  'base_error':'error found in API: simba_rpt_campaignbase_get',
-                  'assert_error':'assert exception',
-                  }
         cls.assertBaseDefault=['avgpos', 'aclick', 'cpm', 'ctr', 'campaignid', 'nick', 'cost', 'source', 'searchtype', 'date', 'impressions', 'click']
         #                     ['avgpos','aclick','cpm','searchtype','nick','cpc','ctr','source','cost','campaignid','date','impressions','click']
         cls.assertEffectDefault=['pay','fav','pay_count']
@@ -61,29 +57,30 @@ class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
         pass
     def test_SimbaRptCampaignBaseEffectGet(self):
         for inputdata in self.testDataBase:
-            is_popped = False
             try:
                 res =  SimbaRptCampaignbaseGet.get_camp_rpt_list_by_date(inputdata['nick'], inputdata['campaign_id'],inputdata['search_type'], inputdata['source'], inputdata['start'],inputdata['end'])
-                self.assertEqual(type(res), list ,"预期返回类型为list，api却返回%s类型"%(type(res),))
+                self.assertEqual(type(res), list)
                 if len(res)>0:
                     for res0 in res:
                         if res0.get('click') >0:
-                            self.assertTrue(res0.has_key('cpc'),"click>0,但未返回cpc.报表为：%s"%(res0,))
+                            self.assertTrue(res0.has_key('cpc'))
                         for k in self.assertBaseDefault:
-                            self.assertTrue(res0.has_key(k),"报表中不存在%s键"%(k,))
+                            self.assertTrue(res0.has_key(k))
                 res = SimbaRptCampaigneffectGet.get_campaign_effect_accumulate(inputdata['nick'], inputdata['campaign_id'],inputdata['search_type'], inputdata['source'], inputdata['start'],inputdata['end'])
-                self.assertEqual( type(res), dict , "预期返回类型为dict，api却返回%s类型"%(type(res),))
+                self.assertEqual( type(res), dict)
                 if res :
                     for k in self.assertEffectDefault:
-                        self.assertTrue(res.has_key(k),"报表中不存在%s键"%(k,))
+                        self.assertTrue(res.has_key(k))
+            except InvalidAccessTokenException , e:
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
             except Exception, e:
-                is_popped = True
-                try:
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
                     self.assertRaises(inputdata['exceptClass'])
-                except Exception, e:
-                    print e
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
 
 
     def tearDown(self):

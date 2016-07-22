@@ -51,11 +51,6 @@ class TestTradesSoldGet(unittest.TestCase):
                         {'nick':'','start':start,'end':end,'popException':False,'exceptClass':None},
                         {'nick':'_nick_not_exists_','start':start,'end':end,'popException':True,'exceptClass':InvalidAccessTokenException},
                         ]
-        cls.errs = {'trades':'error find in API:taobao_trades_sold_get',
-                    'fullinfo':'error find in API:taobao_trade_fullinfo_get',
-                    'assert_error':'assert exception ',
-                    }
-
     def seUp(self):
         pass
     def test_get_trades_sold_list_and_trade_info(self):
@@ -63,22 +58,26 @@ class TestTradesSoldGet(unittest.TestCase):
             is_popped = False
             try:
                 res = TradesSoldGet.get_trades_sold_list(inputdata['nick'], inputdata['start'],inputdata['end'])
-                self.assertEqual(type(res),list,self.errs['trades'])
+                self.assertEqual(type(res),list)
                 if inputdata['nick']=='':
-                    self.assertGreater( len(res), 0 , self.errs['trades'])
+                    self.assertGreater( len(res), 0)
                 if len(res)>0:
                     tid = res[0]['tid']
                     trade = TradeFullinfoGet.get_trade_info(inputdata['nick'], tid) # test taobao_trade_fullinfo_get
-                    self.assertEqual( type(trade), dict , self.errs['fullinfo'])
-                    self.assertEqual( trade['tid'], tid , self.errs['fullinfo'])
-
+                    self.assertEqual( type(trade), dict )
+                    self.assertEqual( trade['tid'], tid )
+            except InvalidAccessTokenException ,e :
+                if inputdata['popException'] ==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else :
+                    pass 
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-
-
+                if inputdata['popException'] ==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else :
+                    self.assertRaises(inputdata['exceptClass'])
     def tearDown(self):
         pass
 

@@ -40,7 +40,7 @@ class TestSimbaRptCusteffectGet(unittest.TestCase):
         nick,campaign_id = GetCampaignAdgroup.get_has_adgroup_rpt_nick()
         start = datetime.datetime.now()-datetime.timedelta(days=7)
         end = datetime.datetime.now()-datetime.timedelta(days=1)
-
+        
         cls.testData = [{'nick':nick,'start':start,'end':end,'popException':False,'exceptClass':None},
                         {'nick':'','start':start,'end':end,'popException':False,'exceptClass':None},
                         {'nick':nick,'start':start,'end':end,'popException':True,'exceptClass':TypeError},
