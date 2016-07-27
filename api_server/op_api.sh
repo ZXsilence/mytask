@@ -64,19 +64,13 @@ elif [ $1_ == 'check_' ] ; then
     ps -ef|grep $USER |grep ApiCenterServer|grep -v grep|awk '{print $2}'|wc -l
 elif [ $1_ == 'stop_' ] ; then
     stop_api
-elif [ $# == 1 -a $1_ == 'start_' ] ; then
-    start_api
-elif [ $# == 1 -a $1_ == 'restart_' ] ; then
-    restart_api
-elif [ $# == 1 -a $1_ == 'rebuild_' ] ; then
-    rebuild_api
-elif [ $# == 2 -a $2 == 'slb' -a $1 == 'start_' ] ; then
+elif [ $1_ == 'start_' ] ; then
     config_slb
     start_api
-elif [ $# == 2 -a $2 == 'slb' -a $1 == 'restart_' ] ; then
+elif [ $1_ == 'restart_' ] ; then
     config_slb
     restart_api
-elif [ $# == 2 -a $2 == 'slb' -a $1 == 'rebuild_' ] ; then
+elif [ $1_ == 'rebuild_' ] ; then
     config_slb
     rebuild_api
 else
