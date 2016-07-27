@@ -170,6 +170,19 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_history_uniq_query(cls, hash_value, sdate, edate):
+        """获取历史除重自然query"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"hash_value":hash_value, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 107874 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
     def get_shop_wx_nature_query(cls, sid, sdate, edate):
         """获取店铺wx自然query"""
 
