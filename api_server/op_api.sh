@@ -3,9 +3,9 @@ function useage(){
     echo 'useage:'
     echo '               sh op_api.sh check         查看api server进程总数'     
     echo '               sh op_api.sh stop          停止api server服务'     
-    echo '               sh op_api.sh start         启动api server服务'     
-    echo '               sh op_api.sh restart       重启api server服务'     
-    echo '               sh op_api.sh rebuild       代码更新并重启api server服务'     
+    echo '               sh op_api.sh start slb     启动api server服务 slb为可选'     
+    echo '               sh op_api.sh restart slb   重启api server服务 slb为可选'     
+    echo '               sh op_api.sh rebuild slb   代码更新并重启api server服务 slb为可选'     
 }
 
 function stop_api(){
@@ -51,17 +51,33 @@ function rebuild_api(){
     restart_api
 }
 
+function config_slb(){
+    ip=`ifconfig eth0 |grep "inet addr:"|awk -F : '{print $2}'|awk '{print $1}'`
+    old_host='10.242.173.131'
+    filename='../api_server/conf/prd/settings.py'
+    sed -i "s/$old_host/$ip/" $filename 1>/dev/null 2>&1
+}
+
 if [ $# == 0 ] ; then
     useage
 elif [ $1_ == 'check_' ] ; then
     ps -ef|grep $USER |grep ApiCenterServer|grep -v grep|awk '{print $2}'|wc -l
 elif [ $1_ == 'stop_' ] ; then
     stop_api
-elif [ $1_ == 'start_' ] ; then
+elif [ $# == 1 -a $1_ == 'start_' ] ; then
     start_api
-elif [ $1_ == 'restart_' ] ; then
+elif [ $# == 1 -a $1_ == 'restart_' ] ; then
     restart_api
-elif [ $1_ == 'rebuild_' ] ; then
+elif [ $# == 1 -a $1_ == 'rebuild_' ] ; then
+    rebuild_api
+elif [ $# == 2 -a $2 == 'slb' -a $1 == 'start_' ] ; then
+    config_slb
+    start_api
+elif [ $# == 2 -a $2 == 'slb' -a $1 == 'restart_' ] ; then
+    config_slb
+    restart_api
+elif [ $# == 2 -a $2 == 'slb' -a $1 == 'rebuild_' ] ; then
+    config_slb
     rebuild_api
 else
     useage
