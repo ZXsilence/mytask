@@ -24,10 +24,9 @@ function stop_proxy(){
 
 function start_proxy(){
     ip=`ifconfig eth0 |grep "inet addr:"|awk -F : '{print $2}'|awk '{print $1}'`
-    old_host="'10.242.173.131'"
-    new_host="'$ip'"
-    filename="'../db_pool/conf/prd/settings.py'"
-    sed -i "s/$old_host/$new_host/" $filename 1>/dev/null 2>&1
+    old_host='10.242.173.131'
+    filename='../db_pool/conf/prd/settings.py'
+    sed -i "s/$old_host/$ip/" $filename 1>/dev/null 2>&1
     pids=`ps -ef|grep $USER|grep "mysql-proxy"|grep -v grep|awk '{print $2}'`
     if [ "$pids" != '' ] ; then
         echo -e "\033[33mthere is already mysql-proxy running\033[0m"
