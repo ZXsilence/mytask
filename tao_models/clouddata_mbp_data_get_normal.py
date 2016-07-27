@@ -191,8 +191,8 @@ class ClouddataMbpDataGet(object):
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id_list = [101426, 101425, 101427, 101428]
-        sql_id = sql_id_list[sid%4]
+        sql_id_list = [107189, 107190, 107191, 107192, 107876]
+        sql_id = sql_id_list[sid%5]
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
     
@@ -386,19 +386,6 @@ class ClouddataMbpDataGet(object):
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res 
     
-    @classmethod
-    def get_shop_app_query(cls,shop_id,sdate,edate):
-        sql_dict = {0:107189,1:107190,2:107191,3:107192,4:107193}
-        now = datetime.datetime.now()
-        sql_id = sql_dict[int(shop_id) % 5]
-        if type(sdate) == type(now):
-            query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
-        else:
-            query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
-        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
-        return res
-        
-
     @classmethod    
     def test(cls):
         sql_id = 104879
@@ -430,7 +417,7 @@ if __name__ == '__main__':
     print len(res)
     print res[0]
     sdate = datetime.datetime.now() - datetime.timedelta(days=7)
-    res = ClouddataMbpDataGet.get_shop_app_query(sid,sdate,edate)
+    res = ClouddataMbpDataGet.get_shop_wx_nature_query(sid,sdate,edate)
     print len(res)
     print res[0]
 
