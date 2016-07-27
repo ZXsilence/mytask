@@ -3,9 +3,9 @@ function useage(){
     echo 'useage:'
     echo '               sh op_api.sh check         查看api server进程总数'     
     echo '               sh op_api.sh stop          停止api server服务'     
-    echo '               sh op_api.sh start slb     启动api server服务 slb为可选'     
-    echo '               sh op_api.sh restart slb   重启api server服务 slb为可选'     
-    echo '               sh op_api.sh rebuild slb   代码更新并重启api server服务 slb为可选'     
+    echo '               sh op_api.sh start         启动api server服务'     
+    echo '               sh op_api.sh restart       重启api server服务'     
+    echo '               sh op_api.sh rebuild       代码更新并重启api server服务'     
 }
 
 function stop_api(){
