@@ -16,12 +16,14 @@ class ServerException(Exception):
     """
     raise this exception when service server excute error  
     """
-    def __init__(self, code=None,msg = None):
+    def __init__(self, code=None,msg = None,sub_code = None,sub_msg = None):
         self.msg = msg 
         self.code = code
+        self.sub_msg = sub_msg 
+        self.sub_code = sub_code
     
     def __str__(self):
-        return "ServerException:code:%smsg:%s"%(self.code,self.msg)
+        return "ServerException:code:%smsg:%s,sub_code:%s,sub_msg:%s"%(self.code,self.msg,self.sub_code,self.sub_msg)
 
 class ZZAccountNotFoundException(Exception):
     """
@@ -33,5 +35,3 @@ class ZZAccountNotFoundException(Exception):
     
     def __str__(self):
         return "ZZAccountNotFoundException:code:%smsg:%s"%(self.code,self.msg)
-
-

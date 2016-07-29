@@ -19,7 +19,6 @@ import datetime
 
 import test_arears_get
 import test_fuwu_sale_link_gen
-import test_clouddata_mbp_data_flowback
 import test_clouddata_mbp_data_get_normal
 import test_itemcats_authorize_get
 import test_itemcats_get
@@ -65,8 +64,6 @@ import test_promotionmisc_item_activity_get
 import test_promotionmisc_item_activity_list_get
 import test_promotionmisc_item_activity_update
 import test_promotionmisc_mjs_activity_all_API_total_test
-import test_wangwang_eservice_groupmember_get
-import test_wangwang_eservice_receivenum_get
 
 import test_vas_subscribe_get
 import test_vas_order_search
@@ -74,7 +71,6 @@ import test_user_seller_get
 import test_topats_4api_total_test
 import test_taobao_user_seller_get
 import test_taobao_trades_2APIs
-import test_taobao_time_get_NOT_USE
 import test_taobao_fuwu_scores_get
 import test_simba_tools_items_top_get
 import test_simba_rpt_custEffectBase_2apis
@@ -92,7 +88,6 @@ import test_simba_insight_wordsareadata_get
 import test_simba_insight_wordsdata_get
 import test_simba_insight_wordspricedata_get
 import test_simba_insight_wordssubdata_get
-import test_simba_keyword_rankingforecast_get
 import test_simba_keywordids_deleted_get
 import test_simba_keywords_changed_get
 import test_simba_keywords_delete
@@ -106,10 +101,10 @@ import test_simba_keywords_pricevon_set
 import test_simba_keywordsvon_add
 import test_simba_customers_authorized_get
 import test_mobile_discount
+import test_simba_keywords_realtime_ranking_batch_get
 alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_simba_login_authsign_get.alltests
                                ,test_fuwu_sale_link_gen.alltests
-                               ,test_clouddata_mbp_data_flowback.alltests
                                ,test_clouddata_mbp_data_get_normal.alltests
                                ,test_itemcats_authorize_get.alltests
                                ,test_itemcats_get.alltests
@@ -155,15 +150,12 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                #,test_promotionmisc_item_activity_list_get.alltests
                                #,test_promotionmisc_item_activity_update.alltests
                                #,test_promotionmisc_mjs_activity_all_API_total_test.alltests
-                               ,test_wangwang_eservice_groupmember_get.alltests
-                               ,test_wangwang_eservice_receivenum_get.alltests
                                ,test_vas_subscribe_get.alltests
                                ,test_vas_order_search.alltests
                                ,test_user_seller_get.alltests
                                ,test_topats_4api_total_test.alltests
                                ,test_taobao_user_seller_get.alltests
                                ,test_taobao_trades_2APIs.alltests
-                               ,test_taobao_time_get_NOT_USE.alltests
                                ,test_taobao_fuwu_scores_get.alltests
                                ,test_simba_tools_items_top_get.alltests
                                ,test_simba_rpt_custEffectBase_2apis.alltests
@@ -180,7 +172,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                test_simba_insight_wordsdata_get.alltests,
                                test_simba_insight_wordspricedata_get.alltests,
                                test_simba_insight_wordssubdata_get.alltests,
-                               test_simba_keyword_rankingforecast_get.alltests,
                                test_simba_keywordids_deleted_get.alltests,
                                test_simba_keywords_changed_get.alltests,
                                test_simba_keywords_delete.alltests,
@@ -191,9 +182,10 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                test_simba_keywords_pricevon_set.alltests,
                                test_simba_keywordsvon_add.alltests,
                                test_simba_customers_authorized_get.alltests,
-                               test_mobile_discount.alltests
+                               test_mobile_discount.alltests,
+                               test_simba_keywords_realtime_ranking_batch_get.alltests
                                ])
-#alltests = unittest.TestSuite([test_simba_rpt_adgroupbase_4api.alltests])
+#alltests = unittest.TestSuite([test_simba_insight_catsforecastnew_get.alltests])
 if __name__ == "__main__":
     if settings.NeedLog:
         fb = file('./report/report_%s.html'%datetime.date.today(),'wb')

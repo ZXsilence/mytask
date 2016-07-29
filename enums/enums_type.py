@@ -167,12 +167,19 @@ class OperationType(object):
     DROP_ADGROUP_CPC_MAX = 516
 
 
+
     ADD_CAMPAIGN_NORMAL = 601
 
     START_CAMPAIGN = 610
     START_OPTIMIZE_CAMPAIGN = 611
+    START_OPTIMIZE_CAMPAIGN_ITEM_LABEL = 621
     STOP_CAMPAIGN = 612
     STOP_OPTIMIZE_CAMPAIGN = 613
+    STOP_OPTIMIZE_CAMPAIGN_ITEM_LABEL = 623
+    START_ITEM_AUTO_STATUS = 624
+    STOP_ITEM_AUTO_STATUS =  625
+    CHANGE_ITEM_LABEL = 626
+
 
     UPGRADE_CAMPAIGN = 614
     CHANGE_CAMPAIGN_SETTINGS = 700
@@ -257,8 +264,13 @@ class OperationType(object):
 
         START_CAMPAIGN,
         START_OPTIMIZE_CAMPAIGN,
+        START_OPTIMIZE_CAMPAIGN_ITEM_LABEL,
         STOP_CAMPAIGN,
         STOP_OPTIMIZE_CAMPAIGN,
+        STOP_OPTIMIZE_CAMPAIGN_ITEM_LABEL,
+        START_ITEM_AUTO_STATUS,
+        STOP_ITEM_AUTO_STATUS,
+        CHANGE_ITEM_LABEL,
         UPGRADE_CAMPAIGN,
         
         CAMPAIGN_SCHEDULE_OPTIMIZE ,
@@ -511,8 +523,13 @@ OPTTYPE_COMMENT = {
     , OperationType.ADD_CAMPAIGN_NORMAL: "新建计划" 
     , OperationType.START_CAMPAIGN: "计划开启推广" 
     , OperationType.START_OPTIMIZE_CAMPAIGN: "计划加入托管"
+    ,OperationType.START_OPTIMIZE_CAMPAIGN_ITEM_LABEL:'计划启动宝贝标签自动识别'
     , OperationType.STOP_CAMPAIGN: "计划暂停推广"
     , OperationType.STOP_OPTIMIZE_CAMPAIGN: "计划取消托管"
+    ,OperationType.STOP_OPTIMIZE_CAMPAIGN_ITEM_LABEL:'计划取消宝贝标签自动识别'
+    ,OperationType.START_ITEM_AUTO_STATUS:'开启宝贝自动识别'
+    ,OperationType.STOP_ITEM_AUTO_STATUS:'暂停宝贝自动识别'
+    ,OperationType.CHANGE_ITEM_LABEL:'宝贝标签切换'
     , OperationType.UPGRADE_CAMPAIGN: "加力计划升级为全能计划"
     , OperationType.IGNORE_PLATFORM_UNHANDLE :"平台优化未打开"
     , OperationType.IGNORE_PLATFORM_CAMPAIGN_CANCEL_OPTIMIZE :"计划未托管，分时和平台不需要优化"

@@ -89,6 +89,9 @@ class ClouddataMbpDataGet(object):
         result_list = []
 
         sql_id = 104456 
+        #历史截止20160212
+        if edate <= datetime.datetime(2016,2,12):
+            sql_id = 106790
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
 
@@ -105,6 +108,11 @@ class ClouddataMbpDataGet(object):
         result_list = []
 
         sql_id = 104414 
+        #历史截止20160212
+        if edate <= datetime.datetime(2016,2,12):
+            sql_id = 106791
+        if edate <= datetime.datetime(2015,12,31):
+            sql_id = 106867
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
 
@@ -121,6 +129,9 @@ class ClouddataMbpDataGet(object):
         result_list = []
 
         sql_id = 105157
+        #历史截止20160212
+        if edate <= datetime.datetime(2016,2,12):
+            sql_id = 106789
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
 
@@ -139,6 +150,9 @@ class ClouddataMbpDataGet(object):
         result_list = []
 
         sql_id = 106777
+        #历史截止20160212
+        if edate <= datetime.datetime(2016,2,12):
+            sql_id = 106788
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
     

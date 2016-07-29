@@ -81,24 +81,30 @@ class test_simba_insight_catsinfo_get(unittest.TestCase):
                 if len(actual_result)==0:
                     self.assertEqual(actual_result,expect_result)
                     continue
+                bb = expect_result[0].keys()
+                bb.sort()
                 if t_type == 1:
                     for index in range(len(actual_result)):
+                        aa = actual_result[index].keys()
+                        aa.sort()
+                        self.assertEqual(aa,bb)
                         self.assertEqual(type(actual_result[index]),dict)
                         self.assertEqual(actual_result[index]['cat_id'],expect_result[index]['cat_id'])
-                        self.assertEqual(actual_result[index].keys().sort(),expect_result[index].keys().sort())
                 elif t_type==2:
                     for index in range(len(actual_result)):
+                        aa = actual_result[index].keys()
+                        aa.sort()
+                        self.assertEqual(aa,bb)
                         self.assertEqual(type(actual_result[index]),dict)
                         self.assertEqual(actual_result[index]['parent_cat_id'],expect_result[0]['parent_cat_id'])
-                        self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
                 elif t_type==0:
                     for index in range(len(actual_result)):
+                        aa = actual_result[index].keys()
+                        aa.sort()
+                        self.assertEqual(aa,bb)
                         self.assertEqual(type(actual_result[index]),dict)
                         self.assertEqual(actual_result[index]['parent_cat_id'],expect_result[0]['parent_cat_id'])
                         self.assertEqual(actual_result[index]['cat_level'],expect_result[0]['cat_level'])
-                        self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
-                    
-
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])

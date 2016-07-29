@@ -41,7 +41,8 @@ class ApiService(object):
         is_get = True
         cache_key = None
         #北斗临时单独处理
-        cache = False
+        if 'bd_webpage' == api_source:
+            cache = False
         if cache and method_config:
             is_get = method_config.get('is_get',False)
             cache_key = ApiCacheService.get_cache_key(params_dict)

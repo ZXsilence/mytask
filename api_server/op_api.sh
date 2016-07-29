@@ -15,6 +15,7 @@ function stop_api(){
         return
     fi
     kill -9 `ps -ef|grep $USER|grep -v grep|grep ApiCenterServer|awk '{print $2}'`
+    sleep 5
     pids=`ps -ef|grep "$USER"|grep ApiCenterServer|grep -v 'grep'|awk '{print $2}'`
     if [ "$pids" != '' ] ; then
         echo -e "\033[31mstop api server failed\033[0m"
@@ -46,8 +47,15 @@ function restart_api(){
 }
 
 function rebuild_api(){
-    cd ~ && sh update.sh
+    # cd ~ && sh update.sh
     restart_api
+}
+
+function config_slb(){
+    ip=`ifconfig eth0 |grep "inet addr:"|awk -F : '{print $2}'|awk '{print $1}'`
+    old_host='10.242.173.131'
+    filename='../api_server/conf/prd/settings.py'
+    sed -i "s/$old_host/$ip/" $filename 1>/dev/null 2>&1
 }
 
 if [ $# == 0 ] ; then
@@ -57,10 +65,13 @@ elif [ $1_ == 'check_' ] ; then
 elif [ $1_ == 'stop_' ] ; then
     stop_api
 elif [ $1_ == 'start_' ] ; then
+    config_slb
     start_api
 elif [ $1_ == 'restart_' ] ; then
+    config_slb
     restart_api
 elif [ $1_ == 'rebuild_' ] ; then
+    config_slb
     rebuild_api
 else
     useage

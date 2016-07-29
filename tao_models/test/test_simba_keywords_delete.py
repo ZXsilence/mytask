@@ -48,7 +48,9 @@ class test_simba_keywords_delete(unittest.TestCase):
                                    'keyword_id': 105677384979, 
                                    'audit_status': 'audit_pass',
                                    'max_price': 38, 
-                                   'is_garbage': False}]} ]
+                                   'is_garbage': False,
+                                   'max_mobile_price':111,
+                                   'mobile_is_default_price':1}]} ]
                # {'cat_id_list':[5.1111582],'start_date_offset':8,'end_date_offset':1,
                #  'expect_result':{'code':15,'msg':'Remote service error','sub_code':'isv.missing-parameter','sub_msg':'date.must.lt.one.month'}}]
         for item in data:
@@ -64,8 +66,12 @@ class test_simba_keywords_delete(unittest.TestCase):
                 self.assertEqual(type(actual_result),list)
                 if len(actual_result) == 0:
                     self.assertEqual(actual_result,expect_result)
+                bb = expect_result[0].keys()
+                bb.sort()
                 for index in range(len(actual_result)):
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
+                    aa = actual_result[index].keys()
+                    aa.sort()
+                    self.assertEqual(aa,bb)
                     self.assertEqual(actual_result[index]['nick'],nick)
                     self.assertEqual(actual_result[index]['campaign_id'],campaign_id)
                     self.assertEqual(actual_result[index]['adgroup_id'],adgroup_id)

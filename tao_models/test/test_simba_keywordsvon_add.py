@@ -78,8 +78,12 @@ class test_simba_keywordsvon_add(unittest.TestCase):
                 self.assertEqual(type(actual_result),list)
                 if len(actual_result) == 0:
                     self.assertEqual(actual_result,expect_result)
+                bb = expect_result[0].keys()
+                bb.sort()
                 for index in range(len(actual_result)):
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result[0].keys().sort())
+                    aa = actual_result[index].keys()
+                    aa.sort()
+                    self.assertEqual(aa,bb)
                     self.assertEqual(actual_result[index]['nick'],nick)
                     self.assertEqual(actual_result[index]['campaign_id'],campaign_id)
                     self.assertEqual(actual_result[index]['adgroup_id'],adgroup_id)
