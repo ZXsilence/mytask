@@ -210,6 +210,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         elif e.sub_code and e.sub_code == "6001":
                             #user not exist
                             raise
+                        #计划标题重复不进行重试
+                        elif e.sub_code == 'campaign.title.exists.error':
+                            raise e
                         else:
                             #其他类型异常，可重试
                             sleep(1)
