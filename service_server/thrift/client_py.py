@@ -35,13 +35,15 @@ if __name__ == "__main__":
     import simplejson
     host = "192.168.0.126"
     host = "183.131.0.206"
+    host = "10.117.3.35"
     port = 9999
     client = JavaApiClient(host,port)
     nick = "飞利浦鼎盛年华专卖店"
+    nick = "凯络上海"
     client.get_shop_info("麦苗科技营销")
     #计划报表
     client = JavaApiClient(host,port)
-    params = {"start_date":"2015-12-01","end_date":"2015-12-20","rpt_type":"campaign"}
+    params = {"start_date":"2016-05-01","end_date":"2016-05-01","rpt_type":"campaign"}
     params= simplejson.dumps(params)
     res = client.query_rpts(nick,params)
     tt = simplejson.loads(res)

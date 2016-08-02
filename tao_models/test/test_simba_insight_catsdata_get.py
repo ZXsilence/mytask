@@ -73,9 +73,13 @@ class test_simba_insight_catsdata_get(unittest.TestCase):
                     self.assertEqual(actual_result,expect_result)
                     continue
                 self.assertEqual(type(actual_result[0]),dict)
+                bb = expect_result[0].keys()
+                bb.sort()
                 for index in range(len(actual_result)):
+                    aa = actual_result[index].keys()
+                    aa.sort()
                     self.assertEqual(actual_result[index]['cat_id'],expect_result[index]['cat_id'])
-                    self.assertEqual(actual_result[index].keys().sort(),expect_result[index].keys().sort())
+                    self.assertEqual(aa,bb)
             except ErrorResponseException,e:
                 self.assertEqual(e.code,expect_result['code'])
                 self.assertEqual(e.msg,expect_result['msg'])

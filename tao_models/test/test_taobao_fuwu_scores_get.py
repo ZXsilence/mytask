@@ -26,7 +26,7 @@ from tao_models.common.exceptions import TaoApiMaxRetryException
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from taobao_fuwu_scores_get import FuwuScoresGet
-
+import copy
 
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestFuwuScoresGet(unittest.TestCase):
@@ -42,24 +42,32 @@ class TestFuwuScoresGet(unittest.TestCase):
                         {'d':'2015-04-08','soft_code':'SYB','popException':False,'excepClass':None},
                         {'d':datetime.datetime.today(),'soft_code':'ZZK','popException':True,'excepClass':InvalidAccessTokenException},
                         ]
-        cls.errs={'type_error':'return type error',
-                  'value_error':'return value error',
-                  'assert_error':'assert exception',
-                  }
+        cls.assertKeys=['rapid_score', 'service_code', 'item_name', 'stability_score', 'matched_score', 'attitude_score', 'avg_score', 'id', 'user_nick', 'gmt_create', 'is_valid', 'prof_score', 'item_code', 'easyuse_score', 'is_pay']
+        cls.hasSuggestion=['suggestion']
     def seUp(self):
         pass
     def test_get_time(self):
         for inputdata in self.testData:
-            is_popped  = False
             try:
                 suggest_list = FuwuScoresGet.get_all_fuwu_scores(inputdata['d'],inputdata['soft_code'])
-                self.assertEqual( type(suggest_list), list , self.errs['type_error'])
-                self.assertGreaterEqual( len(suggest_list), 0 , self.errs['value_error'])
+                self.assertEqual( type(suggest_list), list) 
+                self.assertGreaterEqual( len(suggest_list), 0)
+                preKeys = copy.deepcopy(self.assertKeys)
+                for res0 in suggest_list[:10]:
+                    self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+            except AssertionError , e :
+                preKeys += self.hasSuggestion#将suggestion校验放到异常中来
+                self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+            except InvalidAccessTokenException , e:
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['excepClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'])
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
+                    self.assertRaises(inputdata['excepClass'])
     def tearDown(self):
         pass
 

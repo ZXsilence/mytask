@@ -40,10 +40,8 @@ class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
     def setUpClass(cls):
         set_api_source('SDK_TEST')
         soft_code = "SYB"
-        shop_info = GetCampaignAdgroup.get_a_valid_shop(soft_code,False)
-        nick = shop_info['nick']
-        campaign = GetCampaignAdgroup.get_a_valid_campaign(nick)
-        campaign_id = campaign['campaign_id']
+        nick,campaign_id = GetCampaignAdgroup.get_has_adgroup_rpt_nick()
+        print 'Test nick:',nick
         start = datetime.datetime.now()-datetime.timedelta(days=7)
         end = datetime.datetime.now()-datetime.timedelta(days=1)
 
@@ -52,33 +50,37 @@ class TestSimbaRptCampaigneffectbaseGet(unittest.TestCase):
                             {'nick':nick,'campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':False,'exceptClass':None},
                             {'nick':"_nick_not_exists_",'campaign_id':0,'search_type':'SEARCH,CAT','source':'1,2','start':start,'end':end,'popException':True,'exceptClass':InvalidAccessTokenException},
                             ]
-        cls.errs={'effet_error':'error found in API: simba_rpt_campaigneffect_get',
-                  'base_error':'error found in API: simba_rpt_campaignbase_get',
-                  'assert_error':'assert exception',
-                  }
-        cls.assertKeys=['avgpos','aclick','cpm','searchtype','nick','cpc','ctr','source','cost','campaignid','date','impressions','click']
-        cls.assertKey2=['pay','fav','pay_count']
+        cls.assertBaseDefault=['avgpos', 'aclick', 'cpm', 'ctr', 'campaignid', 'nick', 'cost', 'source', 'searchtype', 'date', 'impressions', 'click']
+        #                     ['avgpos','aclick','cpm','searchtype','nick','cpc','ctr','source','cost','campaignid','date','impressions','click']
+        cls.assertEffectDefault=['pay','fav','pay_count']
     def seUp(self):
         pass
-    def test_get_user_seller(self):
+    def test_SimbaRptCampaignBaseEffectGet(self):
         for inputdata in self.testDataBase:
-            is_popped = False
             try:
                 res =  SimbaRptCampaignbaseGet.get_camp_rpt_list_by_date(inputdata['nick'], inputdata['campaign_id'],inputdata['search_type'], inputdata['source'], inputdata['start'],inputdata['end'])
-                self.assertEqual(type(res), list ,self.errs['base_error'])
+                self.assertEqual(type(res), list)
                 if len(res)>0:
-                    for k in self.assertKeys:
-                        self.assertTrue(res[0].has_key(k),self.errs['base_error'])
+                    for res0 in res:
+                        if res0.get('click') >0:
+                            self.assertTrue(res0.has_key('cpc'))
+                        for k in self.assertBaseDefault:
+                            self.assertTrue(res0.has_key(k))
                 res = SimbaRptCampaigneffectGet.get_campaign_effect_accumulate(inputdata['nick'], inputdata['campaign_id'],inputdata['search_type'], inputdata['source'], inputdata['start'],inputdata['end'])
-                self.assertEqual( type(res), dict , self.errs['effet_error'])
+                self.assertEqual( type(res), dict)
                 if res :
-                    for k in self.assertKey2:
-                        self.assertTrue(res.has_key(k),self.errs['effet_error'])
+                    for k in self.assertEffectDefault:
+                        self.assertTrue(res.has_key(k))
+            except InvalidAccessTokenException , e:
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
+                    self.assertRaises(inputdata['exceptClass'])
 
 
     def tearDown(self):

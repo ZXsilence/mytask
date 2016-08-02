@@ -19,6 +19,8 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
+import datetime as dt
+from datetime import datetime
 sys.path.append('../../../backends/')
 from adgroup_db.db_models.adgroups import Adgroups
 from campaign_db.db_models.campaigns import Campaigns
@@ -26,7 +28,14 @@ from shop_db.db_models.shop_info import ShopInfo
 from tao_models.simba_adgroupsbycampaignid_get import SimbaAdgroupsbycampaignidGet
 from tao_models.simba_keywordsbyadgroupid_get import  SimbaKeywordsbyadgroupidGet
 
-class GetCampaignAdgroup(object):
+from tao_models.simba_rpt_campadgroupbase_get import   SimbaRptCampadgroupBaseGet
+from tao_models.simba_rpt_campadgroupeffect_get import SimbaRptCampadgroupEffectGet
+from user_center.db_models.join_query import JoinQuery
+
+from tao_models.simba_campaigns_get import SimbaCampaignsGet 
+
+
+class GetCampaignAdgroup(object):  
     @classmethod
     def get_a_valid_shop(cls,soft_code="SYB",test=False):
         testShop=[{'nick':'chinchinstyle','sid':62847885,'soft_code':"SYB"},{'nick':'麦苗科技001','sid':101240238,'soft_code':"SYB"}]
@@ -40,8 +49,10 @@ class GetCampaignAdgroup(object):
                 sid = shop['sid']
                 campaign = GetCampaignAdgroup.get_a_valid_campaign(nick,soft_code)
                 if campaign:
-                    adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,campaign,soft_code,sid)
+                    campaign_id = campaign['campaign_id']
+                    adgroup = GetCampaignAdgroup.get_a_valid_adgroup(nick,[campaign_id],soft_code,sid)
                     if adgroup:
+                        print '--get_a_valid_shop:',shop
                         return shop
         return testShop[0]
 
@@ -50,20 +61,21 @@ class GetCampaignAdgroup(object):
         campaigns = Campaigns.get_all_online_campaigns_by_nick(nick)
         if len(campaigns)==0:
             return []
+        print '--get_a_valid_campaign:',campaigns[0]
         return  campaigns[0]
 
     @classmethod
-    def get_a_valid_adgroup(cls,nick,campaign_list,soft_code='SYB',sid=None):
+    def get_a_valid_adgroup(cls,nick,campaign_ids,soft_code='SYB',sid=None):
         if None==sid:
             shop_info = ShopInfo.get_shop_info_by_nick(soft_code,nick)
             sid = shop_info['sid']
-        if type(campaign_list) == dict:
-            campaign_list=[campaign_list]
-        for campaign in campaign_list:
-            campaign_id = campaign['campaign_id']
-            adgroups = Adgroups.get_adgroups_by_campaign_id(sid,campaign_id)
+        if type(campaign_ids) == dict:
+            campaign_ids=[campaign_ids]
+        for campaign_id in campaign_ids:
+            adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick,campaign_id)
             for adgroup in adgroups:
                 if adgroup['online_status'] == 'online':
+                    print '--get_a_valid_adgroup:',adgroup
                     return adgroup
         return []
     
@@ -73,8 +85,45 @@ class GetCampaignAdgroup(object):
         for adgroup in adgroups:
             kw_list = SimbaKeywordsbyadgroupidGet.get_keyword_list_by_adgroup(nick, adgroup['adgroup_id'])
             if len(kw_list)!=0:
+                print '--get_adgroup_has_keyword:',adgroup['adgroup_id']
                 return adgroup['adgroup_id']
         return []
+    @classmethod
+    def get_has_adgroup_rpt_nick(cls):
+        #
+        # 无脑遍历，耗时.暂时没找到其他方法，返回一个有报表的推广组
+        #
+
+        #1,找出有效nick
+        deadline_start=datetime.now()
+        start = datetime.now()-dt.timedelta(days=7)
+        end = datetime.now()-dt.timedelta(days=1)
+        from user_center.services.crm_db_service import CrmDBService
+        customers = CrmDBService.get_customer_list_by_deadline_start(deadline_start)
+        for customer in customers:
+            nick = customer['nick']
+            #2,找出该nick有效campaign
+            campaigns = SimbaCampaignsGet.get_campaign_list(nick)
+            if len(campaigns)==0:
+                continue
+            campaign_ids = [k['campaign_id'] for k in campaigns]
+            for campaign_id in campaign_ids:
+                #3,找出计划下的有效adgroup
+                adgroups = SimbaAdgroupsbycampaignidGet.get_adgroup_list_by_campaign(nick,campaign_id)
+                if len(adgroups)==0:
+                    continue
+                #4,找出有报表的推广组
+                res =SimbaRptCampadgroupEffectGet.get_rpt_adgroupeffect_list(nick,campaign_id,start ,end,'SEARCH,CAT', '1,2,4,5')
+                if not res:
+                    continue
+                print '--get_has_adgroup_rpt_nick:\n--nick:%s\n--campaign_id:%s' %(nick,campaign_id)
+                return (nick,campaign_id)
+        return (None,None)
+
+
+
+
+
 
 if __name__=='__main__':
     soft_code = "SYB"

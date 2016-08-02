@@ -42,23 +42,28 @@ class TestVasSubscribeGet(unittest.TestCase):
                         {'nick':'麦苗科技001','soft_code':'','popException':True,'exceptClass':KeyError},
                         {'nick':'麦苗科技001','soft_code':'ZZ','popException':True,'exceptClass':KeyError},
                         ]
-        cls.errs={'type_error':'assert return type error','value_error':'assert return value error','assert_error':'assert exception'}
-    
+        cls.assertKeys=[u'deadline',u'item_code']
     def seUp(self):
         pass
     def test_get_vas_subscribe(self):
         for inputdata in self.testData:
-            is_popped = False
             try:
                 res = VasSubscribeGet.get_vas_subscribe(inputdata['nick'], inputdata['soft_code'])
-                self.assertEqual(type(res),list,self.errs['type_error'])
-                self.assertGreaterEqual(len(res),0,self.errs['value_error'])
+                self.assertEqual(type(res),list)
+                for res0 in res:
+                    self.assertEqual(sorted(res0.keys()),sorted(self.assertKeys))
+            except ErrorResponseException,e:
+                self.assertTrue(inputdata['popException'])
+            except InvalidAccessTokenException, e:
+                self.assertTrue(inputdata['popException'])
+            except KeyError, e:
+                self.assertTrue(inputdata['popException'])
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-
+                if inputdata['popException'] ==False:
+                    import traceback;traceback.print_exc() 
+                    raise e
+                else :
+                    self.assertRaises(inputdata['exceptClass'])
 
     def tearDown(self):
         pass
