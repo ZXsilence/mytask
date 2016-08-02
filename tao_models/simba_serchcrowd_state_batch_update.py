@@ -33,8 +33,7 @@ class SerchcrowdStateBatchUpdate(object):
         req.adgroup_crowd_ids = adgroup_crowd_ids
         req.state = state
         rsp = ApiService.execute(req,nick,soft_code)
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
-        return change_obj_to_dict_deeply(rsp.adgroup_targeting_tag_dto)
+        return change_obj_to_dict_deeply(rsp.adgrouptargetingtags)
 
 
 if __name__ == '__main__':

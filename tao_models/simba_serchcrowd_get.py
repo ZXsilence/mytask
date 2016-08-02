@@ -35,7 +35,7 @@ class SerchcrowdGet(object):
 
 
 if __name__ == '__main__':
-    nick = "牙齿天天晒"
-    adgroup_id = 618604608
+    nick = "麦苗科技001"
+    adgroup_id = 699940229
     soft_code = 'SYB'
     print SerchcrowdGet.serchcrowdget_result(nick, adgroup_id, soft_code)
