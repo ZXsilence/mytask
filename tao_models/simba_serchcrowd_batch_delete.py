@@ -36,8 +36,8 @@ class SimbaSerchcrowdBatchDelete(object):
 
 
 if __name__ == '__main__':
-    nick = "牙齿天天晒"
+    nick = "麦苗科技001"
     sub_nick = None
-    adgroup_crowd_ids = 224773441056
+    adgroup_crowd_ids = 284702226148
     soft_code = 'SYB'
     print SimbaSerchcrowdBatchDelete.serchcrowdbatch_delete(nick, sub_nick, adgroup_crowd_ids, soft_code)
