@@ -25,6 +25,74 @@ from tao_models.num_tools import change2num, KEYS_INT, KEYS_FLOAT, KEYS_RT
 logger = logging.getLogger(__name__)
 
 class SimbaRtRptAdgroupGet(object):
+    
+    #保留分平台数据
+    @classmethod 
+    def get_adgroup_platform_rt_rpt_list(cls, nick, campaign_id, the_date):
+
+        adgroups_rpt_list = cls.get_adgroup_rt_detail_rpt_list(nick, campaign_id, the_date, "SUMMARY")
+        
+        adgroups_rpt_dict_pc = {} 
+        adgroups_rpt_dict_wx = {}
+
+        for adgroup_rpt in adgroups_rpt_list:
+            adgroup_id = adgroup_rpt['adgroup_id']
+            source_id = int(adgroup_rpt['source'])
+            if source_id == 1 or source_id == 2:
+                if not adgroups_rpt_dict_pc.has_key(adgroup_id):
+                    adgroups_rpt_dict_pc[adgroup_id] = adgroup_rpt
+                else:
+                    sum_adgroup_rpt = adgroups_rpt_dict_pc[adgroup_id]
+                    for key in adgroup_rpt:
+                        if key not in KEYS_INT and key not in KEYS_FLOAT:
+                            continue
+                        if not sum_adgroup_rpt.has_key(key):
+                            sum_adgroup_rpt[key] = adgroup_rpt[key]
+                        else:
+                            sum_adgroup_rpt[key] += adgroup_rpt[key]
+            else:
+                if not adgroups_rpt_dict_wx.has_key(adgroup_id):
+                    adgroups_rpt_dict_wx[adgroup_id] = adgroup_rpt
+                else:
+                    sum_adgroup_rpt = adgroups_rpt_dict_wx[adgroup_id]
+                    for key in adgroup_rpt:
+                        if key not in KEYS_INT and key not in KEYS_FLOAT: 
+                             continue
+                        if not sum_adgroup_rpt.has_key(key):
+                            sum_adgroup_rpt[key] = adgroup_rpt[key]
+                        else:
+                            sum_adgroup_rpt[key] += adgroup_rpt[key]
+        
+        for adgroup_rpt in adgroups_rpt_dict_pc.values():
+            adgroup_rpt['cpc'] = 0 if adgroup_rpt['click'] <= 0 else\
+                adgroup_rpt['cost'] / adgroup_rpt['click']
+            adgroup_rpt['ctr'] = 0 if adgroup_rpt['impressions'] <= 0 else\
+                100.0*adgroup_rpt['click'] / adgroup_rpt['impressions']
+            adgroup_rpt['coverage'] = 0 if adgroup_rpt['click'] <= 0 else \
+                100.0*(adgroup_rpt['directtransactionshipping'] + \
+                     adgroup_rpt['indirecttransactionshipping']) / adgroup_rpt['click']
+            adgroup_rpt['cpm'] = 0 if adgroup_rpt['impressions'] <= 0 else\
+                1000.0*adgroup_rpt['cost'] / adgroup_rpt['impressions']
+            adgroup_rpt['roi'] = 0 if adgroup_rpt['cost'] <= 0 else\
+                (adgroup_rpt['directtransaction'] + adgroup_rpt['indirecttransaction']) \
+                / float(adgroup_rpt['cost'])
+            adgroup_rpt['source'] = 'pc'
+
+        for adgroup_rpt in adgroups_rpt_dict_wx.values():
+            adgroup_rpt['cpc'] = 0 if adgroup_rpt['click'] <= 0 else\
+                adgroup_rpt['cost'] / adgroup_rpt['click']
+            adgroup_rpt['ctr'] = 0 if adgroup_rpt['impressions'] <= 0 else\
+                100.0*adgroup_rpt['click'] / adgroup_rpt['impressions']
+            adgroup_rpt['coverage'] = 0 if adgroup_rpt['click'] <= 0 else \
+                100.0*(adgroup_rpt['directtransactionshipping'] + \
+                     adgroup_rpt['indirecttransactionshipping']) / adgroup_rpt['click']
+            adgroup_rpt['cpm'] = 0 if adgroup_rpt['impressions'] <= 0 else\
+                1000.0*adgroup_rpt['cost'] / adgroup_rpt['impressions']
+            adgroup_rpt['roi'] = 0 if adgroup_rpt['cost'] <= 0 else\
+                (adgroup_rpt['directtransaction'] + adgroup_rpt['indirecttransaction']) \
+                / float(adgroup_rpt['cost'])
+            adgroup_rpt['source'] = 'wx'
+        return adgroups_rpt_dict_pc.values(), adgroups_rpt_dict_wx.values()
 
     @classmethod
     def get_adgroup_rt_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
@@ -117,8 +185,10 @@ if __name__ == '__main__':
     campaign_id = int(sys.argv[2])
     adgroup_id = int(sys.argv[3])
     the_date = datetime.datetime.now()
-    rpt_list = SimbaRtRptAdgroupGet.get_adgroup_rt_rpt_list(nick, campaign_id, the_date)
+    rpt_list = SimbaRtRptAdgroupGet.get_adgroup_platform_rt_rpt_list(nick, campaign_id, the_date)
+    print "results"
     for rpt in rpt_list:
-        if rpt['adgroup_id'] == adgroup_id:
-            print rpt
+        print rpt
+        #if rpt['adgroup_id'] == adgroup_id:
+        #    print rpt
 
