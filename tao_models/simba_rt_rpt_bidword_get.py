@@ -33,10 +33,23 @@ class SimbaRtRptBidwordGet(object):
         
         keywords_rpt_dict_pc = {}
         keywords_rpt_dict_wx = {}
-        
+        keywords_rpt_dict = {}
         for keyword_rpt in keywords_rpt_list:
             keyword_id = keyword_rpt['keyword_id']
             source_id = int(keyword_rpt['source'])
+            if not keywords_rpt_dict.has_key(keyword_id):
+                keywords_rpt_dict[keyword_id] = {}
+                for key in keyword_rpt.keys():
+                    keywords_rpt_dict[keyword_id][key] = keyword_rpt[key]
+            else:
+                sum_keyword_rpt = keywords_rpt_dict[keyword_id]
+                for key in keyword_rpt:
+                    if key not in KEYS_INT and key not in KEYS_FLOAT:
+                        continue
+                    if not sum_keyword_rpt.has_key(key):
+                        sum_keyword_rpt[key] = keyword_rpt[key]
+                    else:
+                        sum_keyword_rpt[key] += keyword_rpt[key]
             if source_id == 1 or source_id == 2:
                 if not keywords_rpt_dict_pc.has_key(keyword_id):
                     keywords_rpt_dict_pc[keyword_id] = keyword_rpt
@@ -62,6 +75,20 @@ class SimbaRtRptBidwordGet(object):
                          else: 
                              sum_keyword_rpt[key] += keyword_rpt[key]
         
+        for keyword_rpt in keywords_rpt_dict.values():
+            keyword_rpt['cpc'] = 0 if keyword_rpt['click'] <= 0 else\
+                keyword_rpt['cost'] / keyword_rpt['click']
+            keyword_rpt['ctr'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                100.0*keyword_rpt['click'] / keyword_rpt['impressions']
+            keyword_rpt['coverage'] = 0 if keyword_rpt['click'] <= 0 else \
+                100.0*(keyword_rpt['directtransactionshipping'] + \
+                    keyword_rpt['indirecttransactionshipping']) / keyword_rpt['click']
+            keyword_rpt['cpm'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                1000.0*keyword_rpt['cost'] / keyword_rpt['impressions']
+            keyword_rpt['roi'] = 0 if keyword_rpt['cost'] <= 0 else\
+                (keyword_rpt['directtransaction'] + keyword_rpt['indirecttransaction']) \
+                / float(keyword_rpt['cost'])
+
         for keyword_rpt in keywords_rpt_dict_pc.values():
             keyword_rpt['cpc'] = 0 if keyword_rpt['click'] <= 0 else\
                 keyword_rpt['cost'] / keyword_rpt['click']
@@ -75,8 +102,8 @@ class SimbaRtRptBidwordGet(object):
             keyword_rpt['roi'] = 0 if keyword_rpt['cost'] <= 0 else\
                 (keyword_rpt['directtransaction'] + keyword_rpt['indirecttransaction']) \
                 / float(keyword_rpt['cost'])
-            keyword_rpt['source'] = 1 + 2
-
+            keyword_rpt['source'] = 'pc'
+        
         for keyword_rpt in keywords_rpt_dict_wx.values():
             keyword_rpt['cpc'] = 0 if keyword_rpt['click'] <= 0 else\
                 keyword_rpt['cost'] / keyword_rpt['click']
@@ -90,9 +117,9 @@ class SimbaRtRptBidwordGet(object):
             keyword_rpt['roi'] = 0 if keyword_rpt['cost'] <= 0 else\
                 (keyword_rpt['directtransaction'] + keyword_rpt['indirecttransaction']) \
                 / float(keyword_rpt['cost'])
-            keyword_rpt['source'] = 4 + 5
+            keyword_rpt['source'] = 'wx'
 
-        return keywords_rpt_dict_pc.values(), keywords_rpt_dict_wx.values()
+        return keywords_rpt_dict.values(), keywords_rpt_dict_pc.values(), keywords_rpt_dict_wx.values()
     
     @classmethod
     def get_bidword_rt_rpt_list(cls, nick, campaign_id, adgroup_id, the_date,source="SUMMARY"):

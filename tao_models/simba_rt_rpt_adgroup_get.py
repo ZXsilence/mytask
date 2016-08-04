@@ -34,10 +34,24 @@ class SimbaRtRptAdgroupGet(object):
         
         adgroups_rpt_dict_pc = {} 
         adgroups_rpt_dict_wx = {}
-
+        adgroups_rpt_dict = {}
+        
         for adgroup_rpt in adgroups_rpt_list:
             adgroup_id = adgroup_rpt['adgroup_id']
             source_id = int(adgroup_rpt['source'])
+            if not adgroups_rpt_dict.has_key(adgroup_id):
+                adgroups_rpt_dict[adgroup_id] = {}
+                for key in adgroup_rpt.keys():
+                    adgroups_rpt_dict[adgroup_id][key] = adgroup_rpt[key]
+            else:
+                sum_adgroup_rpt = adgroups_rpt_dict[adgroup_id]
+                for key in adgroup_rpt:
+                    if key not in KEYS_INT and key not in KEYS_FLOAT:
+                        continue
+                    if not sum_adgroup_rpt.has_key(key):
+                        sum_adgroup_rpt[key] = adgroup_rpt[key]
+                    else:
+                        sum_adgroup_rpt[key] += adgroup_rpt[key]
             if source_id == 1 or source_id == 2:
                 if not adgroups_rpt_dict_pc.has_key(adgroup_id):
                     adgroups_rpt_dict_pc[adgroup_id] = adgroup_rpt
@@ -62,6 +76,20 @@ class SimbaRtRptAdgroupGet(object):
                             sum_adgroup_rpt[key] = adgroup_rpt[key]
                         else:
                             sum_adgroup_rpt[key] += adgroup_rpt[key]
+
+        for adgroup_rpt in adgroups_rpt_dict.values():
+            adgroup_rpt['cpc'] = 0 if adgroup_rpt['click'] <= 0 else\
+                adgroup_rpt['cost'] / adgroup_rpt['click']
+            adgroup_rpt['ctr'] = 0 if adgroup_rpt['impressions'] <= 0 else\
+                100.0*adgroup_rpt['click'] / adgroup_rpt['impressions']
+            adgroup_rpt['coverage'] = 0 if adgroup_rpt['click'] <= 0 else \
+                100.0*(adgroup_rpt['directtransactionshipping'] + \
+                       adgroup_rpt['indirecttransactionshipping']) / adgroup_rpt['click']
+            adgroup_rpt['cpm'] = 0 if adgroup_rpt['impressions'] <= 0 else\
+                1000.0*adgroup_rpt['cost'] / adgroup_rpt['impressions']
+            adgroup_rpt['roi'] = 0 if adgroup_rpt['cost'] <= 0 else\
+                (adgroup_rpt['directtransaction'] + adgroup_rpt['indirecttransaction']) \
+                / float(adgroup_rpt['cost'])
         
         for adgroup_rpt in adgroups_rpt_dict_pc.values():
             adgroup_rpt['cpc'] = 0 if adgroup_rpt['click'] <= 0 else\
@@ -92,7 +120,7 @@ class SimbaRtRptAdgroupGet(object):
                 (adgroup_rpt['directtransaction'] + adgroup_rpt['indirecttransaction']) \
                 / float(adgroup_rpt['cost'])
             adgroup_rpt['source'] = 'wx'
-        return adgroups_rpt_dict_pc.values(), adgroups_rpt_dict_wx.values()
+        return adgroups_rpt_dict.values(), adgroups_rpt_dict_pc.values(), adgroups_rpt_dict_wx.values()
 
     @classmethod
     def get_adgroup_rt_rpt_list(cls, nick, campaign_id, the_date,source="SUMMARY"):
