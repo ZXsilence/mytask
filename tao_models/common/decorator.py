@@ -103,10 +103,10 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                                 and u'未找到指定客户' in e.sub_msg:
                             raise CampaignIdNotBelongToUserException
                         elif api_method == 'taobao.simba.campaign.budget.update' and e.sub_msg \
-                                and u'限额不得小于' in e.sub_msg:
+                                and u'日限额不能低于' in e.sub_msg:
                             raise CampaignBudgetLessThanCostException(e.sub_msg,e.sub_msg)
                         elif api_method == 'taobao.simba.campaign.platform.update' and e.sub_msg \
-                                and u'用户无资格投放定向推广' in e.sub_msg:
+                                and u'不允许设置定向投放' in e.sub_msg:
                             raise NonsearchNotAllowedException
                         elif api_method == 'taobao.simba.creative.update' and e.sub_msg \
                                 and u'图片不是推广组的图片' in e.sub_msg:
