@@ -185,6 +185,10 @@ class OperationType(object):
     CHANGE_CAMPAIGN_SETTINGS = 700
     CHANGE_ADGROUP_SETTINGS = 701
     CHANGE_ADGROUP_MOBILE_DISCOUNT = 702
+    CHANGE_CAMPAIGN_WX_CPC_MAX = 705
+    CHANGE_ADGROUP_WX_CPC_MAX = 706
+    UPDATE_PRICE_FOR_PC_CPC_MAX = 707 
+    UPDATE_PRICE_FOR_WX_CPC_MAX = 708
 
     ADD_RULE = 800
     UPDATE_RULE = 801
@@ -253,6 +257,8 @@ class OperationType(object):
         UPDATE_PRICE_ACCURATE_MATCH,
         UPDATE_PRICE_WIDE_MATCH,
         UPDATE_PRICE_MANUAL_ADGROUP,
+        CHANGE_CAMPAIGN_WX_CPC_MAX,
+        CHANGE_ADGROUP_WX_CPC_MAX,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
@@ -400,7 +406,9 @@ class OperationType(object):
         UPDATE_PRICE_USER_EXPECT_DECRE_PRICE,
         UPDATE_PRICE_FOR_CPC_MAX,
         UPDATE_PRICE_ACCURATE_MATCH,
-        UPDATE_PRICE_WIDE_MATCH
+        UPDATE_PRICE_WIDE_MATCH,
+        UPDATE_PRICE_FOR_PC_CPC_MAX,
+        UPDATE_PRICE_FOR_WX_CPC_MAX,
     ]
 
     ALL_ADGROUP_DELETE_TYPES = [
@@ -565,6 +573,10 @@ OPTTYPE_COMMENT = {
     ,OperationType.ENABLED_RULE:"开启"
     ,OperationType.EXECUTE_RULE:"执行"
     ,OperationType.EXECUTE_RULE_NOTICE:"自动执行"
+    ,OperationType.CHANGE_CAMPAIGN_WX_CPC_MAX:"修改计划无线端最高出价"
+    ,OperationType.CHANGE_ADGROUP_WX_CPC_MAX:"修改推广组无线端最高出价"
+    ,OperationType.UPDATE_PRICE_FOR_PC_CPC_MAX:"关键词根据用户设置PC最高出价进行调价"
+    ,OperationType.UPDATE_PRICE_FOR_WX_CPC_MAX:"关键词根据用户设置无线最高出价进行调价"
 }
 
 class LoginFailType(object):
