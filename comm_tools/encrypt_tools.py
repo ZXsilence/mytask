@@ -28,6 +28,11 @@ def decode_ticket(ticket):
     origin_ticket = decode_AES(ticket)
     return json.loads(origin_ticket)
 
+def get_recommend_ticket(nick,soft_code,acode):
+    origin_ticket = {'nick':nick,'soft_code':soft_code,'acode':acode}
+    s = json.dumps(origin_ticket)
+    return encode_AES(s)
+
 def encode_AES(encode_str):
     cipher = AES.new(SECRET_KEY)
     pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING
