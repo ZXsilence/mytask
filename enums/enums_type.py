@@ -189,6 +189,7 @@ class OperationType(object):
     CHANGE_ADGROUP_WX_CPC_MAX = 706
     UPDATE_PRICE_FOR_PC_CPC_MAX = 707 
     UPDATE_PRICE_FOR_WX_CPC_MAX = 708
+    CHANGE_ADGROUP_BUDGET = 709
 
     ADD_RULE = 800
     UPDATE_RULE = 801
@@ -259,6 +260,7 @@ class OperationType(object):
         UPDATE_PRICE_MANUAL_ADGROUP,
         CHANGE_CAMPAIGN_WX_CPC_MAX,
         CHANGE_ADGROUP_WX_CPC_MAX,
+        CHANGE_ADGROUP_BUDGET,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
@@ -575,6 +577,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.EXECUTE_RULE_NOTICE:"自动执行"
     ,OperationType.CHANGE_CAMPAIGN_WX_CPC_MAX:"修改计划无线端最高出价"
     ,OperationType.CHANGE_ADGROUP_WX_CPC_MAX:"修改推广组无线端最高出价"
+    ,OperationType.CHANGE_ADGROUP_BUDGET:"修改推广组预算"
     ,OperationType.UPDATE_PRICE_FOR_PC_CPC_MAX:"关键词根据用户设置PC最高出价进行调价"
     ,OperationType.UPDATE_PRICE_FOR_WX_CPC_MAX:"关键词根据用户设置无线最高出价进行调价"
 }

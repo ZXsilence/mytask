@@ -48,7 +48,7 @@ class SimbaKeywordsRealtimeRankingBatchGet(object):
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         res = change_obj_to_dict_deeply(rsp.result)
-        return res['realtime_rank_list']
+        return res.get('realtime_rank_list',[])
 
 
 
