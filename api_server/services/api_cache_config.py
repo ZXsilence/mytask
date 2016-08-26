@@ -152,6 +152,14 @@ class ApiCacheConfig(object):
         'taobao.simba.rpt.adgroupkeywordbase.get':{'cache_name':'rpt_keyword_base','max_age':MAX_AGE_1,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
         'taobao.simba.rpt.adgroupkeywordeffect.get':{'cache_name':'rpt_keyword_effect','max_age':MAX_AGE_1,'is_get':IS_GET_YES,'start_cache_hour':start_cache_hour_1},
 
+        #==============人群搜索====================
+        'taobao.simba.rpt.targetingtag.get':{'cache_name':'rpt_targetingtag', 'max_age':MAX_AGE_1, 'is_get':IS_GET_YES, 'start_cache_hour':start_cache_hour_1},
+        'taobao.simba.serchcrowd.get':{'cache_name':'serchcrowd', 'max_age':MAX_AGE_5, 'is_get':IS_GET_YES},
+        'taobao.simba.serchcrowd.batch.delete':{'cache_name':'serchcrowd', 'is_get':IS_GET_NO},
+        'taobao.simba.searchtagtemplate.get':{'cache_name':'searchtagtemplate', 'max_age':MAX_AGE_5, 'is_get':IS_GET_YES},
+        'taobao.simba.serchcrowd.state.batch.update':{'cache_name':'searchtagtemplate', 'is_get':IS_GET_NO},
+        'taobao.simba.searchcrowd.batch.add':{'cache_name':'searchtagtemplate', 'is_get':IS_GET_NO},
+        'taobao.simba.serchcrowd.price.batch.update':{'cache_name':'searchtagtemplate', 'is_get':IS_GET_NO},
         #'taobao.simba.rpt.campadgroupbase.get':
         #'taobao.simba.rpt.campadgroupeffect.get':
         #'taobao.simba.rpt.campaignbase.get':
@@ -204,6 +212,9 @@ class ApiCacheConfig(object):
         'keywords':{'remove_keys':['nick']},
         'rpt_keyword_base':{'remove_keys':['nick','adgroup_id']},
         'rpt_keyword_effect':{'remove_keys':['nick','adgroup_id']},
+        'serchcrowd':{'remove_keys':['nick']},
+        'searchtagtemplate':{'remove_keys':['nick']},
+        'rpt_targetingtag':{'remove_keys':['nick', 'campaign_id']},
     }
 
 if __name__ == '__main__':
