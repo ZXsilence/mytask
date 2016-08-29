@@ -397,3 +397,4 @@ class AdgroupBudgetType(object):
     BUDGET_REDUCE_2_LV = 2
     BUDGET_RAISE_1_LV = 3
     BUDGET_RAISE_2_LV = 4
+    BUDGET_RAISE_3_LV = 5
