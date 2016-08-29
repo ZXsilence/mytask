@@ -198,6 +198,7 @@ class OperationType(object):
     UPDATE_CROWD_DISCOUNT = 714 
     DELETE_CROWD = 715 
     ADD_CROWD = 716
+    FOLLOW_CAMPAIGN = 720
 
 
     ADD_RULE = 800
@@ -271,6 +272,7 @@ class OperationType(object):
         CHANGE_CAMPAIGN_WX_CPC_MAX,
         CHANGE_ADGROUP_WX_CPC_MAX,
         CHANGE_ADGROUP_BUDGET,
+        FOLLOW_CAMPAIGN,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
@@ -600,6 +602,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.UPDATE_CROWD_DISCOUNT:"更新推广组人群溢价"
     ,OperationType.DELETE_CROWD:"删除人群"
     ,OperationType.ADD_CROWD:"增加人群"
+    ,OperationType.FOLLOW_CAMPAIGN:"推广组设置跟随计划"
 }
 
 class LoginFailType(object):
