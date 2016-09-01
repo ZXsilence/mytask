@@ -157,9 +157,9 @@ class ApiCacheConfig(object):
         'taobao.simba.serchcrowd.get':{'cache_name':'serchcrowd', 'max_age':MAX_AGE_5, 'is_get':IS_GET_YES},
         'taobao.simba.serchcrowd.batch.delete':{'cache_name':'serchcrowd', 'is_get':IS_GET_NO},
         'taobao.simba.searchtagtemplate.get':{'cache_name':'searchtagtemplate', 'max_age':MAX_AGE_5, 'is_get':IS_GET_YES},
-        'taobao.simba.serchcrowd.state.batch.update':{'cache_name':'searchtagtemplate', 'is_get':IS_GET_NO},
-        'taobao.simba.searchcrowd.batch.add':{'cache_name':'searchtagtemplate', 'is_get':IS_GET_NO},
-        'taobao.simba.serchcrowd.price.batch.update':{'cache_name':'searchtagtemplate', 'is_get':IS_GET_NO},
+        'taobao.simba.serchcrowd.state.batch.update':{'cache_name':'serchcrowd', 'is_get':IS_GET_NO},
+        'taobao.simba.searchcrowd.batch.add':{'cache_name':'serchcrowd', 'is_get':IS_GET_NO},
+        'taobao.simba.serchcrowd.price.batch.update':{'cache_name':'serchcrowd', 'is_get':IS_GET_NO},
         #'taobao.simba.rpt.campadgroupbase.get':
         #'taobao.simba.rpt.campadgroupeffect.get':
         #'taobao.simba.rpt.campaignbase.get':
