@@ -18,7 +18,7 @@ if pymongo.version.startswith("2.5"):
 #MONGODB SETTINGS
 MGDBS = {
         'user':{
-            'HOST':'10.117.38.235',
+            'HOST':'mm_app_in',
             'PORT':2201,
             'USER':'',
             'PASSWORD':''
