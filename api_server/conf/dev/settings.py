@@ -25,7 +25,7 @@ API_PORT = 30002
 SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
-        'host':'localhost',
+        'host':'10.117.38.235',
         'port':9090
     }
 
@@ -177,4 +177,4 @@ API_NEED_SUBWAY_TOKEN = [
 
 
 #from api_server.thrift.ApiCenterClient import ApiCenterClient
-#api_client  = ApiCenterClient('localhost',9090)
+#api_client  = ApiCenterClient('10.117.38.235',9090)
