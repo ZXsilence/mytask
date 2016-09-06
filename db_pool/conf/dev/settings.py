@@ -3,7 +3,7 @@
 #rds实例1的连接池配置
 RDS1 = {
          'pool_addr':{
-                 'HOST':'localhost',
+                 'HOST':'mm_app_in',
                  'PORT':3306,
                  'USER':'root',
                  'PASSWD':'123456' 
