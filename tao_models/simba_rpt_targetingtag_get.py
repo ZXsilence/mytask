@@ -26,6 +26,7 @@ from TaobaoSdk.Request.SimbaRptTargetingtagGetRequest import SimbaRptTargetingta
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 
 
@@ -41,7 +42,7 @@ class SimbaRptTargetingtagGet(object):
         req.end_time = edate.strftime("%Y-%m-%d")
         req.traffic_type = source 
         rsp = ApiService.execute(req,nick,"SYB")
-        return change_obj_to_dict_deeply(rsp.results)
+        return change2num(change_obj_to_dict_deeply(rsp.results))
 
 
 if __name__ == '__main__':

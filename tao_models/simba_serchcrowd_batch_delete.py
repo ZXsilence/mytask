@@ -30,7 +30,7 @@ class SimbaSerchcrowdBatchDelete(object):
         req = SimbaSerchcrowdBatchDeleteRequest()
         req.nick = nick
         req.sub_nick = sub_nick
-        req.adgroup_crowd_ids = adgroup_crowd_ids
+        req.adgroup_crowd_ids = ','.join([str(d)  for d in adgroup_crowd_ids])
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.delete_list)
 
