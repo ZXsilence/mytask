@@ -177,4 +177,4 @@ API_NEED_SUBWAY_TOKEN = [
 
 
 #from api_server.thrift.ApiCenterClient import ApiCenterClient
-#api_client  = ApiCenterClient('localhost',9090)
+#api_client  = ApiCenterClient('mm_app_in',9090)

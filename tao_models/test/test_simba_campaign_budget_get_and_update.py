@@ -40,17 +40,15 @@ class TestSimbaCampaignBudgetGetAndUpdate(unittest.TestCase):
         cls.tcinfo_get = 'API Test - taobao.simba.campaign.budget.get'
         cls.tcinfo_update = 'API Test - taobao.simba.campaign.budget.update'
         cls.testInputDatas_get = [{'nick': '__NotExistNick__','campaign_id':3328400,'popException':True, 'exceptionClass':InvalidAccessTokenException},
-                                  {'nick': 'chinchinstyle','campaign_id':9214487,'popException':True, 'exceptionClass':ErrorResponseException},
                                   {'nick': 'chinchinstyle','campaign_id':3328400,'popException':False, 'exceptionClass':None}
                                   ]
         cls.testInputDatas_update = [{'nick': '__NotExistNick__','campaign_id':None,'budget':None,'use_smooth':None,'popException':True, 'exceptionClass':InvalidAccessTokenException},
-                                     {'nick': 'chinchinstyle','campaign_id':9214487,'budget':None,'use_smooth':None,'popException':True, 'exceptionClass':ErrorResponseException},
                                      {'nick': 'chinchinstyle','campaign_id':3328400,'budget':None,'use_smooth':'false','popException':False, 'exceptionClass':None},
                                      {'nick': 'chinchinstyle','campaign_id':3328400,'budget':33,'use_smooth':'true','popException':False, 'exceptionClass':None}
                                      ]
         cls.valueType = {'returnValue_get':dict, 'returnValue_update':dict}
         cls.itemFields_get = ['budget', 'modified_time', 'campaign_id', 'nick', 'create_time', 'is_smooth']#'nick,is_smooth,budget,modified_time,campaign_id'.split(',')
-        cls.itemFields_update = 'nick,is_smooth,budget,campaign_id'.split(',')
+        cls.itemFields_update = 'nick,is_smooth,budget,campaign_id,modified_time,create_time'.split(',')
 
     def setUp(self):
         pass

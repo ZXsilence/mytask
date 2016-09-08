@@ -156,6 +156,9 @@ class AdgroupType(object):
     ADGROUP_CVR_GRADE_3 = 243
     ADGROUP_CVR_GRADE_4 = 244
     ADGROUP_CVR_GRADE_5 = 245
+    
+    #推广组花费超过预算
+    ADGROUP_BUDGET_OUT_LIMIT = 402
 
     ALL_ADGROUP_TYPES = [
         ADGROUP_OK,
@@ -206,7 +209,8 @@ class AdgroupType(object):
         ADGROUP_CVR_GRADE_2,
         ADGROUP_CVR_GRADE_3,
         ADGROUP_CVR_GRADE_4,
-        ADGROUP_CVR_GRADE_5
+        ADGROUP_CVR_GRADE_5,
+        ADGROUP_BUDGET_OUT_LIMIT,
         ]
 
     MACHINE_DIAGNOSE_TYPES = [
@@ -309,6 +313,7 @@ CODE_TO_TYPE = {
         ,324:'ADGROUP_ROI_OPTIMIZE_NO_HOPE'
         ,400:'ADGROUP_UNKNOW'
         ,401:'ADGROUP_LOW_PV_UNKNOW'
+        ,402:'ADGROUP_BUDGET_OUT_LIMIT'
         ,241:'ADGROUP_CVR_GRADE_1'
         ,242:'ADGROUP_CVR_GRADE_2'
         ,243:'ADGROUP_CVR_GRADE_3'
@@ -386,3 +391,10 @@ CAMPAIGN_LOW_ROI_REASON = {
         ,AdgroupType.ADGROUP_LOW_ROI_OF_HIGH_COST:"ROI低推广组花费过高"
         }                
 
+class AdgroupBudgetType(object):
+    BUDGET_NO_OPERATION = 0
+    BUDGET_REDUCE_1_LV = 1
+    BUDGET_REDUCE_2_LV = 2
+    BUDGET_REDUCE_3_LV = 3
+    BUDGET_RAISE_1_LV = 4
+    BUDGET_RAISE_2_LV = 5
