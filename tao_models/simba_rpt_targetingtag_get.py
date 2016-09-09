@@ -33,6 +33,7 @@ from tao_models.num_tools import change2num
 class SimbaRptTargetingtagGet(object):
     
     @classmethod
+    @tao_api_exception()
     def get_get_adgroup_crowd_rpt(cls,nick,campaign_id,adgroup_id,sdate,edate,source):
         req = SimbaRptTargetingtagGetRequest()
         req.nick = nick
