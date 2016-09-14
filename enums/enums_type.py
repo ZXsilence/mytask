@@ -189,6 +189,17 @@ class OperationType(object):
     CHANGE_ADGROUP_WX_CPC_MAX = 706
     UPDATE_PRICE_FOR_PC_CPC_MAX = 707 
     UPDATE_PRICE_FOR_WX_CPC_MAX = 708
+    CHANGE_ADGROUP_BUDGET = 709
+    #人群相关操作
+    STOP_CROWD_OPTIMIZE = 710
+    STOP_CROWD = 711
+    START_CROWD_OPTIIMIZE = 712
+    START_CROWD = 713
+    UPDATE_CROWD_DISCOUNT = 714 
+    DELETE_CROWD = 715 
+    ADD_CROWD = 716
+    FOLLOW_CAMPAIGN = 720
+
 
     ADD_RULE = 800
     UPDATE_RULE = 801
@@ -215,6 +226,7 @@ class OperationType(object):
         DELETE_LOW_PV_BY_ADGROUP_CPC,
         DELETE_USER_DELETE_TAOBAO,
         DELETE_GARBAGE_MAX_PRICE,
+        DELETE_CROWD,
 
         DELETE_ADGROUP_NORMAL,
         DELETE_ADGROUP_INITIAL,
@@ -259,6 +271,8 @@ class OperationType(object):
         UPDATE_PRICE_MANUAL_ADGROUP,
         CHANGE_CAMPAIGN_WX_CPC_MAX,
         CHANGE_ADGROUP_WX_CPC_MAX,
+        CHANGE_ADGROUP_BUDGET,
+        FOLLOW_CAMPAIGN,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
@@ -278,6 +292,8 @@ class OperationType(object):
         STOP_ITEM_AUTO_STATUS,
         CHANGE_ITEM_LABEL,
         UPGRADE_CAMPAIGN,
+
+        START_CROWD_OPTIIMIZE,START_CROWD,STOP_CROWD_OPTIMIZE,STOP_CROWD,UPDATE_CROWD_DISCOUNT,
         
         CAMPAIGN_SCHEDULE_OPTIMIZE ,
         CAMPAIGN_PLATFORM_OPTIMIZE,
@@ -298,6 +314,7 @@ class OperationType(object):
         ADD_KEYWORD_DIRECTOR,
         ADD_KEYWORD_HISTORY_NORMAL,
         ADD_KEYWORD_EXTRA_INFO,
+        ADD_CROWD,
 
         ADD_ADGROUP_NORMAL,
 
@@ -575,8 +592,17 @@ OPTTYPE_COMMENT = {
     ,OperationType.EXECUTE_RULE_NOTICE:"自动执行"
     ,OperationType.CHANGE_CAMPAIGN_WX_CPC_MAX:"修改计划无线端最高出价"
     ,OperationType.CHANGE_ADGROUP_WX_CPC_MAX:"修改推广组无线端最高出价"
+    ,OperationType.CHANGE_ADGROUP_BUDGET:"修改推广组预算"
     ,OperationType.UPDATE_PRICE_FOR_PC_CPC_MAX:"关键词根据用户设置PC最高出价进行调价"
     ,OperationType.UPDATE_PRICE_FOR_WX_CPC_MAX:"关键词根据用户设置无线最高出价进行调价"
+    ,OperationType.START_CROWD_OPTIIMIZE:"开启推广组人群优化"
+    ,OperationType.START_CROWD:"开启人群推广"
+    ,OperationType.STOP_CROWD_OPTIMIZE:"暂停推广组人群优化"
+    ,OperationType.STOP_CROWD:"暂停人群推广"
+    ,OperationType.UPDATE_CROWD_DISCOUNT:"更新推广组人群溢价"
+    ,OperationType.DELETE_CROWD:"删除人群"
+    ,OperationType.ADD_CROWD:"增加人群"
+    ,OperationType.FOLLOW_CAMPAIGN:"推广组设置跟随计划"
 }
 
 class LoginFailType(object):

@@ -256,7 +256,6 @@ def send_bd_hd_message(cellphone,params_dict,sign_name='麦苗'):
     if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
     sms_template_code = 'SMS_12975888'
     try:
-        params_dict = {'name':u'省油移动特惠','code':u'15657185997','discount':u'9折优惠'}
         AliqinTaSmsNumSend.send_sms_sdk(cellphone,params_dict,sms_template_code,sign_name)
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
