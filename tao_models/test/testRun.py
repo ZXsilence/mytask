@@ -71,7 +71,6 @@ import test_user_seller_get
 import test_topats_4api_total_test
 import test_taobao_user_seller_get
 import test_taobao_trades_2APIs
-import test_taobao_time_get_NOT_USE
 import test_taobao_fuwu_scores_get
 import test_simba_tools_items_top_get
 import test_simba_rpt_custEffectBase_2apis
@@ -157,7 +156,6 @@ alltests = unittest.TestSuite([test_arears_get.alltests
                                ,test_topats_4api_total_test.alltests
                                ,test_taobao_user_seller_get.alltests
                                ,test_taobao_trades_2APIs.alltests
-                               ,test_taobao_time_get_NOT_USE.alltests
                                ,test_taobao_fuwu_scores_get.alltests
                                ,test_simba_tools_items_top_get.alltests
                                ,test_simba_rpt_custEffectBase_2apis.alltests

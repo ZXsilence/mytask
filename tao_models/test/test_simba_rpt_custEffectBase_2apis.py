@@ -37,39 +37,39 @@ class TestSimbaRptCusteffectGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-
-        shop = GetCampaignAdgroup.get_a_valid_shop()
-        nick=shop['nick']
+        nick,campaign_id = GetCampaignAdgroup.get_has_adgroup_rpt_nick()
         start = datetime.datetime.now()-datetime.timedelta(days=7)
         end = datetime.datetime.now()-datetime.timedelta(days=1)
-
+        
         cls.testData = [{'nick':nick,'start':start,'end':end,'popException':False,'exceptClass':None},
                         {'nick':'','start':start,'end':end,'popException':False,'exceptClass':None},
-                        #{'nick':nick,'start':start,'end':end,'popException':True,'exceptClass':TypeError},
+                        {'nick':nick,'start':start,'end':end,'popException':True,'exceptClass':TypeError},
                         ]
-        cls.errs={'effect_error':'error find in API: simba_rpt_custeffect_get',
-                  'base_error':'error find in API: simba_rpt_custbase_get',
-                  'assert_error':'assert exception',
-                  }
-    
+        cls.assertKeyRptCustEffect=[u'favshopcount', u'directpay', u'nick', u'indirectpay', u'source', u'favitemcount', u'indirectcarttotal', u'indirectpaycount', u'date', u'carttotal', u'directpaycount', u'directcarttotal']
+        cls.assertKeyRptCustBase=[u'aclick', u'cpm', u'ctr', u'nick', u'cpc', u'source', u'cost', u'date', u'impressions', u'click']
     def seUp(self):
         pass
     def test_get_user_seller(self):
         for inputdata in self.testData:
-            is_popped = False
+            import copy
             try:
                 res = SimbaRptCusteffectGet.get_shop_rpt_effect(inputdata['nick'], inputdata['start'],inputdata['end'])
-                self.assertEqual(type(res),list,self.errs['effect_error'])
-
+                self.assertEqual(type(res),list)
+                preKeys = copy.deepcopy(self.assertKeyRptCustEffect)
+                for res0 in res:
+                    self.assertEqual(sorted(res0.keys()),sorted(preKeys))
                 res = SimbaRptCustbaseGet.get_shop_rpt_base(inputdata['nick'],inputdata['start'],inputdata['end'])
-                self.assertEqual ( type(res), list, self.errs['base_error'])
-
+                self.assertEqual ( type(res), list)
+                preKeys = copy.deepcopy(self.assertKeyRptCustBase)
+                for res0 in res:
+                    self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+            except TypeError, e:
+                self.assertTrue(inputdata['popException'])
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped,inputdata['popException'],self.errs['assert_error'])
-
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                else:
+                    self.assertRaises(inputdata['exceptClass'])
 
     def tearDown(self):
         pass

@@ -29,7 +29,7 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 
 class  SimbaInsightWordsdataGet(object):
-    Max_Words = 100
+    Max_Words = 50
     @classmethod
     @tao_api_exception()
     def _get_words_data(cls,words_list,sdate,edate):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     words_list = []
     for item in cur[:100]:
         words_list.append(item['_id'])
-    edate = datetime.datetime.now() - datetime.timedelta(days = 1)
+    edate = datetime.datetime.now() - datetime.timedelta(days = 5)
     sdate = edate - datetime.timedelta(days = 1)
     print sdate ,edate
     res =  SimbaInsightWordsdataGet.get_words_data(words_list,sdate,edate)

@@ -21,11 +21,11 @@ import unittest
 from api_server.conf import set_env
 set_env.getEnvReady()
 from api_server.conf.settings import set_api_source
-from item_get import ItemGet
 from tao_models.common.exceptions import TaoApiMaxRetryException
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.exceptions import W2securityException, InvalidAccessTokenException#导入异常类
 from simba_tools_items_top_get import SimbaToolsItemsTopGet
+import copy;
 
 @unittest.skipUnless('regression' in settings.RUNTYPE, "Regression Test Case")
 class TestSimbaToolsItemsTopGet(unittest.TestCase):
@@ -35,14 +35,11 @@ class TestSimbaToolsItemsTopGet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         set_api_source('SDK_TEST')
-        cls.tstData = [{'nick':'','keyword':'围巾','popException':False, 'exceptClass':None},
+        cls.tstData = [{'nick':'','keyword':'围巾','popException':False, u'exceptClass':None},
                        {'nick':'chinchinstyle','keyword':'围巾','popException':False,'exceptClass':None},
-                       {'nick':'chinchinstyle','keyword':'','popException':True,'exceptClass':ErrorResponseException}
+                       {'nick':'chinchinstyle','keyword':' ','popException':True,'exceptClass':ErrorResponseException}
                        ]
-        cls.errs = {'type_error':'return type error',
-                    'value_error':'return value error',
-                    'except_error':'except error',
-                    }
+        cls.assertKeys=[u'rank_score', u'link_url', u'order', u'max_price', u'title']
     def seUp(self):
         pass
     def test_get_top_items_by_keyword(self):
@@ -50,13 +47,19 @@ class TestSimbaToolsItemsTopGet(unittest.TestCase):
             is_popped = False
             try:
                 res_list =  SimbaToolsItemsTopGet.get_top_items_by_keyword(inputdata['nick'], inputdata['keyword'])
-                self.assertEqual( type(res_list), list , self.errs['type_error'] )
-                self.assertGreater( len(res_list), 1, self.errs['value_error'] )
+                self.assertEqual( type(res_list), list)
+                self.assertGreater( len(res_list), 1)
+                preKeys = copy.deepcopy(self.assertKeys)
+                for res0 in res_list[:1]:
+                    self.assertEqual(sorted(res0.keys()),sorted(preKeys))
+            except ErrorResponseException, e:
+                pass
             except Exception, e:
-                is_popped = True
-                self.assertRaises(inputdata['exceptClass'])
-            finally:
-                self.assertEqual(is_popped, inputdata['popException'], self.errs['except_error'])
+                if inputdata['popException']==False:
+                    import traceback;traceback.print_exc()
+                    raise e
+                else:
+                    self.assertRaises(inputdata['exceptClass'])
 
     def tearDown(self):
         pass

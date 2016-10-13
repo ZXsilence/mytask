@@ -170,6 +170,19 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_history_uniq_query(cls, hash_value, sdate, edate):
+        """获取历史除重自然query"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"hash_value":hash_value, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 107874 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
     def get_shop_wx_nature_query(cls, sid, sdate, edate):
         """获取店铺wx自然query"""
 
@@ -178,8 +191,8 @@ class ClouddataMbpDataGet(object):
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id_list = [101426, 101425, 101427, 101428]
-        sql_id = sql_id_list[sid%4]
+        sql_id_list = [107189, 107190, 107191, 107192, 107876]
+        sql_id = sql_id_list[sid%5]
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
     
@@ -255,7 +268,7 @@ class ClouddataMbpDataGet(object):
     
     @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='pc'):
-        """获取店铺pc付费query报表"""
+        """获取店铺付费query报表"""
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -270,12 +283,16 @@ class ClouddataMbpDataGet(object):
             sql_id = 7387 if sid % 2 == 0 else 7389
             ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
             result_list.extend(ret)
-        
+        if flag == 'all' or flag == 'wx':
+            sql_id = 108420 
+            ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+            result_list.extend(ret)
+
         word_set = StringTools.load_word_set()
         for item in result_list:
-            keyword = urllib.unquote(item['keyword'])
+            keyword = urllib.unquote(str(item['keyword']))
             keyword = urllib.unquote(keyword)
-            query = urllib.unquote(item['query'])
+            query = urllib.unquote(str(item['query']))
             query = urllib.unquote(query)
 
             item['keyword'] = StringTools.keyword_decode(keyword, word_set)
@@ -373,19 +390,6 @@ class ClouddataMbpDataGet(object):
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res 
     
-    @classmethod
-    def get_shop_app_query(cls,shop_id,sdate,edate):
-        sql_dict = {0:107189,1:107190,2:107191,3:107192,4:107193}
-        now = datetime.datetime.now()
-        sql_id = sql_dict[int(shop_id) % 5]
-        if type(sdate) == type(now):
-            query_dict = {'shop_id':shop_id,'sdate':sdate.strftime("%Y%m%d"),'edate':edate.strftime("%Y%m%d")}
-        else:
-            query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
-        res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
-        return res
-        
-
     @classmethod    
     def test(cls):
         sql_id = 104879
@@ -393,15 +397,16 @@ class ClouddataMbpDataGet(object):
         return res
 
 
-def get_shop(shop_id):
-    date = datetime.datetime.now() - datetime.timedelta(days=2)
-    ret = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, date, date)
+def get_shop(shop_id, file_obj):
+    date = datetime.datetime.now() - datetime.timedelta(days=1)
+    ret = ClouddataMbpDataGet.get_sid_keyword_query_report(shop_id, date, date, date, date, 'wx')
     for item in ret:
-        for key in ['auction_id', 'gmv_auction_num','alipay_trade_amt','pay_status','gmv_time','alipay_time','orderdate']:
-            item[key] = item.get(key, '')
-        item['match_scope'] = ClouddataMbpDataGet.get_query_match_scope(item)
+        for key in ['auction_id', 'gmv_auction_num','alipay_trade_amt']:
+            item[key] = item.get(key, 0)
+        #item['match_scope'] = ClouddataMbpDataGet.get_query_match_scope(item)
         #print "%(thedate)s,%(orderdate)s,%(shop_id)s,%(buyer_id)s,%(keyword)s,%(query)s,%(url_title)s,%(auction_id)s,%(gmv_auction_num)s,%(alipay_trade_amt)s,%(pay_status)s,%(gmv_time)s,%(alipay_time)s" % item
-        print "%(keyword)s,%(query)s,%(match_scope)s,%(auction_id)s,%(gmv_auction_num)s" % item
+        line = "%(keyword)s,%(query)s,%(shop_id)s,%(auction_id)s,%(alipay_trade_amt)s,%(gmv_auction_num)s\n" % item
+        file_obj.write(line)
     return len(ret)
 
 
@@ -409,17 +414,16 @@ def get_shop(shop_id):
 
 
 if __name__ == '__main__':
-    edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    sdate = datetime.datetime.now() - datetime.timedelta(days=7)
-    sid = 33665957
-    #sid = 36314238
-    res = ClouddataMbpDataGet.get_shop_pc_nature_query(sid,sdate,edate)
-    print len(res)
-    print res[0]
-    sdate = datetime.datetime.now() - datetime.timedelta(days=7)
-    res = ClouddataMbpDataGet.get_shop_app_query(sid,sdate,edate)
-    print len(res)
-    print res[0]
+    from shop_db.services.shop_info_service import ShopInfoService
+    file_obj = file('wx_test','w')
+    shop_info_list = ShopInfoService.get_shop_infos(None, 'SYB', None)
+    shop_info_list_syb = [shop_info for shop_info in shop_info_list if  shop_info.get('soft_code', '') == 'SYB']
+    for shop_info in shop_info_list_syb:
+        try:
+            get_shop(shop_info['sid'], file_obj)
+        except Exception,e:
+            print str(e)
 
+    file_obj.close()
 
 
