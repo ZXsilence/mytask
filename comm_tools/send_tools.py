@@ -17,6 +17,11 @@ import smtplib, mimetypes
 import urllib, urllib2
 if __name__ == '__main__':
     sys.path.append('../')
+    sys.path.append('../../comm_lib/')
+    from api_server.conf import set_env
+    set_env.getEnvReady()
+    from api_server.conf.settings import set_api_source
+    set_api_source('normal_test')
 
 from email.Header import Header
 from email.mime.text import MIMEText
@@ -250,6 +255,16 @@ def send_gw_code_sms(cellphone,params_dict,sign_name='省油宝'):
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
 
+def send_jd_code_sms(cellphone,params_dict,sign_name='省油宝'):
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    sms_template_code = 'SMS_2840119'
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,params_dict,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
+
+
 
 def send_bd_hd_message(cellphone,params_dict,sign_name='麦苗'):
     global AliqinTaSmsNumSend
@@ -288,14 +303,4 @@ def filter_words(msg):
     return msg
 
 if __name__ == '__main__':
-    #send_email_with_html('115965829@qq.com;xieguanfu@maimiaotech.com', '新邮件切换', '新邮件地址')
-    #send_email_with_html(['115965829@qq.com','xieguanfu@maimiaotech.com'], '你收到邮件了吗', 'subject')
-    #send_email_with_html('dongxuanliang@maimiaotech.com','网络延迟','标题',['dongxl123@163.com'],'245684715@qq.com')
-    print get_msg_report()
-    print get_balance()
-    
-    #send_sms('18612251466','省油宝会员激活验证码:988280。请勿告知他人并确认申请是您本人操作。')
-    #send_sms('15068116152','麦苗提醒:尊敬的水冰月0426，您好！您的省油宝软件将于3天后到期，过期后软件推广设置将被清空，请尽快续费以免影响推广。【麦苗】 ')
-    #send_sms('13732249864','麦苗提醒:尊敬的水冰月0426，您好！您的省油宝软件将于3天后到期，过期后软件推广设置将被清空，请尽快续费以免影响推广。【麦苗】 ')
-    #send_sms(DIRECTOR['PHONE'], u'省油宝新评价:小--漫,评分:1,用了两个多月 再来评价的！说句真心话，没有一点用！ 烧出去的关键词比系统自动添加的还差！每天开出去200多块左')
-    #send_sms(DIRECTOR['PHONE'], '尊敬的客户你好！您的省油宝长期未登陆导致不能正常优化,请您及时登陆省油宝,方便我们进行优化!')
+    send_jd_code_sms(15657185997,{'code':str(123456),'nick':'12','softname':'省油宝'})
