@@ -18,7 +18,7 @@ import logging
 import logging.config
 import datetime
 import chardet
-
+import re
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
     from api_server.conf import set_env
@@ -299,7 +299,10 @@ class ClouddataMbpDataGet(object):
             item['keyword'] = item['keyword'].replace('+', ' ')
             item['query'] = StringTools.keyword_decode(query, word_set)
             item['query'] = item['query'].replace('+', ' ')
-        
+            if not item.has_key('auction_id') and item.has_key('access_url'):
+                url_search = re.search(r'.+id=(\d*)&',item['access_url'])
+                item['auction_id'] = url_search.groups()[0]
+
         return result_list
 
     @classmethod
