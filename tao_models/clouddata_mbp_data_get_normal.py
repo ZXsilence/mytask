@@ -301,7 +301,10 @@ class ClouddataMbpDataGet(object):
             item['query'] = item['query'].replace('+', ' ')
             if not item.has_key('auction_id') and item.has_key('access_url'):
                 url_search = re.search(r'.+id=(\d*)&',item['access_url'])
-                item['auction_id'] = url_search.groups()[0]
+                if not url_search:
+                    item['auction_id'] = '-99'
+                else:
+                    item['auction_id'] = url_search.groups()[0]
 
         return result_list
 
