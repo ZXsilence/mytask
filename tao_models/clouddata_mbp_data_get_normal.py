@@ -155,7 +155,7 @@ class ClouddataMbpDataGet(object):
         sql_id = 7825 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
-    
+
     @classmethod
     def get_shop_pc_nature_query(cls, sid, sdate, edate):
         """获取店铺pc自然query"""
@@ -164,11 +164,10 @@ class ClouddataMbpDataGet(object):
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
-
-        sql_id = 107194 
+        sql_id = 108467
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
-    
+
     @classmethod
     def get_history_uniq_query(cls, hash_value, sdate, edate):
         """获取历史除重自然query"""
@@ -178,10 +177,10 @@ class ClouddataMbpDataGet(object):
         query_dict = {"hash_value":hash_value, "sdate":sdate_str, "edate":edate_str}
         result_list = []
 
-        sql_id = 107874 
+        sql_id = 107874
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
-    
+
     @classmethod
     def get_shop_wx_nature_query(cls, sid, sdate, edate):
         """获取店铺wx自然query"""
@@ -190,12 +189,21 @@ class ClouddataMbpDataGet(object):
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
-
-        sql_id_list = [107189, 107190, 107191, 107192, 107876]
+        #接口待发布
+        sql_id_list = [108468,1 ,1 ,1 ,1 ]
         sql_id = sql_id_list[sid%5]
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
-    
+
+    @classmethod
+    def get_shop_pc_trace_log(cls,sid, sdate, edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
+        sql_id = 108469
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
     @classmethod
     def get_shop_order(cls, sid, sdate, edate):
         """获取店铺订单"""
@@ -231,10 +239,10 @@ class ClouddataMbpDataGet(object):
         query_dict = {"dt1":sdate_str, "dt2":edate_str}
         result_list = []
 
-        sql_id = 7842 
+        sql_id = 7842
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
-    
+
     @classmethod
     def get_all_wx_schedule_rpt(cls,sdate,edate):
         sdate_str = sdate.strftime("%Y%m%d")
@@ -383,7 +391,7 @@ class ClouddataMbpDataGet(object):
             query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
-    
+
     @classmethod
     def get_shop_item_traffic_and_trade_info(cls,shop_id,sdate,edate):
         sql_id = 105138
@@ -393,9 +401,10 @@ class ClouddataMbpDataGet(object):
         else:
             query_dict = {'shop_id':shop_id,'sdate':sdate,'edate':edate}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
-        return res 
-    
-    @classmethod    
+        return res
+
+
+    @classmethod
     def test(cls):
         sql_id = 104879
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,{})
@@ -419,16 +428,11 @@ def get_shop(shop_id, file_obj):
 
 
 if __name__ == '__main__':
-    from shop_db.services.shop_info_service import ShopInfoService
-    file_obj = file('wx_test','w')
-    shop_info_list = ShopInfoService.get_shop_infos(None, 'SYB', None)
-    shop_info_list_syb = [shop_info for shop_info in shop_info_list if  shop_info.get('soft_code', '') == 'SYB']
-    for shop_info in shop_info_list_syb:
-        try:
-            get_shop(shop_info['sid'], file_obj)
-        except Exception,e:
-            print str(e)
+    sid = 36314238
+    sdate = edate = datetime.datetime.now() - datetime.timedelta(days=1)
+    res = ClouddataMbpDataGet.get_shop_pc_trace_log(sid,sdate,edate)
+    for item in res:
+        print item
 
-    file_obj.close()
 
 
