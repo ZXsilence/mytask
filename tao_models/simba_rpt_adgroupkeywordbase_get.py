@@ -24,6 +24,7 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +40,17 @@ class SimbaRptAdgroupkeywordbaseGet(object):
     page_size    Number    可选    500    500     每页大小
     search_type    String    必须    SEARCH         报表类型（搜索：SEARCH,类目出价：CAT, 定向投放：NOSEARCH）可多选例如：SEARCH,CAT
     """
+
     @classmethod
     def get_rpt_adgroupkeywordbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type):
+        date_list = split_date(start_time,end_time)
+        rpt_list = []
+        for item in date_list:
+            rpt_list.extend(cls._get_rpt_adgroupkeywordbase_list(nick, campaign_id, adgroup_id,item[0],item[1],source,search_type))
+        return rpt_list
+
+    @classmethod
+    def _get_rpt_adgroupkeywordbase_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type):
         req = SimbaRptAdgroupkeywordbaseGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
