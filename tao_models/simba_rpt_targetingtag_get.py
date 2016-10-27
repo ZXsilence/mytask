@@ -27,14 +27,24 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
+from tao_models.common.date_tools import   split_date
 
 
 
 class SimbaRptTargetingtagGet(object):
-    
+
     @classmethod
     @tao_api_exception()
     def get_get_adgroup_crowd_rpt(cls,nick,campaign_id,adgroup_id,sdate,edate,source):
+        date_list = split_date(sdate,edate)
+        rpt_list = []
+        for item in date_list:
+            rpt_list.extend(cls._get_get_adgroup_crowd_rpt(nick,campaign_id,adgroup_id,item[0],item[1],source))
+        return rpt_list
+
+    @classmethod
+    @tao_api_exception()
+    def _get_get_adgroup_crowd_rpt(cls,nick,campaign_id,adgroup_id,sdate,edate,source):
         req = SimbaRptTargetingtagGetRequest()
         req.nick = nick
         req.campaign_id = campaign_id

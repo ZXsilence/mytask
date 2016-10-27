@@ -22,14 +22,25 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
+from tao_models.common.date_tools import split_date
 
 logger = logging.getLogger(__name__)
 
 class SimbaRptCusteffectGet(object):
-    
+
     @classmethod
     @tao_api_exception()
     def get_shop_rpt_effect(cls, nick, start_date, end_date,source = 'SUMMARY'):
+        date_list = split_date(start_date,end_date)
+        rpt_list = []
+        for item in date_list:
+            rpt_list.extend(cls._get_shop_rpt_effect(nick,item[0],item[1],source))
+        return rpt_list
+
+
+    @classmethod
+    @tao_api_exception()
+    def _get_shop_rpt_effect(cls, nick, start_date, end_date,source = 'SUMMARY'):
         logger.debug('get nick:%s cust effect rpt'%nick)
         req = SimbaRptCusteffectGetRequest()
         req.nick = nick
