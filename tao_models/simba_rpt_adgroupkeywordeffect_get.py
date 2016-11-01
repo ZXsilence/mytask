@@ -76,11 +76,11 @@ class SimbaRptAdgroupkeywordeffectGet(object):
     def _sub_get_rpt_adgroupkeywordeffect_list(cls,req,nick,soft_code=None):
         rsp = ApiService.execute(req,nick,soft_code)
         l = json.loads(rsp.rpt_adgroupkeyword_effect_list.lower())
+        test_sdate = datetime.datetime.strptime(req.start_time,'%Y-%m-%d')
+        test_edate = datetime.datetime.strptime(req.end_time,'%Y-%m-%d')   
         if type(l) == type({}) and 'sub_code' in l:
             if '开始日期不能大于结束日期' == l['sub_msg'] and datetime.datetime.strptime(req.start_time,'%Y-%m-%d') <= datetime.datetime.strptime(req.end_time,'%Y-%m-%d'):
                 l['sub_code'] = '1515'
-                test_sdate = datetime.datetime.strptime(req.start_time,'%Y-%m-%d')
-                test_edate = datetime.datetime.strptime(req.end_time,'%Y-%m-%d')
             raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'], sdate = test_sdate, edate = test_edate)
         if l == {}:
             l = []
@@ -100,8 +100,6 @@ if __name__ == '__main__':
     end_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=1)
     start_time = datetime.datetime.combine(start_data, datetime.time())
     end_time = datetime.datetime.combine(end_data, datetime.time())
-    print start_data, end_data
-    print start_time, end_time
     res = SimbaRptAdgroupkeywordeffectGet.get_rpt_adgroupkeywordeffect_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)
     print len(res)
 
