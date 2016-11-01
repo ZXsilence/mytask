@@ -68,7 +68,7 @@ class SimbaRptAdgroupkeywordbaseGet(object):
             if len(l) < 500:
                 break
             req.page_no += 1
-        logger.info("get_rpt_adgroupkeywordbase_list, adgroup_id:%s"%(adgroup_id))
+        logger.info("get_rpt_adgroupkeywordbase_list, adgroup_id:%s, sdate:%s, edate:%s"%(adgroup_id, start_time, end_time))
         return change2num(change_obj_to_dict_deeply(base_list))
     
     @classmethod
@@ -76,10 +76,12 @@ class SimbaRptAdgroupkeywordbaseGet(object):
     def _sub_get_rpt_adgroupkeywordbase_list(cls,req,nick,soft_code=None): 
         rsp = ApiService.execute(req,nick,soft_code)
         l = json.loads(rsp.rpt_adgroupkeyword_base_list.lower())
+        test_sdate = datetime.datetime.strptime(req.start_time,'%Y-%m-%d')
+        test_edate = datetime.datetime.strptime(req.end_time,'%Y-%m-%d') 
         if type(l) == type({}) and 'sub_code' in l:
             if '开始日期不能大于结束日期' == l['sub_msg'] and datetime.datetime.strptime(req.start_time,'%Y-%m-%d') <= datetime.datetime.strptime(req.end_time,'%Y-%m-%d'):
                 l['sub_code'] = '1515'
-            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
+            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'], sdate = test_sdate, edate = test_edate)
         if l == {}:
             l = []
         for rpt in l:
