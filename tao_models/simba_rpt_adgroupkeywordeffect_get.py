@@ -61,14 +61,14 @@ class SimbaRptAdgroupkeywordeffectGet(object):
         req.page_no = 1
         req.page_size = 500
         effect_list = []
-        logger.info("start get_rpt_adgroupkeywordeffect_list, adgroup_id:%s"%(adgroup_id))
+        logger.info("start get_rpt_adgroupkeywordeffect_list, adgroup_id:%s, sdate:%s, edate:%s"%(adgroup_id, start_time, end_time))
         while True:
             l = cls._sub_get_rpt_adgroupkeywordeffect_list(req,nick)
             effect_list.extend(l)
             if len(l) < 500:
                 break
             req.page_no += 1
-        logger.info("get_rpt_adgroupkeywordeffect_list, adgroup_id:%s"%(adgroup_id))
+        logger.info("get_rpt_adgroupkeywordeffect_list, adgroup_id:%s, sdate:%s, edate:%s"%(adgroup_id, start_time, end_time))
         return change2num(change_obj_to_dict_deeply(effect_list))
 
     @classmethod 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     source = '1,2,4,5'
     #start_time = datetime.datetime.now() - datetime.timedelta(days=10)
     #end_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    start_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=7)  
+    start_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=8)  
     end_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=1)
     start_time = datetime.datetime.combine(start_data, datetime.time())
     end_time = datetime.datetime.combine(end_data, datetime.time())
