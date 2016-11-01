@@ -79,7 +79,9 @@ class SimbaRptAdgroupkeywordeffectGet(object):
         if type(l) == type({}) and 'sub_code' in l:
             if '开始日期不能大于结束日期' == l['sub_msg'] and datetime.datetime.strptime(req.start_time,'%Y-%m-%d') <= datetime.datetime.strptime(req.end_time,'%Y-%m-%d'):
                 l['sub_code'] = '1515'
-            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
+                test_sdate = datetime.datetime.strptime(req.start_time,'%Y-%m-%d')
+                test_edate = datetime.datetime.strptime(req.end_time,'%Y-%m-%d')
+            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'], sdate = test_sdate, edate = test_edate)
         if l == {}:
             l = []
         for rpt in l:
@@ -87,13 +89,19 @@ class SimbaRptAdgroupkeywordeffectGet(object):
         return l
 
 if __name__ == '__main__':
-    nick = '大雪1'
-    campaign_id = 2617648
-    adgroup_id = 645184372 
+    nick = '美妃服饰旗舰店'
+    campaign_id = 6175323
+    adgroup_id = 707780421 
     search_type = 'SEARCH,CAT'
     source = '1,2,4,5'
-    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
-    end_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    #start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    #end_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    start_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=7)  
+    end_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=1)
+    start_time = datetime.datetime.combine(start_data, datetime.time())
+    end_time = datetime.datetime.combine(end_data, datetime.time())
+    print start_data, end_data
+    print start_time, end_time
     res = SimbaRptAdgroupkeywordeffectGet.get_rpt_adgroupkeywordeffect_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)
     print len(res)
 
