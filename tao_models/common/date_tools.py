@@ -14,7 +14,7 @@ import datetime
 def split_date(sdate,edate):
     date_list = []
     while True:
-        tmp_edate = min(sdate + datetime.timedelta(days=6),edate)
+        tmp_edate = min(sdate + datetime.timedelta(days=5),edate)
         date_list.append((sdate,tmp_edate))
         if tmp_edate >= edate:
             return date_list
