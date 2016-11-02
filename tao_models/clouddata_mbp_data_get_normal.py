@@ -190,9 +190,9 @@ class ClouddataMbpDataGet(object):
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
         #接口待发布
-        #sql_id_list = [108468,1 ,1 ,1 ,1 ]
-        #sql_id = sql_id_list[sid%5]
-        sql_id = 108468
+        sql_id_list = [108468,108593,108594,108595,108596]
+        sql_id = sql_id_list[sid%5]
+        #sql_id = 108468
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
