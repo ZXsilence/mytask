@@ -13,6 +13,8 @@ import datetime
 
 def split_date(sdate,edate):
     date_list = []
+    sdate = datetime.datetime.combine(sdate,datetime.time())
+    edate= datetime.datetime.combine(edate,datetime.time())
     while True:
         tmp_edate = min(sdate + datetime.timedelta(days=6),edate)
         date_list.append((sdate,tmp_edate))
@@ -24,8 +26,8 @@ def split_date(sdate,edate):
 
 
 if __name__ == '__main__':
-    edate = datetime.datetime(2016,10,26)
-    sdate =  edate - datetime.timedelta(days = 12)
+    edate = datetime.datetime(2016,11,1,10,10)
+    sdate =  edate - datetime.timedelta(days = 6)
     res = split_date(sdate,edate)
     for item in res:
         print item
