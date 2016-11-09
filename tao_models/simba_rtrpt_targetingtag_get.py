@@ -24,11 +24,13 @@ from TaobaoSdk.Request.SimbaRtrptTargetingtagGetRequest import SimbaRtrptTargeti
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
 
 
 class SimbaRtrptTargetingtagGet(object):
     
     @classmethod
+    @tao_api_exception()
     def get_get_adgroup_crowd_rpt(cls,nick,campaign_id,adgroup_id,tdate,source):
         req = SimbaRtrptTargetingtagGetRequest()
         req.nick = nick
@@ -37,7 +39,7 @@ class SimbaRtrptTargetingtagGet(object):
         req.the_date = tdate.strftime("%Y-%m-%d")
         req.traffic_type = source 
         rsp = ApiService.execute(req,nick,"SYB")
-        return change_obj_to_dict_deeply(rsp.results)
+        return change2num(change_obj_to_dict_deeply(rsp.results))
 
 
 

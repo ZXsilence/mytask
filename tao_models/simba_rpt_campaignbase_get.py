@@ -23,6 +23,7 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
+from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +52,19 @@ class SimbaRptCampaignbaseGet(object):
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
         return change2num(change_obj_to_dict_deeply(l))
-    
+
     @classmethod
     @tao_api_exception()
     def get_camp_rpt_list_by_date(cls, nick, campaign_id, search_type, source, start_date, end_date):
+        rpt_list = []
+        date_list = split_date(start_date,end_date)
+        for  item in date_list:
+            rpt_list.extend(cls._get_camp_rpt_list_by_date(nick, campaign_id, search_type, source, item[0],item[1]))
+        return rpt_list
+
+    @classmethod
+    @tao_api_exception()
+    def _get_camp_rpt_list_by_date(cls, nick, campaign_id, search_type, source, start_date, end_date):
         req = SimbaRptCampaignbaseGetRequest()
         keys_int  =["click","impressions"]
         keys_float = ["cpm","avgpos","ctr","cost"]
@@ -74,6 +84,8 @@ class SimbaRptCampaignbaseGet(object):
         for rpt in l:
             rpt['date'] = datetime.datetime.strptime(rpt['date'], '%Y-%m-%d')
         return change2num(change_obj_to_dict_deeply(l))
+
+
         
     @classmethod
     def get_campaign_base_accumulate(cls, nick, campaign_id, search_type, source, sdate, edate):
