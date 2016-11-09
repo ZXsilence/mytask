@@ -24,6 +24,7 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,14 @@ class SimbaRptAdgroupkeywordeffectGet(object):
     """
     @classmethod
     def get_rpt_adgroupkeywordeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type):
+        rpt_list = []
+        date_list = split_date(start_time,end_time)
+        for item in date_list:
+            rpt_list.extend(cls._get_rpt_adgroupkeywordeffect_list(nick, campaign_id, adgroup_id,item[0],item[1],source,search_type))
+        return rpt_list
+
+    @classmethod
+    def _get_rpt_adgroupkeywordeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, source, search_type):
         req = SimbaRptAdgroupkeywordeffectGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
@@ -52,14 +61,14 @@ class SimbaRptAdgroupkeywordeffectGet(object):
         req.page_no = 1
         req.page_size = 500
         effect_list = []
-        logger.info("start get_rpt_adgroupkeywordeffect_list, adgroup_id:%s"%(adgroup_id))
+        logger.info("start get_rpt_adgroupkeywordeffect_list, adgroup_id:%s, sdate:%s, edate:%s"%(adgroup_id, start_time, end_time))
         while True:
             l = cls._sub_get_rpt_adgroupkeywordeffect_list(req,nick)
             effect_list.extend(l)
             if len(l) < 500:
                 break
             req.page_no += 1
-        logger.info("get_rpt_adgroupkeywordeffect_list, adgroup_id:%s"%(adgroup_id))
+        logger.info("get_rpt_adgroupkeywordeffect_list, adgroup_id:%s, sdate:%s, edate:%s"%(adgroup_id, start_time, end_time))
         return change2num(change_obj_to_dict_deeply(effect_list))
 
     @classmethod 
@@ -67,10 +76,12 @@ class SimbaRptAdgroupkeywordeffectGet(object):
     def _sub_get_rpt_adgroupkeywordeffect_list(cls,req,nick,soft_code=None):
         rsp = ApiService.execute(req,nick,soft_code)
         l = json.loads(rsp.rpt_adgroupkeyword_effect_list.lower())
+        test_sdate = datetime.datetime.strptime(req.start_time,'%Y-%m-%d')
+        test_edate = datetime.datetime.strptime(req.end_time,'%Y-%m-%d')   
         if type(l) == type({}) and 'sub_code' in l:
             if '开始日期不能大于结束日期' == l['sub_msg'] and datetime.datetime.strptime(req.start_time,'%Y-%m-%d') <= datetime.datetime.strptime(req.end_time,'%Y-%m-%d'):
                 l['sub_code'] = '1515'
-            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'])
+            raise ErrorResponseException(sub_code = l['sub_code'],sub_msg = l['sub_msg'],code = l['code'],msg = l['msg'], sdate = test_sdate, edate = test_edate)
         if l == {}:
             l = []
         for rpt in l:
@@ -78,13 +89,17 @@ class SimbaRptAdgroupkeywordeffectGet(object):
         return l
 
 if __name__ == '__main__':
-    nick = '大雪1'
-    campaign_id = 2617648
-    adgroup_id = 645184372 
+    nick = '美妃服饰旗舰店'
+    campaign_id = 6175323
+    adgroup_id = 707780421 
     search_type = 'SEARCH,CAT'
     source = '1,2,4,5'
-    start_time = datetime.datetime.now() - datetime.timedelta(days=10)
-    end_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    #start_time = datetime.datetime.now() - datetime.timedelta(days=10)
+    #end_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    start_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=8)  
+    end_data = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=1)
+    start_time = datetime.datetime.combine(start_data, datetime.time())
+    end_time = datetime.datetime.combine(end_data, datetime.time())
     res = SimbaRptAdgroupkeywordeffectGet.get_rpt_adgroupkeywordeffect_list(nick, campaign_id, adgroup_id, start_time, end_time, source, search_type)
     print len(res)
 

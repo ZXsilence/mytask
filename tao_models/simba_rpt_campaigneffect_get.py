@@ -22,21 +22,30 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.num_tools import change2num
+from tao_models.common.date_tools  import split_date
 
 logger = logging.getLogger(__name__)
 
 class SimbaRptCampaigneffectGet(object):
 
     @classmethod
-    @tao_api_exception()
     def get_camp_rpt_list_by_date(cls, nick, campaign_id, search_type, source, start_date, end_date):
+        date_list = split_date(start_date,end_date)
+        rpt_list = []
+        for item in date_list:
+            rpt_list.extend(cls._get_camp_rpt_list_by_date(nick, campaign_id, search_type, source,item[0],item[1]))
+        return rpt_list
+
+    @classmethod
+    @tao_api_exception()
+    def _get_camp_rpt_list_by_date(cls, nick, campaign_id, search_type, source, start_date, end_date):
         req = SimbaRptCampaigneffectGetRequest()
         req.nick = nick
         req.start_time = datetime.datetime.strftime(start_date, '%Y-%m-%d')
         req.end_time = datetime.datetime.strftime(end_date, '%Y-%m-%d')
         req.campaign_id = campaign_id
         req.source = source
-        req.search_type = search_type   
+        req.search_type = search_type
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         l = json.loads(rsp.rpt_campaign_effect_list.lower())
