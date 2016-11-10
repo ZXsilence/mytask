@@ -104,6 +104,8 @@ class OperationType(object):
     KEEP_NORMAL = 201
     #无线改价新增
     UPDATE_KEYWORD_MOBILE_PRICE_NORMAL = 210
+    UPDATE_KEYWORD_MOBILE_ROI_GOOD_INCRE_PRICE = 211
+    UPDATE_KEYWORD_MOBILE_ROI_GOOD_INCRE_PRICE = 212
 
     IGNORE_KEYWORD_NOT_EXIST = 301
     IGNORE_KEYWORD_NOT_HANDLE = 302
@@ -428,6 +430,19 @@ class OperationType(object):
         UPDATE_PRICE_FOR_WX_CPC_MAX,
     ]
 
+    ALL_KEYWORD_PC_UPDATE_TYPES = [
+        UPDATE_PRICE_ROI_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_ROI_BAD_DECRE_PRICE,
+        UPDATE_PRICE_FOR_PC_CPC_MAX
+    ]
+
+    ALL_KEYWORD_WX_UPDATE_TYPES = [
+        UPDATE_KEYWORD_MOBILE_PRICE_NORMAL,
+        UPDATE_PRICE_FOR_PC_CPC_MAX,
+        UPDATE_PRICE_MOBILE_ROI_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_MOBILE_ROI_BAD_DECRE_PRICE
+    ]
+
     ALL_ADGROUP_DELETE_TYPES = [
         DELETE_ADGROUP_NORMAL,
         DELETE_ADGROUP_INITIAL,
@@ -495,7 +510,9 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_COST_LESS_THAN_LIMIT_INCRE_PRICE: "计划花费未达到最低花费设置，关键词加大投入"
     , OperationType.UPDATE_PRICE_CUSTOM: "在一定出价范围内，关键词价格进行调整"
     , OperationType.UPDATE_PRICE_FOR_CPC_MAX: "根据用户设置最高点击单价，调整关键词价格"
-    
+    , OperationType.UPDATE_PRICE_MOBILE_ROI_GOOD_INCRE_PRICE: "关键词最近一段时间无线效果好于计划整体，加大投入"
+    , OperationType.UPDATE_PRICE_MOBILE_ROI_BAD_DECRE_PRICE: "关键词最近一段时间无线效果低于计划整体，减小投入"
+
     , OperationType.UPDATE_PRICE_GOOD_POSITION_INCRE_PRICE : '关键词通过加价获得一个好排名'
     , OperationType.UPDATE_PRICE_GOOD_POSITION_DECRE_PRICE : '关键词通过减价获得一个好排名'
     , OperationType.UPDATE_PRICE_HOT_INCRE_CLICK_INCRE_PRICE : '测款计划通过加价增加流量'
