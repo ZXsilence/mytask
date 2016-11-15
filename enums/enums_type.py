@@ -573,7 +573,7 @@ OPTTYPE_COMMENT = {
     , OperationType.UPDATE_PRICE_USER_EXPECT_DECRE_PRICE:'用户意图减小流量，关键词减价'
     , OperationType.UPDATE_PRICE_ACCURATE_MATCH: "点击率低，关键词修改匹配方式"
     , OperationType.UPDATE_PRICE_WIDE_MATCH: "提升流量，关键词修改为广泛匹配"
-    , OperationType.KEEP_NORMAL : "关键词表现正常，保持出价稳定，继续观察"
+    , OperationType.KEEP_NORMAL : "检查了推广组所有关键词，由于推广组和关键词报表数据良好，价格无需调整"
     
     , OperationType.UPDATE_PRICE_MANUAL_ADGROUP: "手动计划自定义优化关键词价格"
     
