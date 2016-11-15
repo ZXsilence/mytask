@@ -101,6 +101,9 @@ class OperationType(object):
     UPDATE_PRICE_ITEM_GOOD_INCRE_PRICE = 130
     UPDATE_PRICE_ITEM_BAD_DECRE_PRICE = 131
     UPDATE_PRICE_NOCLICK_INCRE_PRICE = 132
+    SET_PC_KEYWORDS_MODEL = 133
+    SET_WX_KEYWORDS_MODEL = 134
+
     KEEP_NORMAL = 201
     #无线改价新增
     UPDATE_KEYWORD_MOBILE_PRICE_NORMAL = 210
@@ -201,6 +204,8 @@ class OperationType(object):
     DELETE_CROWD = 715 
     ADD_CROWD = 716
     FOLLOW_CAMPAIGN = 720
+    UPDATE_CAMPAIGN_BUDGET = 721
+    UPDATE_CAMPAIGN_MODEL = 722
 
 
     ADD_RULE = 800
@@ -249,6 +254,8 @@ class OperationType(object):
         UPDATE_PRICE_ROI_BAD_DECRE_PRICE,
         UPDATE_PRICE_COST_SUFF_INCRE_PRICE, 
         UPDATE_PRICE_COST_FULL_DECRE_PRICE,
+        UPDATE_CAMPAIGN_BUDGET,
+        UPDATE_CAMPAIGN_MODEL,
         UPDATE_PRICE_GARBAGE_INCRE_PRICE,
         UPDATE_PRICE_NOCLICK_INCRE_PRICE,
         UPDATE_PRICE_MINIMIZE_CPC_MAX,
@@ -275,6 +282,8 @@ class OperationType(object):
         CHANGE_ADGROUP_WX_CPC_MAX,
         CHANGE_ADGROUP_BUDGET,
         FOLLOW_CAMPAIGN,
+        SET_PC_KEYWORDS_MODEL,
+        SET_WX_KEYWORDS_MODEL,
 
         START_ADGROUP,
         START_OPTIMIZE_ADGROUP,
@@ -428,6 +437,8 @@ class OperationType(object):
         UPDATE_PRICE_WIDE_MATCH,#nouse
         UPDATE_PRICE_FOR_PC_CPC_MAX,
         UPDATE_PRICE_FOR_WX_CPC_MAX,
+        SET_PC_KEYWORDS_MODEL,
+        SET_WX_KEYWORDS_MODEL,
     ]
 
     ALL_KEYWORD_PC_UPDATE_TYPES = [
@@ -629,6 +640,10 @@ OPTTYPE_COMMENT = {
     ,OperationType.DELETE_CROWD:"删除人群"
     ,OperationType.ADD_CROWD:"增加人群"
     ,OperationType.FOLLOW_CAMPAIGN:"推广组设置跟随计划"
+    ,OperationType.UPDATE_CAMPAIGN_BUDGET:"修改计划预算"
+    ,OperationType.UPDATE_CAMPAIGN_MODEL:"修改计划推广平台"
+    ,OperationType.SET_PC_KEYWORDS_MODEL:'计划改为pc模式调整无线关键词价格'
+    ,OperationType.SET_WX_KEYWORDS_MODEL:'计划改为无线模式调整pc关键词价格'
 }
 
 class LoginFailType(object):
