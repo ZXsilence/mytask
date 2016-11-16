@@ -22,6 +22,7 @@ from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
+from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
@@ -51,11 +52,19 @@ class SimbaRptCampadgroupBaseGet(object):
 
     @classmethod
     def get_rpt_adgroupbase_list(cls, nick, campaign_id, start_time, end_time, search_type, source):
+        rpt_list = []
+        date_list = split_date(start_time,end_time)
+        for item in date_list:
+            rpt_list.extend(cls.__get_rpt_adgroupbase_list(nick, campaign_id, item[0], item[1], search_type, source))
+        return rpt_list
+
+    @classmethod
+    def __get_rpt_adgroupbase_list(cls, nick, campaign_id, start_time, end_time, search_type, source):
         page_no = 1
         base_list = []
         keys_int  =["click","impressions"]
         keys_float = ["cpm","avgpos","ctr","cost"]
-        while True:  
+        while True:
             subbase_list = SimbaRptCampadgroupBaseGet._get_rpt_adgroupbase_list(\
                     nick, campaign_id, start_time, end_time, search_type,\
                     source,page_no)

@@ -26,10 +26,9 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
-from busi_service.service.task_service import TaskService
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
-
+TaskService = None
 
 class TaoOpenErrorCode(object):
     """
@@ -354,6 +353,8 @@ def task_manage(arg):
 
 
 def script_manage(arg):
+    global TaskService
+    if not TaskService:from busi_service.service.task_service import TaskService
     def _wrapper_func(func):
         def __wrappe_func(*args, **kwargs):
             task_name = arg
