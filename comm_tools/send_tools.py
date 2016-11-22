@@ -43,8 +43,10 @@ SEND_MESSAGE_URL = 'http://www.stongnet.com/sdkhttp/sendsms.aspx'
 MSG_REPORT = 'http://www.stongnet.com/sdkhttp/getmtreport.aspx'
 DIRECTOR = {
             'PHONE':'15068116152',
-            'EMAIL':'monitor@maimiaotech.com',
-            'SECRET':'Mm@ops2015)'
+            #'EMAIL':'monitor@maimiaotech.com',
+            #'SECRET':'Mm@ops2015)'
+            'EMAIL':'ops@maimiaotech.com',
+            'SECRET':'Mm@2015)'
             }
 
 def send_email_with_text(addressee, text, subject,cc = None, reply_to=None):
