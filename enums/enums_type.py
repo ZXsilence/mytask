@@ -722,7 +722,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.DELETE_CROWD:"删除人群"
     ,OperationType.ADD_CROWD:"增加人群"
     ,OperationType.FOLLOW_CAMPAIGN:"推广组设置跟随计划"
-    ,OperationType.UPDATE_CAMPAIGN_BUDGET:"修改计划预算"
+    ,OperationType.UPDATE_CAMPAIGN_BUDGET:"对计划日限额进行调整"
     ,OperationType.UPDATE_CAMPAIGN_MODEL:"修改计划推广平台"
     ,OperationType.SET_PC_KEYWORDS_MODEL:'计划改为pc模式调整无线关键词价格'
     ,OperationType.SET_WX_KEYWORDS_MODEL:'计划改为无线模式调整pc关键词价格'
