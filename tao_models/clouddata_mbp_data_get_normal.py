@@ -356,7 +356,7 @@ class ClouddataMbpDataGet(object):
         if not dt1 or not dt2:
             dt2 = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d")
             dt1 = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%Y%m%d")
-        sql_id = 104421
+        sql_id = 110031 
         query_dict = {"auction_id":item_id,"dt1":dt1,"dt2":dt2}
         res = ClouddataMbpDataGet.get_data_from_clouddata(sql_id,query_dict)
         return res
@@ -431,7 +431,7 @@ def get_shop(shop_id, file_obj):
 if __name__ == '__main__':
     sid = 36314238
     sdate = edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    res = ClouddataMbpDataGet.get_shop_pc_trace_log(sid,sdate,edate)
+    res = ClouddataMbpDataGet.get_item_pc_traffic_info(528392517111)
     for item in res:
         print item
 
