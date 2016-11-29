@@ -722,8 +722,8 @@ OPTTYPE_COMMENT = {
     ,OperationType.CHANGE_CAMPAIGN_WX_CPC_MAX:"修改计划无线端最高出价"
     ,OperationType.CHANGE_ADGROUP_WX_CPC_MAX:"修改推广组无线端最高出价"
     ,OperationType.CHANGE_ADGROUP_BUDGET:"修改推广组预算"
-    ,OperationType.UPDATE_PRICE_FOR_PC_CPC_MAX:"关键词根据计划模式(PC)调整出价"
-    ,OperationType.UPDATE_PRICE_FOR_WX_CPC_MAX:"关键词根据计划模式(无线)调整出价"
+    ,OperationType.UPDATE_PRICE_FOR_PC_CPC_MAX:"关键词根据推广组pc最高出价调整"
+    ,OperationType.UPDATE_PRICE_FOR_WX_CPC_MAX:"关键词根据推广组(无线)最高出价调整"
     ,OperationType.START_CROWD_OPTIIMIZE:"开启推广组人群优化"
     ,OperationType.START_CROWD:"开启人群推广"
     ,OperationType.STOP_CROWD_OPTIMIZE:"暂停推广组人群优化"
@@ -734,8 +734,8 @@ OPTTYPE_COMMENT = {
     ,OperationType.FOLLOW_CAMPAIGN:"推广组设置跟随计划"
     ,OperationType.UPDATE_CAMPAIGN_BUDGET:"对计划日限额进行调整"
     ,OperationType.UPDATE_CAMPAIGN_MODEL:"修改计划推广平台"
-    ,OperationType.SET_PC_KEYWORDS_MODEL:'计划改为pc模式调整无线关键词价格'
-    ,OperationType.SET_WX_KEYWORDS_MODEL:'计划改为无线模式调整pc关键词价格'
+    ,OperationType.SET_PC_KEYWORDS_MODEL:'关键词根据计划模式(pc)调整出价'
+    ,OperationType.SET_WX_KEYWORDS_MODEL:'关键词根据计划模式(无线)调整出价'
     ,OperationType.UPDATE_WX_RANK_CPC_MAX:'修改抢排名关键词无线最高出价'
     ,OperationType.UPDATE_PC_RANK_CPC_MAX:'修改抢排名关键词PC最高出价'
     ,OperationType.DELETE_CREATIVE_NORMAL:'推广组创意删除'
