@@ -286,7 +286,6 @@ class ClouddataMbpDataGet(object):
             query_dict = {"shop_id":sid, "dt1":sdate_str, "dt2":edate_str, "sdate":sdate_str, "edate":edate_str}
         
         result_list = []
-        return result_list
 
         if flag == "all" or flag == "pc":
             sql_id = 7387 if sid % 2 == 0 else 7389
