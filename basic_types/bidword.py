@@ -47,8 +47,8 @@ class BidWord(object):
                 'avg_price':self.data[3],
                 'compete':self.data[4],
                 'score':self.data[5],
-                'pc_avg_price': self.data[5],
-                'mobile_avg_price': self.data[6]
+                'pc_avg_price': self.data[6],
+                'mobile_avg_price': self.data[7]
                 }
 
     def __get_index_by_field(self,field):
