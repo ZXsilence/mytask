@@ -136,7 +136,7 @@ class ApiCacheConfig(object):
 
 
 
-        #'taobao.simba.keywords.qscore.get':
+        'taobao.simba.keywords.qscore.get':{'cache_name':'qscore','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
         #'taobao.simba.keywords.qscore.split.get':
         #'taobao.simba.keywords.realtime.ranking.get':
         #'taobao.simba.keywords.recommend.get':
