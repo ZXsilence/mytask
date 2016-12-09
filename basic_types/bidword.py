@@ -46,7 +46,9 @@ class BidWord(object):
                 'click':self.data[2],
                 'avg_price':self.data[3],
                 'compete':self.data[4],
-                'score':self.data[5]
+                'score':self.data[5],
+                'pc_avg_price': self.data[6],
+                'mobile_avg_price': self.data[7]
                 }
 
     def __get_index_by_field(self,field):
@@ -62,6 +64,10 @@ class BidWord(object):
             return 4
         elif field == 'score':
             return 5
+        elif field == 'pc_avg_price':
+            return 6
+        elif field == 'mobile_avg_price':
+            return 7
 
 if __name__ == '__main__':
     data  = ('test',100,230,2.5)
