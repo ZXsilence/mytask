@@ -92,6 +92,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         raise SDKRetryException(code=e.code,sub_code=e.sub_code\
                                 ,msg=e.msg,sub_msg=e.sub_msg)
                      
+                    api_method = None
                     #扔出自定义异常
                     if hasattr(e,'params') and e.params:
                         api_method = e.params['method']
@@ -172,6 +173,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         else: 
                             if wait_seconds >= 2:
                                 logger.debug("app call limit [%d] seconds, need sleep"%wait_seconds)
+                            if api_method == 'taobao.simba.keywords.pricevon.set':
+                                wait_seconds += 1
                             sleep(wait_seconds)
                         continue
                     #isp为开头的错误，只有三种无法重试

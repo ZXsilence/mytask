@@ -278,7 +278,6 @@ class ClouddataMbpDataGet(object):
     @classmethod
     def get_sid_keyword_query_report(cls, sid, sdate, edate, dt1=None, dt2=None, flag='pc'):
         """获取店铺付费query报表"""
-
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         if dt1 and dt2:
