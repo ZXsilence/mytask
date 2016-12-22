@@ -224,7 +224,7 @@ class ClouddataMbpDataGet(object):
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         result_list = []
-        sql_id = 110417
+        sql_id = 110422 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
