@@ -138,7 +138,19 @@ class ClouddataMbpDataGet(object):
         query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
         result_list = []
 
-        sql_id = 104099
+        sql_id = 110428 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_area_rpt(cls, sid, sdate, edate):
+        #获取店铺分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+        sql_id = 110429
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
