@@ -119,6 +119,17 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_test_pc_web_log(cls, sid, sdate, edate):
+        """获取测试PC web_log"""
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":edate_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+        sql_id = 6335 #pc
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
     def get_shop_schedule_rpt(cls, sid, sdate, edate):
         #获取店铺分时报表
 
@@ -202,6 +213,18 @@ class ClouddataMbpDataGet(object):
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         sql_id = 108469
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_shop_order_sample(cls, sid, sdate, edate):
+        """获取店铺订单抽样"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+        sql_id = 110422 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -428,11 +451,13 @@ def get_shop(shop_id, file_obj):
 
 
 if __name__ == '__main__':
-    sid = 36314238
+    sid = 68186206 
     sdate = edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    res = ClouddataMbpDataGet.get_item_pc_traffic_info(528392517111)
-    for item in res:
-        print item
-
+    wc_log = ClouddataMbpDataGet.get_test_wc_web_log(sid, sdate, edate)
+    pc_log = ClouddataMbpDataGet.get_test_pc_web_log(sid, sdate, edate)
+    order = ClouddataMbpDataGet.get_shop_order_sample(sid, sdate, edate)
+    print len(wc_log)
+    print len(pc_log)
+    print len(order)
 
 
