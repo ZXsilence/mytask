@@ -138,7 +138,19 @@ class ClouddataMbpDataGet(object):
         query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
         result_list = []
 
-        sql_id = 104099
+        sql_id =110447
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_area_rpt(cls, sid, sdate, edate):
+        #获取店铺分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+        sql_id = 110429
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -451,13 +463,9 @@ def get_shop(shop_id, file_obj):
 
 
 if __name__ == '__main__':
-    sid = 68186206 
-    sdate = edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    wc_log = ClouddataMbpDataGet.get_test_wc_web_log(sid, sdate, edate)
-    pc_log = ClouddataMbpDataGet.get_test_pc_web_log(sid, sdate, edate)
-    order = ClouddataMbpDataGet.get_shop_order_sample(sid, sdate, edate)
-    print len(wc_log)
-    print len(pc_log)
-    print len(order)
+    sid = 36314238
+    sdate = edate = datetime.datetime.now() - datetime.timedelta(days=3)
+    res = ClouddataMbpDataGet.get_shop_schedule_rpt(sid,sdate,edate)
+    print res[0]
 
 
