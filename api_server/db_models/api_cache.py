@@ -62,6 +62,6 @@ class ApiCache(object):
     def clear_cache(cls,cache_name,nick,add_info_dict = {}):
         cls.check_conn()
         table_name = cls.get_coll_name()
-        filter_dict = {'cache_name':cache_name,'nick':nick}
+        filter_dict = {'cache_name':cache_name}
         filter_dict.update(add_info_dict)
         cls._conn[cls._db][table_name].remove(filter_dict)
