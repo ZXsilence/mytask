@@ -115,10 +115,14 @@ class ApiCacheService(object):
 
     @classmethod
     def clear_user_cache(cls,nick):
-        remove_cache_filter = {}
+        params_dict = {'nick':nick}
         cache_name_list = set(config['cache_name'] for config in ApiCacheConfig.API_METHOD_CONFIG.values())
         #公有数据可以不清理,只清理用户自己的数据
         for cache_name in cache_name_list:
+            cache_key_config = ApiCacheConfig.API_CACHE_KEY_CONFIG.get(cache_name)
+            if not cache_key_config:
+                continue
+            remove_cache_filter = dict((k,params_dict[k]) for k in cache_key_config['remove_keys'] if k in params_dict) if cache_key_config else {}
             logger.warning('clean nick:%s api cache ,cache_name:%s' % (nick,cache_name))
             ApiCache.clear_cache(cache_name,nick,remove_cache_filter)
         logger.warning('clean nick:%s api cache done' % nick)
