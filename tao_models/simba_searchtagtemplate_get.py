@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 class SearchtagtemplateGet(object):
 
+
     @classmethod
     @tao_api_exception()
     def searchtagtemplate_result(cls, nick, sub_nick, soft_code):
@@ -31,11 +32,17 @@ class SearchtagtemplateGet(object):
         req.nick = nick
         req.sub_nick = sub_nick
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.template_list)
-
+        res = change_obj_to_dict_deeply(rsp.template_list)
+        #api返回格式简化处理,一个模板对应多个tag,一个tag对应一个人群
+        result = []
+        for item in res:
+            result.append({'template_id':item['id'],'template_name':item['name'],'tag_list':item['dim_list']['dim_dt_os'][0]['tag_list']['tag_options']})
+        return result
 
 if __name__ == '__main__':
     nick = "麦苗科技001"
     sub_nick = None
     soft_code = "SYB"
-    print SearchtagtemplateGet.searchtagtemplate_result(nick, sub_nick, soft_code)
+    res =SearchtagtemplateGet.searchtagtemplate_result(nick, sub_nick, soft_code)
+    for item in res:
+        print item

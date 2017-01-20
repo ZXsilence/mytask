@@ -30,7 +30,7 @@ class SerchcrowdStateBatchUpdate(object):
         req = SimbaSerchcrowdStateBatchUpdateRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
-        req.adgroup_crowd_ids = adgroup_crowd_ids
+        req.adgroup_crowd_ids = ','.join([str(d) for d in adgroup_crowd_ids]) 
         req.state = state
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.adgrouptargetingtags)

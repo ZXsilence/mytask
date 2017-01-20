@@ -24,6 +24,7 @@ from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,14 @@ class SimbaRptAdgroupEffectGet(object):
 
     @classmethod
     def get_rpt_adgroupeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
+        rpt_list = []
+        date_list = split_date(start_time,end_time)
+        for item in date_list:
+            rpt_list.extend(cls._get_rpt_adgroupeffect_list(nick,campaign_id,adgroup_id,item[0],item[1],search_type,source))
+        return rpt_list
+
+    @classmethod
+    def _get_rpt_adgroupeffect_list(cls, nick, campaign_id, adgroup_id, start_time, end_time, search_type, source):
         """
         Notes:
                 because of taobao API access-times limit,so we recommend that (end_time - start_time) do not more than a day

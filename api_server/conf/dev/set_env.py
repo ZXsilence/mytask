@@ -26,3 +26,7 @@ def getEnvReady():
     sys.path.insert(0,API_GEN)
 
 
+def getJdEnvReady():
+    sys.path.insert(0,PYTHON_SDK)
+    sys.path.insert(0,PROJECT_PAR)
+    sys.path.insert(0,API_GEN)

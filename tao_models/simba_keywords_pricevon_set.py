@@ -29,6 +29,7 @@ class SimbaKeywordsPricevonSet(object):
 
     @classmethod
     def set_keywords_price(cls, nick, keyword_price_list,safe=True):
+        """设置关键词pc出价"""
         if not keyword_price_list:
             return []
         keyword_price_list = SimbaKeywordsPricevonSet._del_duplicates2(keyword_price_list)
@@ -194,6 +195,8 @@ class SimbaKeywordsPricevonSet(object):
     
     @classmethod
     def set_mobile_prices(cls,nick,word_price_list,safe=True):
+        """设置关键词mobile出价"""
+
         size = PageSize.KEYWORDS_SET
         package_num = (len(word_price_list)+size-1)/size
         keywords = []
@@ -209,8 +212,41 @@ class SimbaKeywordsPricevonSet(object):
                     continue
         return change_obj_to_dict_deeply(keywords)
 
+    @classmethod
+    def set_keywords_pc_and_mobile_prices(cls, nick, keyword_price_list, safe=True):
+        """设置关键词pc和mobile出价"""
+        if not keyword_price_list:
+            return []
+        keyword_price_list = SimbaKeywordsPricevonSet._del_duplicates2(keyword_price_list)
 
+        size = PageSize.KEYWORDS_SET
+        word_price_dict_list = []
+        for element in keyword_price_list:
+            word_price_dict = {
+                    "keywordId":element['kid']
+            }
+            if element.has_key('price'):
+                word_price_dict['maxPrice'] = element['price']
+                word_price_dict['isDefaultPrice'] = 0  
+                word_price_dict['matchScope'] = element.get('match_scope',4) if element.get('match_scope',4) != 2 else 4
+            if element.has_key('mobile_price'):
+                word_price_dict['maxMobilePrice'] = element['mobile_price']
+                word_price_dict['mobileIsDefaultPrice'] = element['mobile_is_default_price']
 
+            word_price_dict_list.append(word_price_dict)
+        
+        req = SimbaKeywordsPricevonSetRequest()
+        req.nick = nick
+        package_num = len(keyword_price_list)/size + 1
+        if len(keyword_price_list) % size== 0:
+            package_num -= 1
+        keywords = []
+        soft_code = None
+        for i in range(package_num):
+            sub_keywords = cls._set_price2(nick, word_price_dict_list[i*size: (i+1)*size], soft_code, safe)
+            keywords.extend(sub_keywords)
+
+        return change_obj_to_dict_deeply(keywords)
 
 def test():
     nick = 'chinchinstyle'
@@ -219,14 +255,13 @@ def test():
 
 def test2():
     nick = 'chinchinstyle'
-    word_price_list = [{'kid':70160490652, 'price':101, 'match_scope':1}, \
-            {'kid':70160490655, 'price':101, 'match_scope':1}, \
-            {'kid':70160490656, 'price':101, 'match_scope':1}, \
-            {'kid':70160490657, 'price':101, 'match_scope':1}, \
-            {'kid':60160490658, 'price':101, 'match_scope':1}
+    word_price_list = [{'kid':284806654922, 'price':99, 'match_scope':4, 'mobile_price':99, 'mobile_is_default_price':0}, \
+                       {'kid':284806654921, 'price':99, 'match_scope':4 }, \
+                       {'kid':284806654920, 'mobile_price':99, 'mobile_is_default_price':0}
+
             ]
-    print SimbaKeywordsPricevonSet.set_keywords_price(nick, word_price_list)
+    print SimbaKeywordsPricevonSet.set_keywords_pc_and_mobile_prices(nick, word_price_list)
 
 if __name__ == '__main__':
     #test()
-    test2()
+    test2() 

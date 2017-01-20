@@ -19,14 +19,20 @@ SECRET_KEY = '^&maimiaotech!@#'
 BLOCK_SIZE = len(SECRET_KEY)
 PADDING = '{'
 
-def generate_ticket(nick,worker_id,article_code,timestamp,aliww='',is_cloud=False):
-    origin_ticket = {'nick':nick,'worker_id':worker_id,'article_code':article_code,'timestamp':timestamp,'aliww':aliww,'is_cloud':is_cloud}
+def generate_ticket(nick,worker_id,group_id,article_code,timestamp,aliww='',is_cloud=False):
+    origin_ticket = {'nick':nick,'worker_id':worker_id,'article_code':article_code,'timestamp':timestamp,'aliww':aliww,\
+                    'is_cloud':is_cloud,'group_id':group_id}
     s = json.dumps(origin_ticket)
     return encode_AES(s)
 
 def decode_ticket(ticket):
     origin_ticket = decode_AES(ticket)
     return json.loads(origin_ticket)
+
+def get_recommend_ticket(nick,soft_code,acode):
+    origin_ticket = {'nick':nick,'soft_code':soft_code,'acode':acode}
+    s = json.dumps(origin_ticket)
+    return encode_AES(s)
 
 def encode_AES(encode_str):
     cipher = AES.new(SECRET_KEY)

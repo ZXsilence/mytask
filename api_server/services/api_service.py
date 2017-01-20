@@ -50,10 +50,11 @@ class ApiService(object):
             cache_data = ApiCacheService.get_cache(cache_key,params_dict)
             if cache_data:
                 rsp_obj = ApiService.getResponseObj(cache_data)
-                return rsp_obj
+                if 'sub_code' not in rsp_obj.responseBody and  'sub_msg' not in rsp_obj.responseBody:
+                    return rsp_obj
         rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
         rsp_obj = ApiService.getResponseObj(rsp_dict)
-        if not rsp_obj.isSuccess():
+        if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
         #update清理cache
         if cache and method_config:
@@ -71,8 +72,6 @@ class ApiService(object):
         rsp_str = api_client.execute(params_str,nick,soft_code,api_source)
         rsp_dict = simplejson.loads(rsp_str)
         return rsp_dict
-        #rsp_obj = ApiService.getResponseObj(rsp_dict)
-        #return rsp_obj
 
     @staticmethod
     def getReqParameters(req):

@@ -25,6 +25,101 @@ from tao_models.num_tools import change2num, KEYS_INT, KEYS_FLOAT, KEYS_RT
 logger = logging.getLogger(__name__)
 
 class SimbaRtRptBidwordGet(object):
+
+    #保留分平台数据
+    @classmethod
+    def get_bidword_platform_rt_rpt_list(cls, nick, campaign_id, adgroup_id, the_date):
+        keywords_rpt_list = cls.get_bidword_rt_detail_rpt_list(nick, campaign_id, adgroup_id, the_date, "SUMMARY")
+        
+        keywords_rpt_dict_pc = {}
+        keywords_rpt_dict_wx = {}
+        keywords_rpt_dict = {}
+        for keyword_rpt in keywords_rpt_list:
+            keyword_id = keyword_rpt['keyword_id']
+            source_id = int(keyword_rpt['source'])
+            if not keywords_rpt_dict.has_key(keyword_id):
+                keywords_rpt_dict[keyword_id] = {}
+                for key in keyword_rpt.keys():
+                    keywords_rpt_dict[keyword_id][key] = keyword_rpt[key]
+            else:
+                sum_keyword_rpt = keywords_rpt_dict[keyword_id]
+                for key in keyword_rpt:
+                    if key not in KEYS_INT and key not in KEYS_FLOAT:
+                        continue
+                    if not sum_keyword_rpt.has_key(key):
+                        sum_keyword_rpt[key] = keyword_rpt[key]
+                    else:
+                        sum_keyword_rpt[key] += keyword_rpt[key]
+            if source_id == 1 or source_id == 2:
+                if not keywords_rpt_dict_pc.has_key(keyword_id):
+                    keywords_rpt_dict_pc[keyword_id] = keyword_rpt
+                else:
+                    sum_keyword_rpt = keywords_rpt_dict_pc[keyword_id]
+                    for key in keyword_rpt:
+                        if key not in KEYS_INT and key not in KEYS_FLOAT:
+                            continue
+                        if not sum_keyword_rpt.has_key(key):
+                            sum_keyword_rpt[key] = keyword_rpt[key]
+                        else:
+                            sum_keyword_rpt[key] += keyword_rpt[key]
+            else:
+                if not keywords_rpt_dict_wx.has_key(keyword_id):
+                    keywords_rpt_dict_wx[keyword_id] = keyword_rpt
+                else:
+                     sum_keyword_rpt = keywords_rpt_dict_wx[keyword_id]
+                     for key in keyword_rpt:
+                         if key not in KEYS_INT and key not in KEYS_FLOAT:
+                             continue
+                         if not sum_keyword_rpt.has_key(key):
+                             sum_keyword_rpt[key] = keyword_rpt[key]
+                         else: 
+                             sum_keyword_rpt[key] += keyword_rpt[key]
+        
+        for keyword_rpt in keywords_rpt_dict.values():
+            keyword_rpt['cpc'] = 0 if keyword_rpt['click'] <= 0 else\
+                keyword_rpt['cost'] / keyword_rpt['click']
+            keyword_rpt['ctr'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                100.0*keyword_rpt['click'] / keyword_rpt['impressions']
+            keyword_rpt['coverage'] = 0 if keyword_rpt['click'] <= 0 else \
+                100.0*(keyword_rpt['directtransactionshipping'] + \
+                    keyword_rpt['indirecttransactionshipping']) / keyword_rpt['click']
+            keyword_rpt['cpm'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                1000.0*keyword_rpt['cost'] / keyword_rpt['impressions']
+            keyword_rpt['roi'] = 0 if keyword_rpt['cost'] <= 0 else\
+                (keyword_rpt['directtransaction'] + keyword_rpt['indirecttransaction']) \
+                / float(keyword_rpt['cost'])
+
+        for keyword_rpt in keywords_rpt_dict_pc.values():
+            keyword_rpt['cpc'] = 0 if keyword_rpt['click'] <= 0 else\
+                keyword_rpt['cost'] / keyword_rpt['click']
+            keyword_rpt['ctr'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                100.0*keyword_rpt['click'] / keyword_rpt['impressions']
+            keyword_rpt['coverage'] = 0 if keyword_rpt['click'] <= 0 else \
+                100.0*(keyword_rpt['directtransactionshipping'] + \
+                     keyword_rpt['indirecttransactionshipping']) / keyword_rpt['click']
+            keyword_rpt['cpm'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                1000.0*keyword_rpt['cost'] / keyword_rpt['impressions']
+            keyword_rpt['roi'] = 0 if keyword_rpt['cost'] <= 0 else\
+                (keyword_rpt['directtransaction'] + keyword_rpt['indirecttransaction']) \
+                / float(keyword_rpt['cost'])
+            keyword_rpt['source'] = 'pc'
+        
+        for keyword_rpt in keywords_rpt_dict_wx.values():
+            keyword_rpt['cpc'] = 0 if keyword_rpt['click'] <= 0 else\
+                keyword_rpt['cost'] / keyword_rpt['click']
+            keyword_rpt['ctr'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                100.0*keyword_rpt['click'] / keyword_rpt['impressions']
+            keyword_rpt['coverage'] = 0 if keyword_rpt['click'] <= 0 else \
+                100.0*(keyword_rpt['directtransactionshipping'] + \
+                     keyword_rpt['indirecttransactionshipping']) / keyword_rpt['click']
+            keyword_rpt['cpm'] = 0 if keyword_rpt['impressions'] <= 0 else\
+                1000.0*keyword_rpt['cost'] / keyword_rpt['impressions']
+            keyword_rpt['roi'] = 0 if keyword_rpt['cost'] <= 0 else\
+                (keyword_rpt['directtransaction'] + keyword_rpt['indirecttransaction']) \
+                / float(keyword_rpt['cost'])
+            keyword_rpt['source'] = 'wx'
+
+        return keywords_rpt_dict.values(), keywords_rpt_dict_pc.values(), keywords_rpt_dict_wx.values()
     
     @classmethod
     def get_bidword_rt_rpt_list(cls, nick, campaign_id, adgroup_id, the_date,source="SUMMARY"):
@@ -104,16 +199,18 @@ class SimbaRtRptBidwordGet(object):
         else:
             return keywords_rpt_dict.get(keyword_rpt['source'],[])
         return keywords_rpt_list
-
-
+    
 if __name__ == '__main__':
     nick = sys.argv[1]
     campaign_id = int(sys.argv[2])
     adgroup_id = int(sys.argv[3])
-    keyword_id = int(sys.argv[4])
+    #keyword_id = int(sys.argv[4])
     the_date = datetime.datetime.now()
-    rpt_list = SimbaRtRptBidwordGet.get_bidword_rt_rpt_list(nick, campaign_id, adgroup_id, the_date)
+    #rpt_list = SimbaRtRptBidwordGet.get_bidword_rt_rpt_list(nick, campaign_id, adgroup_id, the_date)
+    rpt_list = SimbaRtRptBidwordGet.get_bidword_platform_rt_rpt_list(nick, campaign_id, adgroup_id, the_date)
     for rpt in rpt_list:
-        if rpt['keyword_id'] == keyword_id:
-            print rpt
+        print rpt
+    #for rpt in rpt_list:
+    #    if rpt['keyword_id'] == keyword_id:
+    #        print rpt
         

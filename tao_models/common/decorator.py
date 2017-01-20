@@ -26,10 +26,9 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
-from busi_service.service.task_service import TaskService
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
-
+TaskService = None
 
 class TaoOpenErrorCode(object):
     """
@@ -93,6 +92,7 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         raise SDKRetryException(code=e.code,sub_code=e.sub_code\
                                 ,msg=e.msg,sub_msg=e.sub_msg)
                      
+                    api_method = None
                     #扔出自定义异常
                     if hasattr(e,'params') and e.params:
                         api_method = e.params['method']
@@ -173,6 +173,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         else: 
                             if wait_seconds >= 2:
                                 logger.debug("app call limit [%d] seconds, need sleep"%wait_seconds)
+                            if api_method == 'taobao.simba.keywords.pricevon.set':
+                                wait_seconds += 1
                             sleep(wait_seconds)
                         continue
                     #isp为开头的错误，只有三种无法重试
@@ -354,6 +356,8 @@ def task_manage(arg):
 
 
 def script_manage(arg):
+    global TaskService
+    if not TaskService:from busi_service.service.task_service import TaskService
     def _wrapper_func(func):
         def __wrappe_func(*args, **kwargs):
             task_name = arg
