@@ -821,18 +821,25 @@ class TextTestRunner(Template_mixin):
         return self.ENDING_TMPL
     def send_email_with_html(self, addressee, html, subject):
         """发送html email"""
+        import base64
         msg = MIMEMultipart()
         msg['Subject'] = Header(subject, 'utf-8')
         msg['From'] = settings.DIRECTOR['EMAIL']
-        to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+        if settings.b_testMail:
+            to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+        else:
+            to_list = settings.getTestWorkers()
         msg['To'] = ';'.join(to_list) 
         html_att = MIMEText(html, 'html', 'utf-8')
         msg.attach(html_att)
-        
         try:
-            smtp = smtplib.SMTP()
-            smtp.connect(settings.DIRECTOR['sendserverip'], settings.DIRECTOR['sendserverport']) 
-            smtp.login(msg['From'], settings.DIRECTOR['SECRET'])
+            smtp = None
+            if settings.DIRECTOR['sendserverip'].endswith("qq.com"):
+                smtp = smtplib.SMTP_SSL(settings.DIRECTOR['sendserverip'],settings.DIRECTOR['sendserverport'])
+            else:
+                smtp = smtplib.SMTP()
+                smtp.connect(settings.DIRECTOR['sendserverip'], settings.DIRECTOR['sendserverport']) 
+            smtp.login(msg['From'], base64.decodestring(settings.DIRECTOR['SECRET']) if settings.b64encode else settings.DIRECTOR['SECRET'])
             smtp.sendmail(msg['From'], to_list, msg.as_string())
         except Exception,e:
             print e
