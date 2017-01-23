@@ -16,18 +16,17 @@ from db_pool.lib.pool_util import PoolUtil
 
 def getTestWorkers():
     conn,cursor = PoolUtil.get_cursor('crm')
-    sql = "select email from crm.auth_worker where id in (SELECT DISTINCT worker_id  from crm.auth_worker_groups where group_id in (14,29))"
+    sql = "select email from crm.auth_worker where is_active=1 and id in (SELECT DISTINCT worker_id  from crm.auth_worker_groups where group_id in (14,29))"
     cursor.execute(sql)
     rows = cursor.fetchall()
     return [ k[0] for k in rows]
 
 RUNTYPE = ['regression']
 NeedLog = True
-b64encode = True # 仅当SECRET是base64加密时，b64encode 才是True
 b_testMail = False
 MAIL_RECEIVE = '920194536@qq.com' # 当b_testMail = True时才发给MAIL_RECEIVE ，否则发给getTestWorkers()中的人
-DIRECTOR = {'EMAIL':'tanglingling@maimiaotech.com',
-            'SECRET':'P2xsQG1tMjAxNQ==',
+DIRECTOR = {'EMAIL':'monitor@maimiaotech.com',
+            'SECRET':'Mm@ops2015)',
             'sendserverip':'smtp.mxhichina.com',
             'sendserverport':25}
 # 以下是以QQ邮箱发送服务器
