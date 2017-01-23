@@ -266,6 +266,15 @@ def send_jd_code_sms(cellphone,params_dict,sign_name='省油宝'):
     except Exception,e:
         logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
 
+def send_service_status_sms(cellphone,params_dict,sign_name='麦苗'):
+    global AliqinTaSmsNumSend
+    if not AliqinTaSmsNumSend:from tao_models.alibaba_aliqin_ta_sms_num_send import AliqinTaSmsNumSend
+    sms_template_code = 'SMS_42665166'
+    try:
+        AliqinTaSmsNumSend.send_sms_sdk(cellphone,params_dict,sms_template_code,sign_name)
+    except Exception,e:
+        logging.error('send message to %s unsuccessfully:server error'%(cellphone,))
+
 
 
 def send_bd_hd_message(cellphone,params_dict,sign_name='麦苗'):
