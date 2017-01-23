@@ -845,7 +845,7 @@ class TextTestRunner(Template_mixin):
             else:
                 smtp = smtplib.SMTP()
                 smtp.connect(settings.DIRECTOR['sendserverip'], settings.DIRECTOR['sendserverport']) 
-            smtp.login(msg['From'], base64.decodestring(settings.DIRECTOR['SECRET']) if settings.b64encode else settings.DIRECTOR['SECRET'])
+            smtp.login(msg['From'], settings.DIRECTOR['SECRET'])
             smtp.sendmail(msg['From'], to_list, msg.as_string())
         except Exception,e:
             print e
