@@ -3,8 +3,7 @@
 """
 @author: wangying
 @contact: wangying@maimiaotech.com
-@date: 2014-09-25 17:08
-@version: 0.0.0
+@date: 2014-09-25 17:08 @version: 0.0.0
 @license: Copyright Maimiaotech.com
 @copyright: Copyright Maimiaotech.com
 
@@ -25,12 +24,14 @@ def getTestWorkers():
 RUNTYPE = ['regression']
 NeedLog = True
 b64encode = True # 仅当SECRET是base64加密时，b64encode 才是True
-b_testMail =False 
-MAIL_RECEIVE = '592800277@qq.com' # 当b_testMail = True时才发给MAIL_RECEIVE ，否则发给getTestWorkers()中的人
+b_testMail = False
+MAIL_RECEIVE = '920194536@qq.com' # 当b_testMail = True时才发给MAIL_RECEIVE ，否则发给getTestWorkers()中的人
 DIRECTOR = {'EMAIL':'tanglingling@maimiaotech.com',
             'SECRET':'P2xsQG1tMjAxNQ==',
-            #'sendserverip':'smtp.qq.com',
             'sendserverip':'smtp.mxhichina.com',
-            #'sendserverport':465}
             'sendserverport':25}
-
+# 以下是以QQ邮箱发送服务器
+#DIRECTOR = {'EMAIL':'592800277@qq.com',
+#            'SECRET':'c2p6b29kZGJ2cHVzYmZnZQ==\n',
+#            'sendserverip':'smtp.qq.com',
+#            'sendserverport':465}

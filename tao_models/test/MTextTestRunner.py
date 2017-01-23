@@ -23,6 +23,9 @@ import smtplib, mimetypes
 from email.Header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.MIMEBase import MIMEBase
+from email import Encoders
+import base64
 
 class TerminalController:
     """Self Terminal"""
@@ -820,18 +823,21 @@ class TextTestRunner(Template_mixin):
     def _generate_ending(self):
         return self.ENDING_TMPL
     def send_email_with_html(self, addressee, html, subject):
-        """发送html email"""
-        import base64
-        msg = MIMEMultipart()
-        msg['Subject'] = Header(subject, 'utf-8')
-        msg['From'] = settings.DIRECTOR['EMAIL']
+        msg = MIMEMultipart('mixed')
+        msg['Subject'] = Header("淘宝api自动化脚本运行结果", 'utf-8')
+        msg['From'] =settings.DIRECTOR['EMAIL']
         if settings.b_testMail:
-            to_list = [ str(adr).strip() for adr in addressee.split(';')] if type(addressee) in [str,type(u'')] else addressee
+            to_list = [ str(adr).strip() for adr in settings.MAIL_RECEIVE.split(';')] if type(settings.MAIL_RECEIVE) in [str,type(u'')] else settings.MAIL_RECEIVE
         else:
-            to_list = settings.getTestWorkers()
+            to_list =settings.getTestWorkers()
         msg['To'] = ';'.join(to_list) 
-        html_att = MIMEText(html, 'html', 'utf-8')
-        msg.attach(html_att)
+
+        filename = "report/report_%s.html"%datetime.date.today()
+        part = MIMEBase('application', "octet-stream")
+        part.set_payload(open(filename).read())
+        Encoders.encode_base64(part)
+        part.add_header('Content-Disposition','attachment;filename="%s"'% filename )
+        msg.attach(part)
         try:
             smtp = None
             if settings.DIRECTOR['sendserverip'].endswith("qq.com"):
@@ -843,4 +849,3 @@ class TextTestRunner(Template_mixin):
             smtp.sendmail(msg['From'], to_list, msg.as_string())
         except Exception,e:
             print e
-
