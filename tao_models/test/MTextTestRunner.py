@@ -831,7 +831,9 @@ class TextTestRunner(Template_mixin):
         else:
             to_list =settings.getTestWorkers()
         msg['To'] = ';'.join(to_list) 
-
+        #将报告作为邮件内容
+        msg.attach(MIMEText(html,'html','utf-8'))
+        #将报告作为附件
         filename = "report/report_%s.html"%datetime.date.today()
         part = MIMEBase('application', "octet-stream")
         part.set_payload(open(filename).read())
