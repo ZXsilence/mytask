@@ -13,10 +13,11 @@
 import sys
 sys.path.append('../../../comm_lib/')
 from db_pool.lib.pool_util import PoolUtil
-
+# 14 、29测试组
+# 13、26 开发组
 def getTestWorkers():
     conn,cursor = PoolUtil.get_cursor('crm')
-    sql = "select email from crm.auth_worker where is_active=1 and id in (SELECT DISTINCT worker_id  from crm.auth_worker_groups where group_id in (14,29))"
+    sql = "select email from crm.auth_worker where is_active=1 and id in (SELECT DISTINCT worker_id  from crm.auth_worker_groups where group_id in (14,29,13,26))"
     cursor.execute(sql)
     rows = cursor.fetchall()
     return [ k[0] for k in rows]
@@ -25,8 +26,8 @@ RUNTYPE = ['regression']
 NeedLog = True
 b_testMail = False
 MAIL_RECEIVE = '920194536@qq.com' # 当b_testMail = True时才发给MAIL_RECEIVE ，否则发给getTestWorkers()中的人
-DIRECTOR = {'EMAIL':'monitor@maimiaotech.com',
-            'SECRET':'Mm@ops2015)',
+DIRECTOR = {'EMAIL':'ops@maimiaotech.com',
+            'SECRET':'Mm@2015)',
             'sendserverip':'smtp.mxhichina.com',
             'sendserverport':25}
 # 以下是以QQ邮箱发送服务器
