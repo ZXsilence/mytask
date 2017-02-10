@@ -194,3 +194,5 @@ if __name__ == "__main__":
         mrunner = MTextTestRunner.TextTestRunner()
     mrunner.run(alltests)
     #unittest.main(testRunner = mrunner)
+    if fb:
+        fb.close()
