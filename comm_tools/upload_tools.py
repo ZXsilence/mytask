@@ -71,7 +71,11 @@ def scp_file(root_path, ext_path, file_name,servers=['10.132.174.13','10.132.174
                 ssh.connect(hostname=server, port=port, username=username, password=password)
                 ssh.exec_command('mkdir -p '+dest_path + ext_path)
                 sftp = ssh.open_sftp()
-                sftp.put(root_path + ext_path + file_name,dest_path + ext_path + file_name)
+                if type(file_name) == list:
+                    for fname in file_name:
+                        sftp.put(root_path + ext_path + fname,dest_path + ext_path + fname)
+                else:
+                    sftp.put(root_path + ext_path + file_name,dest_path + ext_path + file_name)
                 ssh.close()
             except Exception,e:
                 print root_path + ext_path + file_name,dest_path + ext_path + file_name
