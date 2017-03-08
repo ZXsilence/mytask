@@ -43,7 +43,7 @@ class ApiService(object):
         #北斗临时单独处理
         if 'bd_webpage' == api_source:
             cache = False
-            logger.info("北斗临时单独处理,API没走缓存:%s"%cache)
+            logger.info("北斗临时单独处理,API没走缓存,nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
         if cache and method_config:
             is_get = method_config.get('is_get',False)
             cache_key = ApiCacheService.get_cache_key(params_dict)
@@ -52,9 +52,9 @@ class ApiService(object):
             if cache_data:
                 rsp_obj = ApiService.getResponseObj(cache_data)
                 if 'sub_code' not in rsp_obj.responseBody and  'sub_msg' not in rsp_obj.responseBody:
-                    logger.info("API走缓存:%s"%cache)
+                    logger.info("API走缓存,nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
                     return rsp_obj
-        logger.info("响应主体包含sub_code和sub_msg,API没走缓存:%s"%cache)
+        logger.info("API没走缓存:nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
         rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
         rsp_obj = ApiService.getResponseObj(rsp_dict)
         if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
@@ -63,10 +63,10 @@ class ApiService(object):
         if cache and method_config:
             if is_get and cache_key:
                 ApiCacheService.set_cache(cache_key,rsp_dict,{'nick':nick or params_dict.get('nick'),'cache_name':method_config['cache_name']},params_dict)
-                logger.info("缓存过期，API没走缓存:%s"%is_get)
+                logger.info("缓存过期，API没走缓存:nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
             elif not is_get:
+                logger.info("缓存异常，API没走缓存:nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method'])) 
                 ApiCacheService.clear_cache(nick or params_dict.get('nick'),params_dict)
-                logger.info("缓存异常，API没走缓存:%s"%is_get)
         return rsp_obj 
 
     @staticmethod
