@@ -47,6 +47,7 @@ class ApiService(object):
         if cache and method_config:
             is_get = method_config.get('is_get',False)
             cache_key = ApiCacheService.get_cache_key(params_dict)
+        logger.info("API缓存:nick:[%s] cache_key:[%s] method:[%s] is_get:%s"%(nick,cache_key,params_dict['method'],is_get))
         if cache and is_get and cache_key:
             cache_data = ApiCacheService.get_cache(cache_key,params_dict)
             if cache_data:
@@ -54,18 +55,18 @@ class ApiService(object):
                 if 'sub_code' not in rsp_obj.responseBody and  'sub_msg' not in rsp_obj.responseBody:
                     logger.info("API走缓存,nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
                     return rsp_obj
-        logger.info("API没走缓存:nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
         rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
         rsp_obj = ApiService.getResponseObj(rsp_dict)
         if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
+            logger.info("API缓存 api失败:nick:[%s] cache_key:[%s] method:[%s] is_get:%s"%(nick,cache_key,params_dict['method'],is_get))
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
         #update清理cache
         if cache and method_config:
             if is_get and cache_key:
                 ApiCacheService.set_cache(cache_key,rsp_dict,{'nick':nick or params_dict.get('nick'),'cache_name':method_config['cache_name']},params_dict)
-                logger.info("缓存过期，API没走缓存:nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
+                logger.info("API没走缓存 更新缓存 :nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method']))
             elif not is_get:
-                logger.info("缓存异常，API没走缓存:nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method'])) 
+                logger.info("API没走缓存 执行update :nick:[%s] cache_key:[%s] method:[%s]"%(nick,cache_key,params_dict['method'])) 
                 ApiCacheService.clear_cache(nick or params_dict.get('nick'),params_dict)
         return rsp_obj 
 
