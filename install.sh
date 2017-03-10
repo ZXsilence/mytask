@@ -13,7 +13,7 @@ proPath="${currDir}"/../
 #00:16:3e:00:01:f9 baidu4
 function  isWy(){
     info=`ifconfig`
-    if [[ "$info" =~ "00:1E:67:64:AF:61" || "$info" =~ "00:1E:67:59:8F:73" || "$info" =~ "00:1E:67:24:E0:B1" || "$info" =~ "00:1E:67:1A:0D:81" || "$info" =~ "00:1E:67:A4:D7:E4" ]];then
+    if [[ "$info" =~ "00:1E:67:64:AF:61" || "$info" =~ "00:1E:67:59:8F:73" || "$info" =~ "00:1E:67:24:E0:B1" || "$info" =~ "00:1E:67:1A:0D:81" || "$info" =~ "00:1E:67:31:23:C9" || "$info" =~ "00:1E:67:34:13:41" ]];then
         echo 'wy'
     elif [[ "$info" =~ "00:16:3e:00:52:60" || "$info" =~ "00:16:3e:00:01:f9" ]];then
         echo 'aliyun'

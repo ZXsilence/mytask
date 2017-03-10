@@ -92,7 +92,7 @@ class ApiCacheConfig(object):
         #'taobao.simba.campaign.area.get':{'cache_name':'campaign_area','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
         #'taobao.simba.campaign.area.update':{'cache_name':'campaign_area','is_get':IS_GET_NO},
         'taobao.simba.campaign.areaoptions.get':{'cache_name':'campaign_areaoptions','max_age':MAX_AGE_1,'is_get':IS_GET_YES},
-        'taobao.simba.campaign.budget.get':{'cache_name':'budget','max_age':MAX_AGE_3,'is_get':IS_GET_YES}, 
+        'taobao.simba.campaign.budget.get':{'cache_name':'budget','max_age':MAX_AGE_5,'is_get':IS_GET_YES}, 
         'taobao.simba.campaign.budget.update':{'cache_name':'budget','is_get':IS_GET_NO},
         'taobao.simba.campaign.channeloptions.get':{'cache_name':'channeloptions','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
         'taobao.simba.campaign.platform.get':{'cache_name':'campaign_platform','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
@@ -190,7 +190,7 @@ class ApiCacheConfig(object):
     API_CACHE_KEY_CONFIG = {
         'campaign':{'remove_keys':['nick']},
         'adgroup':{'remove_keys':['nick']},
-        'budget':{'remove_keys':['campaign_id']},
+        'budget':{'remove_keys':['nick','campaign_id']},
         'sellercats':{'remove_keys':['nick']},
         'logistics_address':{'remove_keys':['nick']},
         'itemcats':{'remove_keys':['nick']},
@@ -200,7 +200,7 @@ class ApiCacheConfig(object):
         'item_img':{'remove_keys':['num_iid']},
         #由于上传数据接口只是偶尔使用,mbp_data可以不清除cache
         'mbp_data':{'remove_keys':['sql_id','sid']},
-        'campaign_platform':{'remove_keys':['campaign_id']},
+        'campaign_platform':{'remove_keys':['nick','campaign_id']},
         'campaign_area':{'remove_keys':['campaign_id']},
         'campaign_areaoptions':{'remove_keys':[]},
         'areas':{'remove_keys':[]},
