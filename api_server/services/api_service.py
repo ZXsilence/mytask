@@ -46,6 +46,7 @@ class ApiService(object):
         if cache and method_config:
             is_get = method_config.get('is_get',False)
             cache_key = ApiCacheService.get_cache_key(params_dict)
+        logger.info("API缓存:nick:[%s] cache_key:[%s] method:[%s] is_get:%s"%(nick,cache_key,params_dict['method'],is_get))
         if cache and is_get and cache_key:
             cache_data = ApiCacheService.get_cache(cache_key,params_dict)
             if cache_data:
@@ -55,6 +56,7 @@ class ApiService(object):
         rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
         rsp_obj = ApiService.getResponseObj(rsp_dict)
         if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
+            logger.info("API缓存 api失败:nick:[%s] cache_key:[%s] method:[%s] is_get:%s"%(nick,cache_key,params_dict['method'],is_get))
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
         #update清理cache
         if cache and method_config:
