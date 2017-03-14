@@ -34,14 +34,15 @@ class  SimbaInsightCatsdataGet(object):
     @classmethod
     @tao_api_exception()
     def get_cats_data(cls,cat_id_list,sdate,edate):
-        req = SimbaInsightCatsdataGetRequest()
-        req.category_id_list = ','.join([str(item) for item in cat_id_list])
-        req.start_date = sdate.strftime("%Y-%m-%d")
-        req.end_date = edate.strftime("%Y-%m-%d")
-        nick = None
-        soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.cat_data_list)
+        #req = SimbaInsightCatsdataGetRequest()
+        #req.category_id_list = ','.join([str(item) for item in cat_id_list])
+        #req.start_date = sdate.strftime("%Y-%m-%d")
+        #req.end_date = edate.strftime("%Y-%m-%d")
+        #nick = None
+        #soft_code = None
+        #rsp = ApiService.execute(req,nick,soft_code)
+        #return change_obj_to_dict_deeply(rsp.cat_data_list)
+        return []
 
 if __name__ == '__main__':
    edate = datetime.datetime.now() - datetime.timedelta(days = 1)
