@@ -40,7 +40,7 @@ class SimbaKeywordsPricevonSet(object):
                     "keywordId":element['kid']
                     , "maxPrice":element['price']
                     , "isDefaultPrice":0
-                    , "matchScope":element.get('match_scope',4) if element.get('match_scope',4) not in ("2",2) else 4
+                    , "matchScope":element.get('match_scope',4) if int(element.get('match_scope',4)) != 2 else 4
                     }
             word_price_dict_list.append(word_price_dict)
         req = SimbaKeywordsPricevonSetRequest()
@@ -94,7 +94,7 @@ class SimbaKeywordsPricevonSet(object):
                     "keywordId":kid
                     , "maxPrice":price
                     , "isDefaultPrice":0
-                    , "matchScope": match_scope if match_scope not in ("2",2) else 4
+                    , "matchScope": match_scope if int(match_scope) != 2 else 4
                     }
             word_price_dict_list.append(word_price_dict)
 
@@ -228,7 +228,7 @@ class SimbaKeywordsPricevonSet(object):
             if element.has_key('price'):
                 word_price_dict['maxPrice'] = element['price']
                 word_price_dict['isDefaultPrice'] = 0  
-                word_price_dict['matchScope'] = element.get('match_scope',4) if element.get('match_scope',4) not in ("2", 2) else 4
+                word_price_dict['matchScope'] = element.get('match_scope',4) if int(element.get('match_scope',4)) != 2  else 4
             if element.has_key('mobile_price'):
                 word_price_dict['maxMobilePrice'] = element['mobile_price']
                 word_price_dict['mobileIsDefaultPrice'] = element['mobile_is_default_price']
