@@ -114,7 +114,7 @@ def upload_customer_img_with_base64(root_path,nick,file_obj):
         os.makedirs(package_path)
     file_path = os.path.normpath(os.path.join(package_path,'%s'%file_name))
     destination = open(file_path,'wb+')
-    img_data = urllib.unquote_plus(file_obj.replace('\n',''))
+    img_data = file_obj.replace('\n','')
     img_data = img_data[re.search(';base64',img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
