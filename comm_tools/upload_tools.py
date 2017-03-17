@@ -107,7 +107,7 @@ def upload_activity_img_with_base64(root_path,file_obj):
     rsp = PictureUpload.upload_img('麦苗科技001',file_path)
     return rsp['picture']['picture_path']
 
-def upload_customer_img_with_base64_unquote(root_path, nick, file_obj):
+def upload_customer_img_with_base64(root_path, nick, file_obj):
     if not file_obj:
         return
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
@@ -124,7 +124,7 @@ def upload_customer_img_with_base64_unquote(root_path, nick, file_obj):
     rsp = PictureUpload.upload_img(nick,file_path)
     return rsp['picture']['picture_path']
 
-def upload_customer_img_with_base64(root_path,nick,file_obj):
+def upload_customer_img_with_base64_new(root_path,nick,file_obj):
     if not file_obj:
         return
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
