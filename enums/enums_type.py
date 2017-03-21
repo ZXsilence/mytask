@@ -225,6 +225,7 @@ class OperationType(object):
     FOLLOW_CAMPAIGN = 720
     UPDATE_CAMPAIGN_BUDGET = 721
     UPDATE_CAMPAIGN_MODEL = 722
+    UPDATE_ADGROUP_CPC_MAX = 723
 
 
     ADD_RULE = 800
@@ -741,6 +742,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.DELETE_CREATIVE_NORMAL:'推广组创意删除'
     ,OperationType.ADD_CREATIVE_NORMAL:'推广组创意添加'
     ,OperationType.MODIFY_CREATIVE_NORMAL:'推广组创意修改'
+    ,OperationType.UPDATE_ADGROUP_CPC_MAX:'规则引擎修改推广组最高出价'
 }
 
 class LoginFailType(object):
