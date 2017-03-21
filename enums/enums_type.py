@@ -234,6 +234,7 @@ class OperationType(object):
     DISABLED_RULE = 804
     EXECUTE_RULE = 805
     EXECUTE_RULE_NOTICE = 806
+    UPDATE_ADGROUP_CPC_MAX = 807
 
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
@@ -741,6 +742,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.DELETE_CREATIVE_NORMAL:'推广组创意删除'
     ,OperationType.ADD_CREATIVE_NORMAL:'推广组创意添加'
     ,OperationType.MODIFY_CREATIVE_NORMAL:'推广组创意修改'
+    ,OperationType.UPDATE_ADGROUP_CPC_MAX:'规则引擎修改推广组最高出价'
 }
 
 class LoginFailType(object):
