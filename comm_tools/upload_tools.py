@@ -18,6 +18,9 @@ import re
 import paramiko
 from tao_models.picture_upload import PictureUpload
 
+
+
+
 def upload_file(file_obj,root_path,category,proj_path,mode=None,with_scp=False):
     """
     file_obj: 文件对象
@@ -71,7 +74,11 @@ def scp_file(root_path, ext_path, file_name,servers=['10.132.174.13','10.132.174
                 ssh.connect(hostname=server, port=port, username=username, password=password)
                 ssh.exec_command('mkdir -p '+dest_path + ext_path)
                 sftp = ssh.open_sftp()
-                sftp.put(root_path + ext_path + file_name,dest_path + ext_path + file_name)
+                if type(file_name) == list:
+                    for fname in file_name:
+                        sftp.put(root_path + ext_path + fname,dest_path + ext_path + fname)
+                else:
+                    sftp.put(root_path + ext_path + file_name,dest_path + ext_path + file_name)
                 ssh.close()
             except Exception,e:
                 print root_path + ext_path + file_name,dest_path + ext_path + file_name
@@ -100,7 +107,7 @@ def upload_activity_img_with_base64(root_path,file_obj):
     rsp = PictureUpload.upload_img('麦苗科技001',file_path)
     return rsp['picture']['picture_path']
 
-def upload_customer_img_with_base64(root_path,nick,file_obj):
+def upload_customer_img_with_base64(root_path, nick, file_obj):
     if not file_obj:
         return
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
@@ -110,7 +117,24 @@ def upload_customer_img_with_base64(root_path,nick,file_obj):
         os.makedirs(package_path)
     file_path = os.path.normpath(os.path.join(package_path,'%s'%file_name))
     destination = open(file_path,'wb+')
-    img_data = urllib.unquote_plus(file_obj.replace('\n',''))
+    img_data = urllib.unquote_plus(file_obj.replace('\n', ''))
+    img_data = img_data[re.search(';base64', img_data).start()+8:]
+    destination.write(base64.b64decode(img_data))
+    destination.close()
+    rsp = PictureUpload.upload_img(nick,file_path)
+    return rsp['picture']['picture_path']
+
+def upload_customer_img_with_base64_new(root_path,nick,file_obj):
+    if not file_obj:
+        return
+    file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
+    now = datetime.now()
+    package_path = os.path.join(root_path,'%s/%s/%s'%(now.year,now.month,now.day))
+    if not os.path.exists(package_path):
+        os.makedirs(package_path)
+    file_path = os.path.normpath(os.path.join(package_path,'%s'%file_name))
+    destination = open(file_path,'wb+')
+    img_data = file_obj.replace('\n','')
     img_data = img_data[re.search(';base64',img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
