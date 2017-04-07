@@ -24,7 +24,7 @@ class SimbaCreativeUpdate(object):
 
     @classmethod
     @tao_api_exception(5)
-    def update_creative(cls, nick, adgroup_id, creative_id, img_url, title):
+    def update_creative(cls, nick, adgroup_id, creative_id, img_url, title, picture_id):
         """
         update a creative in adgroup
         """
@@ -34,6 +34,8 @@ class SimbaCreativeUpdate(object):
         req.creative_id = creative_id
         req.img_url = img_url
         req.title = title
+        if picture_id:
+            req.picture_id = picture_id
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.creativerecord)
