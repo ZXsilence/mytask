@@ -35,7 +35,7 @@ class SimbaCreativeUpdate(object):
         req.img_url = img_url
         req.title = title
         if picture_id:
-            req.picture_id = picture_id
+            req.picture_id = int(picture_id)
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.creativerecord)
