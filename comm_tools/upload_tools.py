@@ -109,7 +109,7 @@ def upload_activity_img_with_base64(root_path,file_obj):
     rsp = PictureUpload.upload_img('麦苗科技001',file_path)
     return rsp['picture']['picture_path']
 
-def upload_customer_img_with_base64(root_path, nick, file_obj, is_toutu_optimized=False, has_upload_img_ability=False):
+def upload_customer_img_with_base64(root_path, nick, file_obj, img_target=None, has_upload_img_ability=False):
     if not file_obj:
         return
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
@@ -123,9 +123,9 @@ def upload_customer_img_with_base64(root_path, nick, file_obj, is_toutu_optimize
     img_data = img_data[re.search(';base64', img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
-    if is_toutu_optimized:
+    if img_target == 'is_toutu':
         category_id = _img_kongjian_add_category(nick, CATEGORY_SYB_TOUTU)
-    elif not has_upload_img_ability:
+    elif img_target == 'is_zhutu':
         category_id = _img_kongjian_add_category(nick, CATEGORY_SYB_ZHUTU)
     else:
         category_id = 0
