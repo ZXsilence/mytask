@@ -123,6 +123,9 @@ def upload_customer_img_with_base64(root_path, nick, file_obj, img_target=None, 
     img_data = img_data[re.search(';base64', img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
+    import Image
+    image = Image.open(file_path)
+    image.save(file_path, 'JPEG', quality=90)
     if img_target == 'is_toutu':
         category_id = _img_kongjian_add_category(nick, CATEGORY_SYB_TOUTU)
     elif img_target == 'is_zhutu':
