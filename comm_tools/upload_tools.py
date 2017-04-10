@@ -111,7 +111,7 @@ def upload_activity_img_with_base64(root_path,file_obj):
 
 def upload_customer_img_with_base64(root_path, nick, file_obj, img_target=None, has_upload_img_ability=False):
     if not file_obj:
-        return
+        return None, None
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
     now = datetime.now()
     package_path = os.path.join(root_path,'%s/%s/%s'%(now.year,now.month,now.day))
