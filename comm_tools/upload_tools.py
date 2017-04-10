@@ -17,8 +17,10 @@ import urllib
 import re
 import paramiko
 from tao_models.picture_upload import PictureUpload
-
-
+from tao_models.picture_category_get import PictureCategoryGet
+from tao_models.picture_category_add import PictureCategoryAdd
+CATEGORY_SYB_TOUTU = '省油宝宝贝投图'
+CATEGORY_SYB_ZHUTU = '省油宝商品主图'
 
 
 def upload_file(file_obj,root_path,category,proj_path,mode=None,with_scp=False):
@@ -107,9 +109,9 @@ def upload_activity_img_with_base64(root_path,file_obj):
     rsp = PictureUpload.upload_img('麦苗科技001',file_path)
     return rsp['picture']['picture_path']
 
-def upload_customer_img_with_base64(root_path, nick, file_obj):
+def upload_customer_img_with_base64(root_path, nick, file_obj, img_target=None, has_upload_img_ability=False):
     if not file_obj:
-        return
+        return None, None
     file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
     now = datetime.now()
     package_path = os.path.join(root_path,'%s/%s/%s'%(now.year,now.month,now.day))
@@ -121,8 +123,28 @@ def upload_customer_img_with_base64(root_path, nick, file_obj):
     img_data = img_data[re.search(';base64', img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
-    rsp = PictureUpload.upload_img(nick,file_path)
-    return rsp['picture']['picture_path']
+    import Image
+    image = Image.open(file_path)
+    image.save(file_path, 'JPEG', quality=90)
+    if img_target == 'is_toutu':
+        category_id = _img_kongjian_add_category(nick, CATEGORY_SYB_TOUTU)
+    elif img_target == 'is_zhutu':
+        category_id = _img_kongjian_add_category(nick, CATEGORY_SYB_ZHUTU)
+    else:
+        category_id = 0
+    rsp = PictureUpload.upload_img(nick,file_path, category_id)
+    return rsp['picture']['picture_path'], rsp['picture']['picture_id']
+
+
+def _img_kongjian_add_category(nick, category_name):
+    category_list = PictureCategoryGet.get_picture_category_name(nick, category_name)
+    if category_list and category_list[0]['picture_category_name'] == category_name:
+        category_id = category_list[0]['picture_category_id']
+    else:
+        res = PictureCategoryAdd.add_picture_category(nick, category_name)
+        category_id = res['picture_category_id']
+    return category_id
+
 
 def upload_customer_img_with_base64_new(root_path,nick,file_obj):
     if not file_obj:
