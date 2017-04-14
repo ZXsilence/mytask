@@ -30,9 +30,9 @@ class PictureGet(object):
     def get_picture(cls, nick, kwargs_dict):
         req = PictureGetRequest()
         for key, value in kwargs_dict.items():
-            req.key = value
+            setattr(req, key, value)
         soft_code = None
-        rsp = ApiService.execute(req, nick, soft_code)
+        rsp = ApiService.execute(req, nick, soft_code, cache=False)
         return rsp.totalResults, change_obj_to_dict_deeply(rsp.pictures)
 
 
