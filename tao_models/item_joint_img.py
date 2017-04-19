@@ -28,7 +28,7 @@ class ItemJointImg(object):
 
     @classmethod
     @tao_api_exception(4)
-    def joint_img(cls, nick, num_iid, pic_path, id=0, is_major='false'):
+    def joint_img(cls, nick, num_iid, pic_path, id=0, is_major='false', position=0):
 
         req = ItemJointImgRequest()
         req.num_iid = num_iid
@@ -36,6 +36,7 @@ class ItemJointImg(object):
         #req.is_major = 'true'
         req.id = id
         req.is_major = is_major
+        req.positin = position
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.item_img)
