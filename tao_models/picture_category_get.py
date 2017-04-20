@@ -41,7 +41,7 @@ class PictureCategoryGet(object):
         req.parent_id = parent_id
         req.nick = nick
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code, cache=False)
         return change_obj_to_dict_deeply(rsp.picture_categories)
 
 
