@@ -88,14 +88,14 @@ APP_SETTINGS = {
             'app_secret':'2bb89aa556b1698b1a7225f521d41e42',
             'article_code':'FW_GOODS-1000078795',
             'soft_code':'YZB'
-        }
-        #'WY':{
-        #    'name':'微页',
-        #    'app_key':'',
-        #    'app_secret':'',
-        #    'article_code':'',
-        #    'soft_code':'WY'
-        #},
+        },
+        'WY':{
+            'name':'微页',
+            'app_key':'21682149',
+            'app_secret':'21b808683af61a3929d9d9cd67057b1f',
+            'article_code':'FW_GOODS-1906099',
+            'soft_code':'WY'
+        },
         #'JX':{
         #    'name':'车手绩效',
         #    'app_key':'21569590',
