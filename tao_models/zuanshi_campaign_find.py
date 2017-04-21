@@ -62,11 +62,10 @@ class ZuanshiCampaignFind(object):
         req.page_num = page_num
         req.page_size = cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        return change_obj_to_dict_deeply(rsp.result).get('campaigns')['campaign']
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
-    adzone_id =7762129 
-    task_id = 6923202
+    nick = '优美妮旗舰店'
     try_list = ZuanshiCampaignFind.get_campaign_list(nick)
-    print try_list
+    for obj in try_list:
+        print obj

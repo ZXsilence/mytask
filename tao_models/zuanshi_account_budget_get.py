@@ -42,6 +42,7 @@ class ZuanshiAccountBudgetGet(object):
 
 if __name__ == '__main__':
     nick = '飞利浦官方旗舰店'
+    nick = '优美妮旗舰店'
     adzone_id =7762129 
     try_list = ZuanshiAccountBudgetGet.get_budget(nick)
     print try_list
