@@ -748,7 +748,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.MODIFY_CREATIVE_NORMAL:'推广组创意修改'
     ,OperationType.UPDATE_ADGROUP_CPC_MAX:'规则引擎修改推广组最高出价'
 
-    ,OperationType.ADD_BIDWORD:'新增过滤词'
+    ,OperationType.ADD_BIDWORD:'设置过滤词'
 }
 
 class LoginFailType(object):
