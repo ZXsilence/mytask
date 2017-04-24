@@ -370,7 +370,9 @@ class OperationType(object):
         ADD_ADGROUP_NORMAL,
 
         ADD_CAMPAIGN_NORMAL,
-        ADD_NEW_CAMPAIGN_SETTINGS
+        ADD_NEW_CAMPAIGN_SETTINGS,
+
+        ADD_BIDWORD,
     ]
 
     ALL_IGNORE_TYPES = [
