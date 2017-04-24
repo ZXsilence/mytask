@@ -1,0 +1,69 @@
+#encoding=utf8
+'''
+Created on 2012-8-10
+
+@author: dk
+'''
+import sys
+import os
+import logging
+import logging.config
+import json
+import datetime
+from copy import deepcopy
+
+
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+    from api_server.conf import set_env
+    set_env.getEnvReady()
+    from api_server.conf.settings import set_api_source
+    set_api_source('normal_test')
+
+from TaobaoSdk import ZuanshiBannerAdzoneFindpageRequest 
+from tao_models.common.decorator import  tao_api_exception
+from api_server.services.api_service import ApiService
+from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
+from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.common.date_tools import  split_date
+
+logger = logging.getLogger(__name__)
+
+class ZuanshiAdzoneFindPage(object):
+
+    page_size  = 50
+    __params = ('adzone_id_list','adzone_size_list ','page_size','page_num','allow_ad_format_list','media_type_list','adzone_type','adzone_name','settle_type_lis')
+
+    @classmethod
+    def get_adzone_list(cls, nick,soft_code ='YZB' ,**kwargs):
+        data_list = []
+        page_num = 1
+        while True:
+            tmp_list = cls.__get_sub_adgroup_list(nick,campaign_id,soft_code = soft_code,page_num = page_num,**kwargs)
+            data_list.extend(tmp_list)
+            if len(tmp_list) < cls.page_size:
+                break;
+            page_num +=1
+        return data_list 
+
+    @classmethod
+    @tao_api_exception()
+    def __get_sub_adgroup_list(cls, nick,campaign_id,soft_code = 'YZB',**kwargs):
+        req = ZuanshiBannerAdzoneFindpageRequest()
+        for k,v in kwargs.iteritems():
+            if k not in cls.__params:
+                raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
+            if v is not None:
+                setattr(req,k,v)
+        req.page_size = cls.page_size
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.result).get('adzones',{}).get('adzone_d_t_o')
+
+if __name__ == '__main__':
+    nick = '优美妮旗舰店'
+    campaign_id = 217069448
+    try_list = ZuanshiAdzoneFindPage.get_adzone_list(nick)
+    print try_list
+    #for obj in try_list:
+    #    print obj
