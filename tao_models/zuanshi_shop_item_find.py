@@ -34,17 +34,18 @@ class ZuanshiShopItemFind(object):
 
     @classmethod
     @tao_api_exception()
-    def get_shop_item(cls,nick,item_name,soft_code = 'YZB'):
+    def get_shop_item(cls,nick,item_name = None,soft_code = 'YZB'):
         req = ZuanshiShopItemFindRequest()
-        req.campaign_id = campaign_id
-        req.adgroup_id = adgroup_id
-        req.item_name = item_name
+        if item_name:
+            req.item_name = item_name
         rsp = ApiService.execute(req,nick,soft_code)
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
-        return change_obj_to_dict_deeply(rsp.result).get('items')
+        return change_obj_to_dict_deeply(rsp.result).get('items').get('item_d_t_o')
 
 if __name__ == '__main__':
-    nick = '优美妮旗舰店'
-    name = '新品'
+    nick = '飞利浦官方旗舰店'
+    #nick = '优美妮旗舰店'
+    #name = '新品'
+    name = ''
     try_list = ZuanshiShopItemFind.get_shop_item(nick,name)
-    print try_list
+    print len(try_list)
+    print try_list[0]
