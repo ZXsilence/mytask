@@ -60,7 +60,7 @@ class ZuanshiAdgroupFind(object):
         req.campaign_id = campaign_id
         req.page_size = cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('adgroups',{}).get('adgroup')
+        return change_obj_to_dict_deeply(rsp.result).get('adgroups',{}).get('adgroup',[])
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'

@@ -37,7 +37,7 @@ class ZuanshiBannerCpcTargetingFind(object):
     def get_cpc_targeting(cls, nick,soft_code = 'YZB'):
         req = ZuanshiBannerCpcTargetingFindRequest()
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        return change_obj_to_dict_deeply(rsp.result).get('targetings',{}).get('target_d_t_o')
 
 if __name__ == '__main__':
     nick = '飞利浦官方旗舰店'
