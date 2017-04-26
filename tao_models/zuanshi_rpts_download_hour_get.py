@@ -20,7 +20,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-from TaobaoSdk import ZuanshiAdvertiserAccountRtrptsGetRequest 
+from TaobaoSdk import ZuanshiAdvertiserRptsDownloadHourGetRequest 
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
@@ -30,23 +30,26 @@ from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
-class ZuanshiAccountRtRptsGet(object):
+class ZuanshiRptsDownloadHourGet(object):
+
+    __hierarchy_list = ('campaign','adgroup','creative','target','adzone','targetAdzone')
 
     @classmethod
     @tao_api_exception()
-    def get_account_rt_rpts(cls, nick,rpt_date,campaign_model =1,soft_code = 'YZB'):
-        req = ZuanshiAdvertiserAccountRtrptsGetRequest()
+    def get_rpts_task(cls, nick,rpt_date,hierarchy,campaign_model =1,soft_code = 'YZB'):
+        #钻展广告主分时数据异步下载接口，一次只能下载一天数据
+        req = ZuanshiAdvertiserRptsDownloadHourGetRequest()
         req.log_date = rpt_date.strftime('%Y-%m-%d')
-        req.campaign_model = campaign_model
+        if hierarchy not in cls.__hierarchy_list:
+            raise Exception('下载任务类型不对,类型hierarchy必须是:%s中的一种' % cls.__hierarchy_list)
+        req.hierarchy = hierarchy
+        req.campaign_model = campaign_model 
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.advertiser_realtime_rpt_list)
+        return change_obj_to_dict_deeply(rsp.result)
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
-    rpt_date = datetime.datetime(2017,4,23)
-    campaign_id = 217069448
-    adgroup_id = 217061436
-    adzone_id = 34492608
-    try_list = ZuanshiAccountRtRptsGet.get_account_rt_rpts(nick,rpt_date)
-    print len(try_list)
-        
+    rpt_date = datetime.datetime(2017,4,24)
+    hierarchy = 'adgroup'
+    try_list = ZuanshiRptsDownloadHourGet.get_rpts_task(nick,rpt_date,hierarchy)
+    print try_list

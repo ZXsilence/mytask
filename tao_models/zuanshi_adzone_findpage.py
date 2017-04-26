@@ -64,6 +64,6 @@ if __name__ == '__main__':
     nick = '优美妮旗舰店'
     campaign_id = 217069448
     try_list = ZuanshiAdzoneFindPage.get_adzone_list(nick)
-    print try_list
+    print try_list[0]
     #for obj in try_list:
     #    print obj

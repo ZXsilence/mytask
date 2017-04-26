@@ -20,7 +20,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-from TaobaoSdk import ZuanshiAdvertiserAccountRtrptsGetRequest 
+from TaobaoSdk import ZuanshiAdvertiserAdgroupRptsDayGetRequest 
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
@@ -30,23 +30,29 @@ from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
-class ZuanshiAccountRtRptsGet(object):
+class ZuanshiAdgroupRptsDayGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_account_rt_rpts(cls, nick,rpt_date,campaign_model =1,soft_code = 'YZB'):
-        req = ZuanshiAdvertiserAccountRtrptsGetRequest()
-        req.log_date = rpt_date.strftime('%Y-%m-%d')
-        req.campaign_model = campaign_model
+    def get_adgroup_rpts_day(cls, nick,campaign_id,start_time,end_time,adgroup_id,effect = 15,campaign_model = 1,effect_type ='click',soft_code = 'YZB'):
+        req = ZuanshiAdvertiserAdgroupRptsDayGetRequest()
+        req.start_time = start_time.strftime('%Y-%m-%d')
+        req.end_time = end_time.strftime('%Y-%m-%d')
+        req.campaign_id = campaign_id
+        req.adgroup_id = adgroup_id
+        req.effect = effect
+        req.effect_type = effect_type
+        if campaign_model:
+            req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.advertiser_realtime_rpt_list)
+        return change_obj_to_dict_deeply(rsp.adgroup_offline_rpt_days_list)
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
-    rpt_date = datetime.datetime(2017,4,23)
+    nick = '优美妮旗舰店'
+    start_time = datetime.datetime(2017,4,1)
+    end_time = datetime.datetime(2017,4,23)
     campaign_id = 217069448
     adgroup_id = 217061436
-    adzone_id = 34492608
-    try_list = ZuanshiAccountRtRptsGet.get_account_rt_rpts(nick,rpt_date)
-    print len(try_list)
+    try_list = ZuanshiAdgroupRptsDayGet.get_adgroup_rpts_day(nick,campaign_id,start_time,end_time,adgroup_id)
+    print try_list
         
