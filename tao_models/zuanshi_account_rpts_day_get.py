@@ -46,9 +46,9 @@ class ZuanshiAccountRptsDayGet(object):
         return change_obj_to_dict_deeply(rsp.account_offline_rpt_days_list)
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
+    nick = '优美妮旗舰店'
     start_time = datetime.datetime(2017,4,23)
     end_time = datetime.datetime(2017,4,23)
     try_list = ZuanshiAccountRptsDayGet.get_account_rpts_day(nick,start_time,end_time)
-    print len(try_list)
+    print try_list
         

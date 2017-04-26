@@ -42,11 +42,11 @@ class ZuanshiAccountRtRptsGet(object):
         return change_obj_to_dict_deeply(rsp.advertiser_realtime_rpt_list)
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
+    nick = '优美妮旗舰店'
     rpt_date = datetime.datetime(2017,4,23)
     campaign_id = 217069448
     adgroup_id = 217061436
     adzone_id = 34492608
     try_list = ZuanshiAccountRtRptsGet.get_account_rt_rpts(nick,rpt_date)
-    print len(try_list)
+    print try_list
         
