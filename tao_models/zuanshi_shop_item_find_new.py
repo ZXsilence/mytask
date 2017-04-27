@@ -41,11 +41,13 @@ class ZuanshiShopItemFind(object):
         page_num = 1
         while True:
             tmp_list = cls.__get_sub_data_list(nick,item_name,page_num,soft_code)
-            data_list.extend(tmp_list)
-            if len(tmp_list) < cls.page_size:
+            if tmp_list:
+                data_list.extend(tmp_list)
+            if not tmp_list or len(tmp_list) < cls.page_size:
                 break;
             page_num +=1
-        return data_list 
+            data_list.extend(tmp_list)
+        return data_list
 
     @classmethod
     @tao_api_exception()

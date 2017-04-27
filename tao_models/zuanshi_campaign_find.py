@@ -40,8 +40,9 @@ class ZuanshiCampaignFind(object):
         page_num = 1
         while True:
             tmp_list = cls.__get_sub_campaign_list(nick,name = name,campaign_id_list = campaign_id_list,status_list = status_list,type = type,page_num = page_num,soft_code = soft_code)
-            campaign_list.extend(tmp_list)
-            if len(tmp_list) < cls.page_size:
+            if tmp_list:
+                campaign_list.extend(tmp_list)
+            if not tmp_list or len(tmp_list) < cls.page_size:
                 break;
             page_num +=1
         return campaign_list

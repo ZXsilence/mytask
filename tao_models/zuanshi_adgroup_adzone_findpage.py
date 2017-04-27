@@ -41,8 +41,9 @@ class ZuanshiAdgroupAdzoneFindPage(object):
         page_num = 1
         while True:
             tmp_list = cls.__get_sub_adgroup_list(nick,campaign_id,adgroup_id,soft_code = soft_code,page_num = page_num,**kwargs)
-            data_list.extend(tmp_list)
-            if len(tmp_list) < cls.page_size:
+            if tmp_list:
+                data_list.extend(tmp_list)
+            if not tmp_list or len(tmp_list) < cls.page_size:
                 break;
             page_num +=1
         return data_list 

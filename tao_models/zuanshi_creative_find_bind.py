@@ -41,11 +41,12 @@ class ZuanshiCreativeFindBind(object):
         page_num = 1
         while True:
             tmp_list = cls.__get_sub_adgroup_list(nick,campaign_id,adgroup_id,soft_code = soft_code,page_num = page_num,**kwargs)
-            data_list.extend(tmp_list)
-            if len(tmp_list) < cls.page_size:
+            if tmp_list:
+                data_list.extend(tmp_list)
+            if not tmp_list or len(tmp_list) < cls.page_size:
                 break;
             page_num +=1
-        return data_list 
+        return data_list
 
     @classmethod
     @tao_api_exception()
@@ -64,8 +65,8 @@ class ZuanshiCreativeFindBind(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    campaign_id = 217069448
-    adgroup_id = 217061436
+    campaign_id = 222625535
+    adgroup_id = 222603980
     try_list = ZuanshiCreativeFindBind.get_bind_creative_list(nick,campaign_id,adgroup_id)
     print try_list
     #for obj in try_list:
