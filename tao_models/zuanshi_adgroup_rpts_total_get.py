@@ -74,5 +74,5 @@ if __name__ == '__main__':
     try_list = ZuanshiAdgroupRptsTotalGet.get_adgroup_rpts_total(nick,sdate,edate,effect_type = 'impression',campaign_id=216582042)
     print len(try_list)
     for obj in try_list:
-        #print obj.keys()
+        print obj.keys()
         print obj['campaign_id'],obj['adgroup_name'],obj['uv'],obj['ad_pv'],obj['ctr'],obj['ecpm'],obj['charge'],obj.get('cvr',0),obj['roi']

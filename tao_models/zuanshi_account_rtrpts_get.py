@@ -39,7 +39,7 @@ class ZuanshiAccountRtRptsGet(object):
         req.log_date = rpt_date.strftime('%Y-%m-%d')
         req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.advertiser_realtime_rpt_list)
+        return change2num(change_obj_to_dict_deeply(rsp.advertiser_realtime_rpt_list))
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'

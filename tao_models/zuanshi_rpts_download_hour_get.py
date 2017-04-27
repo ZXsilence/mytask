@@ -48,7 +48,7 @@ class ZuanshiRptsDownloadHourGet(object):
         return change_obj_to_dict_deeply(rsp.result)
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
+    nick = '优美妮旗舰店'
     rpt_date = datetime.datetime(2017,4,24)
     hierarchy = 'adgroup'
     try_list = ZuanshiRptsDownloadHourGet.get_rpts_task(nick,rpt_date,hierarchy)

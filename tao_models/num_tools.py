@@ -24,6 +24,12 @@ KEYS_RT = ['impression', 'roi', 'directtransactionshipping', 'cost', \
            'transactionshippingtotal', 'coverage', 'directcarttotal', 'favtotal', \
            'cpm', 'ctr', 'cpc', 'indirectcarttotal', 'carttotal', 'favitemtotal']
 
+KEYS_INT_YZB = ['ad_pv']
+KEYS_FLOAT_YZB = ['charge','ctr','ecpm','ecpc']
+
+KEYS_INT += KEYS_INT_YZB
+KEYS_FLOAT += KEYS_FLOAT_YZB
+
 def change2num(rpt_list):
     if not rpt_list:
         return rpt_list
