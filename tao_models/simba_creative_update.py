@@ -24,7 +24,7 @@ class SimbaCreativeUpdate(object):
 
     @classmethod
     @tao_api_exception(5)
-    def update_creative(cls, nick, adgroup_id, creative_id, img_url, title, picture_id=0):
+    def update_creative(cls, nick, adgroup_id, creative_id, img_url, title, picture_id=None):
         """
         update a creative in adgroup
         """
