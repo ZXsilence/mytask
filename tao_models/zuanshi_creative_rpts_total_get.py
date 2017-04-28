@@ -39,8 +39,9 @@ class ZuanshiCreativeRptsTotalGet(object):
         rpt_list = []
         while True:
             tmp_list = cls.__sub_get_creative_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,soft_code = soft_code)
-            rpt_list.extend(tmp_list)
-            if len(tmp_list) < cls.page_size:
+            if tmp_list:
+                rpt_list.extend(tmp_list)
+            if not tmp_list or len(tmp_list) < cls.page_size:
                 break
             page_num +=1
         return rpt_list
