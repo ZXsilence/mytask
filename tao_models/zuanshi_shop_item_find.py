@@ -32,20 +32,35 @@ logger = logging.getLogger(__name__)
 
 class ZuanshiShopItemFind(object):
 
+    page_size  = 20
+    __params = ('campaign_id','status','name','page_size','adgroup_id_list','page_num')
+
+    @classmethod
+    def get_shop_item(cls,nick,item_name = None,soft_code = 'YZB'):
+        data_list = []
+        page_num = 1
+        while True:
+            tmp_list = cls.__get_sub_data_list(nick,item_name,page_num,soft_code)
+            if tmp_list:
+                data_list.extend(tmp_list)
+            if not tmp_list or len(tmp_list) < cls.page_size:
+                break;
+            page_num +=1
+        return data_list 
+
     @classmethod
     @tao_api_exception()
-    def get_shop_item(cls,nick,item_name = None,soft_code = 'YZB'):
+    def __get_sub_data_list(cls, nick,item_name = None,page_num=1,soft_code = 'YZB'):
         req = ZuanshiShopItemFindRequest()
         if item_name:
             req.item_name = item_name
+        req.page_size = cls.page_size
+        req.page_num = page_num
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('items').get('item_d_t_o')
 
 if __name__ == '__main__':
-    #nick = '飞利浦官方旗舰店'
     nick = '优美妮旗舰店'
-    #name = '新品'
-    name = ''
-    try_list = ZuanshiShopItemFind.get_shop_item(nick,name)
+    item_name = ''
+    try_list = ZuanshiShopItemFind.get_shop_item(nick,item_name = item_name)
     print len(try_list)
-    print try_list[0]
