@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 class ZuanshiAdzoneFindPage(object):
 
     page_size  = 50
-    __params = ('adzone_id_list','adzone_size_list ','page_size','page_num','allow_ad_format_list','media_type_list','adzone_type','adzone_name','settle_type_lis')
+    __params = ('adzone_id_list','adzone_size_list ','page_size','page_num','allow_ad_format_list','media_type_list','adzone_type','adzone_name','settle_type_list')
 
     @classmethod
     def get_adzone_list(cls, nick,soft_code ='YZB' ,**kwargs):
@@ -64,7 +64,7 @@ class ZuanshiAdzoneFindPage(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     campaign_id = 217069448
-    try_list = ZuanshiAdzoneFindPage.get_adzone_list(nick)
-    print try_list[0]
+    try_list = ZuanshiAdzoneFindPage.get_adzone_list(nick,settle_type_list  = '2')
+    print len(try_list)
     #for obj in try_list:
     #    print obj

@@ -40,11 +40,12 @@ def change2num(rpt_list):
             #处理None
             if not item[key]:
                 item[key] = 0
+                continue
             if key in KEYS_INT:
                 item[key] = int(float(item[key]))
             elif key in KEYS_FLOAT:
                 item[key] = float(item[key])
-            if 'log_date' in item and type(item['log_date']) != datetime:
-                l = item['log_date'].strip().replace('-',' ').split(' ')
-                item['log_date'] = datetime(int(l[0]), int(l[1]), int(l[2]))
+        if 'log_date' in item and type(item['log_date']) != datetime:
+            l = item['log_date'].strip().replace('-',' ').split(' ')
+            item['log_date'] = datetime(int(l[0]), int(l[1]), int(l[2]))
     return rpt_list
