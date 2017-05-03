@@ -40,12 +40,12 @@ class ZuanshiCampaignRtRptsGet(object):
         req.campaign_id = campaign_id
         req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.campaign_realtime_rpt_list)
+        return change2num(change_obj_to_dict_deeply(rsp.campaign_realtime_rpt_list))
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
-    rpt_date = datetime.datetime(2017,4,23)
-    campaign_id = 217069448
+    nick = '优美妮旗舰店'
+    rpt_date = datetime.datetime(2017,5,3)
+    campaign_id = 217411616
     try_list = ZuanshiCampaignRtRptsGet.get_campaign_rt_rpts(nick,rpt_date,campaign_id)
     print len(try_list)
         

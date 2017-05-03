@@ -40,7 +40,7 @@ class ZuanshiAdzoneFindPage(object):
         data_list = []
         page_num = 1
         while True:
-            tmp_list = cls.__get_sub_adgroup_list(nick,campaign_id,soft_code = soft_code,page_num = page_num,**kwargs)
+            tmp_list = cls.__get_sub_adgroup_list(nick,soft_code = soft_code,page_num = page_num,**kwargs)
             if tmp_list:
                 data_list.extend(tmp_list)
             if not tmp_list or len(tmp_list) < cls.page_size:
@@ -50,7 +50,7 @@ class ZuanshiAdzoneFindPage(object):
 
     @classmethod
     @tao_api_exception()
-    def __get_sub_adgroup_list(cls, nick,campaign_id,soft_code = 'YZB',**kwargs):
+    def __get_sub_adgroup_list(cls, nick,soft_code = 'YZB',**kwargs):
         req = ZuanshiBannerAdzoneFindpageRequest()
         for k,v in kwargs.iteritems():
             if k not in cls.__params:
@@ -63,7 +63,6 @@ class ZuanshiAdzoneFindPage(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    campaign_id = 217069448
     try_list = ZuanshiAdzoneFindPage.get_adzone_list(nick,settle_type_list  = '2')
     print len(try_list)
     #for obj in try_list:

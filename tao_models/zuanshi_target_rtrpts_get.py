@@ -42,7 +42,7 @@ class ZuanshiTargetRtRptsGet(object):
         req.target_id = target_id
         req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.target_realtime_rpt_list)
+        return change2num(change_obj_to_dict_deeply(rsp.target_realtime_rpt_list))
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'

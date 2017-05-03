@@ -42,7 +42,7 @@ class ZuanshiTargetAdzoneRtRptsGet(object):
         req.target_id = target_id
         req.adzone_id = adzone_id
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.target_adzone_realtime_rpt_list)
+        return change2num(change_obj_to_dict_deeply(rsp.target_adzone_realtime_rpt_list))
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
