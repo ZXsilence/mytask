@@ -34,20 +34,20 @@ class ZuanshiAdgroupRtRptsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_group_rt_rpts(cls, nick,rpt_date,campaign_id,adgroup_id,campaign_model =1,soft_code = 'YZB'):
+    def get_adgroup_rt_rpts(cls, nick,rpt_date,campaign_id,adgroup_id,campaign_model =1,soft_code = 'YZB'):
         req = ZuanshiAdvertiserAdgroupRtrptsGetRequest()
         req.log_date = rpt_date.strftime('%Y-%m-%d')
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id 
         req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.adgroup_realtime_rpt_list)
+        return change2num(change_obj_to_dict_deeply(rsp.adgroup_realtime_rpt_list))
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
     rpt_date = datetime.datetime(2017,4,23)
     campaign_id = 217069448
     adgroup_id = 217061436
-    try_list = ZuanshiAdgroupRtRptsGet.get_group_rt_rpts(nick,rpt_date,campaign_id,adgroup_id)
+    try_list = ZuanshiAdgroupRtRptsGet.get_adgroup_rt_rpts(nick,rpt_date,campaign_id,adgroup_id)
     print len(try_list)
         

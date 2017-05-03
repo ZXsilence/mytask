@@ -48,9 +48,9 @@ class ZuanshiCampaignRptsDayGet(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    start_time = datetime.datetime(2017,4,23)
-    end_time = datetime.datetime(2017,4,23)
-    campaign_id = 3493376
+    start_time = datetime.datetime(2017,5,3)
+    end_time = datetime.datetime(2017,5,3)
+    campaign_id = 217411616
     try_list = ZuanshiCampaignRptsDayGet.get_campaign_rpts_day(nick,campaign_id,start_time,end_time)
-    print len(try_list)
+    print try_list[0]
         

@@ -42,7 +42,7 @@ class ZuanshiCreativeRtRptsGet(object):
         req.creative_id = creative_id
         req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.creative_realtime_rpt_list)
+        return change2num(change_obj_to_dict_deeply(rsp.creative_realtime_rpt_list))
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
