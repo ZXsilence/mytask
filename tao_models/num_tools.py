@@ -30,6 +30,8 @@ KEYS_FLOAT_YZB = ['charge','ctr','ecpm','ecpc']
 KEYS_INT += KEYS_INT_YZB
 KEYS_FLOAT += KEYS_FLOAT_YZB
 
+from datetime import datetime
+
 def change2num(rpt_list):
     if not rpt_list:
         return rpt_list
@@ -42,4 +44,7 @@ def change2num(rpt_list):
                 item[key] = int(float(item[key]))
             elif key in KEYS_FLOAT:
                 item[key] = float(item[key])
+            if 'log_date' in item and type(item['log_date']) != datetime:
+                l = item['log_date'].strip().replace('-',' ').split(' ')
+                item['log_date'] = datetime(int(l[0]), int(l[1]), int(l[2]))
     return rpt_list
