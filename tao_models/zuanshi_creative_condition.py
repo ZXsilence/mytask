@@ -39,7 +39,7 @@ class ZuanshiCreativeCondition(object):
         return change_obj_to_dict_deeply(rsp.result).get('condition')
 
 if __name__ == '__main__':
-    nick = '飞利浦官方旗舰店'
-    nick = '优美妮旗舰店'
-    try_list = ZuanshiCreativeCondition.get_creative_condition(nick)
+    nick1 = '飞利浦官方旗舰店'
+    nick2 = '优美妮旗舰店'
+    try_list = ZuanshiCreativeCondition.get_creative_condition(nick2)
     print try_list
