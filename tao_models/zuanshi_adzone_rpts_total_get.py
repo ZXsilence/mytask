@@ -38,7 +38,7 @@ class ZuanshiAdzoneRptsTotalGet(object):
     def get_adzone_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',page_num = 1,campaign_id = None,adgroup_id = None,adzone_id = None,soft_code = 'YZB'):
         rpt_list = []
         while True:
-            tmp_list = cls.__sub_get_adzone_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,soft_code = soft_code)
+            tmp_list = cls.__sub_get_adzone_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,campaign_id = campaign_id,adgroup_id=adgroup_id,soft_code = soft_code)
             if tmp_list:
                 rpt_list.extend(tmp_list)
             if not tmp_list or len(tmp_list) < cls.page_size:

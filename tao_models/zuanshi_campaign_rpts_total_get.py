@@ -38,7 +38,7 @@ class ZuanshiCampaignRptsTotalGet(object):
     def get_campaign_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',page_num = 1,campaign_id = None,soft_code = 'YZB'):
         rpt_list = []
         while True:
-            tmp_list = cls.__sub_get_campaign_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,soft_code = soft_code)
+            tmp_list = cls.__sub_get_campaign_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,campaign_id = campaign_id,soft_code = soft_code)
             if tmp_list:
                 rpt_list.extend(tmp_list)
             if not tmp_list or len(tmp_list) < cls.page_size:
@@ -68,8 +68,8 @@ if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
     nick = '飞利浦官方旗舰店'
     nick = '优美妮旗舰店'
-    sdate = datetime.datetime(2017,3,22)
-    edate = datetime.datetime(2017,4,24)
+    sdate = datetime.datetime(2017,5,3)
+    edate = datetime.datetime(2017,5,3)
     try_list = ZuanshiCampaignRptsTotalGet.get_campaign_rpts_total(nick,sdate,edate,effect_type = 'impression',campaign_id=216582042)
     print len(try_list)
     for obj in try_list:
