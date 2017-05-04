@@ -236,6 +236,8 @@ class OperationType(object):
     EXECUTE_RULE = 805
     EXECUTE_RULE_NOTICE = 806
 
+    ADD_BIDWORD = 900
+
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
@@ -368,7 +370,9 @@ class OperationType(object):
         ADD_ADGROUP_NORMAL,
 
         ADD_CAMPAIGN_NORMAL,
-        ADD_NEW_CAMPAIGN_SETTINGS
+        ADD_NEW_CAMPAIGN_SETTINGS,
+
+        ADD_BIDWORD,
     ]
 
     ALL_IGNORE_TYPES = [
@@ -743,6 +747,8 @@ OPTTYPE_COMMENT = {
     ,OperationType.ADD_CREATIVE_NORMAL:'推广组创意添加'
     ,OperationType.MODIFY_CREATIVE_NORMAL:'推广组创意修改'
     ,OperationType.UPDATE_ADGROUP_CPC_MAX:'规则引擎修改推广组最高出价'
+
+    ,OperationType.ADD_BIDWORD:'设置过滤词'
 }
 
 class LoginFailType(object):
