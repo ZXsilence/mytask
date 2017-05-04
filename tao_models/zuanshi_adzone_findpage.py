@@ -52,12 +52,12 @@ class ZuanshiAdzoneFindPage(object):
     @tao_api_exception()
     def __get_sub_adgroup_list(cls, nick,soft_code = 'YZB',**kwargs):
         req = ZuanshiBannerAdzoneFindpageRequest()
+        req.page_size = cls.page_size
         for k,v in kwargs.iteritems():
             if k not in cls.__params:
                 raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
             if v is not None:
                 setattr(req,k,v)
-        req.page_size = cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('adzones',{}).get('adzone_d_t_o')
 
