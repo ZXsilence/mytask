@@ -30,10 +30,10 @@ class ZuanshiAdgroupStatus(object):
     @tao_api_exception()
     def modify_adgroup_status(cls, nick, campaign_id, adgroup_id_list, status, soft_code='YZB'):
         req = ZuanshiBannerAdgroupStatusRequest()
-        if len(adgroup_id_list) > 20:
-            raise Exception('参数adgroup_id_list最大列表长度：20')
+        # if len(adgroup_id_list) > 20:
+        #     raise Exception('参数adgroup_id_list最大列表长度：20')
         req.campaign_id = campaign_id
-        req.adgroup_id_list = adgroup_id_list
+        req.adgroup_id_list = ','.join(map(str, adgroup_id_list))
         req.status = status
         rsp = ApiService.execute(req, nick, soft_code)
         return change_obj_to_dict_deeply(rsp.result)
