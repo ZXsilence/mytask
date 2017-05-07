@@ -30,7 +30,7 @@ from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
-class ZuanshiAdgroupFind(object):
+class ZuanshiCrowdFind(object):
 
     page_size  = 200
     __params = ('campaign_id','status','name','page_size','adgroup_id_list','page_num')
@@ -61,13 +61,17 @@ class ZuanshiAdgroupFind(object):
         req.page_size = cls.page_size
         req.page_num = page_num
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('crowd_d_t_o')
+        crowd_list = change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('crowd_d_t_o')
+        for crowd in crowd_list:
+            crowd['sub_crowds'] = crowd['sub_crowds']['sub_crowd_d_t_o']
+            crowd['matrix_prices'] = crowd['matrix_prices']['matrix_price_d_t_o']
+        return crowd_list
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     campaign_id = 217069448
     adgroup_id = 217061436
-    try_list = ZuanshiAdgroupFind.get_crowd_list(nick,campaign_id,adgroup_id)
+    try_list = ZuanshiCrowdFind.get_crowd_list(nick,campaign_id,adgroup_id)
     print try_list
     #for obj in try_list:
     #    print obj

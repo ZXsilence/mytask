@@ -59,7 +59,11 @@ class ZuanshiAdzoneFindPage(object):
             if v is not None:
                 setattr(req,k,v)
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('adzones',{}).get('adzone_d_t_o')
+        adzone_list = change_obj_to_dict_deeply(rsp.result).get('adzones',{}).get('adzone_d_t_o')
+        for adzone in adzone_list:
+            adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
+            adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
+        return adzone_list
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
