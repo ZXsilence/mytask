@@ -40,7 +40,7 @@ class ZuanshiCampaignRptsTotalGet(object):
         req = ZuanshiAdvertiserAccountRptsTotalGetRequest()
         req.start_time = sdate.strftime('%Y-%m-%d')
         req.end_time = edate.strftime('%Y-%m-%d')
-        req.effect = 15
+        req.effect = effect
         req.campaign_model = campaign_model
         req.effect_type = effect_type
         rsp = ApiService.execute(req,nick,soft_code)

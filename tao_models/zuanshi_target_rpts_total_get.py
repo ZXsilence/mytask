@@ -35,10 +35,11 @@ class ZuanshiTargetRptsTotalGet(object):
     page_size = 200
 
     @classmethod
-    def get_target_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',page_num = 1,campaign_id = None,adgroup_id = None,target_id = None,soft_code = 'YZB'):
+    def get_target_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',campaign_id = None,adgroup_id = None,target_id = None,soft_code = 'YZB'):
         rpt_list = []
+        page_num = 1
         while True:
-            tmp_list = cls.__sub_get_target_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,soft_code = soft_code)
+            tmp_list = cls.__sub_get_target_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,campaign_id=campaign_id,adgroup_id=adgroup_id,target_id=target_id,soft_code = soft_code)
             if tmp_list:
                 rpt_list.extend(tmp_list)
             if not tmp_list or len(tmp_list) < cls.page_size:
@@ -60,7 +61,7 @@ class ZuanshiTargetRptsTotalGet(object):
             req.adgroup_id  = adgroup_id 
         if target_id :
             req.target_id  = target_id 
-        req.effect = 15
+        req.effect = effect
         req.campaign_model = campaign_model
         req.effect_type = effect_type
         req.page_size = cls.page_size
