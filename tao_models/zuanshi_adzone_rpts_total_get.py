@@ -24,7 +24,7 @@ from TaobaoSdk import ZuanshiAdvertiserAdzoneRptsTotalGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num
+from tao_models.num_tools import change2num,change2num2
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
@@ -38,7 +38,7 @@ class ZuanshiAdzoneRptsTotalGet(object):
     def get_adzone_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',page_num = 1,campaign_id = None,adgroup_id = None,adzone_id = None,soft_code = 'YZB'):
         rpt_list = []
         while True:
-            tmp_list = cls.__sub_get_adzone_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,campaign_id = campaign_id,adgroup_id=adgroup_id,soft_code = soft_code)
+            tmp_list = cls.__sub_get_adzone_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,campaign_id = campaign_id,adgroup_id=adgroup_id,adzone_id = adzone_id,soft_code = soft_code)
             if tmp_list:
                 rpt_list.extend(tmp_list)
             if not tmp_list or len(tmp_list) < cls.page_size:
@@ -66,8 +66,7 @@ class ZuanshiAdzoneRptsTotalGet(object):
         req.page_size = cls.page_size
         req.offset = (page_num -1)*cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
-        print len(rsp.adzone_offline_rpt_total_list)
-        return change_obj_to_dict_deeply(rsp.adzone_offline_rpt_total_list)
+        return change2num2(change_obj_to_dict_deeply(rsp.adzone_offline_rpt_total_list),True)
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
