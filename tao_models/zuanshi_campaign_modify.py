@@ -35,7 +35,7 @@ class ZuanshiCampaignModify(object):
 
     @classmethod
     @tao_api_exception()
-    def modify_banner_campaign(cls, nick, soft_code = 'YZB', modify_data):
+    def modify_banner_campaign(cls, nick, modify_data, soft_code = 'YZB'):
         req = nshiBannerCampaignModifyRequest()
         req.id = modify_data['id']
         if modify_data.get('name'):
@@ -46,8 +46,21 @@ class ZuanshiCampaignModify(object):
             req.start_time = modify_data['start_time']
             req.end_time = modify_data['end_time']
         if modify_data.get('area_id_list'):
-            area_id_list = ','.join([str(area_id) for area_id in eval(area_id_list)])
+            area_id_list = ','.join([str(area_id) for area_id in area_id_list])
             req.area_id_list = area_id_list
+        if modify_data.get('weekday'):
+            req.workday = ','.join([str(day) for day in modify_data['weekday']])
+        if modify_data.get('workday'):
+            req.workday = ','.join([str(day) for day in modify_data['workday']])
+        if modify_data.get('type'):
+            req.type = modify_data['type']
+        if modify_data.get('speed_type'):
+            req.speed_type = modify_data['modify_data']
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('success')
+
+if __name__ == '__main__':
+    nick = '优美妮旗舰店'
+    modify_data['campaign_id'] = 3493376
+    ZuanshiCampaignModify.modify_banner_campaign(nick, soft_code, modify_data)
 

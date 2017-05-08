@@ -35,10 +35,10 @@ class ZuanshiCampaignCreate(object):
     
     @classmethod
     @tao_api_exception()
-    def create_banner_campaign(cls, nick, soft_code = 'YZB', workday, weekend, type, name, area_id_list, speed_type, day_budget, start_time, end_time):
+    def create_banner_campaign(cls, soft_code = 'YZB', nick, workday, weekend, type, name, area_id_list, speed_type, day_budget, start_time, end_time):
         req = ZuanshiBannerCampaignCreateRequest()
-        req.workday = workday
-        req.weekend = weekend
+        req.workday = ','.join([str(day) for day in workday])
+        req.weekend = ','.join([str(day) for day in weekend])
         req.type = type
         req.name = name
         req.area_id_list = area_id_list
