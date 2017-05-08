@@ -62,10 +62,11 @@ class ZuanshiAdgroupAdzoneFindPage(object):
         req.page_size = cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
         adzone_list = change_obj_to_dict_deeply(rsp.result).get('adzones',{}).get('adzone_bid_d_t_o')
-        for adzone in adzone_list:
-            adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
-            adzone['matrix_price_list'] = adzone['matrix_price_list']['matrix_price_d_t_o']
-            adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
+        if adzone_list:
+            for adzone in adzone_list:
+                adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
+                adzone['matrix_price_list'] = adzone['matrix_price_list']['matrix_price_d_t_o']
+                adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
         return adzone_list
 
 if __name__ == '__main__':
