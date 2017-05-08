@@ -58,7 +58,7 @@ class ZuanshiAdgroupRptsTotalGet(object):
             req.campaign_id  = campaign_id
         if adgroup_id:
             req.adgroup_id  = adgroup_id 
-        req.effect = 15
+        req.effect = effect
         req.campaign_model = campaign_model
         req.effect_type = effect_type
         req.page_size = cls.page_size

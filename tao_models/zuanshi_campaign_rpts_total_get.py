@@ -56,7 +56,7 @@ class ZuanshiCampaignRptsTotalGet(object):
         req.end_time = edate.strftime('%Y-%m-%d')
         if campaign_id:
             req.campaign_id  = campaign_id
-        req.effect = 15
+        req.effect = effect
         req.campaign_model = campaign_model
         req.effect_type = effect_type
         req.page_size = cls.page_size
