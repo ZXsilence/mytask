@@ -40,7 +40,15 @@ class ZuanshiAdzonesGet(object):
         return change_obj_to_dict_deeply(rsp.adzone_list)
 
 if __name__ == '__main__':
-    nick = '飞利浦润氏专卖店'
+    nick = '优美妮旗舰店'
     try_list = ZuanshiAdzonesGet.get_adzones(nick)
-    print try_list[0]
+    for obj in try_list:
+        if 'PC' in obj['adzone_name'] and '首页' in obj['adzone_name']:
+            print obj['adzone_name']
+        #if obj['adzone_name'] in ['PC_流量包_网上购物_淘宝首页焦点图','PC_网上购物_淘宝首页焦点图右侧banner二','PC_流量包_网上购物_天猫首页焦点图']:
+        #    print obj['adzone_name'],obj['adzone_id']
+        #if obj['adzone_name'] in ['无线_流量包_网上购物_手淘app_手淘焦点图','无线_流量包_网上购物_触摸版_淘宝首页焦点图','无线_网上购物_app_新天猫首页焦点图2','无线_流量包_网上购物_天猫app首页焦点图','无线_网上购物_app_天猫_首页焦点图 ']:
+        #    print obj['adzone_name'],obj['adzone_id']
+    print try_list[0].keys()
+    print len(try_list)
         

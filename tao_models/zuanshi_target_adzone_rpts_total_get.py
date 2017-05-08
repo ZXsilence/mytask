@@ -24,7 +24,7 @@ from TaobaoSdk import ZuanshiAdvertiserTargetAdzoneRptsTotalGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num
+from tao_models.num_tools import change2num,change2num2
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
@@ -65,9 +65,7 @@ class ZuanshiTargetAdzoneRptsTotalGet(object):
         req.offset = (offset -1) * cls.page_size
         req.page_size = cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
-        print len(change_obj_to_dict_deeply(rsp.target_adzone_offline_rpt_total_list))
-        #abc = set(['%(adgroup_id)s_%(campaign_id)s_%(adzone_id)s_%(target_id)s' %(obj) for obj in change_obj_to_dict_deeply(rsp.target_adzone_offline_rpt_total_list)])
-        return change_obj_to_dict_deeply(rsp.target_adzone_offline_rpt_total_list)
+        return change2num2(change_obj_to_dict_deeply(rsp.target_adzone_offline_rpt_total_list),True)
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'

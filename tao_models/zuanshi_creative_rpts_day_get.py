@@ -46,7 +46,7 @@ class ZuanshiCreativeRptsDayGet(object):
         if campaign_model:
             req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change2num(change_obj_to_dict_deeply(rsp.creative_offline_rpt_days_list),True)
+        return change2num2(change_obj_to_dict_deeply(rsp.creative_offline_rpt_days_list),True)
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
