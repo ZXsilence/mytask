@@ -24,7 +24,7 @@ from TaobaoSdk import ZuanshiAdvertiserCreativeRptsTotalGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num
+from tao_models.num_tools import change2num,change2num2
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
@@ -66,7 +66,7 @@ class ZuanshiCreativeRptsTotalGet(object):
         req.page_size = cls.page_size
         req.offset = (page_num - 1)*cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.creative_offline_rpt_total_list)
+        return change2num2(change_obj_to_dict_deeply(rsp.creative_offline_rpt_total_list),True)
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
