@@ -24,17 +24,17 @@ from TaobaoSdk import ZuanshiAdvertiserAccountRptsTotalGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num
+from tao_models.num_tools import change2num,change2num2
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
-class ZuanshiCampaignRptsTotalGet(object):
+class ZuanshiAccountRptsTotalGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_campaign_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',soft_code = 'YZB'):
+    def get_account_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',soft_code = 'YZB'):
         #campaign_model 1：全店推广；4单品推广
         #effect_type效果类型。“impression”：展现效果；“click”：点击效果
         req = ZuanshiAdvertiserAccountRptsTotalGetRequest()
@@ -44,7 +44,7 @@ class ZuanshiCampaignRptsTotalGet(object):
         req.campaign_model = campaign_model
         req.effect_type = effect_type
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.account_offline_rpt_total_list)
+        return change2num2(change_obj_to_dict_deeply(rsp.account_offline_rpt_total_list),True)
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     nick = '优美妮旗舰店'
     sdate = datetime.datetime(2017,3,22)
     edate = datetime.datetime(2017,4,24)
-    try_list = ZuanshiCampaignRptsTotalGet.get_campaign_rpts_total(nick,sdate,edate,effect_type = 'impression')
+    try_list = ZuanshiAccountRptsTotalGet.get_account_rpts_total(nick,sdate,edate,effect_type = 'impression')
     print len(try_list)
     for obj in try_list:
         #print obj.keys()
