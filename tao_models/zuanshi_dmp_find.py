@@ -30,11 +30,11 @@ from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
-class ZuanshiCatelabelFind(object):
+class ZuanshiDmpFind(object):
 
     @classmethod
     @tao_api_exception()
-    def get_cpc_targeting(cls, nick,soft_code = 'YZB'):
+    def get_dmp_list(cls, nick,soft_code = 'YZB'):
         req = ZuanshiBannerDmpFindRequest()
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('dmp_crowd_d_t_o')
@@ -42,5 +42,5 @@ class ZuanshiCatelabelFind(object):
 if __name__ == '__main__':
     nick = '飞利浦官方旗舰店'
     adzone_id =7762129 
-    try_list = ZuanshiCatelabelFind.get_cpc_targeting(nick)
+    try_list = ZuanshiDmpFind.get_dmp_list(nick)
     print try_list

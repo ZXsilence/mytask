@@ -34,7 +34,7 @@ class ZuanshiCatelabelFind(object):
 
     @classmethod
     @tao_api_exception()
-    def get_cpc_targeting(cls, nick,soft_code = 'YZB'):
+    def get_catelabel_list(cls, nick,soft_code = 'YZB'):
         req = ZuanshiBannerCatelabelFindRequest()
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('labels',{}).get('cat_label_d_t_o')
@@ -42,5 +42,5 @@ class ZuanshiCatelabelFind(object):
 if __name__ == '__main__':
     nick = '飞利浦官方旗舰店'
     adzone_id =7762129 
-    try_list = ZuanshiCatelabelFind.get_cpc_targeting(nick)
+    try_list = ZuanshiCatelabelFind.get_catelabel_list(nick)
     print try_list
