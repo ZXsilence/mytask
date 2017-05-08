@@ -30,6 +30,7 @@ from tao_models.common.date_tools import  split_date
 
 logger = logging.getLogger(__name__)
 
+
 class ZuanshiCreativeFindBind(object):
 
     page_size  = 100

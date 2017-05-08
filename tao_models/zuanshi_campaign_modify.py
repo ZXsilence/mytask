@@ -45,6 +45,9 @@ class ZuanshiCampaignModify(object):
         if modify_data.get('start_time') and modify_data.get('end_time'):
             req.start_time = modify_data['start_time']
             req.end_time = modify_data['end_time']
+        if modify_data.get('area_id_list'):
+            area_id_list = ','.join([str(area_id) for area_id in eval(area_id_list)])
+            req.area_id_list = area_id_list
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('success')
 

@@ -36,6 +36,18 @@ class ZuanshiCreativeFind(object):
     __params = ('size_list','campaign_id','adgroup_id','name','creative_level','page_size','audit_status_list','page_num','format_list')
 
     @classmethod
+    @tao_api_exception()
+    def get_paginated_creative_list(cls, nick, soft_code='YZB', **kwargs):
+        req = ZuanshiBannerCreativeFindRequest()
+        for k, v in kwargs.iteritems():
+            if k not in cls.__params:
+                raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
+            if v is not None:
+                setattr(req, k, v)
+        rsp = ApiService.execute(req, nick, soft_code)
+        return change_obj_to_dict_deeply(rsp.result)
+
+    @classmethod
     def get_creative_list(cls, nick,soft_code ='YZB' ,**kwargs):
         data_list = []
         page_num = 1
@@ -52,12 +64,12 @@ class ZuanshiCreativeFind(object):
     @tao_api_exception()
     def __get_sub_data_list(cls, nick,soft_code = 'YZB',**kwargs):
         req = ZuanshiBannerCreativeFindRequest()
+        req.page_size = cls.page_size
         for k,v in kwargs.iteritems():
             if k not in cls.__params:
                 raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
             if v is not None:
                 setattr(req,k,v)
-        req.page_size = cls.page_size
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('creatives',{}).get('creative')
 
