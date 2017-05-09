@@ -16,7 +16,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-import json
+import simplejson as json
 from TaobaoSdk import ZuanshiBannerAdgroupCreateRequest
 from tao_models.common.decorator import tao_api_exception
 from api_server.services.api_service import ApiService
@@ -35,7 +35,7 @@ class ZuanshiAdgroupCreate(object):
         req = ZuanshiBannerAdgroupCreateRequest()
         req.campaign_id = campaign_id
         req.name = name
-        req.crowds = crowds
+        req.crowds = json.dumps(crowds)
         req.adzone_bid_list = adzone_bid_list
         req.intelligent_bid = intelligent_bid
         rsp = ApiService.execute(req, nick, soft_code)
