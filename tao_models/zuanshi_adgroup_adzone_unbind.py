@@ -40,7 +40,7 @@ class ZuanshiAdgroupAdzoneUnbind(object):
         req = ZuanshiBannerAdgroupAdzoneUnbindRequest()
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id
-        req.adzone_id_list = adzone_id_list
+        req.adzone_id_list = ','.join(map(str, adzone_id_list))
         rsp = ApiService.execute(req, nick, soft_code)
         return change_obj_to_dict_deeply(rsp.result)
 
@@ -49,6 +49,6 @@ if __name__ == '__main__':
     nick = '优美妮旗舰店'
     campaign_id = 217069448
     adgroup_id = 217061436
-    adzone_id_list = 64400199
+    adzone_id_list = [64400199]
     result = ZuanshiAdgroupAdzoneUnbind.unbind_adzone(nick, campaign_id, adgroup_id, adzone_id_list)
     print result

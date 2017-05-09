@@ -56,6 +56,8 @@ class ZuanshiAdgroupAdzoneFindPage(object):
             if k not in cls.__params:
                 raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
             if v is not None:
+                if k == 'adzone_id_list':
+                    v = ','.join(map(str, v))
                 setattr(req,k,v)
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id
