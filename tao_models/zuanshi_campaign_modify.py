@@ -36,7 +36,7 @@ class ZuanshiCampaignModify(object):
     @classmethod
     @tao_api_exception()
     def modify_banner_campaign(cls, nick, modify_data, soft_code = 'YZB'):
-        req = nshiBannerCampaignModifyRequest()
+        req = ZuanshiBannerCampaignModifyRequest()
         req.id = modify_data['id']
         if modify_data.get('name'):
             req.name = modify_data['name']
@@ -61,6 +61,10 @@ class ZuanshiCampaignModify(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    modify_data['campaign_id'] = 3493376
-    ZuanshiCampaignModify.modify_banner_campaign(nick, soft_code, modify_data)
+    modify_data = {}
+    modify_data['id'] = 223280585
+    modify_data['name'] = 'cpc_test_carlos'
+    soft_code = 'YZB'
+    res = ZuanshiCampaignModify.modify_banner_campaign(nick, modify_data, soft_code)
+    print res
 
