@@ -27,7 +27,7 @@ KEYS_RT = ['impression', 'roi', 'directtransactionshipping', 'cost', \
 KEYS_INT_YZB = ['campaign_id','adgroup_id','creative_id','adzone_id','target_id','ad_pv','click','uv','deep_inshop_uv','avg_access_page_num',\
                 'inshop_item_col_num','dir_shop_col_num','cart_num','gmv_inshop_num','alipay_in_shop_num']
 KEYS_FLOAT_YZB = ['charge','ctr','ecpc','ecpm','avg_access_time','gmv_inshop_amt','alipay_inshop_amt','cvr','roi']
-MONEY_KEYS = ['charge','gmv_inshop_amt','alipay_inshop_amt','ecpc','ecpm']
+MONEY_KEYS = ['charge','gmv_inshop_amt','alipay_inshop_amt','ecpc','ecpm','ctr','cvr']
 
 from datetime import datetime
 
