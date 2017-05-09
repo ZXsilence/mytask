@@ -40,7 +40,10 @@ class ZuanshiBannerCpcTargetingFind(object):
         return change_obj_to_dict_deeply(rsp.result).get('targetings',{}).get('target_d_t_o')
 
 if __name__ == '__main__':
-    nick = '飞利浦官方旗舰店'
+    nick = '优美妮旗舰店'
     adzone_id =7762129 
     try_list = ZuanshiBannerCpcTargetingFind.get_cpc_targeting(nick)
-    print try_list
+    print try_list[0]
+    for obj in try_list:
+        print obj
+    #print try_list
