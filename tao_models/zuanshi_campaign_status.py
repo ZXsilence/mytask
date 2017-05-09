@@ -35,13 +35,23 @@ class ZuanshiCampaignStatus(object):
 
     @classmethod
     @tao_api_exception()
-    def modify_banner_campaign_status(cls, nick, soft_code='YZB', modify_campaign_status_data):
-        req = ZuanshiBannerCampaignStatusRequest
-        campaign_id_list = ','.join(modify_campaign_status_data['campaign_id_list'])
+    def modify_banner_campaign_status(cls, nick, modify_campaign_status_data, soft_code='YZB'):
+        req = ZuanshiBannerCampaignStatusRequest()
+        campaign_id_list = ','.join([str(campaign_id) for campaign_id in modify_campaign_status_data['campaign_id_list']])
         req.campaign_id_list = campaign_id_list
         req.status = modify_campaign_status_data['status']
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('success')
+
+
+if __name__ == '__main__':
+    nick = '优美妮旗舰店'
+    soft_code = 'YZB'
+    modify_campaign_status_data = {}
+    modify_campaign_status_data['campaign_id_list'] = [223280585]
+    modify_campaign_status_data['status'] = 1
+    res = ZuanshiCampaignStatus.modify_banner_campaign_status(nick, modify_campaign_status_data, soft_code)
+    print res
 
 
 
