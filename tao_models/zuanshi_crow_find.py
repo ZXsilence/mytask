@@ -62,9 +62,10 @@ class ZuanshiCrowdFind(object):
         req.page_num = page_num
         rsp = ApiService.execute(req,nick,soft_code)
         crowd_list = change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('crowd_d_t_o')
-        for crowd in crowd_list:
-            crowd['sub_crowds'] = crowd['sub_crowds']['sub_crowd_d_t_o']
-            crowd['matrix_prices'] = crowd['matrix_prices']['matrix_price_d_t_o']
+        if crowd_list:
+            for crowd in crowd_list:
+                crowd['sub_crowds'] = crowd['sub_crowds']['sub_crowd_d_t_o']
+                crowd['matrix_prices'] = crowd['matrix_prices']['matrix_price_d_t_o']
         return crowd_list
 
 if __name__ == '__main__':
