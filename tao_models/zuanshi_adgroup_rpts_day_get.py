@@ -24,7 +24,7 @@ from TaobaoSdk import ZuanshiAdvertiserAdgroupRptsDayGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num
+from tao_models.num_tools import change2num,change2num2
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
@@ -45,7 +45,7 @@ class ZuanshiAdgroupRptsDayGet(object):
         if campaign_model:
             req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.adgroup_offline_rpt_days_list)
+        return change2num2(change_obj_to_dict_deeply(rsp.adgroup_offline_rpt_days_list),True)
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
