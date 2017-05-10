@@ -46,19 +46,18 @@ class ZuanshiCampaignModify(object):
             req.start_time = modify_data['start_time']
             req.end_time = modify_data['end_time']
         if modify_data.get('area_id_list'):
-            area_id_list = ','.join([str(area_id) for area_id in area_id_list])
+            area_id_list = ','.join(area_id_list)
             req.area_id_list = area_id_list
         if modify_data.get('weekend'):
-            req.weekend = ','.join([str(day).lower() for day in modify_data['weekend']])
+            req.weekend = ','.join(modify_data['weekend'])
         if modify_data.get('workday'):
-            req.workday = ','.join([str(day).lower() for day in modify_data['workday']])
+            req.workday = ','.join(modify_data['workday'])
         if modify_data.get('type'):
             req.type = modify_data['type']
         if modify_data.get('speed_type'):
             req.speed_type = modify_data['modify_data']
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('success') if change_obj_to_dict_deeply(rsp.result).get('success') else\
-            change_obj_to_dict_deeply(rsp.result).get('message').encode('utf8')
+        return change_obj_to_dict_deeply(rsp.result).get('success')
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
