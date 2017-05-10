@@ -48,8 +48,8 @@ class ZuanshiCampaignModify(object):
         if modify_data.get('area_id_list'):
             area_id_list = ','.join([str(area_id) for area_id in area_id_list])
             req.area_id_list = area_id_list
-        if modify_data.get('weekday'):
-            req.workday = ','.join([str(day).lower() for day in modify_data['weekday']])
+        if modify_data.get('weekend'):
+            req.weekend = ','.join([str(day).lower() for day in modify_data['weekend']])
         if modify_data.get('workday'):
             req.workday = ','.join([str(day).lower() for day in modify_data['workday']])
         if modify_data.get('type'):
@@ -57,13 +57,15 @@ class ZuanshiCampaignModify(object):
         if modify_data.get('speed_type'):
             req.speed_type = modify_data['modify_data']
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('success')
+        return change_obj_to_dict_deeply(rsp.result).get('success') if change_obj_to_dict_deeply(rsp.result).get('success') else\
+            change_obj_to_dict_deeply(rsp.result).get('message').encode('utf8')
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     modify_data = {}
     modify_data['id'] = 223280585
-    modify_data['name'] = 'cpc_test_carlos'
+    modify_data['workday'] = map(lambda x:True, xrange(24))
+    modify_data['weekend'] = map(lambda x:True, xrange(24))
     soft_code = 'YZB'
     res = ZuanshiCampaignModify.modify_banner_campaign(nick, modify_data, soft_code)
     print res
