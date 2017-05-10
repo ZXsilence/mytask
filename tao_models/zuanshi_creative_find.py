@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 class ZuanshiCreativeFind(object):
 
     page_size  = 200
-    __params = ('size_list','campaign_id','adgroup_id','name','creative_level','page_size','audit_status_list','page_num','format_list')
+    __params = ('size_list','campaign_id','adgroup_id','name','creative_level','page_size','audit_status_list','page_num','format_list','online_status')
     number_list_fields = ['audit_status_list', 'format_list']
 
     @classmethod
