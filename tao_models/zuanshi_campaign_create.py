@@ -58,7 +58,7 @@ if __name__ == '__main__':
     name = 'carlos_test'
     area_id_list = [1,19,532,39]
     speed_type = 1
-    day_budget=30000
+    day_budget=110000
     start_time="2017-05-10 00:00:00"
     end_time="2017-05-11 00:00:00"
     res = ZuanshiCampaignCreate.create_banner_campaign(nick, workday, weekend, type, name, area_id_list, speed_type, day_budget, start_time, end_time, soft_code)

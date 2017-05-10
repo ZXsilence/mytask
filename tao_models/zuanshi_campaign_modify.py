@@ -49,9 +49,9 @@ class ZuanshiCampaignModify(object):
             area_id_list = ','.join([str(area_id) for area_id in area_id_list])
             req.area_id_list = area_id_list
         if modify_data.get('weekday'):
-            req.workday = ','.join([str(day) for day in modify_data['weekday']])
+            req.workday = ','.join([str(day).lower() for day in modify_data['weekday']])
         if modify_data.get('workday'):
-            req.workday = ','.join([str(day) for day in modify_data['workday']])
+            req.workday = ','.join([str(day).lower() for day in modify_data['workday']])
         if modify_data.get('type'):
             req.type = modify_data['type']
         if modify_data.get('speed_type'):
