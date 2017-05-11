@@ -24,7 +24,7 @@ from TaobaoSdk import ZuanshiAdvertiserCampaignRtrptsGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num,change2num2
+from tao_models.num_tools import change2num,change2num2,default_zero_value_fields_rt
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
@@ -40,7 +40,7 @@ class ZuanshiCampaignRtRptsGet(object):
         req.campaign_id = campaign_id
         req.campaign_model = campaign_model
         rsp = ApiService.execute(req,nick,soft_code)
-        return change2num2(change_obj_to_dict_deeply(rsp.campaign_realtime_rpt_list),True)
+        return change2num2(change_obj_to_dict_deeply(rsp.campaign_realtime_rpt_list),True,default_zero_value_fields_rt)
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
