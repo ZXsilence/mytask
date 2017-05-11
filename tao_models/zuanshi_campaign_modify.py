@@ -36,7 +36,7 @@ class ZuanshiCampaignModify(object):
     @classmethod
     @tao_api_exception()
     def modify_banner_campaign(cls, nick, modify_data, soft_code = 'YZB'):
-        req = nshiBannerCampaignModifyRequest()
+        req = ZuanshiBannerCampaignModifyRequest()
         req.id = modify_data['id']
         if modify_data.get('name'):
             req.name = modify_data['name']
@@ -46,12 +46,12 @@ class ZuanshiCampaignModify(object):
             req.start_time = modify_data['start_time']
             req.end_time = modify_data['end_time']
         if modify_data.get('area_id_list'):
-            area_id_list = ','.join([str(area_id) for area_id in area_id_list])
+            area_id_list = ','.join(area_id_list)
             req.area_id_list = area_id_list
-        if modify_data.get('weekday'):
-            req.workday = ','.join([str(day) for day in modify_data['weekday']])
+        if modify_data.get('weekend'):
+            req.weekend = ','.join(modify_data['weekend'])
         if modify_data.get('workday'):
-            req.workday = ','.join([str(day) for day in modify_data['workday']])
+            req.workday = ','.join(modify_data['workday'])
         if modify_data.get('type'):
             req.type = modify_data['type']
         if modify_data.get('speed_type'):
@@ -61,6 +61,11 @@ class ZuanshiCampaignModify(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    modify_data['campaign_id'] = 3493376
-    ZuanshiCampaignModify.modify_banner_campaign(nick, soft_code, modify_data)
+    modify_data = {}
+    modify_data['id'] = 223280585
+    modify_data['workday'] = map(lambda x:True, xrange(24))
+    modify_data['weekend'] = map(lambda x:True, xrange(24))
+    soft_code = 'YZB'
+    res = ZuanshiCampaignModify.modify_banner_campaign(nick, modify_data, soft_code)
+    print res
 

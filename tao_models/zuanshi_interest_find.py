@@ -43,6 +43,8 @@ class ZuanshiInterestFind(object):
             if k not in cls.__params:
                 raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
             if v is not None:
+                if k == 'item_ids':
+                    v = ','.join(map(str, v))
                 setattr(req, k, v)
         rsp = ApiService.execute(req, nick, soft_code)
         interests = change_obj_to_dict_deeply(rsp.result).get('interests', {}).get('interest_d_t_o', [])

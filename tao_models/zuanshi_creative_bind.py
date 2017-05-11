@@ -34,7 +34,7 @@ class ZuanshiCreativeBind(object):
             raise Exception('参数creative_id_list最大列表长度：20')
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id
-        req.creative_id_list = creative_id_list
+        req.creative_id_list = ','.join(map(str, creative_id_list))
         rsp = ApiService.execute(req, nick, soft_code)
         return change_obj_to_dict_deeply(rsp.result)
 
