@@ -43,9 +43,10 @@ class AreasGet(object):
         return change_obj_to_dict_deeply(rsp.areas)
 
 if __name__ == "__main__":
-    areas = AreasGet.get_areas() 
-    areas = [obj for obj in areas if obj['type'] ==2 and obj['parent_id'] ==1]
-    print len(areas)
-    for area in areas:
-        if area['type'] ==2:
-            print area['name'],area['id']
+    areas = AreasGet.get_areas()
+    areas = [obj for obj in areas]
+    print areas
+    #print len(areas)
+    #for area in areas:
+    #    if area['type'] ==2:
+    #        print area['name'],area['id']

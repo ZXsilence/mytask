@@ -69,7 +69,7 @@ class ZuanshiCampaignFind(object):
             return None
 
 if __name__ == '__main__':
-    nick = '麦苗科技001'
+    nick = '优美妮旗舰店'
     try_list = ZuanshiCampaignFind.get_campaign_list(nick)
     for obj in try_list:
-        print obj
+        print obj['online_status']

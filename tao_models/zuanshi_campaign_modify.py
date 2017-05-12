@@ -46,7 +46,7 @@ class ZuanshiCampaignModify(object):
             req.start_time = modify_data['start_time']
             req.end_time = modify_data['end_time']
         if modify_data.get('area_id_list'):
-            area_id_list = ','.join(area_id_list)
+            area_id_list = ','.join(modify_data['area_id_list'])
             req.area_id_list = area_id_list
         if modify_data.get('weekend'):
             req.weekend = ','.join(modify_data['weekend'])
