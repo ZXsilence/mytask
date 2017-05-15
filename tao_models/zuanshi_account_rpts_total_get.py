@@ -34,7 +34,7 @@ class ZuanshiAccountRptsTotalGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_account_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',soft_code = 'YZB'):
+    def get_account_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'impression',soft_code = 'YZB'):
         #campaign_model 1：全店推广；4单品推广
         #effect_type效果类型。“impression”：展现效果；“click”：点击效果
         req = ZuanshiAdvertiserAccountRptsTotalGetRequest()

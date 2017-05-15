@@ -34,7 +34,7 @@ class ZuanshiTargetRptsDayGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_target_rpts_day(cls, nick,campaign_id,start_time,end_time,adgroup_id,target_id,effect = 15,campaign_model = 1,effect_type ='click',soft_code = 'YZB'):
+    def get_target_rpts_day(cls, nick,campaign_id,start_time,end_time,adgroup_id,target_id,effect = 15,campaign_model = 1,effect_type ='impression',soft_code = 'YZB'):
         req = ZuanshiAdvertiserTargetRptsDayGetRequest()
         req.start_time = start_time.strftime('%Y-%m-%d')
         req.end_time = end_time.strftime('%Y-%m-%d')

@@ -35,7 +35,7 @@ class ZuanshiAdzoneRptsTotalGet(object):
     page_size = 200
 
     @classmethod
-    def get_adzone_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',page_num = 1,campaign_id = None,adgroup_id = None,adzone_id = None,soft_code = 'YZB'):
+    def get_adzone_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'impression',page_num = 1,campaign_id = None,adgroup_id = None,adzone_id = None,soft_code = 'YZB'):
         rpt_list = []
         while True:
             tmp_list = cls.__sub_get_adzone_rpts_total(nick,sdate,edate,effect = effect,campaign_model= campaign_model,effect_type  = effect_type,page_num = page_num,campaign_id = campaign_id,adgroup_id=adgroup_id,adzone_id = adzone_id,soft_code = soft_code)
@@ -48,7 +48,7 @@ class ZuanshiAdzoneRptsTotalGet(object):
 
     @classmethod
     @tao_api_exception()
-    def __sub_get_adzone_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'click',page_num = 1,campaign_id = None,adgroup_id = None,adzone_id = None,soft_code = 'YZB'):
+    def __sub_get_adzone_rpts_total(cls, nick,sdate,edate,effect = 15,campaign_model= 1,effect_type  = 'impression',page_num = 1,campaign_id = None,adgroup_id = None,adzone_id = None,soft_code = 'YZB'):
         #campaign_model 1：全店推广；4单品推广
         #effect_type效果类型。“impression”：展现效果；“click”：点击效果
         req = ZuanshiAdvertiserAdzoneRptsTotalGetRequest()

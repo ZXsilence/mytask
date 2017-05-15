@@ -36,7 +36,7 @@ class ZuanshiRptsDownloadDayGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_rpts_task(cls,nick,start_time,end_time,hierarchy,campaign_model =1,effect_type ='click',soft_code = 'YZB'):
+    def get_rpts_task(cls,nick,start_time,end_time,hierarchy,campaign_model =1,effect_type ='impression',soft_code = 'YZB'):
         #钻展广告主分时数据异步下载接口，一次只能下载一天数据
         req = ZuanshiAdvertiserRptsDownloadDayGetRequest()
         req.start_time = start_time .strftime('%Y-%m-%d')

@@ -36,7 +36,7 @@ class ZuanshiTargetAdzoneRptsTotalGet(object):
     __params = ('target_id','adgroup_id','campaign_id','adzone_id','offset','effect','effect_type')
 
     @classmethod
-    def get_rpts_total_list(cls, nick,start_time,end_time,effect =15,effect_type='click',soft_code = 'YZB' ,**kwargs):
+    def get_rpts_total_list(cls, nick,start_time,end_time,effect =15,effect_type='impression',soft_code = 'YZB' ,**kwargs):
         data_list = []
         page_num = 1
         while True:
@@ -50,7 +50,7 @@ class ZuanshiTargetAdzoneRptsTotalGet(object):
 
     @classmethod
     @tao_api_exception()
-    def __get_sub_data_list(cls, nick,start_time,end_time,effect =15,effect_type='click',soft_code = 'YZB',offset = 1 ,**kwargs):
+    def __get_sub_data_list(cls, nick,start_time,end_time,effect =15,effect_type='impression',soft_code = 'YZB',offset = 1 ,**kwargs):
         #获取推广组列表
         req = ZuanshiAdvertiserTargetAdzoneRptsTotalGetRequest()
         for k,v in kwargs.iteritems():
