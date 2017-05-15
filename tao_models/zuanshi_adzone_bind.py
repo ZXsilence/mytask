@@ -24,7 +24,7 @@ if __name__ == '__main__':
 from TaobaoSdk import ZuanshiBannerAdgroupAdzoneBindRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
-from api_server.common.util import change_obj_to_dict_deeply
+from api_server.common.util import change_obj_to_dict_deeply, slice_list
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
@@ -40,9 +40,23 @@ class ZuanshiAdzoneBind(object):
         req = ZuanshiBannerAdgroupAdzoneBindRequest()
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id
-        req.adzone_bid_dto_list = adzone_bid_dto_list
-        rsp = ApiService.execute(req, nick, soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        success_adzone_list = []
+        failed_adzone_list = []
+        for chunk in slice_list(adzone_bid_dto_list, 20):
+            # 参数adzone_bid_dto_list最大列表长度：20
+            req.adzone_bid_dto_list = chunk
+            rsp = ApiService.execute(req, nick, soft_code)
+            result = change_obj_to_dict_deeply(rsp.result)
+            if result['success']:
+                success_adzone_list.extend(chunk)
+            else:
+                failed_adzone_list.extend(chunk)
+        result = {
+            'success': False if failed_adzone_list else True,
+            'success_list': success_adzone_list,
+            'failed_list': failed_adzone_list
+        }
+        return result
 
 
 if __name__ == '__main__':
