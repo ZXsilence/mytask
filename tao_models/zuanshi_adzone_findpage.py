@@ -33,8 +33,33 @@ logger = logging.getLogger(__name__)
 class ZuanshiAdzoneFindPage(object):
 
     page_size  = 50
-    __params = ('adzone_id_list','adzone_size_list ','page_size','page_num','allow_ad_format_list','media_type_list','adzone_type','adzone_name','settle_type_list')
+    __params = ('adzone_id_list','adzone_size_list','page_size','page_num','allow_ad_format_list','media_type_list','adzone_type','adzone_name','settle_type_list')
     number_list_fields = ('adzone_id_list', 'allow_ad_format_list', 'media_type_list', 'settle_type_list')
+
+    @classmethod
+    def get_paginated_adzone_list(cls, nick, soft_code ='YZB', **kwargs):
+        """分页获取"""
+        req = ZuanshiBannerAdzoneFindpageRequest()
+        for k, v in kwargs.iteritems():
+            if k not in cls.__params:
+                raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' % (k, v, cls.__params))
+            if v is not None:
+                if k in cls.number_list_fields:
+                    v = ','.join(map(str, v))
+                if k == 'adzone_size_list':
+                    v = ','.join(v)
+                setattr(req, k, v)
+        rsp = ApiService.execute(req, nick, soft_code)
+        result = change_obj_to_dict_deeply(rsp.result)
+        total_count = result.get('total_count')
+        adzone_list = result.get('adzones', {}).get('adzone_d_t_o')
+        if adzone_list:
+            for adzone in adzone_list:
+                adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
+                adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
+        else:
+            adzone_list = []
+        return total_count, adzone_list
 
     @classmethod
     def get_adzone_list(cls, nick,soft_code ='YZB' ,**kwargs):
@@ -61,13 +86,14 @@ class ZuanshiAdzoneFindPage(object):
                 if k in cls.number_list_fields:
                     v = ','.join(map(str, v))
                 if k == 'adzone_size_list':
-                    v = ','.join(v).replace('x', '*')
+                    v = ','.join(v)
                 setattr(req,k,v)
         rsp = ApiService.execute(req,nick,soft_code)
         adzone_list = change_obj_to_dict_deeply(rsp.result).get('adzones',{}).get('adzone_d_t_o')
-        for adzone in adzone_list:
-            adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
-            adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
+        if adzone_list:
+            for adzone in adzone_list:
+                adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
+                adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
         return adzone_list
 
 if __name__ == '__main__':

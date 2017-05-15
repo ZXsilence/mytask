@@ -44,9 +44,16 @@ class ZuanshiCreativeFind(object):
             if k not in cls.__params:
                 raise Exception('不支持该参数,参数名:%s,值:%s,仅支持%s' %(k,v,cls.__params))
             if v is not None:
+                if k in cls.number_list_fields:
+                    v = ','.join(map(str, v))
+                if k == 'size_list':
+                    v = ','.join(v)
                 setattr(req, k, v)
         rsp = ApiService.execute(req, nick, soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        result = change_obj_to_dict_deeply(rsp.result)
+        total_count = result.get('total_count')
+        creative_list = result.get('creatives', {}).get('creative', [])
+        return total_count, creative_list
 
     @classmethod
     def get_creative_list(cls, nick,soft_code ='YZB' ,**kwargs):

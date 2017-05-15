@@ -1,16 +1,21 @@
-#encoding=utf8
-'''
-Created on 2012-8-10
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@author: lichen
+@contact: lichen@maimiaotech.com
+@date: 2017-05-12 18:56
+@version: 0.0.0
+@license: Copyright Maimiaotech.com
+@copyright: Copyright Maimiaotech.com
 
-@author: dk
-'''
+"""
 import sys
 import os
 import logging
 import logging.config
 import json
 import datetime
-from copy import deepcopy
+
 
 
 if __name__ == '__main__':
@@ -20,31 +25,28 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-from TaobaoSdk import DmpCrowdsGetRequest 
+from TaobaoSdk import ZuanshiBannerAreaCodeFindRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
-from tao_models.common.date_tools import  split_date
+
 
 logger = logging.getLogger(__name__)
 
-class DmpCrowdsGet(object):
+class ZuanshiAreaCodeFind(object):
 
-    page_size = 200
-    
     @classmethod
-    def get_dmp_crowds(cls, nick, soft_code = 'YZB'):
-        req = DmpCrowdsGetRequest()
-        req.is_query_all = 1
-        req.offset = 0
-        req.limit = 50 #时间原因，先不分页了
+    @tao_api_exception()
+    def get_area_info(cls,nick,soft_code = 'YZB'):
+        req = ZuanshiBannerAreaCodeFindRequest()
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.results)
+        return change_obj_to_dict_deeply(rsp.result).get("area_codes").get("area_code")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     nick = '优美妮旗舰店'
-    try_list = DmpCrowdsGet.get_dmp_crowds(nick)
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
-    print try_list
+    res = ZuanshiAreaCodeFind.get_area_info(nick)
+    for r in res:
+        print "{code:%s,name:%s}"%(r['code'], r['name'].encode("utf8"))
+
+
