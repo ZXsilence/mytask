@@ -34,7 +34,7 @@ class ZuanshiTargetRtRptsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_adzone_rt_rpts(cls, nick,rpt_date,campaign_id,adgroup_id,target_id,campaign_model =1,soft_code = 'YZB'):
+    def get_target_rt_rpts(cls, nick,rpt_date,campaign_id,adgroup_id,target_id,campaign_model =1,soft_code = 'YZB'):
         req = ZuanshiAdvertiserTargetRtrptsGetRequest()
         req.log_date = rpt_date.strftime('%Y-%m-%d')
         req.campaign_id = campaign_id
@@ -50,6 +50,6 @@ if __name__ == '__main__':
     campaign_id = 217069448
     adgroup_id = 217061436
     target_id= 0
-    try_list = ZuanshiTargetRtRptsGet.get_adzone_rt_rpts(nick,rpt_date,campaign_id,adgroup_id,target_id)
+    try_list = ZuanshiTargetRtRptsGet.get_target_rt_rpts(nick,rpt_date,campaign_id,adgroup_id,target_id)
     print len(try_list)
         
