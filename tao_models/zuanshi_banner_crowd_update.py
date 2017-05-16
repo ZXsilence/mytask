@@ -23,7 +23,7 @@ if __name__ == '__main__':
 from TaobaoSdk import ZuanshiBannerCrowdUpdateRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
-from api_server.common.util import change_obj_to_dict_deeply
+from api_server.common.util import change_obj_to_dict_deeply, reduce_list_by_step
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
@@ -31,6 +31,19 @@ logger = logging.getLogger(__name__)
 
 
 class ZuanshiBannerCrowdUpdate(object):
+
+    @classmethod
+    def reduce_crowds_by_step(cls, crowds, step=20):
+        """按20长度切分crowds，相同crowd_type的crowd必须在同一个list中"""
+        type_crowds_dict = {}
+        for crowd in crowds:
+            crowd_type = crowd['crowd_type']
+            if crowd_type in type_crowds_dict:
+                type_crowds_dict[crowd_type].append(crowd)
+            else:
+                type_crowds_dict[crowd_type] = [crowd]
+        values = type_crowds_dict.values()
+        return reduce_list_by_step(values, step)
 
     @classmethod
     @tao_api_exception()
@@ -58,9 +71,23 @@ class ZuanshiBannerCrowdUpdate(object):
         req = ZuanshiBannerCrowdUpdateRequest()
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id
-        req.crowds = json.dumps(crowds)
-        rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        crowds_list = cls.reduce_crowds_by_step(crowds) if len(crowds) > 20 else [crowds]
+        success_crowd_list = []
+        failed_crowd_list = []
+        for crowds in crowds_list:
+            req.crowds = json.dumps(crowds)
+            rsp = ApiService.execute(req, nick, soft_code)
+            result = change_obj_to_dict_deeply(rsp.result)
+            if result['success']:
+                success_crowd_list.extend(crowds)
+            else:
+                failed_crowd_list.extend(crowds)
+        result = {
+            'success': False if failed_crowd_list else True,
+            'success_list': success_crowd_list,
+            'failed_list': failed_crowd_list
+        }
+        return result
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'

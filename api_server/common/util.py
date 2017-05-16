@@ -34,3 +34,20 @@ def slice_list(source_list, step):
     """将列表按长度step分段"""
     for i in xrange(0, len(source_list), step):
         yield source_list[i:i+step]
+
+
+def reduce_list_by_step(source_list, step):
+    """
+    reduce list of list by step, 每个子元素不能被拆分，新生成的列表每个子元素的长度不能超过step
+    source_list: [[1,2,3], [4], [5,6,7], [8,9,10]]
+    step: 5
+    return [[1,2,3,4], [5,6,7], [8,9,10]]
+    """
+    new_list = []
+    for item in source_list:
+        assert len(item) <= step
+        if new_list and len(new_list[-1] + item) <= step:
+            new_list[-1] += item
+        else:
+            new_list.append(item)
+    return new_list
