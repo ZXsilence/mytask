@@ -42,13 +42,16 @@ class ZuanshiAdzonesGet(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     try_list = ZuanshiAdzonesGet.get_adzones(nick)
-    for obj in try_list:
-        if 'PC' in obj['adzone_name'] and '首页' in obj['adzone_name']:
-            print obj['adzone_name']
+    #res = []
+    #for obj in try_list:
+    #    a = "{'adzone_id': %s,'adzone_name': '%s', 'adzone_size': '%s'}" %(obj['adzone_id'], obj['adzone_name'].encode('utf8'), obj['adzone_size'].replace('x', '*'))
+    #    res.append(eval(a))
+    print try_list[0]['site_url']
+        #if 'PC' in obj['adzone_name'] and '首页' in obj['adzone_name']:
+        #    print obj['adzone_name']
         #if obj['adzone_name'] in ['PC_流量包_网上购物_淘宝首页焦点图','PC_网上购物_淘宝首页焦点图右侧banner二','PC_流量包_网上购物_天猫首页焦点图']:
         #    print obj['adzone_name'],obj['adzone_id']
         #if obj['adzone_name'] in ['无线_流量包_网上购物_手淘app_手淘焦点图','无线_流量包_网上购物_触摸版_淘宝首页焦点图','无线_网上购物_app_新天猫首页焦点图2','无线_流量包_网上购物_天猫app首页焦点图','无线_网上购物_app_天猫_首页焦点图 ']:
         #    print obj['adzone_name'],obj['adzone_id']
-    print try_list[0].keys()
-    print len(try_list)
-        
+    #print try_list[0].keys()
+    #print len(try_list)

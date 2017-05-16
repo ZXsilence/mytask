@@ -42,4 +42,5 @@ if __name__ == '__main__':
     nick1 = '飞利浦官方旗舰店'
     nick2 = '优美妮旗舰店'
     try_list = ZuanshiCreativeCondition.get_creative_condition(nick2)
-    print try_list
+    for k,v in try_list.iteritems():
+        print k,v
