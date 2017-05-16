@@ -48,7 +48,7 @@ class ZuanshiCampaignCreate(object):
         req.end_time = end_time
         rsp = ApiService.execute(req,nick,soft_code)
         if not change_obj_to_dict_deeply(rsp.result).get('id'):
-            logging.INFO("%s create campaign failed:%s" %(nick, change_obj_to_dict_deeply(rsp.result)))
+            logging.info('%s:%s'%(nick, change_obj_to_dict_deeply(rsp.result).get('message')))
         return change_obj_to_dict_deeply(rsp.result).get('id')
 
 if __name__ == '__main__':
