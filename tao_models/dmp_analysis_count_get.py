@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 class DmpAnalysisCountGet(object):
 
     @classmethod
+    @tao_api_exception()
     def get_crowd_count(cls, nick, selects, looklike=1, soft_code = 'YZB'):
         req = DmpAnalysisCountGetRequest()
         req.lookalike_multiple = looklike

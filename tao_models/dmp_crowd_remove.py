@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 class DmpCrowdRemove(object):
 
     @classmethod
+    @tao_api_exception()
     def remove_dmp_crowd(cls, nick, crowd_id, soft_code = 'YZB'):
         req = DmpCrowdRemoveRequest()
         req.crowd_id= crowd_id
