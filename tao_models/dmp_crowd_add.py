@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 class DmpCrowdAdd(object):
 
     @classmethod
+    @tao_api_exception()
     def add_dmp_crowd(cls, nick, crowd_name, selects, looklike=1, soft_code = 'YZB'):
         req = DmpCrowdAddRequest()
         req.crowd_name = crowd_name

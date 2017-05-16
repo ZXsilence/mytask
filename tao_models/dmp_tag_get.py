@@ -46,7 +46,7 @@ class DmpTagGet(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     try_list = DmpTagGet.get_dmp_tag(nick, int(sys.argv[1]))
-    #print try_list['tag_option_group_d_t_os']
+    print try_list['tag_option_group_d_t_os']
     keys_list = ['option_name','option_value','option_group_id','parent_option_id','sort_num','id']
     print ','.join(keys_list)
     for element in try_list['tag_option_group_d_t_os'][0]['tag_option_d_t_os']['tag_option_d_t_o']:
