@@ -23,7 +23,7 @@ if __name__ == '__main__':
 from TaobaoSdk import ZuanshiBannerCrowdDeleteRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
-from api_server.common.util import change_obj_to_dict_deeply
+from api_server.common.util import change_obj_to_dict_deeply, slice_list
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
@@ -38,9 +38,24 @@ class ZuanshiBannerCrowdDelete(object):
         req = ZuanshiBannerCrowdDeleteRequest()
         req.campaign_id = campaign_id
         req.adgroup_id = adgroup_id
-        req.crowds = json.dumps(crowds)
-        rsp = ApiService.execute(req, nick, soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        success_crowd_list = []
+        failed_crowd_list = []
+        for chunk in slice_list(crowds, 20):
+            # 参数crowds最大列表长度：20
+            req.crowds = chunk
+            rsp = ApiService.execute(req, nick, soft_code)
+            result = change_obj_to_dict_deeply(rsp.result)
+            if result['success']:
+                success_crowd_list.extend(chunk)
+            else:
+                failed_crowd_list.extend(chunk)
+        result = {
+            'success': False if failed_crowd_list else True,
+            'success_list': success_crowd_list,
+            'failed_list': failed_crowd_list
+        }
+        return result
+
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'

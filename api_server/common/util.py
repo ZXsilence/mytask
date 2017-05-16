@@ -29,3 +29,8 @@ def change_obj_to_dict_deeply(obj):
             result_dict[key] = [change_obj_to_dict_deeply(obj) for obj in result_dict[key]]
     return result_dict
 
+
+def slice_list(source_list, step):
+    """将列表按长度step分段"""
+    for i in xrange(0, len(source_list), step):
+        yield source_list[i:i+step]

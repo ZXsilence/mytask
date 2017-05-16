@@ -19,7 +19,7 @@ if __name__ == '__main__':
 from TaobaoSdk import ZuanshiBannerAdgroupDeleteRequest
 from tao_models.common.decorator import tao_api_exception
 from api_server.services.api_service import ApiService
-from api_server.common.util import change_obj_to_dict_deeply
+from api_server.common.util import change_obj_to_dict_deeply, slice_list
 
 logger = logging.getLogger(__name__)
 
@@ -30,12 +30,24 @@ class ZuanshiAdgroupDelete(object):
     @tao_api_exception()
     def delete_adgroup(cls, nick, campaign_id, adgroup_id_list, soft_code='YZB'):
         req = ZuanshiBannerAdgroupDeleteRequest()
-        # if len(adgroup_id_list) > 20:
-        #     raise Exception('参数adgroup_id_list最大列表长度：20')
         req.campaign_id = campaign_id
-        req.adgroup_id_list = ','.join(map(str, adgroup_id_list))
-        rsp = ApiService.execute(req, nick, soft_code)
-        return change_obj_to_dict_deeply(rsp.result)
+        success_id_list = []
+        failed_id_list = []
+        for chunk in slice_list(adgroup_id_list, 20):
+            # 参数adgroup_id_list最大列表长度：20
+            req.adgroup_id_list = ','.join(map(str, chunk))
+            rsp = ApiService.execute(req, nick, soft_code)
+            result = change_obj_to_dict_deeply(rsp.result)
+            if result['success']:
+                success_id_list.extend(chunk)
+            else:
+                failed_id_list.extend(chunk)
+        result = {
+            'success': False if failed_id_list else True,
+            'success_list': success_id_list,
+            'failed_list': failed_id_list
+        }
+        return result
 
 
 if __name__ == '__main__':
