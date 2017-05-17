@@ -72,4 +72,5 @@ if __name__ == '__main__':
     nick = '优美妮旗舰店'
     try_list = ZuanshiCampaignFind.get_campaign_list(nick)
     for obj in try_list:
-        print obj['online_status']
+        print obj
+        break

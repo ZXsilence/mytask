@@ -43,6 +43,6 @@ class ZuanshiCampaignGet(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    campaign_id = 224199656
+    campaign_id = 217411616
     try_list = ZuanshiCampaignGet.get_campaign(nick,campaign_id)
     print try_list

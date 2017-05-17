@@ -55,7 +55,7 @@ class ZuanshiCampaignModify(object):
         if modify_data.get('type'):
             req.type = modify_data['type']
         if modify_data.get('speed_type'):
-            req.speed_type = modify_data['modify_data']
+            req.speed_type = modify_data['speed_type']
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result).get('success')
 
