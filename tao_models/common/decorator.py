@@ -126,7 +126,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         elif api_method == 'taobao.simba.creative.update' and e.sub_msg \
                                 and u'创意在待审核状态' in e.sub_msg:
                             raise NoPermissionException(e.sub_msg) 
-
+                        elif api_method == 'taobao.dmp.crowds.get' and int(e.code) == 15 and int(e.sub_code) == 400:
+                            raise DmpNotOpenException
                     #异常状态的重试处理,不扔出自定义的业务异常
                     if (code == 530 or code == 46) and e.sub_code.startswith('isp'): 
                         if retry_times == MAX_RETRY_TIMES:
