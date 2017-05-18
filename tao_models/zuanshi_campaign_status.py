@@ -41,14 +41,14 @@ class ZuanshiCampaignStatus(object):
         req.campaign_id_list = campaign_id_list
         req.status = modify_campaign_status_data['status']
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('success')
+        return change_obj_to_dict_deeply(rsp.result)
 
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     soft_code = 'YZB'
     modify_campaign_status_data = {}
-    modify_campaign_status_data['campaign_id_list'] = [223280585]
+    modify_campaign_status_data['campaign_id_list'] = [223280585,225344013]
     modify_campaign_status_data['status'] = 1
     res = ZuanshiCampaignStatus.modify_banner_campaign_status(nick, modify_campaign_status_data, soft_code)
     print res

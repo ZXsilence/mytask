@@ -57,14 +57,14 @@ class ZuanshiCampaignModify(object):
         if modify_data.get('speed_type'):
             req.speed_type = modify_data['speed_type']
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('success')
+        return change_obj_to_dict_deeply(rsp.result)
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     modify_data = {}
-    modify_data['id'] = 223280585
-    modify_data['workday'] = map(lambda x:True, xrange(24))
-    modify_data['weekend'] = map(lambda x:True, xrange(24))
+    modify_data['id'] = 225344013
+    modify_data['workday'] = map(lambda x:'true', xrange(24))
+    modify_data['weekend'] = map(lambda x:'true', xrange(24))
     soft_code = 'YZB'
     res = ZuanshiCampaignModify.modify_banner_campaign(nick, modify_data, soft_code)
     print res
