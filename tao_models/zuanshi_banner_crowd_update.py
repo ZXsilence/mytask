@@ -38,10 +38,7 @@ class ZuanshiBannerCrowdUpdate(object):
         type_crowds_dict = {}
         for crowd in crowds:
             crowd_type = crowd['crowd_type']
-            if crowd_type in type_crowds_dict:
-                type_crowds_dict[crowd_type].append(crowd)
-            else:
-                type_crowds_dict[crowd_type] = [crowd]
+            type_crowds_dict.setdefault(crowd_type, []).append(crowd)
         values = type_crowds_dict.values()
         return reduce_list_by_step(values, step)
 
