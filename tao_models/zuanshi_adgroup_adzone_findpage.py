@@ -67,7 +67,7 @@ class ZuanshiAdgroupAdzoneFindPage(object):
         if adzone_list:
             for adzone in adzone_list:
                 adzone['adzone_size_list'] = adzone['adzone_size_list']['string']
-                adzone['matrix_price_list'] = adzone['matrix_price_list']['matrix_price_d_t_o']
+                adzone['matrix_price_list'] = adzone['matrix_price_list']['matrix_price_d_t_o'] if adzone['matrix_price_list'] else []
                 adzone['allow_ad_format_list'] = adzone['allow_ad_format_list']['number']
         return adzone_list
 
