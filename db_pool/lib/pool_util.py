@@ -11,17 +11,21 @@
 """
 import os,sys,random
 import MySQLdb
+from MySQLdb.converters import conversions
 currDir = os.path.normpath(os.path.dirname(__file__))
 os.path.normpath(os.path.join(currDir, '../../../'))
 from db_pool.conf.settings import RDS1,RDS2,RDS3,RDS4
 
 class PoolUtil(object):
+    conv = conversions
 
     @classmethod
     def _get_cursor_by_rds(self,db_name,RDS):
         db_set = RDS['pool_addr']
+        self.conv[0] = float
+        self.conv[246] = float
         conn=MySQLdb.connect(host=db_set['HOST'],port=int(db_set['PORT']),\
-                user=db_set['USER'],passwd=db_set['PASSWD'],db=db_name,charset="utf8")
+                user=db_set['USER'],passwd=db_set['PASSWD'],db=db_name,charset="utf8",conv=self.conv)
         cursor = conn.cursor()
         return (conn,cursor)
 
