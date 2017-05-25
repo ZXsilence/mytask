@@ -73,5 +73,8 @@ def change2num2(rpt_list,change_unit = False,fields = default_zero_value_fields)
                 if key in item: 
                     item[key] *= 100
         item.update(dict((k,0) for k in fields - set(item.keys())))
+    return rpt_list
+
+def remove_error_target(rpt_list):
     rpt_list = [obj for obj in rpt_list if not (obj.get('target_id') == -2 and not obj.get('target_name'))]
     return rpt_list

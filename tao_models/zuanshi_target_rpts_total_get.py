@@ -24,7 +24,7 @@ from TaobaoSdk import ZuanshiAdvertiserTargetRptsTotalGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-from tao_models.num_tools import change2num,change2num2
+from tao_models.num_tools import change2num,change2num2,remove_error_target
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.date_tools import  split_date
 
@@ -45,7 +45,7 @@ class ZuanshiTargetRptsTotalGet(object):
             if not tmp_list or len(tmp_list) < cls.page_size:
                 break
             page_num +=1
-        return rpt_list
+        return remove_error_target(rpt_list)
 
     @classmethod
     @tao_api_exception()
@@ -71,10 +71,10 @@ class ZuanshiTargetRptsTotalGet(object):
 
 if __name__ == '__main__':
     nick = '飞利浦润氏专卖店'
-    nick = '飞利浦官方旗舰店'
+    nick = '赐福堂电器专营店'
     sdate = datetime.datetime(2017,3,22)
-    edate = datetime.datetime(2017,4,18)
-    try_list = ZuanshiTargetRptsTotalGet.get_target_rpts_total(nick,sdate,edate,effect_type = 'impression')
+    edate = datetime.datetime(2017,3,24)
+    try_list = ZuanshiTargetRptsTotalGet.get_target_rpts_total(nick,sdate,edate,effect_type = 'click',target_id = -2)
     for obj in try_list:
         #print obj.keys()
         print obj['campaign_id'],obj['target_name'],obj['uv'],obj['ad_pv'],obj['ctr'],obj['ecpm'],obj['charge'],obj.get('cvr',0),obj['roi']
