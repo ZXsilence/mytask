@@ -37,7 +37,7 @@ class ZuanshiDmpFind(object):
     def get_dmp_list(cls, nick,soft_code = 'YZB'):
         req = ZuanshiBannerDmpFindRequest()
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('dmp_crowd_d_t_o')
+        return change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('dmp_crowd_d_t_o', [])
 
 if __name__ == '__main__':
     nick = '飞利浦官方旗舰店'

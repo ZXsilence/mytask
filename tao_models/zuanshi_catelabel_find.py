@@ -37,7 +37,7 @@ class ZuanshiCatelabelFind(object):
     def get_catelabel_list(cls, nick,soft_code = 'YZB'):
         req = ZuanshiBannerCatelabelFindRequest()
         rsp = ApiService.execute(req,nick,soft_code)
-        return change_obj_to_dict_deeply(rsp.result).get('labels',{}).get('cat_label_d_t_o')
+        return change_obj_to_dict_deeply(rsp.result).get('labels',{}).get('cat_label_d_t_o', [])
 
 if __name__ == '__main__':
     nick = '飞利浦官方旗舰店'
