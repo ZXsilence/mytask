@@ -36,14 +36,14 @@ class ZuanshiCreativeModify(object):
 
 
     @classmethod
-    @tao_api_exception
+    @tao_api_exception()
     def modify_creative(cls,nick,params,soft_code='YZB'):
         req = ZuanshiBannerCreativeModifyRequest()
-        req.id = params['creative_id']
-        req.is_trans_to_wifi = params['is_trans_to_wifi']
+        req.id = params['id']
+        req.is_trans_to_wifi = str(params['is_trans_to_wifi']).lower()
         if params.get('name'):
             req.name = params['name']
-        if pramas.get('image_path'):
+        if params.get('image_path'):
             req.image = FileItem(title,open(image_path))
         if params.get('cat_id'):
             req.cat_id = params['cat_id']
@@ -51,3 +51,10 @@ class ZuanshiCreativeModify(object):
             req.click_url = params['click_url']
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.result)
+
+if __name__ == '__main__':
+    nick = '优美妮旗舰店'
+    soft_code = 'YZB'
+    params = {'id': 805164400001, 'name': 'carlos_lee_test', 'is_trans_to_wifi': False}
+    res = ZuanshiCreativeModify.modify_creative(nick,params,soft_code)
+    print res
