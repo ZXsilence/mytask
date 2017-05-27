@@ -87,8 +87,8 @@ class ZuanshiCreativeFind(object):
 
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
-    campaign_id = 217069448
-    try_list = ZuanshiCreativeFind.get_creative_list(nick)
-    print len(try_list)
+    soft_code = 'YZB'
+    try_list = ZuanshiCreativeFind.get_creative_list(nick,soft_code,name='616-2-手机端_640x200')
+    print try_list
     #for obj in try_list:
     #    print obj
