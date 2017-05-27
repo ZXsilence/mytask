@@ -40,7 +40,6 @@ class VasOrderSearch(object):
         if nick != None:
             req.nick = nick
         nick = None
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.article_biz_orders
 
@@ -101,15 +100,14 @@ class VasOrderSearch(object):
         req.page_size =1
         if nick is not None:
             req.nick=nick
-        soft_code = None
         nick = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.total_item)
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    soft_code = 'SYB'
+    nick = '飞利浦官方旗舰店'
+    soft_code = 'YZB'
     start = datetime.datetime.now() - datetime.timedelta(89)
     today = datetime.datetime.now()
     result = VasOrderSearch.search_vas_order_by_nick(start, today, soft_code,nick)
