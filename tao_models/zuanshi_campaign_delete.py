@@ -45,6 +45,6 @@ class ZuanshiCampaignDelete(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     soft_code = 'YZB'
-    delete_id_list = [225344013]
+    delete_id_list = [226622102]
     res = ZuanshiCampaignDelete.delete_banner_campaign(nick,delete_id_list,soft_code)
     print res

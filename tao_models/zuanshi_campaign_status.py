@@ -48,9 +48,10 @@ if __name__ == '__main__':
     nick = '优美妮旗舰店'
     soft_code = 'YZB'
     modify_campaign_status_data = {}
-    modify_campaign_status_data['campaign_id_list'] = [223280585,225344013]
-    modify_campaign_status_data['status'] = 1
+    modify_campaign_status_data['campaign_id_list'] = [226674640]
+    modify_campaign_status_data['status'] = 9
     res = ZuanshiCampaignStatus.modify_banner_campaign_status(nick, modify_campaign_status_data, soft_code)
+    import simplejson as json
     print res
 
 
