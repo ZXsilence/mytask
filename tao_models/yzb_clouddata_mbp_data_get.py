@@ -88,7 +88,21 @@ class ClouddataMbpDataGet(object):
         sql_id = 111851 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
+    
+    @classmethod
+    def get_shop_area_rpt_sum(cls, shop_id, edate):
+        """获取店铺最近30天地域报表"""
+        return_keys = (('shop_id','shop_id'), ('region_name','地域名称') , \
+                       ('ipv','ipv'),('iuv','iuv'),('pv','pv'),('uv','uv'),('view_repeat_num','浏览回头客'),\
+                       ('alipay_winner_num','支付买家数'), ('alipay_auction_num','支付商品数'), \
+                       ('alipay_trade_amt','支付金额'),('alipay_trade_num','支付订单数'))
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "edate":edate_str}
+        result_list = []
 
+        sql_id = 111869 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
 
     @classmethod
     def get_shop_pc_nature_query(cls, shop_id, sdate, edate):
@@ -361,13 +375,14 @@ def get_all_shop_cats():
 
 if __name__ == '__main__':
     sdate = datetime.datetime(2017,5,31,0,0)
-    edate = datetime.datetime(2017,5,31,0,0)
+    edate = datetime.datetime(2017,6,5,0,0)
     shop_id = 290778632 
     auction_id = 545710998697 
     #query_list = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id, sdate, edate)
     #item_list = ClouddataMbpDataGet.get_item_pc_page_effect_d(shop_id, sdate, edate)
     #item_info,keys_list = ClouddataMbpDataGet.get_one_item_pc_page_effect_d(shop_id, auction_id, sdate, edate)
-    item_info,keys_list = ClouddataMbpDataGet.get_item_pc_page_url(shop_id, auction_id, sdate, edate)
+    #item_info,keys_list = ClouddataMbpDataGet.get_item_pc_page_url(shop_id, auction_id, sdate, edate)
+    rpt_list,keys_list = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id, edate)
 
     import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
     from advert_service.service.philips_busi_service import PhilipsBusiService
