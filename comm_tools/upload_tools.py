@@ -19,6 +19,7 @@ import paramiko
 from tao_models.picture_upload import PictureUpload
 from tao_models.picture_category_get import PictureCategoryGet
 from tao_models.picture_category_add import PictureCategoryAdd
+from PIL import Image
 CATEGORY_SYB_TOUTU = '省油宝宝贝投图'
 CATEGORY_SYB_ZHUTU = '省油宝商品主图'
 
@@ -163,6 +164,23 @@ def upload_customer_img_with_base64_new(root_path,nick,file_obj):
     destination.close()
     rsp = PictureUpload.upload_img(nick,file_path)
     return rsp['picture']['picture_path']
+
+def upload_yzb_creative_img_with_base64(root_path,nick,img_data):
+    if not img_data:
+        return
+    file_name = '%s.png'%(time.mktime(datetime.now().timetuple()))
+    now = datetime.now()
+    package_path = os.path.join(root_path,'%s/%s/%s'%(now.year,now.month,now.day))
+    if not os.path.exists(package_path):
+        os.makedirs(package_path)
+    file_path = os.path.normpath(os.path.join(package_path,'%s'%file_name))
+    destination = open(file_path,'wb+')
+    img_data = img_data[re.search(';base64',img_data).start()+8:]
+    img_data = base64.b64decode(img_data)
+    destination.write(img_data)
+    destination.close()
+    image_size = "_".join(map(lambda x:str(x),Image.open(file_path).size))
+    return file_path,image_size
 
 if __name__ == '__main__':
     print file_append_timestamp('111_1')
