@@ -374,59 +374,17 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-<<<<<<< Updated upstream
-    sdate = datetime.datetime(2017,5,31,0,0)
-    edate = datetime.datetime(2017,6,5,0,0)
-    shop_id = 290778632 
-    auction_id = 545710998697 
-=======
     sdate = datetime.datetime(2017,6,1,0,0)
     edate = datetime.datetime(2017,6,6,0,0)
     shop_id = 290778632
     auction_id = 545710998697
-    data,title = ClouddataMbpDataGet.get_shop_traffic_trade_d(shop_id,sdate,edate)
-    print data
->>>>>>> Stashed changes
-    #query_list = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id, sdate, edate)
-    #item_list = ClouddataMbpDataGet.get_item_pc_page_effect_d(shop_id, sdate, edate)
-    #item_info,keys_list = ClouddataMbpDataGet.get_one_item_pc_page_effect_d(shop_id, auction_id, sdate, edate)
-    #item_info,keys_list = ClouddataMbpDataGet.get_item_pc_page_url(shop_id, auction_id, sdate, edate)
-<<<<<<< Updated upstream
-    rpt_list,keys_list = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id, edate)
+    data, title = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
+    from 
+    #data,title = ClouddataMbpDataGet.get_shop_traffic_trade_d(shop_id,sdate,edate)
+    #print data
+    #rpt_list,keys_list = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id, edate)
 
-    import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
-    from advert_service.service.philips_busi_service import PhilipsBusiService
-    shop_list = PhilipsBusiService.get_shop_relation(1)
-    shop_dict = {shop['sid']:shop['nick'] for shop in shop_list}
-    shop_list = ClouddataMbpDataGet.get_shop_list(edate)
-    
-    for shop in shop_list:
-        nick = shop_dict.get(int(shop['shop_id']), None)
-        if not nick:
-            continue
-        file_obj = file('philips_data/%s_shop_platform_traffic_trade_d.csv' % nick, 'w')
-        res, return_keys = ClouddataMbpDataGet.get_shop_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
-
-        keys = [t[0] for t in return_keys]
-        heads = [t[1] for t in return_keys]
-        file_obj.write(','.join(heads)+'\n')
-        for item in res:
-            data_list = [item.get(key,'0') for key in keys]
-            file_obj.write(','.join(data_list)+'\n')
-        file_obj.close()
-
-        file_obj = file('philips_data/%s_item_platform_traffic_trade_d.csv' % nick, 'w')
-        res, return_keys = ClouddataMbpDataGet.get_item_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
-
-        keys = [t[0] for t in return_keys]
-        heads = [t[1] for t in return_keys]
-        file_obj.write(','.join(heads)+'\n')
-        for item in res:
-            data_list = [item.get(key,'0') for key in keys]
-            file_obj.write(','.join(data_list)+'\n')
-        file_obj.close()
-=======
-
+    #import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
     #from advert_service.service.philips_busi_service import PhilipsBusiService
     #shop_list = PhilipsBusiService.get_shop_relation(1)
     #shop_dict = {shop['sid']:shop['nick'] for shop in shop_list}
@@ -457,4 +415,3 @@ if __name__ == '__main__':
     #        data_list = [item.get(key,'0') for key in keys]
     #        file_obj.write(','.join(data_list)+'\n')
     #    file_obj.close()
->>>>>>> Stashed changes

@@ -34,12 +34,12 @@ class ZuanshiCreativeCreate(object):
 
     @classmethod
     @tao_api_exception()
-    def create_creative(cls,nick,image_path,name, cat_id ,click_url,is_trans_to_wifi = False, soft_code='YZB'):
+    def create_creative(cls,nick,image,name, cat_id ,click_url,is_trans_to_wifi = False, soft_code='YZB'):
         req = ZuanshiBannerCreativeCreateRequest()
         req.name = name
         req.is_trans_to_wifi = str(is_trans_to_wifi).lower()
         title = 'any.jpg'
-        req.image = FileItem(title,open(image_path))
+        req.image = FileItem(title,image)
         req.cat_id = cat_id
         req.click_url = click_url
         rsp = ApiService.execute(req,nick,soft_code)

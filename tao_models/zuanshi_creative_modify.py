@@ -43,8 +43,9 @@ class ZuanshiCreativeModify(object):
         req.is_trans_to_wifi = str(params['is_trans_to_wifi']).lower()
         if params.get('name'):
             req.name = params['name']
-        if params.get('image_path'):
-            req.image = FileItem(title,open(image_path))
+        if params.get('image'):
+            title = 'any.jpg'
+            req.image = FileItem(title,params['image'])
         if params.get('cat_id'):
             req.cat_id = params['cat_id']
         if params.get('click_url'):
