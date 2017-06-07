@@ -38,6 +38,7 @@ class ZuanshiCreativeCreate(object):
         req = ZuanshiBannerCreativeCreateRequest()
         req.name = name
         req.is_trans_to_wifi = str(is_trans_to_wifi).lower()
+        title = 'any.jpg'
         req.image = FileItem(title,open(image_path))
         req.cat_id = cat_id
         req.click_url = click_url
