@@ -56,7 +56,7 @@ class ZuanshiCreativeModify(object):
             if params.get("name"):
                 req.name = params['name']
             req.is_trans_to_wifi = str(params['is_trans_to_wifi']).lower()
-            if params.get('image'):
+            if params.get('image_path'):
                 req.image = FileItem(title,open(params['image_path']))
             if params.get('cat_id'):
                 req.cat_id = params['cat_id']
@@ -77,6 +77,6 @@ class ZuanshiCreativeModify(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     soft_code = 'YZB'
-    params = {'id': 805164400001, 'name': 'carlos_lee_test', 'is_trans_to_wifi': False}
+    params = {'name':'test' ,'cat_id': 18, 'id': 642667030001, 'is_trans_to_wifi':False,'image_path':'/tmp/shoes.jpg', 'click_url':"http://taobao.com"}
     res = ZuanshiCreativeModify.modify_creative(nick,params)
     print res

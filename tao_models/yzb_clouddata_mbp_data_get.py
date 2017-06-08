@@ -377,9 +377,27 @@ if __name__ == '__main__':
     sdate = datetime.datetime(2017,6,1,0,0)
     edate = datetime.datetime(2017,6,6,0,0)
     shop_id = 290778632
-    auction_id = 545710998697
-    data, title = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
-    from 
+    nick = '优美妮旗舰店'
+    data1, title1 = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
+    data2, titile2 = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
+    from tao_models.itemcats_authorize_get import ItemcatsAuthorizeGet
+    brand_list = [brand['name'] for brand in ItemcatsAuthorizeGet.get_itemcats_authorize(nick,'brand.name').get('brands')]
+    data1.extend(data2)
+    shop_traffic_data = {}
+    for d in data1:
+        if d['dt'] not in shop_traffic_data.keys():
+            shop_traffic_data[d['dt']] = {'uv':int(d['uv'])}
+            if d['query'] in brand_list:
+                shop_traffic_data[d['dt']]['brand_traffic'] = int(d['uv'])
+            else:
+                shop_traffic_data[d['dt']]['brand_traffic'] = 0
+        else:
+            shop_traffic_data[d['dt']]['uv'] = shop_traffic_data[d['dt']]['uv']+int(d['uv'])
+            if d['query'] in brand_list:
+                shop_traffic_data[d['dt']]['brand_traffic'] = shop_traffic_data[d['dt']]['brand_traffic']+int(d['uv'])
+    print shop_traffic_data
+    #shop_brand_uv = reduce(lambda x,y:x['uv']+y['uv'],filter(lambda x:x['query'] in brand_list, data1))
+    #print shop_brand_uv
     #data,title = ClouddataMbpDataGet.get_shop_traffic_trade_d(shop_id,sdate,edate)
     #print data
     #rpt_list,keys_list = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id, edate)
