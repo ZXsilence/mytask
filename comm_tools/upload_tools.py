@@ -15,6 +15,7 @@ from datetime import datetime
 import base64
 import urllib
 import re
+import urllib2
 import paramiko
 from tao_models.picture_upload import PictureUpload
 from tao_models.picture_category_get import PictureCategoryGet
@@ -175,8 +176,11 @@ def upload_yzb_creative_img_with_base64(root_path,nick,img_data):
         os.makedirs(package_path)
     file_path = os.path.normpath(os.path.join(package_path,'%s'%file_name))
     destination = open(file_path,'wb+')
-    img_data = img_data[re.search(';base64',img_data).start()+8:]
-    img_data = base64.b64decode(img_data)
+    if 'http' in img_data:
+        img_data = urllib2.urlopen(img_data).read()
+    else:
+        img_data = img_data[re.search(';base64',img_data).start()+8:]
+        img_data = base64.b64decode(img_data)
     destination.write(img_data)
     destination.close()
     image_size = "_".join(map(lambda x:str(x),Image.open(file_path).size))
