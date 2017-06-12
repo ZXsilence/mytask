@@ -45,5 +45,6 @@ if __name__ == '__main__':
     nick = '麦苗科技001'
     name = '省油宝请勿删除'
     data = PictureCategoryAdd.add_picture_category(nick,name)
-    for obj in data:
-        print obj['picture_category_name']
+    # for obj in data:
+    #     print obj['picture_category_name']
+    print data['picture_category_name']
