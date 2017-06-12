@@ -88,6 +88,19 @@ class ClouddataMbpDataGet(object):
         sql_id = 111851 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
+
+    @classmethod
+    def get_shop_pc_page_url(cls,shop_id,sdate,edate):
+        """获取全店PC流量去向"""
+        return_keys = (('dt','日期'),('shop_id','店铺id'),('auction_id','商品id'),('access_url','去向url'),('uv','uv'))
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id,  "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 111871
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
     
     @classmethod
     def get_shop_area_rpt_sum(cls, shop_id, edate):
@@ -375,61 +388,92 @@ def get_all_shop_cats():
 
 if __name__ == '__main__':
     sdate = datetime.datetime(2017,6,1,0,0)
-    edate = datetime.datetime(2017,6,6,0,0)
+    edate = datetime.datetime(2017,6,8,0,0)
     shop_id = 290778632
-    nick = '优美妮旗舰店'
-    data1, title1 = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
-    data2, titile2 = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
-    from tao_models.itemcats_authorize_get import ItemcatsAuthorizeGet
-    brand_list = [brand['name'] for brand in ItemcatsAuthorizeGet.get_itemcats_authorize(nick,'brand.name').get('brands')]
-    data1.extend(data2)
-    shop_traffic_data = {}
-    for d in data1:
-        if d['dt'] not in shop_traffic_data.keys():
-            shop_traffic_data[d['dt']] = {'uv':int(d['uv'])}
-            if d['query'] in brand_list:
-                shop_traffic_data[d['dt']]['brand_traffic'] = int(d['uv'])
+    nick = '飞利浦官方旗舰店'
+    pc_page_data, pc_page_title = ClouddataMbpDataGet.get_item_pc_page_effect_d(shop_id,sdate,edate)
+    page_effect_data = {}
+    for pc_page in pc_page_data:
+        dt = datetime.datetime.strptime(pc_page['dt'],"%Y%m%d")
+        if pc_page['auction_id'] in page_effect_data.keys():
+            page_effect_data[pc_page['auction_id']]['page_duration_all'] += int(pc_page['page_duration'])
+            if dt in page_effect_data[pc_page['auction_id']]['page_duration'].keys():
+                page_effect_data[pc_page['auction_id']]['page_duration'][dt] += int(pc_page['page_duration'])
             else:
-                shop_traffic_data[d['dt']]['brand_traffic'] = 0
+                page_effect_data[pc_page['auction_id']]['page_duration'][dt] = int(pc_page['page_duration'])
+            page_effect_data[pc_page['auction_id']]['iuv_all'] += int(pc_page['iuv'])
+            if dt in page_effect_data[pc_page['auction_id']]['iuv'].keys():
+                page_effect_data[pc_page['auction_id']]['iuv'][dt] += int(pc_page['iuv'])
+            else:
+                page_effect_data[pc_page['auction_id']]['iuv'][dt] = int(pc_page['iuv'])
+            page_effect_data[pc_page['auction_id']]['bounce_cnt'] += int(pc_page['bounce_cnt'])
+            page_effect_data[pc_page['auction_id']]['landing_cnt'] += int(pc_page['landing_cnt'])
+            if dt in page_effect_data[pc_page['auction_id']]['bounce_detail'].keys():
+                page_effect_data[pc_page['auction_id']]['bounce_detail'][dt]['bounce_cnt'] += int(pc_page['bounce_cnt'])
+                page_effect_data[pc_page['auction_id']]['bounce_detail'][dt]['landing_cnt'] += int(pc_page['landing_cnt'])
+            else:
+                page_effect_data[pc_page['auction_id']]['bounce_detail'][dt] = {'bounce_cnt': int(pc_page['bounce_cnt']),\
+                                                                                'landing_cnt': int(pc_page['landing_cnt'])}
         else:
-            shop_traffic_data[d['dt']]['uv'] = shop_traffic_data[d['dt']]['uv']+int(d['uv'])
-            if d['query'] in brand_list:
-                shop_traffic_data[d['dt']]['brand_traffic'] = shop_traffic_data[d['dt']]['brand_traffic']+int(d['uv'])
-    print shop_traffic_data
-    #shop_brand_uv = reduce(lambda x,y:x['uv']+y['uv'],filter(lambda x:x['query'] in brand_list, data1))
-    #print shop_brand_uv
-    #data,title = ClouddataMbpDataGet.get_shop_traffic_trade_d(shop_id,sdate,edate)
-    #print data
-    #rpt_list,keys_list = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id, edate)
+            page_effect_data[pc_page['auction_id']]= {'page_duration_all':int(pc_page['page_duration']),\
+                                                      'page_duration':{dt:int(pc_page['page_duration'])},
+                                                      'iuv_all':int(pc_page['iuv']),\
+                                                      'iuv':{dt:int(pc_page['iuv'])},\
+                                                      'bounce_cnt':int(pc_page['bounce_cnt']),\
+                                                      'landing_cnt':int(pc_page['landing_cnt']),\
+                                                      'bounce_detail':{dt:{'bounce_cnt':int(pc_page['bounce_cnt']),\
+                                                                           'landing_cnt':int(pc_page['landing_cnt'])}},
+                                                      'page_url':'https://item.taobao.com/item.htm?id='+pc_page['auction_id']}
+    page_url_data, page_url_title = ClouddataMbpDataGet.get_shop_pc_page_url(shop_id,sdate,edate)
+    for page_url in page_url_data:
+        if page_url['auction_id'] in page_effect_data.keys():
+            if page_effect_data[page_url['auction_id']].get('detail'):
+                if page_url['access_url'] in page_effect_data[page_url['auction_id']]['detail'].keys():
+                    page_effect_data[page_url['auction_id']]['detail'][page_url['access_url']]['uv'] += int(page_url['uv'])
+                else:
+                    page_effect_data[page_url['auction_id']]['detail'][page_url['access_url']] = {'uv':int(page_url['uv'])}
+            else:
+                page_effect_data[page_url['auction_id']]['detail'] = {page_url['access_url']:{'uv':int(page_url['uv'])}}
+    import pprint
+    pprint.pprint(page_effect_data['545285529847'])
+    #area_data, title = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id,edate)
+    #area_traffic_data = {}
+    #for area in area_data:
+    #    if '中国' in area['region_name'].encode('utf8'):
+    #        if area['region_name'].encode('utf8') not in area_traffic_data.keys():
+    #            area_traffic_data[area['region_name'].encode('utf8')] = {'uv': float(area['uv']),'pv':float(area['pv']),\
+    #                                                                     'alipay_trade_num':float(area['alipay_trade_num']),\
+    #                                                                     'alipay_trade_amt':float(area['alipay_trade_amt'])}
+    #        else:
+    #            area_traffic_data[area['region_name'].encode('utf8')]['uv'] += float(area['uv'])
+    #            area_traffic_data[area['region_name'].encode('utf8')]['pv'] += float(area['pv'])
+    #            area_traffic_data[area['region_name'].encode('utf8')]['alipay_trade_num'] += float(area['alipay_trade_num'])
+    #            area_traffic_data[area['region_name'].encode('utf8')]['alipay_trade_amt'] += float(area['alipay_trade_amt'])
+    #print area_traffic_data
+    #nick = '优美妮旗舰店'
+    #shop_id = 105296061
+    #data1, title1 = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
+    #data2, titile2 = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
+    #from tao_models.itemcats_authorize_get import ItemcatsAuthorizeGet
 
-    #import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
-    #from advert_service.service.philips_busi_service import PhilipsBusiService
-    #shop_list = PhilipsBusiService.get_shop_relation(1)
-    #shop_dict = {shop['sid']:shop['nick'] for shop in shop_list}
-    #shop_list = ClouddataMbpDataGet.get_shop_list(edate)
-    #
-    #for shop in shop_list:
-    #    nick = shop_dict.get(int(shop['shop_id']), None)
-    #    if not nick:
-    #        continue
-    #    file_obj = file('philips_data/%s_shop_platform_traffic_trade_d.csv' % nick, 'w')
-    #    res, return_keys = ClouddataMbpDataGet.get_shop_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
-
-    #    keys = [t[0] for t in return_keys]
-    #    heads = [t[1] for t in return_keys]
-    #    file_obj.write(','.join(heads)+'\n')
-    #    for item in res:
-    #        data_list = [item.get(key,'0') for key in keys]
-    #        file_obj.write(','.join(data_list)+'\n')
-    #    file_obj.close()
-
-    #    file_obj = file('philips_data/%s_item_platform_traffic_trade_d.csv' % nick, 'w')
-    #    res, return_keys = ClouddataMbpDataGet.get_item_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
-
-    #    keys = [t[0] for t in return_keys]
-    #    heads = [t[1] for t in return_keys]
-    #    file_obj.write(','.join(heads)+'\n')
-    #    for item in res:
-    #        data_list = [item.get(key,'0') for key in keys]
-    #        file_obj.write(','.join(data_list)+'\n')
-    #    file_obj.close()
+    #brand_list = [brand['name'] for brand in ItemcatsAuthorizeGet.get_itemcats_authorize(nick,'brand.name').get('brands')]
+    #brand_detail_list = []
+    #for brand in brand_list:
+    #    if '/' in brand:
+    #        brand_detail_list.extend(brand.split('/'))
+    #    else:
+    #        brand_detail_list.append(brand)
+    #data1.extend(data2)
+    #shop_traffic_data = {}
+    #for d in data1:
+    #    if d['dt'] not in shop_traffic_data.keys():
+    #        shop_traffic_data[d['dt']] = {'uv':int(d['uv'])}
+    #        if len(filter(lambda x:x in d['query'], brand_detail_list)) > 0:
+    #            shop_traffic_data[d['dt']]['brand_traffic'] = int(d['uv'])
+    #        else:
+    #            shop_traffic_data[d['dt']]['brand_traffic'] = 0
+    #    else:
+    #        shop_traffic_data[d['dt']]['uv'] = shop_traffic_data[d['dt']]['uv']+int(d['uv'])
+    #        if len(filter(lambda x:x in d['query'], brand_detail_list)) > 0:
+    #            shop_traffic_data[d['dt']]['brand_traffic'] = shop_traffic_data[d['dt']]['brand_traffic']+int(d['uv'])
+    #print shop_traffic_data
