@@ -346,7 +346,8 @@ class ClouddataMbpDataGet(object):
                 url_search = re.search(r'.+id=(\d*)&',item['access_url'])
                 if not url_search:
                     url_search = re.search(r'.+com\/i(\d*).',item['access_url'])
-                item['auction_id'] = url_search.groups()[0]
+                if url_search:
+                    item['auction_id'] = url_search.groups()[0]
 
         return result_list
 
