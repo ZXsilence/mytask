@@ -42,9 +42,9 @@ class SimbaAdgroupUpdate(object):
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    adgroup_id = 336844923
+    nick = '麦苗科技001'
+    adgroup_id = 734178871
     default_price = 11
-    online_status = 'online'
+    online_status = 'offline'
     adgroup = SimbaAdgroupUpdate.update_adgroup(nick, adgroup_id, default_price, online_status )
     print adgroup

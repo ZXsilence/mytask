@@ -57,14 +57,14 @@ class ClouddataMbpDataGet(object):
             req = ClouddataMbpDataGetRequest() 
             req.sql_id = sql_id
             req.parameter = parameter
-        
             soft_code = 'YZB'
-            app_key = APP_SETTINGS[soft_code]['app_key']
-            app_secret = APP_SETTINGS[soft_code]['app_secret']
-            params = ApiService.getReqParameters(req)
-            taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
-            access_token = '620242667104ad9e1f5d60bc2f880f60a9ZZ4e6ee0a8f55520500325'
-            rsp = ApiService.getResponseObj(taobao_client.execute(params, access_token, {}))
+            rsp = ApiService.execute(req, None, soft_code)
+            #app_key = APP_SETTINGS[soft_code]['app_key']
+            #app_secret = APP_SETTINGS[soft_code]['app_secret']
+            #params = ApiService.getReqParameters(req)
+            #taobao_client = TaobaoClient(SERVER_URL,app_key,app_secret)
+            #access_token = '620042781c28e996fc0808e9ff762074923ZZfdd0df557292686194'
+            #rsp = ApiService.getResponseObj(taobao_client.execute(params, access_token, {}))
             if rsp.isSuccess():
                 res = cls._decode_clouddata(rsp)
                 ret.extend(res)
@@ -75,7 +75,67 @@ class ClouddataMbpDataGet(object):
                 return []
 
         return ret
+    
+    @classmethod
+    def get_item_pc_page_url(cls, shop_id, auction_id, sdate, edate):
+        """获取商品PC流量去向"""
+        return_keys = (('dt','日期'),('shop_id','店铺id'),('auction_id','商品id'),('access_url','去向url'),('uv','uv'))
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "auction_id":auction_id, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
 
+        sql_id = 111851 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+    
+    @classmethod
+    def get_shop_area_rpt_sum(cls, shop_id, edate):
+        """获取店铺最近30天地域报表"""
+        return_keys = (('shop_id','shop_id'), ('region_name','地域名称') , \
+                       ('ipv','ipv'),('iuv','iuv'),('pv','pv'),('uv','uv'),('view_repeat_num','浏览回头客'),\
+                       ('alipay_winner_num','支付买家数'), ('alipay_auction_num','支付商品数'), \
+                       ('alipay_trade_amt','支付金额'),('alipay_trade_num','支付订单数'))
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "edate":edate_str}
+        result_list = []
+
+        sql_id = 111869 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+
+    @classmethod
+    def get_shop_pc_nature_query(cls, shop_id, sdate, edate):
+        """获取店铺pc自然query报表"""
+        return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), ('auction_id','商品id') , \
+                       ('query','搜索词'),('pv','pv'),('click','click'),('uv','uv'),\
+                       ('order_winner_num','下单买家数'), ('alipay_winner_num','支付买家数'), ('alipay_auction_num','支付商品数'), \
+                       ('alipay_trade_amt','支付金额'),('alifav_num','收藏数'),('alicart_num','加购数'))
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 111846 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+
+    @classmethod
+    def get_shop_mobile_nature_query(cls, shop_id, sdate, edate):
+        """获取店铺mobile自然query报表"""
+        return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), ('auction_id','商品id') , \
+                       ('query','搜索词'),('pv','pv'),('uv','uv'),\
+                       ('order_winner_num','下单买家数'), ('alipay_winner_num','支付买家数'), ('alipay_auction_num','支付商品数'), \
+                       ('alipay_trade_amt','支付金额'),('alifav_num','收藏数'),('alicart_num','加购数'))
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 111847
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+    
     @classmethod
     def get_item_traffic_trade_d(cls, shop_id, sdate, edate):
         return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), ('auction_id','商品id') , \
@@ -166,6 +226,19 @@ class ClouddataMbpDataGet(object):
         result_list = []
 
         sql_id = 104413 
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret, return_keys
+    
+    @classmethod
+    def get_one_item_pc_page_effect_d(cls, shop_id, auction_id, sdate, edate):
+        return_keys = (('thedate','日期'), ('seller_id','seller_id'), ('shop_id','shop_id'), ('auction_id','商品id') , \
+                       ('page_duration','页面停留时间'), ('bounce_cnt','一次入店次数'), ('landing_cnt','入店次数'), ('landing_uv','入店uv'), ('exit_cnt','出店次数'))
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "auction_id":auction_id, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+
+        sql_id = 111848
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret, return_keys
     
@@ -301,35 +374,62 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-    sdate = datetime.datetime(2016,1,22,0,0)
-    edate = datetime.datetime(2016,2,22,0,0)
-    from advert_service.service.philips_busi_service import PhilipsBusiService
-    shop_list = PhilipsBusiService.get_shop_relation(1)
-    shop_dict = {shop['sid']:shop['nick'] for shop in shop_list}
-    shop_list = ClouddataMbpDataGet.get_shop_list(edate)
-    
-    for shop in shop_list:
-        nick = shop_dict.get(int(shop['shop_id']), None)
-        if not nick:
-            continue
-        file_obj = file('philips_data/%s_shop_platform_traffic_trade_d.csv' % nick, 'w')
-        res, return_keys = ClouddataMbpDataGet.get_shop_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
+    sdate = datetime.datetime(2017,6,1,0,0)
+    edate = datetime.datetime(2017,6,6,0,0)
+    shop_id = 290778632
+    nick = '优美妮旗舰店'
+    data1, title1 = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
+    data2, titile2 = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
+    from tao_models.itemcats_authorize_get import ItemcatsAuthorizeGet
+    brand_list = [brand['name'] for brand in ItemcatsAuthorizeGet.get_itemcats_authorize(nick,'brand.name').get('brands')]
+    data1.extend(data2)
+    shop_traffic_data = {}
+    for d in data1:
+        if d['dt'] not in shop_traffic_data.keys():
+            shop_traffic_data[d['dt']] = {'uv':int(d['uv'])}
+            if d['query'] in brand_list:
+                shop_traffic_data[d['dt']]['brand_traffic'] = int(d['uv'])
+            else:
+                shop_traffic_data[d['dt']]['brand_traffic'] = 0
+        else:
+            shop_traffic_data[d['dt']]['uv'] = shop_traffic_data[d['dt']]['uv']+int(d['uv'])
+            if d['query'] in brand_list:
+                shop_traffic_data[d['dt']]['brand_traffic'] = shop_traffic_data[d['dt']]['brand_traffic']+int(d['uv'])
+    print shop_traffic_data
+    #shop_brand_uv = reduce(lambda x,y:x['uv']+y['uv'],filter(lambda x:x['query'] in brand_list, data1))
+    #print shop_brand_uv
+    #data,title = ClouddataMbpDataGet.get_shop_traffic_trade_d(shop_id,sdate,edate)
+    #print data
+    #rpt_list,keys_list = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id, edate)
 
-        keys = [t[0] for t in return_keys]
-        heads = [t[1] for t in return_keys]
-        file_obj.write(','.join(heads)+'\n')
-        for item in res:
-            data_list = [item.get(key,'0') for key in keys]
-            file_obj.write(','.join(data_list)+'\n')
-        file_obj.close()
+    #import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
+    #from advert_service.service.philips_busi_service import PhilipsBusiService
+    #shop_list = PhilipsBusiService.get_shop_relation(1)
+    #shop_dict = {shop['sid']:shop['nick'] for shop in shop_list}
+    #shop_list = ClouddataMbpDataGet.get_shop_list(edate)
+    #
+    #for shop in shop_list:
+    #    nick = shop_dict.get(int(shop['shop_id']), None)
+    #    if not nick:
+    #        continue
+    #    file_obj = file('philips_data/%s_shop_platform_traffic_trade_d.csv' % nick, 'w')
+    #    res, return_keys = ClouddataMbpDataGet.get_shop_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
 
-        file_obj = file('philips_data/%s_item_platform_traffic_trade_d.csv' % nick, 'w')
-        res, return_keys = ClouddataMbpDataGet.get_item_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
+    #    keys = [t[0] for t in return_keys]
+    #    heads = [t[1] for t in return_keys]
+    #    file_obj.write(','.join(heads)+'\n')
+    #    for item in res:
+    #        data_list = [item.get(key,'0') for key in keys]
+    #        file_obj.write(','.join(data_list)+'\n')
+    #    file_obj.close()
 
-        keys = [t[0] for t in return_keys]
-        heads = [t[1] for t in return_keys]
-        file_obj.write(','.join(heads)+'\n')
-        for item in res:
-            data_list = [item.get(key,'0') for key in keys]
-            file_obj.write(','.join(data_list)+'\n')
-        file_obj.close()
+    #    file_obj = file('philips_data/%s_item_platform_traffic_trade_d.csv' % nick, 'w')
+    #    res, return_keys = ClouddataMbpDataGet.get_item_platform_traffic_trade_d(int(shop['shop_id']), sdate, edate)
+
+    #    keys = [t[0] for t in return_keys]
+    #    heads = [t[1] for t in return_keys]
+    #    file_obj.write(','.join(heads)+'\n')
+    #    for item in res:
+    #        data_list = [item.get(key,'0') for key in keys]
+    #        file_obj.write(','.join(data_list)+'\n')
+    #    file_obj.close()
