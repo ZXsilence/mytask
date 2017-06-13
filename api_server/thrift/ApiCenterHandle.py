@@ -57,6 +57,9 @@ class ApiCenterHandle(object):
                 shop_infos = ShopInfoService.get_shop_infos_by_num(10,session_expired)
             else:
                 shop_infos = ShopInfoService.get_shop_infos(nick,soft_code,session_expired)
+            #优钻宝appkey,没有直通车权限
+            if not soft_code and 'taobao.simba' in method:
+                shop_infos = [obj for obj in shop_infos if obj['soft_code'] != 'YZB']
             #去除QN的shop_info
             call_shop_infos = []
             if soft_code !='QN' and len(shop_infos) >= 2:
