@@ -400,26 +400,11 @@ if __name__ == '__main__':
     shop_id = 290778632
     nick = '飞利浦官方旗舰店'
     shop_pc_data = ClouddataMbpDataGet.get_shop_pc_web_log_d(shop_id,sdate,edate)
-    import xlwt
-    wb = xlwt.Workbook()
-    ws = wb.add_sheet('web_log_data')
-    key_list = shop_pc_data[0].keys()
-    for i in key_list:
-        ws.write(0,key_list.index(i),i)
-    for i in xrange(1,len(shop_pc_data)):
-        for y in key_list:
-            ws.write(i,key_list.index(y),shop_pc_data[i][y])
-    wb.save('/tmp/data.xls')
-    #for shop_pc in shop_pc_data:
-    #    if shop_pc['access_url'] not in page_log_data.keys():
-    #        page_log_data[shop_pc['access_url']] = {'uv':{shop_pc['acookie']:1},\
-    #                                                'auction_id':shop_pc['auction_id'],\
-    #                                                'cookie_list':{shop_pc['acookie']: shop_pc['acookie']}}
-    #    else:
-    #        if shop_pc['acookie'] in page_log_data[shop_pc['access_url']]['uv'].keys():
-    #            page_log_data[shop_pc['access_url']]['uv'][shop_pc['acookie']] += 1
-    #        else:
-    #            page_log_data[shop_pc['access_url']]['uv'] = {shop_pc['acookie']:1}
-    #for shop_pc in shop_pc_data:
-    #    if shop_pc['refer_url'] in page_log_data.keys():
-    #        pass
+    poly_log_data = {}
+    for shop_pc in shop_pc_data:
+        dt = datetime.datetime.strptime(shop_pc['dt'],"%Y%m%d")
+        if shop_pc['access_url'] in poly_log_data.keys():
+            if dt in poly_log_data[shop_pc['access_url']]['uv'].keys():
+                if shop_pc['accokie']
+        else:
+            poly_log_data[shop_pc['access_url']] = {'uv':[]}
