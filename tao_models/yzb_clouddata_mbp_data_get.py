@@ -361,7 +361,15 @@ class ClouddataMbpDataGet(object):
         sql_id = 104658 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
-    
+
+    @classmethod
+    def get_shop_pc_web_log_d(cls, shop_id, sdate, edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        sql_id = 111879
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
 
 def get_all_shop_cats():
     """查看飞利浦授权店铺包含飞利浦字眼的商品的二级类目情况(次二级类目是从根开始数，不是从叶子开始，注意)"""
@@ -388,92 +396,30 @@ def get_all_shop_cats():
 
 if __name__ == '__main__':
     sdate = datetime.datetime(2017,6,1,0,0)
-    edate = datetime.datetime(2017,6,8,0,0)
+    edate = datetime.datetime(2017,6,14,0,0)
     shop_id = 290778632
     nick = '飞利浦官方旗舰店'
-    pc_page_data, pc_page_title = ClouddataMbpDataGet.get_item_pc_page_effect_d(shop_id,sdate,edate)
-    page_effect_data = {}
-    for pc_page in pc_page_data:
-        dt = datetime.datetime.strptime(pc_page['dt'],"%Y%m%d")
-        if pc_page['auction_id'] in page_effect_data.keys():
-            page_effect_data[pc_page['auction_id']]['page_duration_all'] += int(pc_page['page_duration'])
-            if dt in page_effect_data[pc_page['auction_id']]['page_duration'].keys():
-                page_effect_data[pc_page['auction_id']]['page_duration'][dt] += int(pc_page['page_duration'])
-            else:
-                page_effect_data[pc_page['auction_id']]['page_duration'][dt] = int(pc_page['page_duration'])
-            page_effect_data[pc_page['auction_id']]['iuv_all'] += int(pc_page['iuv'])
-            if dt in page_effect_data[pc_page['auction_id']]['iuv'].keys():
-                page_effect_data[pc_page['auction_id']]['iuv'][dt] += int(pc_page['iuv'])
-            else:
-                page_effect_data[pc_page['auction_id']]['iuv'][dt] = int(pc_page['iuv'])
-            page_effect_data[pc_page['auction_id']]['bounce_cnt'] += int(pc_page['bounce_cnt'])
-            page_effect_data[pc_page['auction_id']]['landing_cnt'] += int(pc_page['landing_cnt'])
-            if dt in page_effect_data[pc_page['auction_id']]['bounce_detail'].keys():
-                page_effect_data[pc_page['auction_id']]['bounce_detail'][dt]['bounce_cnt'] += int(pc_page['bounce_cnt'])
-                page_effect_data[pc_page['auction_id']]['bounce_detail'][dt]['landing_cnt'] += int(pc_page['landing_cnt'])
-            else:
-                page_effect_data[pc_page['auction_id']]['bounce_detail'][dt] = {'bounce_cnt': int(pc_page['bounce_cnt']),\
-                                                                                'landing_cnt': int(pc_page['landing_cnt'])}
-        else:
-            page_effect_data[pc_page['auction_id']]= {'page_duration_all':int(pc_page['page_duration']),\
-                                                      'page_duration':{dt:int(pc_page['page_duration'])},
-                                                      'iuv_all':int(pc_page['iuv']),\
-                                                      'iuv':{dt:int(pc_page['iuv'])},\
-                                                      'bounce_cnt':int(pc_page['bounce_cnt']),\
-                                                      'landing_cnt':int(pc_page['landing_cnt']),\
-                                                      'bounce_detail':{dt:{'bounce_cnt':int(pc_page['bounce_cnt']),\
-                                                                           'landing_cnt':int(pc_page['landing_cnt'])}},
-                                                      'page_url':'https://item.taobao.com/item.htm?id='+pc_page['auction_id']}
-    page_url_data, page_url_title = ClouddataMbpDataGet.get_shop_pc_page_url(shop_id,sdate,edate)
-    for page_url in page_url_data:
-        if page_url['auction_id'] in page_effect_data.keys():
-            if page_effect_data[page_url['auction_id']].get('detail'):
-                if page_url['access_url'] in page_effect_data[page_url['auction_id']]['detail'].keys():
-                    page_effect_data[page_url['auction_id']]['detail'][page_url['access_url']]['uv'] += int(page_url['uv'])
-                else:
-                    page_effect_data[page_url['auction_id']]['detail'][page_url['access_url']] = {'uv':int(page_url['uv'])}
-            else:
-                page_effect_data[page_url['auction_id']]['detail'] = {page_url['access_url']:{'uv':int(page_url['uv'])}}
-    import pprint
-    pprint.pprint(page_effect_data['545285529847'])
-    #area_data, title = ClouddataMbpDataGet.get_shop_area_rpt_sum(shop_id,edate)
-    #area_traffic_data = {}
-    #for area in area_data:
-    #    if '中国' in area['region_name'].encode('utf8'):
-    #        if area['region_name'].encode('utf8') not in area_traffic_data.keys():
-    #            area_traffic_data[area['region_name'].encode('utf8')] = {'uv': float(area['uv']),'pv':float(area['pv']),\
-    #                                                                     'alipay_trade_num':float(area['alipay_trade_num']),\
-    #                                                                     'alipay_trade_amt':float(area['alipay_trade_amt'])}
-    #        else:
-    #            area_traffic_data[area['region_name'].encode('utf8')]['uv'] += float(area['uv'])
-    #            area_traffic_data[area['region_name'].encode('utf8')]['pv'] += float(area['pv'])
-    #            area_traffic_data[area['region_name'].encode('utf8')]['alipay_trade_num'] += float(area['alipay_trade_num'])
-    #            area_traffic_data[area['region_name'].encode('utf8')]['alipay_trade_amt'] += float(area['alipay_trade_amt'])
-    #print area_traffic_data
-    #nick = '优美妮旗舰店'
-    #shop_id = 105296061
-    #data1, title1 = ClouddataMbpDataGet.get_shop_pc_nature_query(shop_id,sdate,edate)
-    #data2, titile2 = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
-    #from tao_models.itemcats_authorize_get import ItemcatsAuthorizeGet
-
-    #brand_list = [brand['name'] for brand in ItemcatsAuthorizeGet.get_itemcats_authorize(nick,'brand.name').get('brands')]
-    #brand_detail_list = []
-    #for brand in brand_list:
-    #    if '/' in brand:
-    #        brand_detail_list.extend(brand.split('/'))
+    shop_pc_data = ClouddataMbpDataGet.get_shop_pc_web_log_d(shop_id,sdate,edate)
+    import xlwt
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('web_log_data')
+    key_list = shop_pc_data[0].keys()
+    for i in key_list:
+        ws.write(0,key_list.index(i),i)
+    for i in xrange(1,len(shop_pc_data)):
+        for y in key_list:
+            ws.write(i,key_list.index(y),shop_pc_data[i][y])
+    wb.save('/tmp/data.xls')
+    #for shop_pc in shop_pc_data:
+    #    if shop_pc['access_url'] not in page_log_data.keys():
+    #        page_log_data[shop_pc['access_url']] = {'uv':{shop_pc['acookie']:1},\
+    #                                                'auction_id':shop_pc['auction_id'],\
+    #                                                'cookie_list':{shop_pc['acookie']: shop_pc['acookie']}}
     #    else:
-    #        brand_detail_list.append(brand)
-    #data1.extend(data2)
-    #shop_traffic_data = {}
-    #for d in data1:
-    #    if d['dt'] not in shop_traffic_data.keys():
-    #        shop_traffic_data[d['dt']] = {'uv':int(d['uv'])}
-    #        if len(filter(lambda x:x in d['query'], brand_detail_list)) > 0:
-    #            shop_traffic_data[d['dt']]['brand_traffic'] = int(d['uv'])
+    #        if shop_pc['acookie'] in page_log_data[shop_pc['access_url']]['uv'].keys():
+    #            page_log_data[shop_pc['access_url']]['uv'][shop_pc['acookie']] += 1
     #        else:
-    #            shop_traffic_data[d['dt']]['brand_traffic'] = 0
-    #    else:
-    #        shop_traffic_data[d['dt']]['uv'] = shop_traffic_data[d['dt']]['uv']+int(d['uv'])
-    #        if len(filter(lambda x:x in d['query'], brand_detail_list)) > 0:
-    #            shop_traffic_data[d['dt']]['brand_traffic'] = shop_traffic_data[d['dt']]['brand_traffic']+int(d['uv'])
-    #print shop_traffic_data
+    #            page_log_data[shop_pc['access_url']]['uv'] = {shop_pc['acookie']:1}
+    #for shop_pc in shop_pc_data:
+    #    if shop_pc['refer_url'] in page_log_data.keys():
+    #        pass
