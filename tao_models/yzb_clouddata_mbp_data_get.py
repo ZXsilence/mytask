@@ -367,7 +367,43 @@ class ClouddataMbpDataGet(object):
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
-        sql_id = 111879
+        sql_id = 111898
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_pc_nature_query_new(cls,shop_id,seller_id,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "seller_id":seller_id, "sdate":sdate_str, "edate":edate_str}
+        sql_id = 111900
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_mobile_nature_query_new(cls,shop_id,seller_id,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "seller_id":seller_id, "sdate":sdate_str, "edate":edate_str}
+        sql_id = 111901
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_pc_nature_query_carlos(cls,shop_id,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        sql_id = 111904
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_mobile_nature_query_carlos(cls,shop_id,sdate,edate):
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
+        sql_id = 111905
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -395,49 +431,12 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-    sdate = datetime.datetime(2017,6,9,0,0)
-    edate = datetime.datetime(2017,6,15,0,0)
-    shop_id = 290778632
-    nick = '飞利浦官方旗舰店'
-    shop_pc_data = ClouddataMbpDataGet.get_shop_pc_web_log_d(shop_id,sdate,edate)
-    section = (edate - sdate).days
-    poly_log_data = {}
-    tmp_time_stamp = 0
-    tmp_cookie = ''
-    for shop_pc in shop_pc_data:
-        dt = datetime.datetime.strptime(shop_pc['dt'],"%Y%m%d")
-        inx = (dt - sdate).days
-        if shop_pc['access_url'] in poly_log_data.keys():
-            if poly_log_data[shop_pc['access_url']]['pv'][inx]:
-                poly_log_data[shop_pc['access_url']]['pv'][inx] += 1
-            else:
-                poly_log_data[shop_pc['access_url']]['pv'][inx] = 1
-            if shop_pc['acookie'] not in poly_log_data[shop_pc['access_url']]['uv'][inx].keys():
-                poly_log_data[shop_pc['access_url']]['uv'][inx][shop_pc['acookie']] = 1
-        else:
-            poly_log_data[shop_pc['access_url']] = {'uv':[{}]*inx+[{shop_pc['acookie']:1}]+[{}]*(section-inx-1),\
-                                                    'pv':[0]*inx+[1]+[0]*(section-inx-1),\
-                                                    'page_duration':[0]*section,\
-                                                    'a_c':[0]*section,\
-                                                    'detail':[]}
-    for shop_pc in shop_pc_data:
-        dt = datetime.datetime.strptime(shop_pc['dt'],"%Y%m%d")
-        dt2 = datetime.datetime.strptime(shop_pc['time_stamp'],"%Y-%m-%d %H:%M:%S")
-        inx = (dt - sdate).days
-        if shop_pc['acookie'] == tmp_cookie and dt2.date() == tmp_time_stamp.date():
-            if (dt2 - tmp_time_stamp).seconds <= 1800:
-                poly_log_data[shop_pc['access_url']]['page_duration'][inx] += (dt2 - tmp_time_stamp).seconds
-        tmp_time_stamp = dt2
-        tmp_cookie = shop_pc['acookie']
-    for shop_pc in shop_pc_data:
-        dt = datetime.datetime.strptime(shop_pc['dt'],"%Y%m%d")
-        inx = (dt - sdate).days
-        if shop_pc['refer_url'] in poly_log_data.keys():
-            poly_log_data[shop_pc['refer_url']]['a_c'][inx] += 1
-            tmp = filter(lambda x:x['access_url'] == shop_pc['access_url'],poly_log_data[shop_pc['refer_url']]['detail'])
-            if tmp:
-                tmp[0]['pv'] += 1
-            else:
-                poly_log_data[shop_pc['refer_url']]['detail'].append({'access_url':shop_pc['access_url'],'pv':1})
-    for k,v in poly_log_data.iteritems():
-        print k
+    sdate = datetime.datetime(2017,6,19,0,0)
+    edate = datetime.datetime(2017,6,20,0,0)
+    shop_id = 57299763
+    seller_id = 92686194
+    now = datetime.datetime.now()
+    #res1 = ClouddataMbpDataGet.get_shop_pc_nature_query_test(shop_id,sdate,edate)
+    res2 = ClouddataMbpDataGet.get_shop_mobile_nature_query_test(shop_id,sdate,edate)
+    print datetime.datetime.now() - now
+    print len(res2) 
