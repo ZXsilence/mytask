@@ -44,6 +44,6 @@ class SimbaCampaignsGet(object):
         return change_obj_to_dict_deeply(rsp.campaigns)
 
 if __name__ == '__main__':
-    campaigns = SimbaCampaignsGet.get_campaign_list('麦苗科技001')
+    campaigns = SimbaCampaignsGet.get_campaign_list('优美妮旗舰店')
     for campaign in campaigns:
         print campaign

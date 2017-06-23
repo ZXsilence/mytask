@@ -1,0 +1,48 @@
+#encoding=utf8
+'''
+Created on 2012-8-10
+
+@author: dk
+'''
+import sys
+import os
+import logging
+import logging.config
+import json
+import datetime
+from copy import deepcopy
+
+
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+    from api_server.conf import set_env
+    set_env.getEnvReady()
+    from api_server.conf.settings import set_api_source
+    set_api_source('normal_test')
+
+from TaobaoSdk import ZuanshiBannerAccountBudgetGetRequest 
+from tao_models.common.decorator import  tao_api_exception
+from api_server.services.api_service import ApiService
+from api_server.common.util import change_obj_to_dict_deeply
+from tao_models.num_tools import change2num
+from TaobaoSdk.Exceptions import ErrorResponseException
+from tao_models.common.date_tools import  split_date
+
+logger = logging.getLogger(__name__)
+
+class ZuanshiAccountBudgetGet(object):
+
+    @classmethod
+    @tao_api_exception()
+    def get_budget(cls, nick,soft_code = 'YZB'):
+        #钻展报表下载任务状态
+        req = ZuanshiBannerAccountBudgetGetRequest()
+        rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.result)
+
+if __name__ == '__main__':
+    nick = '飞利浦官方旗舰店'
+    nick = '优美妮旗舰店'
+    adzone_id =7762129 
+    try_list = ZuanshiAccountBudgetGet.get_budget(nick)
+    print try_list

@@ -45,17 +45,12 @@ class SimbaKeywordsQscoreSplitGet(object):
         rsp = ApiService.execute(req,nick,soft_code)
         if not rsp.result.toDict():
             return []
-        return rsp.result.toDict()['result']['word_score_list']['wordscorelist']
+        return rsp.result.toDict()['result'].get('word_score_list',{}).get('wordscorelist',[])
 
 if __name__ == '__main__':
-    nick = 'joeycharm'
-    adgroup_id = 704182438 
-    keyword_id_list = [2,231139213535,231361936129,231361936130,231361936132,231361936133,231361936134,231361936137,231361936138,231361936139,231361936140,231361936141,231531546019,231531546020,231531546022,231531546023,231531546028,231531546031,231531546032,231531546033,231531546035,231531546036,231531546039,231531546044,231531546045,231531546046,231531546047,231531546049,231531546050,231652841950,231652841953,231652841954,231652841958,231652841959,231652841960,231652841961,231652841962,231652841967,232103412112,232477162488]
-    keyword_id_list = [289324570051,289324570050]
-    for i in range(1):
-        try:
-            res = SimbaKeywordsQscoreSplitGet.get_keywords_split_qscore(nick, adgroup_id, keyword_id_list)
-            print res
-        except Exception:
-            print "call error"
+    nick = 'chinchinstyle'
+    adgroup_id = 732193626
+    keyword_id_list = [314935722886,314935722888,314935722888]
+    res = SimbaKeywordsQscoreSplitGet.get_keywords_split_qscore(nick, adgroup_id, keyword_id_list)
+    print res
 

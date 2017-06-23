@@ -40,7 +40,6 @@ class VasOrderSearch(object):
         if nick != None:
             req.nick = nick
         nick = None
-        soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return rsp.article_biz_orders
 
@@ -63,22 +62,28 @@ class VasOrderSearch(object):
     def search_vas_order_yesterday(cls, soft_code):
         yes = datetime.datetime.now() - datetime.timedelta(days=1)
         today = datetime.datetime.now()
-        start_created = yes.strftime("%Y-%m-%d 00:00:00") 
-        end_created = today.strftime("%Y-%m-%d 00:00:00") 
+        yes = datetime.datetime.combine(yes,datetime.time())
+        today = datetime.datetime.combine(today,datetime.time())
+        start_created = yes.strftime("%Y-%m-%d %H:%M:%S") 
+        end_created = today.strftime("%Y-%m-%d %H:%M:%S") 
         return VasOrderSearch.search_vas_order( start_created, end_created,soft_code)
 
     @classmethod
     def search_vas_order_all(cls, soft_code,days=30):
         start = datetime.datetime.now() - datetime.timedelta(days)
         today = datetime.datetime.now()
-        start_created = start.strftime("%Y-%m-%d 00:00:00") 
-        end_created = today.strftime("%Y-%m-%d 00:00:00") 
+        start = datetime.datetime.combine(start,datetime.time())
+        today = datetime.datetime.combine(today,datetime.time())
+        start_created = start.strftime("%Y-%m-%d %H:%M:%S") 
+        end_created = today.strftime("%Y-%m-%d %H:%M:%S") 
         return VasOrderSearch.search_vas_order(start_created, end_created,soft_code)
 
     @classmethod
     def search_vas_order_by_nick(cls, sdate, edate, soft_code,nick):
-        start_created = sdate.strftime("%Y-%m-%d 00:00:00") 
-        end_created = edate.strftime("%Y-%m-%d 00:00:00") 
+        sdate= datetime.datetime.combine(sdate,datetime.time())
+        edate = datetime.datetime.combine(edate,datetime.time())
+        start_created = start.strftime("%Y-%m-%d %H:%M:%S") 
+        end_created = today.strftime("%Y-%m-%d %H:%M:%S") 
         return VasOrderSearch.search_vas_order(start_created, end_created,soft_code, nick)
 
     @classmethod
@@ -101,17 +106,18 @@ class VasOrderSearch(object):
         req.page_size =1
         if nick is not None:
             req.nick=nick
-        soft_code = None
         nick = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.total_item)
 
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    soft_code = 'SYB'
+    nick = 'lichangbo869'
+    soft_code = 'YZB'
     start = datetime.datetime.now() - datetime.timedelta(89)
     today = datetime.datetime.now()
     result = VasOrderSearch.search_vas_order_by_nick(start, today, soft_code,nick)
+    print '==',result
+    result = VasOrderSearch.search_vas_order_by_nick_new(start, today, soft_code,nick)
     for element in result:
         print element

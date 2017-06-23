@@ -31,14 +31,17 @@ logger = logging.getLogger(__name__)
 class PictureCategoryGet(object):
 
     @classmethod
-    def get_picture_category_name(cls, nick,category_name):
+    def get_picture_category_name(cls, nick, category_name=None, category_id=None, parent_id=-1):
         
         req = PictureCategoryGetRequest()
         if category_name:
-            req.picture_category_name = category_name 
+            req.picture_category_name = category_name
+        if category_id:
+            req.picture_category_id = category_id
+        req.parent_id = parent_id
         req.nick = nick
         soft_code = None
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code, cache=False)
         return change_obj_to_dict_deeply(rsp.picture_categories)
 
 

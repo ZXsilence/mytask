@@ -119,6 +119,17 @@ class ClouddataMbpDataGet(object):
         return ret
     
     @classmethod
+    def get_test_pc_web_log(cls, sid, sdate, edate):
+        """获取测试PC web_log"""
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "dt":edate_str, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+        sql_id = 6335 #pc
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
     def get_shop_schedule_rpt(cls, sid, sdate, edate):
         #获取店铺分时报表
 
@@ -127,7 +138,19 @@ class ClouddataMbpDataGet(object):
         query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
         result_list = []
 
-        sql_id = 104099
+        sql_id =110447
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+
+    @classmethod
+    def get_shop_area_rpt(cls, sid, sdate, edate):
+        #获取店铺分时报表
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "start_dt":sdate_str, "start_date":sdate_str, "end_dt":edate_str, "end_date":edate_str}
+        result_list = []
+        sql_id = 110429
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -202,6 +225,18 @@ class ClouddataMbpDataGet(object):
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
         sql_id = 108469
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        return ret
+    
+    @classmethod
+    def get_shop_order_sample(cls, sid, sdate, edate):
+        """获取店铺订单抽样"""
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+        sql_id = 110422 
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -311,7 +346,8 @@ class ClouddataMbpDataGet(object):
                 url_search = re.search(r'.+id=(\d*)&',item['access_url'])
                 if not url_search:
                     url_search = re.search(r'.+com\/i(\d*).',item['access_url'])
-                item['auction_id'] = url_search.groups()[0]
+                if url_search:
+                    item['auction_id'] = url_search.groups()[0]
 
         return result_list
 
@@ -429,10 +465,8 @@ def get_shop(shop_id, file_obj):
 
 if __name__ == '__main__':
     sid = 36314238
-    sdate = edate = datetime.datetime.now() - datetime.timedelta(days=1)
-    res = ClouddataMbpDataGet.get_item_pc_traffic_info(528392517111)
-    for item in res:
-        print item
-
+    sdate = edate = datetime.datetime.now() - datetime.timedelta(days=3)
+    res = ClouddataMbpDataGet.get_shop_schedule_rpt(sid,sdate,edate)
+    print res[0]
 
 
