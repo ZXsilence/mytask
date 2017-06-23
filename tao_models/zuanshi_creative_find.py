@@ -86,9 +86,9 @@ class ZuanshiCreativeFind(object):
         return change_obj_to_dict_deeply(rsp.result).get('creatives',{}).get('creative')
 
 if __name__ == '__main__':
-    nick = '优美妮旗舰店'
+    nick = '飞利浦官方旗舰店'
     soft_code = 'YZB'
-    try_list = ZuanshiCreativeFind.get_creative_list(nick,soft_code,name='616-2-手机端_640x200')
-    print try_list
+    try_list = ZuanshiCreativeFind.get_creative_list(nick,soft_code)
+    print len(try_list)
     #for obj in try_list:
     #    print obj
