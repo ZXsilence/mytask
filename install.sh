@@ -24,7 +24,24 @@ function  isWy(){
 isWyIp=`isWy`
 echo "软链设置类型:$isWyIp"
 
-if [ $1_ == "dev_" ]
+
+if [ $1_ == "test_" ]
+then
+    ln -s "${proPath}/comm_lib/tao_models/conf/dev/settings.py" "${proPath}/comm_lib/tao_models/conf/"
+    ln -s "${proPath}/comm_lib/tao_models/conf/dev/set_env.py" "${proPath}/comm_lib/tao_models/conf/"
+
+    ln -s "${proPath}/comm_lib/api_server/conf/test/set_env.py" "${proPath}/comm_lib/api_server/conf/"
+    ln -s "${proPath}/comm_lib/api_server/conf/test/settings.py" "${proPath}/comm_lib/api_server/conf/"
+    ln -s "${proPath}/comm_lib/api_server/conf/test/db_settings.py" "${proPath}/comm_lib/api_server/conf/"
+    ln -s "${proPath}/comm_lib/db_pool/conf/test/settings.py" "${proPath}/comm_lib/db_pool/conf/"
+
+    ln -s "${proPath}/comm_lib/service_server/conf/dev/set_env.py" "${proPath}/comm_lib/service_server/conf/"
+    ln -s "${proPath}/comm_lib/service_server/conf/dev/settings.py" "${proPath}/comm_lib/service_server/conf/"
+    ln -s "${proPath}/comm_lib/api_parallel/dev/celeryconfig_result.py" "${proPath}/comm_lib/api_parallel/"
+
+
+
+elif [ $1_ == "dev_" ]
 then
     ln -s "${proPath}/comm_lib/tao_models/conf/dev/settings.py" "${proPath}/comm_lib/tao_models/conf/"
     ln -s "${proPath}/comm_lib/tao_models/conf/dev/set_env.py" "${proPath}/comm_lib/tao_models/conf/"
@@ -82,4 +99,5 @@ then
     echo "Usage: sh install.sh clean    清除当前环境中的配置及中间文件"
     echo "       sh install.sh prd      安装线上环境"
     echo "       sh install.sh dev      安装开发环境"
+    echo "       sh install.sh test      安装测试环境"
 fi
