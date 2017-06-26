@@ -77,6 +77,6 @@ class ZuanshiCreativeModify(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     soft_code = 'YZB'
-    params = {'name':'test' ,'cat_id': 18, 'id': 642667030001, 'is_trans_to_wifi':False,'image_path':'/tmp/shoes.jpg', 'click_url':"http://taobao.com"}
+    params = {'id':658823070001,'name':'2016_9_4_952_2_640x200','is_trans_to_wifi':False}
     res = ZuanshiCreativeModify.modify_creative(nick,params)
     print res
