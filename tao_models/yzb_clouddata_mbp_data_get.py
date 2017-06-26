@@ -372,29 +372,11 @@ class ClouddataMbpDataGet(object):
         return ret
 
     @classmethod
-    def get_shop_pc_nature_query_new(cls,shop_id,seller_id,sdate,edate):
-        sdate_str = sdate.strftime("%Y%m%d")
-        edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":shop_id, "seller_id":seller_id, "sdate":sdate_str, "edate":edate_str}
-        sql_id = 111900
-        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
-        return ret
-
-    @classmethod
-    def get_shop_mobile_nature_query_new(cls,shop_id,seller_id,sdate,edate):
-        sdate_str = sdate.strftime("%Y%m%d")
-        edate_str = edate.strftime("%Y%m%d")
-        query_dict = {"shop_id":shop_id, "seller_id":seller_id, "sdate":sdate_str, "edate":edate_str}
-        sql_id = 111901
-        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
-        return ret
-
-    @classmethod
     def get_shop_pc_nature_query_carlos(cls,shop_id,sdate,edate):
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
-        sql_id = 111904
+        sql_id = 111910
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -403,7 +385,7 @@ class ClouddataMbpDataGet(object):
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
-        sql_id = 111905
+        sql_id = 111911
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -431,12 +413,10 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-    sdate = datetime.datetime(2017,6,19,0,0)
-    edate = datetime.datetime(2017,6,20,0,0)
-    shop_id = 57299763
-    seller_id = 92686194
+    sdate = datetime.datetime(2017,6,16,0,0)
+    edate = datetime.datetime(2017,6,22,0,0)
+    shop_id = 92686194
     now = datetime.datetime.now()
-    #res1 = ClouddataMbpDataGet.get_shop_pc_nature_query_test(shop_id,sdate,edate)
-    res2 = ClouddataMbpDataGet.get_shop_mobile_nature_query_test(shop_id,sdate,edate)
+    res,title = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
     print datetime.datetime.now() - now
-    print len(res2) 
+    print len(res)
