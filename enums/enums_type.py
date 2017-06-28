@@ -46,10 +46,11 @@ class OperationType(object):
     DELETE_UNEXPECT = -1
     DELETE_AUDIT_UNPASS = 1
     DELETE_LOW_QSCORE = 2
+    DELETE_LOW_PC_QSCORE = 24 
+    DELETE_LOW_MOBILE_QSCORE = 25
     DELETE_LOW_PV_OLD = 3
     DELETE_DELETE_PERCENT = 4
     DELETE_LOW_CLICK_OLD = 5
-    #DELETE_IS_GARGABE = 6
     DELETE_IS_GARBAGE = 6
     DELETE_USER_DELETE = 7
     DELETE_LOW_PV_MAX_PRICE = 8
@@ -247,6 +248,8 @@ class OperationType(object):
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
+        DELETE_LOW_PC_QSCORE,
+        DELETE_LOW_MOBILE_QSCORE,
         DELETE_LOW_PV_OLD,
         DELETE_DELETE_PERCENT,
         DELETE_LOW_CLICK_OLD,
@@ -439,6 +442,8 @@ class OperationType(object):
         DELETE_UNEXPECT,
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
+        DELETE_LOW_PC_QSCORE,
+        DELETE_LOW_MOBILE_QSCORE,
         DELETE_LOW_PV_OLD,
         DELETE_DELETE_PERCENT,
         DELETE_LOW_CLICK_OLD,
@@ -598,6 +603,8 @@ OPTTYPE_COMMENT = {
     OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
     , OperationType.DELETE_UNEXPECT: "关键词删除时未记录原因"
     , OperationType.DELETE_LOW_QSCORE : "关键词质量分过低，已经删除"
+    , OperationType.DELETE_LOW_PC_QSCORE : "关键词PC质量分低于设置，已经删除"
+    , OperationType.DELETE_LOW_MOBILE_QSCORE : "关键词移动质量分低于设置，已经删除"
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PERCENT : "关键词在计划中相对表现较差，已经删除"
     , OperationType.DELETE_LOW_CLICK_OLD : "关键词最近一段时间点击量过低，已经删除"
