@@ -367,7 +367,7 @@ class ClouddataMbpDataGet(object):
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
         query_dict = {"shop_id":shop_id, "sdate":sdate_str, "edate":edate_str}
-        sql_id = 111898
+        sql_id = 111923
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
 
@@ -413,10 +413,8 @@ def get_all_shop_cats():
     file_obj.close()
 
 if __name__ == '__main__':
-    sdate = datetime.datetime(2017,6,16,0,0)
-    edate = datetime.datetime(2017,6,22,0,0)
-    shop_id = 92686194
-    now = datetime.datetime.now()
-    res,title = ClouddataMbpDataGet.get_shop_mobile_nature_query(shop_id,sdate,edate)
-    print datetime.datetime.now() - now
-    print len(res)
+    sdate = datetime.datetime(2017,6,22,0,0)
+    edate = datetime.datetime(2017,6,28,0,0)
+    shop_id = 105296061
+    res = ClouddataMbpDataGet.get_shop_pc_web_log_d(shop_id,sdate,edate)
+    print res
