@@ -26,16 +26,16 @@ class SerchcrowdGet(object):
 
     @classmethod
     @tao_api_exception()
-    def serchcrowdget_result(cls, nick, adgroup_id, soft_code):
+    def serchcrowdget_result(cls, nick, adgroup_id, soft_code, cache=True):
         req = SimbaSerchcrowdGetRequest()
         req.nick = nick
         req.adgroup_id = adgroup_id
-        rsp = ApiService.execute(req,nick,soft_code)
+        rsp = ApiService.execute(req,nick,soft_code, cache)
         return change_obj_to_dict_deeply(rsp.adgrouptargetingtags)
 
 
 if __name__ == '__main__':
     nick = "麦苗科技001"
-    adgroup_id = 699940229
+    adgroup_id = 774193293 
     soft_code = 'SYB'
     print SerchcrowdGet.serchcrowdget_result(nick, adgroup_id, soft_code)
