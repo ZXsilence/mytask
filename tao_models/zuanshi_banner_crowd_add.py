@@ -64,11 +64,13 @@ class ZuanshiBannerCrowdAdd(object):
 if __name__ == '__main__':
     nick = '优美妮旗舰店'
     campaign_id = 217069448
-    adgroup_id = 222632391
+    # adgroup_id = 222632391
+    adgroup_id = 226794221
     crowds= [{'crowd_type':16, 'crowd_value':1, 'sub_crowds':[{'sub_crowd_value':105296061, 'sub_crowd_name':'优美妮旗舰店'}],\
               'matrix_prices':[{'adzone_id':48436030, 'price':5}]}]
     crowds = [{'crowd_type':16, 'crowd_value':'1', 'sub_crowds':[{'sub_crowd_name':u'优美妮旗舰店'}],'matrix_prices':[{'adzone_id':34492608, 'price':5}]}]
     #crowds= [{'crowd_type':32, 'sub_crowds':[{'sub_crowd_value':90, 'sub_crowd_name':'CPC营销场景定向-核心客户'}], \
     #          'matrix_prices':[{'adzone_id':34492608, 'price':5}]}]
+    crowds = [{'crowd_type': 524288, 'crowd_value':'50016587_304009209160', 'crowd_name': '拉丁舞裙拉丁','matrix_prices':[{'adzone_id':34492608, 'price':50}]}]
     result = ZuanshiBannerCrowdAdd.add_crowd(nick, campaign_id, adgroup_id, crowds)
     print result
