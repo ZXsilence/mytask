@@ -29,8 +29,9 @@ class FuwuSaleLinkGen(object):
         req = FuwuSaleLinkGenRequest()
         req.nick = nick 
         req.param_str = param_str 
-        soft_code = soft_code
-        rsp = ApiService.execute(req,nick=nick,soft_code=soft_code)
+        if soft_code !='YZB':
+            soft_code = None
+        rsp = ApiService.execute(req,None,soft_code)
         return change_obj_to_dict_deeply(rsp.url)
 
 
