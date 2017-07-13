@@ -599,6 +599,95 @@ class OperationType(object):
         EXECUTE_RULE_NOTICE
     ]
 
+    SHOP_LEVEL_LOG_TYPES = [
+        ADD_NEW_CAMPAIGN_SETTINGS,
+        STOP_OPTIMIZE_CAMPAIGN,
+        START_OPTIMIZE_CAMPAIGN,
+        STOP_CAMPAIGN,
+        START_CAMPAIGN
+    ]
+
+    CAMPAIGN_LEVEL_LOG_TYPES = [
+        START_CAMPAIGN,
+        STOP_CAMPAIGN,
+        STOP_OPTIMIZE_CAMPAIGN,
+        START_OPTIMIZE_CAMPAIGN,
+        UPDATE_CAMPAIGN_BUDGET,
+        UPDATE_CAMPAIGN_MODEL
+    ]
+
+    ADGROUP_LEVEL_LOG_TYPES = [
+        DELETE_DELETE_PERCENT,
+        DELETE_LOW_QSCORE,
+
+        UPDATE_KEYWORD_MOBILE_PRICE_NORMAL,
+        UPDATE_PRICE_TO_DECREASE_COST,
+        UPDATE_PRICE_MOBILE_TO_DECREASE_COST,
+        UPDATE_PRICE_HISTORY_NORMAL,
+        UPDATE_PRICE_MOBILE_ROI_GOOD_INCRE_PRICE,
+        UPDATE_PRICE_MOBILE_ROI_BAD_DECRE_PRICE,
+        UPDATE_PRICE_TO_INCREASE_COST,
+        UPDATE_PRICE_MOBILE_TO_INCREASE_COST,
+
+        STOP_ADGROUP,
+        START_ADGROUP,
+        START_OPTIMIZE_ADGROUP,
+        STOP_OPTIMIZE_ADGROUP,
+
+        UPDATE_CROWD_DISCOUNT,
+        ADD_CROWD,
+        DELETE_CROWD,
+        START_CROWD,
+        STOP_CROWD,
+
+        CHANGE_ADGROUP_WX_CPC_MAX,
+        CHANGE_ADGROUP_MOBILE_DISCOUNT,
+
+        ADD_CREATIVE_NORMAL,
+        DELETE_CREATIVE_NORMAL
+    ]
+
+
+SHOP_LEVEL_LOG_COMMENT = {
+    OperationType.ADD_NEW_CAMPAIGN_SETTINGS: '新设置{}计划',
+    OperationType.STOP_OPTIMIZE_CAMPAIGN: '{}计划取消托管',
+    OperationType.START_OPTIMIZE_CAMPAIGN: '{}计划加入托管',
+    OperationType.STOP_CAMPAIGN: '{}计划暂停推广',
+    OperationType.START_CAMPAIGN: '{}计划开启推广'
+}
+
+ADGROUP_LEVEL_LOG_COMMENT = {
+    OperationType.DELETE_DELETE_PERCENT: '删除关键词',
+    OperationType.DELETE_LOW_QSCORE: '删除关键词',
+
+    OperationType.UPDATE_KEYWORD_MOBILE_PRICE_NORMAL: '关键词价格调整',
+    OperationType.UPDATE_PRICE_TO_DECREASE_COST: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_TO_DECREASE_COST: '关键词价格调整',
+    OperationType.UPDATE_PRICE_HISTORY_NORMAL: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_ROI_GOOD_INCRE_PRICE: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_ROI_BAD_DECRE_PRICE: '关键词价格调整',
+    OperationType.UPDATE_PRICE_TO_INCREASE_COST: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_TO_INCREASE_COST: '关键词价格调整',
+
+    OperationType.STOP_ADGROUP: '推广组取消推广',
+    OperationType.START_ADGROUP: '推广组开启推广',
+    OperationType.START_OPTIMIZE_ADGROUP: '推广组加入托管',
+    OperationType.STOP_OPTIMIZE_ADGROUP: '推广组取消托管',
+
+    OperationType.UPDATE_CROWD_DISCOUNT: '人群设置调整',
+    OperationType.ADD_CROWD: '人群设置调整',
+    OperationType.DELETE_CROWD: '人群设置调整',
+    OperationType.START_CROWD: '开启人群推广',
+    OperationType.STOP_CROWD: '暂停人群推广',
+
+    OperationType.CHANGE_ADGROUP_WX_CPC_MAX: '推广组设置调整',
+    OperationType.CHANGE_ADGROUP_MOBILE_DISCOUNT: '推广组设置调整',
+
+    OperationType.ADD_CREATIVE_NORMAL: '创意调整',
+    OperationType.DELETE_CREATIVE_NORMAL: '创意调整',
+}
+
+
 OPTTYPE_COMMENT = {
     OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
     , OperationType.DELETE_UNEXPECT: "关键词删除时未记录原因"
