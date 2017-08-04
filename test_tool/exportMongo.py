@@ -27,8 +27,8 @@ bak_dir = "./mongobak/"
 
 def useage():
     f = sys.argv[0]
-    print "python %s db_name table_name  --同步指定表到测试机/开发机" % (f,)
-    print "python %s db_name table_name search_dict  --同步指定表的筛选数据到测试机/开发机,search_dict格式，例如：'{\"finish_num\": 2}'" % (f,)
+    print "python %s sourceTo db_name table_name  --同步指定表到测试机/开发机" % (f,)
+    print "python %s sourceTo db_name table_name search_dict  --同步指定表的筛选数据到测试机/开发机,search_dict格式，例如：'{\"finish_num\": 2}'" % (f,)
     print "python %s clear  --清空本地历史dump文件" % (f,)
 
 

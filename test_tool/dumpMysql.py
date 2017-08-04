@@ -28,8 +28,8 @@ bak_dir = "./mysqlbak/"
 
 def useage():
     f = sys.argv[0]
-    print "python %s nick sourceTo  --同步指定nick的常用数据表到测试库/开发机" % (f,)
-    print "python %s nick sourceTo db_name table_name  --同步指定nick的指定库和表到测试库/开发机" % (f,)
+    print "python %s nick sourceTo  --同步指定nick的常用数据表到测试机/开发机" % (f,)
+    print "python %s nick sourceTo db_name table_name  --同步指定nick的指定库和表到测试机/开发机" % (f,)
     print "python %s clear  --清空本地历史dump文件" % (f,)
 
 
@@ -75,11 +75,11 @@ def CommonUse(nick,sourceTo):
             conn = MySQLdb.connect(host=host,user=user,passwd=pwd,port=port,db=db_name)
             conn.set_character_set("utf8")
             cursor = conn.cursor()
-            #同步前先清空开发机/测试库数据
+            #同步前先清空开发机/测试机数据
             clear_sql = "DELETE FROM %s.%s WHERE nick='%s'" %(db_name,table_name,nick)
             cursor.execute(clear_sql)
             conn.commit()
-            #source线上数据到开发机/测试库
+            #source线上数据到开发机/测试机
             source_path = "%s%s_%s.sql" %(bak_dir,table_name,dump_time)
             sql = open(source_path).read()
             cursor.execute(sql)
@@ -120,11 +120,11 @@ def DumpOneMysql(nick,sourceTo,db_name,table_name):
         conn = MySQLdb.connect(host=host,user=user,passwd=pwd,port=port,db=db_name)
         conn.set_character_set("utf8")
         cursor = conn.cursor()
-        #同步前先清空开发机/测试库数据
+        #同步前先清空开发机/测试机数据
         clear_sql = "DELETE FROM %s.%s WHERE nick='%s'" %(db_name,table_name,nick)
         cursor.execute(clear_sql)
         conn.commit()
-        #source线上数据到开发机/测试库
+        #source线上数据到开发机/测试机
         source_path = "%s%s_%s.sql" %(bak_dir,table_name,dump_time)
         sql = open(source_path).read()
         cursor.execute(sql)
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         clearBak()
     elif len(sys.argv) == 3:
         nick = sys.argv[1]
-        #参数sourceTo='test'表示同步到测试数据库，sourceTo='dev'表示同步到开发机数据库
+        #参数sourceTo='test'表示同步到测试数据机，sourceTo='dev'表示同步到开发机数据库
         sourceTo = sys.argv[2]
         CommonUse(nick,sourceTo)
     elif len(sys.argv) == 5:
