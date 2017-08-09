@@ -42,16 +42,15 @@ def get_api_source():
     global api_source
     return api_source
 
-DEBUG_TEST = True
-if DEBUG_TEST:
-    logger = logging.getLogger("api_virtual")
-    hdlr = logging.FileHandler("/tmp/api_virtual.log")
-    hdlr.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)s:%(lineno)-15d %(message)s')
-    hdlr.setFormatter(formatter)
-    logger.addHandler(hdlr)
-    logger.setLevel(logging.DEBUG)
-    logger.propagate = False
+logger2 = logging.getLogger("api_virtual")
+hdlr = logging.FileHandler("/tmp/api_virtual.log")
+hdlr.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(name)s:%(lineno)-15d %(message)s')
+hdlr.setFormatter(formatter)
+logger2.addHandler(hdlr)
+logger2.setLevel(logging.DEBUG)
+logger2.propagate = False
+
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/tmp/api_server.log')
 hdlr.setLevel(logging.DEBUG)

@@ -99,5 +99,6 @@ class ReplaceKeywordsPricevonSet(object):
 
         #替换值后存虚拟库
         KeywordDBService.update_keyword_list(sid,to_save_db_keyword_list)
+        logger2.info("存虚拟库成功！api_name:%s " % self.api_name)
 
         return self.fkey

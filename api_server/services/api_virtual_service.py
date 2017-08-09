@@ -76,6 +76,12 @@ class  ApiVirtualDB(object):
         replace_obj = ApiVirtualReplaceRetBase(self.api_name,self.nick,fkey,ivalue)
         try:
             fkey = replace_obj.replace_ret_values()
+            if fkey is None: #必须判断为None才报错，因为fkey可能为[]，是允许的
+                logger2.error("错误：替换返回值失败！api_name:%s" % self.api_name)
+                return None,None
+            #替换值重新赋值，主要是非对象类型时需要重新赋值
+            if isinstance(fkey,object):
+                setattr(response,key,fkey)
         except Exception,e:
             logger2.exception("错误：替换返回值失败！%s" % e)
             return None,None
