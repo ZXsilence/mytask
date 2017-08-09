@@ -50,6 +50,9 @@ class ReplaceKeywordsByAdgroupidGet(object):
                 self.fkey.extend(items)
             elif ilen < 0 :
                 self.fkey = self.fkey[:len(self.fkey) + ilen ]
+                #当fkey[]时，直接返回即可
+                if not self.fkey:
+                    return self.fkey
         else:
             logger2.error("错误：返回值替换失败！%s " % self.api_name)
             return None
@@ -70,6 +73,4 @@ class ReplaceKeywordsByAdgroupidGet(object):
         except Exception,e:
             logger2.exception("错误：返回值替换失败！%s,e:%s " % self.api_name, e)
             return None
-        else:
-            logger2.info("未替换值有：%s,nick:%s, adgroup_id:%s, api_name:%s" % (",".join(n_change_keys),self.nick,adgroup_id,self.api_name))
         return self.fkey

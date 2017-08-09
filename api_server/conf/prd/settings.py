@@ -41,7 +41,6 @@ def set_api_source(source):
 def get_api_source():
     global api_source
     return api_source
-DEBUG_TEST=False
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/alidata1/logs/api_server.log')
 hdlr.setLevel(logging.DEBUG)

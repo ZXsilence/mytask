@@ -42,7 +42,6 @@ def get_api_source():
     global api_source
     return api_source
 
-DEBUG_TEST=False
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/tmp/api_server.log')
 hdlr.setLevel(logging.DEBUG)
