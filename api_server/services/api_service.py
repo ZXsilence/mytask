@@ -13,13 +13,18 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from api_server.conf.settings import API_THRIFT,APP_SETTINGS
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
-from api_server.conf.settings import API_SOURCE
+from api_server.conf.settings import API_SOURCE,DEBUG_TEST
 from api_server.conf.settings import get_api_source 
 from api_server.common.decorator import sdk_exception
 from api_server.services.api_cache_service import ApiCacheService
 from api_server.services.api_cache_config import ApiCacheConfig
+from api_server.services.api_virtual_service import ApiVirtualDB
 
 logger = logging.getLogger(__name__)
+
+DEBUG_TEST = True
+if DEBUG_TEST:
+    logger2 = logging.getLogger("api_virtual")
 
 class ApiService(object):
 
@@ -52,8 +57,17 @@ class ApiService(object):
                 rsp_obj = ApiService.getResponseObj(cache_data)
                 if 'sub_code' not in rsp_obj.responseBody and  'sub_msg' not in rsp_obj.responseBody:
                     return rsp_obj
-        rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
-        rsp_obj = ApiService.getResponseObj(rsp_dict)
+        ApiVirtualDB_obj = None
+        if DEBUG_TEST:
+            ApiVirtualDB_obj = ApiVirtualDB(params_dict,soft_code,api_source)
+            rsp_dict = ApiVirtualDB_obj.call_virtual_db()
+            if not rsp_dict:
+                msg = "错误：测试模式，call_virtual_db返回为None！"
+                logger2.error(msg)
+                raise ErrorResponseException(code=100, msg=msg, sub_msg=msg)
+        else:
+            rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
+        rsp_obj = ApiService.getResponseObj(rsp_dict,ApiVirtualDB_obj)
         if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
         #update清理cache
@@ -89,10 +103,15 @@ class ApiService(object):
         return parameters
 
     @staticmethod
-    def getResponseObj(rsp_dict):
+    def getResponseObj(rsp_dict,ApiVirtualDB_obj=None):
         '''
         将rsp_dict转为rsp_obj
         '''
+        if DEBUG_TEST and not ApiVirtualDB_obj:
+            msg = "错误：测试模式，ApiVirtualDB_obj对象为空，不能走虚拟库！"
+            logger.error(msg)
+            raise ErrorResponseException(code=100, msg=msg, sub_msg=msg)
+
         responses = list()
         rawContent = simplejson.dumps(rsp_dict)
         try:
@@ -101,6 +120,11 @@ class ApiService(object):
                 ResponseClass = getattr(sys.modules["TaobaoSdk.Response.%s" % key], key)
                 response = ResponseClass(value)
                 response.responseStatus = 200
+                if DEBUG_TEST:
+                    response,rawContent = ApiVirtualDB_obj.replace_virtual_response(response)
+                    if not response or not rawContent:
+                        msg = "替换返回值失败！"
+                        raise ErrorResponseException(code=100, msg=msg)
                 response.responseBody = rawContent
                 responses.append(response)
             return (tuple(responses))[0]
