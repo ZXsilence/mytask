@@ -23,7 +23,7 @@ from api_server.db_models.api_structure_templates import ApiStructureTemplate
 from api_server.services.api_virtual_replace_key_config import ApiVirtualReplaceKeyConfig
 from api_server.services.api_virtual_replace_ret_base import ApiVirtualReplaceRetBase
 
-class  ApiVirtualDB(object):
+class  ApiVirtualService(object):
 
 
     def __init__(self,params_dict,soft_code,api_source):

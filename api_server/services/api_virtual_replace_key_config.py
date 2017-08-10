@@ -12,11 +12,13 @@
 class ApiVirtualReplaceKeyConfig(object):
     API_INPUT_REPLACE_KEY = {
         "taobao.simba.keywordsbyadgroupid.get":"adgroup_id",
-        "taobao.simba.keywords.pricevon.set":"keywordid_prices"
+        "taobao.simba.keywords.pricevon.set":"keywordid_prices",
+        "taobao.simba.keywordsvon.add":"keyword_prices",
     }
     API_OUTPUT_REPLACE_KEY = {
         "taobao.simba.keywordsbyadgroupid.get":"keywords",
         "taobao.simba.keywords.pricevon.set":"keywords",
+        "taobao.simba.keywordsvon.add":"keywords",
     }
 
 

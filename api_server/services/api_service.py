@@ -18,7 +18,7 @@ from api_server.conf.settings import get_api_source
 from api_server.common.decorator import sdk_exception
 from api_server.services.api_cache_service import ApiCacheService
 from api_server.services.api_cache_config import ApiCacheConfig
-from api_server.services.api_virtual_service import ApiVirtualDB
+from api_server.services.api_virtual_service import ApiVirtualService
 from api_server.services.api_virtual_replace_key_config import ApiVirtualReplaceKeyConfig
 
 logger = logging.getLogger(__name__)
@@ -61,17 +61,17 @@ class ApiService(object):
                 if 'sub_code' not in rsp_obj.responseBody and  'sub_msg' not in rsp_obj.responseBody:
                     return rsp_obj
 
-        ApiVirtualDB_obj = None
+        ApiVirtualService_obj = None
         if API_VIRTUAL:
-            ApiVirtualDB_obj = ApiVirtualDB(params_dict,soft_code,api_source)
-            rsp_dict = ApiVirtualDB_obj.call_virtual_db()
+            ApiVirtualService_obj = ApiVirtualService(params_dict,soft_code,api_source)
+            rsp_dict = ApiVirtualService_obj.call_virtual_db()
             if not rsp_dict:
                 msg = "错误：测试模式，call_virtual_db返回为None！"
                 logger2.error(msg)
                 raise ErrorResponseException(code=100, msg=msg, sub_msg=msg)
         else:
             rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
-        rsp_obj = ApiService.getResponseObj(rsp_dict,ApiVirtualDB_obj,API_VIRTUAL)
+        rsp_obj = ApiService.getResponseObj(rsp_dict,ApiVirtualService_obj,API_VIRTUAL)
         if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
         #update清理cache
@@ -107,12 +107,12 @@ class ApiService(object):
         return parameters
 
     @staticmethod
-    def getResponseObj(rsp_dict,ApiVirtualDB_obj=None,API_VIRTUAL=None):
+    def getResponseObj(rsp_dict,ApiVirtualService_obj=None,API_VIRTUAL=None):
         '''
         将rsp_dict转为rsp_obj
         '''
-        if API_VIRTUAL and not ApiVirtualDB_obj:
-            msg = "错误：测试模式，ApiVirtualDB_obj对象为空，不能走虚拟库！"
+        if API_VIRTUAL and not ApiVirtualService_obj:
+            msg = "错误：测试模式，ApiVirtualService_obj对象为空，不能走虚拟库！"
             logger2.error(msg)
             raise ErrorResponseException(code=100, msg=msg, sub_msg=msg)
 
@@ -125,7 +125,7 @@ class ApiService(object):
                 response = ResponseClass(value)
                 response.responseStatus = 200
                 if API_VIRTUAL:
-                    response,rawContent = ApiVirtualDB_obj.replace_virtual_response(response)
+                    response,rawContent = ApiVirtualService_obj.replace_virtual_response(response)
                     if not response or not rawContent:
                         msg = "替换返回值失败！"
                         raise ErrorResponseException(code=100, msg=msg)
