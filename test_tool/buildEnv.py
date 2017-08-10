@@ -146,6 +146,8 @@ def restartApache():
     for k in output.split("\n"):print k
     if "failed" in output:
         print "\033[1;31;40m启动apache失败，请查看apache日志！"+"\033[0m"
+    elif "incorrect password attempts" in output:
+        print "\033[1;31;40msudo密码错误，启动apache失败！"+"\033[0m"
     else:
         print "\033[1;36;40m启动apache成功！"+"\033[0m"
 
@@ -227,13 +229,14 @@ if __name__ == "__main__":
                 breakWare = False
                 continue
             else:
-                sure = raw_input( "你输入的仓库名顺序为:\033[1;36;40m"+','.join(wares)+"\033[0m"+"\n确请按y，重新输入请按n，其他键退出: " )
-                if sure.lower() == 'y':
-                    breakWare=True
-                elif sure.lower() == 'n':
-                    continue
-                else:
-                    exit(0)
+                breakWare=True
+                #sure = raw_input( "你输入的仓库名顺序为:\033[1;36;40m"+','.join(wares)+"\033[0m"+"\n确请按y，重新输入请按n，其他键退出: " )
+                #if sure.lower() == 'y':
+                #    breakWare=True
+                #elif sure.lower() == 'n':
+                #    continue
+                #else:
+                #    exit(0)
 
         while(not breakBrach):
             ware2br_str = ""
@@ -245,13 +248,16 @@ if __name__ == "__main__":
                 continue
             for i in range(len(wares)):
                 ware2br_str += "\n%s:%s"%(wares[i],brs[i])
-            sure = raw_input("确认你输入的仓库名-分支名的对应关系：\033[1;36;40m"+ware2br_str+"\033[0m"+"\n确认请输入y，重新输入请按n，其他键退出：")
-            if sure.lower()== 'y':
-                breakBrach = True
-            elif sure.lower() == 'n':
-                breakBrach = False
-            else:
-                exit(0)
+            breakBrach = True
+            print "你输入的仓库名-分支名的对应关系是：\033[1;36;40m" + ware2br_str + "\033[0m"
+            time.sleep(1)
+            #sure = raw_input("确认你输入的仓库名-分支名的对应关系：\033[1;36;40m"+ware2br_str+"\033[0m"+"\n确认请输入y，重新输入请按n，其他键退出：")
+            #if sure.lower()== 'y':
+            #    breakBrach = True
+            #elif sure.lower() == 'n':
+            #    breakBrach = False
+            #else:
+            #    exit(0)
 
         if not wares or not brs:
             print "\033[1;31;40m输入仓库名or分支名有误，退出！"+"\033[0m"
