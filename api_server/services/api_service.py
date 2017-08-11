@@ -13,7 +13,7 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from api_server.conf.settings import API_THRIFT,APP_SETTINGS
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
-from api_server.conf.settings import API_SOURCE
+from api_server.conf.settings import API_SOURCE,API_VIRTUAL_TEST
 from api_server.conf.settings import get_api_source 
 from api_server.common.decorator import sdk_exception
 from api_server.services.api_cache_service import ApiCacheService
@@ -45,7 +45,7 @@ class ApiService(object):
 
         api_name = params_dict['method']
         replace_api_names = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.keys()
-        API_VIRTUAL = api_name in replace_api_names
+        API_VIRTUAL = API_VIRTUAL_TEST and (api_name in replace_api_names)
 
         is_get = True
         cache_key = None

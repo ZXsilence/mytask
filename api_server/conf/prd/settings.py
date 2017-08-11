@@ -41,7 +41,7 @@ def set_api_source(source):
 def get_api_source():
     global api_source
     return api_source
-
+API_VIRTUAL_TEST=False
 logger2 = logging.getLogger("api_virtual")
 hdlr = logging.FileHandler("/tmp/api_virtual.log")
 hdlr.setLevel(logging.DEBUG)
