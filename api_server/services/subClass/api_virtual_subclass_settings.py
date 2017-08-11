@@ -12,6 +12,7 @@
 SUB_CLASS_MAPPINGS = {
     "taobao.simba.keywords.pricevon.set":{"class":"ReplaceKeywordsPricevonSet"},
     "taobao.simba.keywordsbyadgroupid.get":{"class":"ReplaceKeywordsByAdgroupidGet"},
+    "taobao.simba.keywordsvon.add":{"class":"ReplaceKeywordsvonAdd"},
 }
 
 

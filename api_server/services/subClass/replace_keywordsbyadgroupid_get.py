@@ -21,11 +21,11 @@ class ReplaceKeywordsByAdgroupidGet(object):
     根据推广组id获取关键词列表接口
     api_name:taobao.simba.keywordsbyadgroupid.get
     '''
-    def __init__(self,api_name,nick,fkey,ivalue):
+    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
         self.api_name = api_name
         self.nick = nick
         self.fkey = fkey
-        self.ivalue = int(ivalue) #ivalue是adgroup_id所以必须取int
+        self.ivalue = ivalue
 
     def replace_ret_values(self):
         global KeywordDBService
@@ -42,20 +42,12 @@ class ReplaceKeywordsByAdgroupidGet(object):
         #根据推广组id从虚拟库找出关键词列表
         keywords_list = KeywordDBService.get_keywords_by_adgroup_id(sid,adgroup_id)
 
-        #返回结构长度不够的进行返回长度扩展
-        ilen = len(keywords_list) - len(self.fkey)
-        if isinstance(self.fkey,list) :
-            if ilen > 0:
-                items = [copy.deepcopy(self.fkey[0]) for k in range(ilen)]
-                self.fkey.extend(items)
-            elif ilen < 0 :
-                self.fkey = self.fkey[:len(self.fkey) + ilen ]
-                #当fkey[]时，直接返回即可
-                if not self.fkey:
-                    return self.fkey
-        else:
-            logger2.error("错误：返回值替换失败！%s " % self.api_name)
-            return None
+        inputLen = len(keywords_list)
+        outputLen = len(self.fkey)
+        if inputLen > outputLen:
+            self.fkey.extend([copy.deepcopy(self.fkey[0]) for i in range(inputLen-outputLen)])
+        elif inputLen < outputLen:
+            self.fkey = self.fkey[:(outputLen-inputLen)]
 
         #根据返回结构里的键，进行返回值替换
         rkeys = self.fkey[0].toDict().keys()

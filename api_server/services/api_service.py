@@ -20,6 +20,7 @@ from api_server.services.api_cache_service import ApiCacheService
 from api_server.services.api_cache_config import ApiCacheConfig
 from api_server.services.api_virtual_service import ApiVirtualService
 from api_server.services.api_virtual_replace_key_config import ApiVirtualReplaceKeyConfig
+from api_server.services.subClass.exceptions import ApiVirtualResponseException
 
 logger = logging.getLogger(__name__)
 logger2 = logging.getLogger("api_virtual")
@@ -125,13 +126,19 @@ class ApiService(object):
                 response = ResponseClass(value)
                 response.responseStatus = 200
                 if API_VIRTUAL:
-                    response,rawContent = ApiVirtualService_obj.replace_virtual_response(response)
-                    if not response or not rawContent:
-                        msg = "替换返回值失败！"
-                        raise ErrorResponseException(code=100, msg=msg)
+                    try:
+                        response,rawContent = ApiVirtualService_obj.replace_virtual_response(response)
+                        if not response or not rawContent:
+                            msg = "替换返回值失败！"
+                            raise ApiVirtualResponseException(msg)
+                    except Exception,e:
+                        logger.error(e.msg)
+                        raise e
                 response.responseBody = rawContent
                 responses.append(response)
             return (tuple(responses))[0]
+        except ApiVirtualResponseException,e:
+            raise e
         except ValueError,e:
             if "does not match format '%Y-%m-%d %H:%M:%S'" in str(e):
                 #时间转换

@@ -9,7 +9,7 @@
 @copyright: Copyright Maimiaotech.com
 
 """
-class BusiException(Exception):
+class ApiVirtualResponseException(Exception):
     def __init__(self,msg=None):
         self.msg = msg
 

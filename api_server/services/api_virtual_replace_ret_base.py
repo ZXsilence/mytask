@@ -21,12 +21,14 @@ class ApiVirtualReplaceRetBase(object):
     api_virtual_service进行返回值替换调用的统一入口
     约定：替换返回值的方法名叫: replace_ret_values
     '''
-    def __init__(self,api_name,nick,fkey,ivalue):
+    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
         self.api_name = api_name
         self.nick = nick
         self.fkey = fkey
         self.ivalue = ivalue
         self.sub_class_obj = None
+        self.campaign_id = campaign_id
+        self.adgroup_id = adgroup_id
 
     #根据api_name找出应该调用哪个类方法，进行实际返回值替换
     def _get_sub_class_by_api_name(self):
@@ -37,8 +39,8 @@ class ApiVirtualReplaceRetBase(object):
                     logger2.error("错误：未能找到%s对应的子类方法！" % self.api_name)
                 sub_class_name = setting["class"]
                 sub_class = globals()[sub_class_name]
-                self.sub_class_obj = apply(sub_class,(self.api_name,self.nick,self.fkey,self.ivalue))
-            except BusiException,e :
+                self.sub_class_obj = apply(sub_class,(self.api_name,self.nick,self.fkey,self.ivalue,self.campaign_id,self.adgroup_id))
+            except ApiVirtualResponseException,e :
                 logger2.exception(e.msg)
                 raise e
             except Exception,e:
