@@ -46,10 +46,11 @@ class OperationType(object):
     DELETE_UNEXPECT = -1
     DELETE_AUDIT_UNPASS = 1
     DELETE_LOW_QSCORE = 2
+    DELETE_LOW_PC_QSCORE = 24 
+    DELETE_LOW_MOBILE_QSCORE = 25
     DELETE_LOW_PV_OLD = 3
     DELETE_DELETE_PERCENT = 4
     DELETE_LOW_CLICK_OLD = 5
-    #DELETE_IS_GARGABE = 6
     DELETE_IS_GARBAGE = 6
     DELETE_USER_DELETE = 7
     DELETE_LOW_PV_MAX_PRICE = 8
@@ -192,6 +193,7 @@ class OperationType(object):
     DELETE_CREATIVE_NORMAL = 517
     ADD_CREATIVE_NORMAL = 518
     MODIFY_CREATIVE_NORMAL = 519
+    STOP_ADGROUP_FROM_COST_MONITOR = 523
 
     ADD_CAMPAIGN_NORMAL = 601
     START_CAMPAIGN = 610
@@ -203,6 +205,7 @@ class OperationType(object):
     START_ITEM_AUTO_STATUS = 624
     STOP_ITEM_AUTO_STATUS =  625
     CHANGE_ITEM_LABEL = 626
+    STOP_CAMPAIGN_FROM_COST_MONITOR = 633
 
 
     UPGRADE_CAMPAIGN = 614
@@ -227,6 +230,12 @@ class OperationType(object):
     UPDATE_CAMPAIGN_MODEL = 722
     UPDATE_ADGROUP_CPC_MAX = 723
 
+    # 修改推广组高级设置(针对主推/长尾计划)
+    UPDATE_STAR_KEYWORD_MAX_PRICE_PC = 731
+    UPDATE_STAR_KEYWORD_MAX_PRICE_MOBILE = 732
+    UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_PC = 733
+    UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_MOBILE = 734
+    UPDATE_KEYWORD_TOTAL_UPPER_LIMIT = 735
 
     ADD_RULE = 800
     UPDATE_RULE = 801
@@ -241,6 +250,8 @@ class OperationType(object):
     ALL_DELETE_TYPES = [
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
+        DELETE_LOW_PC_QSCORE,
+        DELETE_LOW_MOBILE_QSCORE,
         DELETE_LOW_PV_OLD,
         DELETE_DELETE_PERCENT,
         DELETE_LOW_CLICK_OLD,
@@ -354,7 +365,16 @@ class OperationType(object):
         CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE,
         CHANGE_CAMPAIGN_SETTINGS,
         CHANGE_ADGROUP_SETTINGS,
-        CHANGE_ADGROUP_MOBILE_DISCOUNT
+        CHANGE_ADGROUP_MOBILE_DISCOUNT,
+
+        UPDATE_STAR_KEYWORD_MAX_PRICE_PC,
+        UPDATE_STAR_KEYWORD_MAX_PRICE_MOBILE,
+        UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_PC,
+        UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_MOBILE,
+        UPDATE_KEYWORD_TOTAL_UPPER_LIMIT,
+
+        STOP_CAMPAIGN_FROM_COST_MONITOR,
+        STOP_ADGROUP_FROM_COST_MONITOR,
     ]
 
 
@@ -427,6 +447,8 @@ class OperationType(object):
         DELETE_UNEXPECT,
         DELETE_AUDIT_UNPASS,
         DELETE_LOW_QSCORE,
+        DELETE_LOW_PC_QSCORE,
+        DELETE_LOW_MOBILE_QSCORE,
         DELETE_LOW_PV_OLD,
         DELETE_DELETE_PERCENT,
         DELETE_LOW_CLICK_OLD,
@@ -544,6 +566,24 @@ class OperationType(object):
         UPDATE_PRICE_MOBILE_WIDE_MATCH
     ]
 
+    ALL_ADGROUP_ADVANCED_SETTINGS_TYPES = [
+        UPDATE_STAR_KEYWORD_MAX_PRICE_PC,
+        UPDATE_STAR_KEYWORD_MAX_PRICE_MOBILE,
+        UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_PC,
+        UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_MOBILE,
+        UPDATE_KEYWORD_TOTAL_UPPER_LIMIT,
+    ]
+
+    ALL_ADGROUP_ADVANCED_SETTINGS_PC_UPDATE_TYPES = [
+        UPDATE_STAR_KEYWORD_MAX_PRICE_PC,
+        UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_PC,
+    ]
+
+    ALL_ADGROUP_ADVANCED_SETTINGS_WX_UPDATE_TYPES = [
+        UPDATE_STAR_KEYWORD_MAX_PRICE_MOBILE,
+        UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_MOBILE,
+    ]
+
     ALL_ADGROUP_DELETE_TYPES = [
         DELETE_ADGROUP_NORMAL,
         DELETE_ADGROUP_INITIAL,
@@ -564,10 +604,91 @@ class OperationType(object):
         EXECUTE_RULE_NOTICE
     ]
 
+    SHOP_LEVEL_LOG_TYPES = [
+        ADD_NEW_CAMPAIGN_SETTINGS,
+        STOP_OPTIMIZE_CAMPAIGN,
+        START_OPTIMIZE_CAMPAIGN,
+        STOP_CAMPAIGN,
+        START_CAMPAIGN
+    ]
+
+    CAMPAIGN_LEVEL_LOG_TYPES = [
+        START_CAMPAIGN,
+        STOP_CAMPAIGN,
+        STOP_OPTIMIZE_CAMPAIGN,
+        START_OPTIMIZE_CAMPAIGN,
+        UPDATE_CAMPAIGN_BUDGET,
+        UPDATE_CAMPAIGN_MODEL
+    ]
+
+    ADGROUP_LEVEL_LOG_TYPES = [
+        STOP_ADGROUP,
+        START_ADGROUP,
+        START_OPTIMIZE_ADGROUP,
+        STOP_OPTIMIZE_ADGROUP,
+
+        UPDATE_CROWD_DISCOUNT,
+        ADD_CROWD,
+        DELETE_CROWD,
+        START_CROWD,
+        STOP_CROWD,
+
+        CHANGE_ADGROUP_WX_CPC_MAX,
+        CHANGE_ADGROUP_MOBILE_DISCOUNT,
+
+        ADD_CREATIVE_NORMAL,
+        DELETE_CREATIVE_NORMAL
+    ] + ALL_KEYWORD_ADD_TYPES + ALL_KEYWORD_DELETE_TYPES + ALL_KEYWORD_UPDATE_TYPES
+
+    COST_MONITOR_LOG_TYPES = [
+        STOP_ADGROUP_FROM_COST_MONITOR,
+        STOP_CAMPAIGN_FROM_COST_MONITOR,
+    ]
+
+
+SHOP_LEVEL_LOG_COMMENT = {
+    OperationType.ADD_NEW_CAMPAIGN_SETTINGS: '新设置{}计划',
+    OperationType.STOP_OPTIMIZE_CAMPAIGN: '{}计划取消托管',
+    OperationType.START_OPTIMIZE_CAMPAIGN: '{}计划加入托管',
+    OperationType.STOP_CAMPAIGN: '{}计划暂停推广',
+    OperationType.START_CAMPAIGN: '{}计划开启推广'
+}
+
+ADGROUP_LEVEL_LOG_COMMENT = {
+    OperationType.UPDATE_KEYWORD_MOBILE_PRICE_NORMAL: '关键词价格调整',
+    OperationType.UPDATE_PRICE_TO_DECREASE_COST: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_TO_DECREASE_COST: '关键词价格调整',
+    OperationType.UPDATE_PRICE_HISTORY_NORMAL: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_ROI_GOOD_INCRE_PRICE: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_ROI_BAD_DECRE_PRICE: '关键词价格调整',
+    OperationType.UPDATE_PRICE_TO_INCREASE_COST: '关键词价格调整',
+    OperationType.UPDATE_PRICE_MOBILE_TO_INCREASE_COST: '关键词价格调整',
+
+    OperationType.STOP_ADGROUP: '推广组取消推广',
+    OperationType.START_ADGROUP: '推广组开启推广',
+    OperationType.START_OPTIMIZE_ADGROUP: '推广组加入托管',
+    OperationType.STOP_OPTIMIZE_ADGROUP: '推广组取消托管',
+
+    OperationType.UPDATE_CROWD_DISCOUNT: '人群设置调整',
+    OperationType.ADD_CROWD: '人群设置调整',
+    OperationType.DELETE_CROWD: '人群设置调整',
+    OperationType.START_CROWD: '开启人群推广',
+    OperationType.STOP_CROWD: '暂停人群推广',
+
+    OperationType.CHANGE_ADGROUP_WX_CPC_MAX: '推广组设置调整',
+    OperationType.CHANGE_ADGROUP_MOBILE_DISCOUNT: '推广组设置调整',
+
+    OperationType.ADD_CREATIVE_NORMAL: '创意调整',
+    OperationType.DELETE_CREATIVE_NORMAL: '创意调整',
+}
+
+
 OPTTYPE_COMMENT = {
     OperationType.DELETE_AUDIT_UNPASS: "关键词审核未通过，已经删除"
     , OperationType.DELETE_UNEXPECT: "关键词删除时未记录原因"
     , OperationType.DELETE_LOW_QSCORE : "关键词质量分过低，已经删除"
+    , OperationType.DELETE_LOW_PC_QSCORE : "关键词PC质量分低于设置，已经删除"
+    , OperationType.DELETE_LOW_MOBILE_QSCORE : "关键词移动质量分低于设置，已经删除"
     , OperationType.DELETE_LOW_PV_OLD : "关键词最近一段时间展现量过低，已经删除"
     , OperationType.DELETE_DELETE_PERCENT : "关键词在计划中相对表现较差，已经删除"
     , OperationType.DELETE_LOW_CLICK_OLD : "关键词最近一段时间点击量过低，已经删除"
@@ -749,6 +870,15 @@ OPTTYPE_COMMENT = {
     ,OperationType.UPDATE_ADGROUP_CPC_MAX:'规则引擎修改推广组最高出价'
 
     ,OperationType.ADD_BIDWORD:'设置过滤词'
+
+    ,OperationType.UPDATE_STAR_KEYWORD_MAX_PRICE_PC: '修改标星词PC端最高出价'
+    ,OperationType.UPDATE_STAR_KEYWORD_MAX_PRICE_MOBILE: '修改标星词移动端最高出价'
+    ,OperationType.UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_PC: '修改关键词质量分PC端的下限值'
+    ,OperationType.UPDATE_KEYWORD_QSCORE_LOWER_LIMIT_MOBILE: '修改关键词质量分移动端的下限值'
+    ,OperationType.UPDATE_KEYWORD_TOTAL_UPPER_LIMIT: '修改关键词总数的上限值'
+
+    ,OperationType.STOP_CAMPAIGN_FROM_COST_MONITOR: '花费异常，暂停计划'
+    ,OperationType.STOP_ADGROUP_FROM_COST_MONITOR: '花费异常，暂停推广组'
 }
 
 class LoginFailType(object):

@@ -99,7 +99,7 @@ class ApiCacheConfig(object):
         'taobao.simba.campaign.platform.update':{'cache_name':'campaign_platform','is_get':IS_GET_NO},
         'taobao.simba.campaign.schedule.get':{'cache_name':'campaign_schedule','max_age':MAX_AGE_2,'is_get':IS_GET_YES},
         'taobao.simba.campaign.schedule.update':{'cache_name':'campaign_schedule','is_get':IS_GET_NO},
-        'taobao.simba.campaigns.get':{'cache_name':'campaign','max_age':MAX_AGE_1,'is_get':IS_GET_YES},
+        'taobao.simba.campaigns.get':{'cache_name':'campaign','max_age':MAX_AGE_4,'is_get':IS_GET_YES},
         'taobao.simba.campaign.update':{'cache_name':'campaign','is_get':IS_GET_NO},
         'taobao.simba.campaign.add':{'cache_name':'campaign','is_get':IS_GET_NO}, 
 

@@ -29,17 +29,18 @@ class FuwuSaleLinkGen(object):
         req = FuwuSaleLinkGenRequest()
         req.nick = nick 
         req.param_str = param_str 
-        soft_code = None
-        rsp = ApiService.execute(req,None)
+        if soft_code !='YZB':
+            soft_code = None
+        rsp = ApiService.execute(req,None,soft_code)
         return change_obj_to_dict_deeply(rsp.url)
 
 
 if __name__ == '__main__':
 
-    nick = 'chinchinstyle'
-    soft_code = None
+    nick = '麦苗科技001'
+    soft_code = "YZB"
     param_str = """
-        {"param":{"aCode":"ACT_847721042_130517115127","itemList":["ts-1796606-3"],"promIds":[10058712],"type":2},"sign":"E2896D1E94845D1B82FFE9FBF8A9D18E"}
+    {"param":{"aCode":"ACT_1101933802_170622134424","itemList":["FW_GOODS-1000078795-1:1*2"],"promIds":[1002011602],"type":1},"sign":"9DBE865F21001748E0EDC0FAA22CC1F9"}
         """
     url = FuwuSaleLinkGen.fuwu_sale_link_gen(nick, param_str,soft_code)
     print url

@@ -21,13 +21,16 @@ from api_server.common.util import change_obj_to_dict_deeply
 
 logger = logging.getLogger(__name__)
 
+
 class ItemcatsGet(object):
+
+    default_fields = 'cid,parent_cid,name,is_parent'
 
     @classmethod
     @tao_api_exception()
-    def get_child_cats(cls, p_cid):
+    def get_child_cats(cls, p_cid, fields=default_fields):
         req = ItemcatsGetRequest()
-        req.fields = 'cid,parent_cid,name,is_parent'
+        req.fields = fields
         req.parent_cid = int(p_cid)
         nick = None
         soft_code = None
@@ -36,9 +39,9 @@ class ItemcatsGet(object):
 
     @classmethod
     @tao_api_exception()
-    def get_cats_by_cids(cls, cids):
+    def get_cats_by_cids(cls, cids, fields=default_fields):
         req = ItemcatsGetRequest()
-        req.fields = 'cid,parent_cid,name,is_parent'
+        req.fields = fields
         req.cids = ",".join([str(k) for k in cids])
         nick = None
         soft_code = None

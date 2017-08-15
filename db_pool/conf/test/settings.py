@@ -3,10 +3,10 @@
 #rds实例1的连接池配置
 RDS1 = {
          'pool_addr':{
-                 'HOST':'mm_app_in',
+                 'HOST':'localhost',
                  'PORT':3306,
                  'USER':'root',
-                 'PASSWD':'123456' 
+                 'PASSWD':'test123' 
                  }
              ,
          'db_list':['information_schema','access_records',\
@@ -23,7 +23,7 @@ RDS1 = {
                  'sample_analysis','workflow','keywords_deleted_new',\
                  'user_item','yzb','advert','ysf','rpt_all_new',\
                  'yzb_busi','yzb_operation_log','yzb_creatives',\
-                 'yzb_rpt_all','yzb_monitor','yzb_traffic']
+                 'yzb_rpt_all','yzb_monitor']
         }
 
 #rds2实例连接池配置
