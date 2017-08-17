@@ -17,6 +17,7 @@ from common import get_corresponding_key
 
 KeywordDBService = None
 ShopInfo = None
+KeywordChangedTestService = None
 
 class ReplaceKeywordsPricevonSet(object):
     '''
@@ -34,6 +35,8 @@ class ReplaceKeywordsPricevonSet(object):
         if not KeywordDBService:from keyword_db.services.keyword_db_service_new import KeywordDBService
         global ShopInfo
         if not ShopInfo:from shop_db.db_models.shop_info import ShopInfo
+        global KeywordChangedTestService
+        if not KeywordChangedTestService: from keyword_db.services.keywords_changed_test_service import KeywordChangedTestService
 
         #根据推广组id从虚拟库找出关键词列表
         sid = ShopInfo.get_sid_by_nick(self.nick)
@@ -78,5 +81,10 @@ class ReplaceKeywordsPricevonSet(object):
         #替换值后存虚拟库
         KeywordDBService.update_keyword_list(sid,to_save_db_keyword_list)
         logger2.info("存虚拟库成功！api_name:%s " % self.api_name)
+
+        #将改价的词，更新到 keyword_change_虚拟表中
+        import pdb; pdb.set_trace()  # XXX BREAKPOINT
+        KeywordChangedTestService.upsert_keywords_changed(sid,to_save_db_keyword_list)
+        logger2.info("keyword_change_虚拟表中更新成功！")
 
         return self.fkey

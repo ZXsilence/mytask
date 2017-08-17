@@ -4,3 +4,6 @@ from replace_keywords_pricevon_set import *
 from exceptions import *
 from common import *
 from replace_keywordsvon_add import *
+from replace_keywords_delete import *
+from replace_keywordsbykeywordids_get import *
+from replace_keywords_changed_get import *

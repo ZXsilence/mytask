@@ -50,32 +50,42 @@ class  ApiVirtualService(object):
 
         #key：返回结构里使用到的替换键值
         #ikey：入参结构里使用到的替换键值
-        key = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.get(self.api_name)
+        okey = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.get(self.api_name)
         ikey = ApiVirtualReplaceKeyConfig.API_INPUT_REPLACE_KEY.get(self.api_name)
-        if not key or not ikey:
+        if not okey or not ikey:
             logger2.info("Warn:未找到替换键，原数据返回！")
             return None,None
 
         #入参结构异常捕获
-        ivalue = self.params_dict.get(ikey,None)
-        if not ivalue:
+        if not self.params_dict.get(ikey,None):
             logger2.error("错误：入参没有%s字段，无法进行返回值替换！" % ikey)
+
+        #入参值处理
+        try:
+            iv = self.params_dict[ikey]
+            iv = simplejson.loads(iv)
+        except ValueError,e:
+            if ikey in ("adgroup_id","campaign_id"): #这里后续有类型继续加进去！！
+                iv = int ( iv)
+            else:
+                iv = iv
+
+        if self.params_dict.get("page_no",None) and self.params_dict.get("page_size",None):
+            ivalue = {}
+            ivalue["page_no"] = self.params_dict["page_no"]
+            ivalue["page_size"] = self.params_dict["page_size"]
+            ivalue["ivalue"] = iv
+        else:
+            ivalue = iv 
+
         #返回结构异常捕获
         self.response = response
-        if hasattr(response,key):
-            fkey = getattr(response,key)
+        if hasattr(response,okey):
+            fkey = getattr(response,okey)
         else:
             logger2.error("错误：response对象没有%s这个属性！不能进行返回值替换！")
             return None,None
 
-        #入参值处理
-        try:
-            ivalue = simplejson.loads(ivalue)
-        except ValueError,e:
-            if ikey in ("adgroup_id","campaign_id"): #这里后续有类型继续加进去！！
-                ivalue = int ( ivalue)
-            else:
-                ivalue = ivalue
 
         #根据传参重组返回数据长度，主要是写操作时用到 . 读操作还是需要在具体替换类中单独实现
         if isinstance(fkey,list) and isinstance(ivalue,list):
@@ -99,27 +109,46 @@ class  ApiVirtualService(object):
                 logger2.error("错误：替换返回值失败！api_name:%s" % self.api_name)
                 return None,None
             #替换值重新赋值，主要是非对象类型时需要重新赋值
-            setattr(self.response,key,fkey)
+            setattr(self.response,okey,fkey)
         except Exception,e:
             logger2.exception("错误：替换返回值失败！%s" % e)
             return None,None
 
-        # rawContent 好像没毛用，就把fkey直接弄过去了。。随便搞搞，后期用到再说
+        # rawContent 没毛用, 结构和实际api的rawContent不一样。但都把键值返回
+
+        content = copy.deepcopy(fkey)
         rawContent={}
         response_name = self.response.__module__.split(".")[-1]
         response_name = get_corresponding_key(response_name)[1:]
-        content = fkey
-        if isinstance(fkey,list):
-            content = [ k.toDict() for k in fkey ]
-            for cc in content:
-                for k ,v in cc.iteritems():
-                    if type(v) == type(datetime.datetime.now()):
-                        cc[k] = v.strftime("%Y-%m-%d %H:%M:%S")
         rawContent[response_name] = {}
-        rawContent[response_name][key] = content
+        if isinstance(content,list):
+            rawContent[response_name][okey] = covertObjRecursively(content)
+        else:
+            attrs = [k for k in dir(content) if not k.startswith("_") and k != "toDict" ]
+            for attr in attrs:
+                rawContent[response_name][attr] = covertObjRecursively(getattr(content,attr))
         rawContent = simplejson.dumps(rawContent)
         return self.response,rawContent
 
+#递归寻找，将为list的对象显示出来
+BASE_TYPE = [str,bool,int,float,tuple,dict,datetime,unicode]
+def covertObjRecursively(attr):
+    if isinstance(attr,list): #是list对象
+        if len(attr)==0:
+            return []
+        if isinstance(attr[0].toDict(),dict):
+            res = [k.toDict() for k in attr ]
+            for res0 in res:
+                for k ,v in res0.iteritems():
+                    if type(v) == type(datetime.datetime.now()):
+                        res0[k] = datetime.datetime.strftime(v,"%Y-%m-%d %H:%M:%S")
+            return res
+    elif type(attr) in BASE_TYPE:# 属性是基础类型
+        return attr
+    else: #还是class继续递归
+        ats = [k for k in dir(attr) if not k.startswith("_") ]
+        for at in ats:
+            setattr(attr,at,covertObjRecursively(getattr(attr,at)))
 
 if __name__ == "__main__":
     params_dict = {'timestamp': u'1501809957060', 'keywordid_prices': u'[{"mobileIsDefaultPrice": 0, "maxMobilePrice": 99, "keywordId": 359278253772}]', 'method': u'taobao.simba.keywords.pricevon.set', 'nick': u'\u9ea6\u82d7\u79d1\u6280001'}

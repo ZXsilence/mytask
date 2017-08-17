@@ -107,6 +107,23 @@ if __name__ == "__main__":
     api_output = {'simba_keywordsbyadgroupid_get_response': {'keywords': {'keyword': [{'qscore': '7', 'word': u'\u5f00\u886b\u6bdb\u8863\u5916\u5957 \u5973', 'max_mobile_price': 52, 'match_scope': '4', 'campaign_id': 3442512, 'modified_time': '2017-08-07 15:35:31', 'nick': 'chinchinstyle', 'create_time': '2017-08-07 15:35:25', 'is_default_price': False, 'adgroup_id': 770370215, 'mobile_is_default_price': 0, 'keyword_id': 359905166893, 'audit_status': 'audit_pass', 'max_price': 40, 'is_garbage': False}]}, 'request_id': 'yfaebycvbm8'}}
 
 
-    #ApiStructureTemplate.set_api_structure(api_name,api_input,api_output)
+    api_output = {'simba_keywords_delete_response': {'keywords': {'keyword': [{'word': 'test', 'max_mobile_price': 0, 'campaign_id': 3367748, 'modified_time': '2017-08-10 14:52:53', 'nick': 'chinchinstyle', 'create_time': '2017-08-10 14:52:52', 'is_default_price': False, 'adgroup_id': 771324767, 'mobile_is_default_price': 1, 'keyword_id': 360484760233, 'audit_status': 'audit_pass', 'max_price': 250, 'is_garbage': False}]}, 'request_id': '2rdbtukbgv4k'}}
+    api_name = "taobao.simba.keywords.delete"
+    api_input = {'campaign_id': u'3367748', 'timestamp': u'1502760150675', 'keyword_ids': u'360484760234,360484760233', 'method': u'taobao.simba.keywords.delete', 'nick': u'chinchinstyle'}
+
+
+    api_name = "taobao.simba.keywordsbykeywordids.get"
+    api_input = {'timestamp': u'1502768719893', 'keyword_ids': u'360535591428,351317729168', 'method': u'taobao.simba.keywordsbykeywordids.get', 'nick': u'chinchinstyle'}
+    api_output = {'simba_keywordsbykeywordids_get_response': {'keywords': {'keyword': [{'word': u'\u6bdb\u8863 \u5916\u5957\u5973 \u4e2d\u957f\u6b3e', 'max_mobile_price': 45, 'match_scope': '4', 'campaign_id': 3367748, 'modified_time': '2017-06-23 10:03:23', 'nick': 'chinchinstyle', 'create_time': '2017-06-23 10:03:18', 'is_default_price': False, 'adgroup_id': 771324767, 'mobile_is_default_price': 0, 'keyword_id': 351317729168, 'audit_status': 'audit_pass', 'max_price': 41, 'is_garbage': False}]}, 'request_id': '3ez57cnityv0'}}
+
+    api_name = "taobao.simba.keywordids.deleted.get"
+    api_input = {'timestamp': u'1502779264414', 'start_time': u'2017-08-05 14:41:04', 'page_size': u'1000', 'nick': u'chinchinstyle', 'method': u'taobao.simba.keywordids.deleted.get', 'page_no': u'1'}
+    api_output = {'simba_keywordids_deleted_get_response': {'deleted_keyword_ids': {'number': [361390730650]}, 'request_id': 'z247u3oc5y6y'}}
+
+    api_name = "taobao.simba.keywords.changed.get"
+    api_input =     {'timestamp': u'1502780512885', 'start_time': u'2017-08-05 15:00:27', 'page_size': u'300', 'nick': u'chinchinstyle', 'method': u'taobao.simba.keywords.changed.get', 'page_no': u'1'}
+    api_output = {'simba_keywords_changed_get_response': {'keywords': {'keyword_list': {'keyword': [{'keyword_id': 360535591428, 'adgroup_id': 771324767, 'modified_time': '2017-08-10 16:47:30', 'nick': 'chinchinstyle'}]}, 'total_item': 5}, 'request_id': 's77g52vlhocu'}}
+
+    ApiStructureTemplate.set_api_structure(api_name,api_input,api_output)
     res = ApiStructureTemplate.get_api_structure_by_name(api_name)
     print res

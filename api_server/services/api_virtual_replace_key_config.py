@@ -10,15 +10,30 @@
 
 """
 class ApiVirtualReplaceKeyConfig(object):
+    #
+    # 注释 写api只保留读api配置，可以让用户数据先同步
+    #
     API_INPUT_REPLACE_KEY = {
+        #读api
         "taobao.simba.keywordsbyadgroupid.get":"adgroup_id",
+        "taobao.simba.keywordsbykeywordids.get":"keyword_ids",
+        "taobao.simba.keywords.changed.get":"start_time",
+
+        #写api
         "taobao.simba.keywords.pricevon.set":"keywordid_prices",
         "taobao.simba.keywordsvon.add":"keyword_prices",
+        "taobao.simba.keywords.delete":"keyword_ids",
     }
     API_OUTPUT_REPLACE_KEY = {
+        #读api
         "taobao.simba.keywordsbyadgroupid.get":"keywords",
+        "taobao.simba.keywordsbykeywordids.get":"keywords",
+        "taobao.simba.keywords.changed.get":"keywords",
+
+        #写api
         "taobao.simba.keywords.pricevon.set":"keywords",
         "taobao.simba.keywordsvon.add":"keywords",
+        "taobao.simba.keywords.delete":"keywords",
     }
 
 

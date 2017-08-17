@@ -44,8 +44,9 @@ class ApiService(object):
         method_config = ApiCacheConfig.API_METHOD_CONFIG.get(params_dict['method'])
 
         api_name = params_dict['method']
-        replace_api_names = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.keys()
-        API_VIRTUAL = API_VIRTUAL_TEST and (api_name in replace_api_names)
+        replace_input_api_names = ApiVirtualReplaceKeyConfig.API_INPUT_REPLACE_KEY.keys()
+        replace_output_api_names = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.keys()
+        API_VIRTUAL = API_VIRTUAL_TEST and (api_name in replace_input_api_names) and (api_name in replace_output_api_names)
 
         is_get = True
         cache_key = None
@@ -132,7 +133,7 @@ class ApiService(object):
                             msg = "替换返回值失败！"
                             raise ApiVirtualResponseException(msg)
                     except Exception,e:
-                        logger.error(e.msg)
+                        logger2.error(e)
                         raise e
                 response.responseBody = rawContent
                 responses.append(response)

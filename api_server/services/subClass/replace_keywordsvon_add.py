@@ -22,6 +22,7 @@ from common import get_corresponding_key
 AdgroupDBService = None
 ShopInfo = None
 KeywordDBService = None
+KeywordChangedTestService = None
 
 class ReplaceKeywordsvonAdd(object):
     '''
@@ -43,6 +44,8 @@ class ReplaceKeywordsvonAdd(object):
         if not ShopInfo:from shop_db.db_models.shop_info import ShopInfo
         global KeywordDBService
         if not KeywordDBService:from keyword_db.services.keyword_db_service_new import KeywordDBService
+        global KeywordChangedTestService
+        if not KeywordChangedTestService: from keyword_db.services.keywords_changed_test_service import KeywordChangedTestService
 
         if [] == self.fkey:
             logger2.info("新增0个关键词到虚拟库。nick:%s,campaign_id:%s,adgroup_id:%s" \
@@ -117,4 +120,9 @@ class ReplaceKeywordsvonAdd(object):
         KeywordDBService.add_keyword_list(sid,self.nick,save_db_keyword_list)
         logger2.info("新增%s个关键词到虚拟库。nick:%s,campaign_id:%s,adgroup_id:%s,keywords：%s " \
                      % (len(self.fkey),self.nick,self.campaign_id,self.adgroup_id,",".join([k['word'] for k in save_db_keyword_list])))
+
+        #新增的词，更新到 keyword_change_虚拟表中
+        KeywordChangedTestService.upsert_keywords_changed(sid,save_db_keyword_list)
+        logger2.info("keyword_change_虚拟表中更新成功！")
+
         return self.fkey
