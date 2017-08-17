@@ -26,7 +26,7 @@ OK = ['Already up-to-date.']
 NO_INSTALL = ['TaobaoOpenPythonSDK','AutoTests']
 
 PDIR = os.path.abspath(os.path.dirname(os.curdir))
-
+Alls = ["Webpage","backends","comm_lib","Stuff","Algorithm","TaobaoOpenPythonSDK","JdWeb","JdBackend","JdApi","JDAlgorithm","ZZAlgorithm"]
 class TimeOutException(Exception):
     def __init__(self,msg):
         self.msg = msg
@@ -155,6 +155,7 @@ def mergeInstallOther(wares):
     print "\033[1;32;40m开始合并远端主分支 ...\033[0m"
     os.chdir(PDIR)
     dirs = os.listdir(PDIR)
+    dirs = [k for k in dirs if k in Alls]
     results={}
     pwares = []
     totalError = 0
