@@ -105,6 +105,134 @@ APP_SETTINGS = {
         #},
 }
 
+# SYB In-Application Purchase，key为SYB版本item_code，sub_type：1=周期型，2=计量型
+IAP_SETTINGS = {
+    # 基础 --> 托管计划数量+1，领航版功能试用，车图，详情页，诊断
+    'ts-1796606-3': [
+        {
+            'article_code': 'FW_GOODS-1000498060',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497964',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 进阶 --> 托管计划数量+1，领航版功能试用，车图，详情页，诊断
+    'ts-1796606-v5': [
+        {
+            'article_code': 'FW_GOODS-1000498060',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497964',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 旗舰 --> 领航版功能试用，车图，详情页，诊断
+    'ts-1796606-v5_old': [
+        {
+            'article_code': 'FW_GOODS-1000497964',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 领航 --> 车图，详情页，诊断
+    'ts-1796606-v10': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 领航顾问 --> 车图，详情页，诊断
+    'ts-1796606-v6': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 云车手 --> 车图，详情页，诊断
+    'ts-1796606-v7': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 资深云车手 --> 车图，详情页，诊断
+    'ts-1796606-v9': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ]
+}
 
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
