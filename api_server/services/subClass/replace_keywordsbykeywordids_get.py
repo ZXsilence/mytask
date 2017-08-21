@@ -18,22 +18,15 @@ import copy
 from datetime import datetime
 from exceptions import ApiVirtualResponseException
 from common import get_corresponding_key
+from replace_base import ReplaceBase
 
 KeywordDBService = None
 ShopInfo = None
 
-class ReplaceKeywordsbykeywordidsGet(object):
+class ReplaceKeywordsbykeywordidsGet(ReplaceBase):
     '''
     根据关键词id获取关键词列表
     '''
-    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
-        self.api_name = api_name
-        self.nick = nick
-        self.fkey = fkey
-        self.ivalue = ivalue
-        self.campaign_id = campaign_id
-        self.adgroup_id = adgroup_id
-
     def replace_ret_values(self):
         global KeywordDBService
         if not KeywordDBService:from keyword_db.services.keyword_db_service_new import KeywordDBService

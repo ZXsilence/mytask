@@ -18,25 +18,18 @@ import copy
 from datetime import datetime
 from exceptions import ApiVirtualResponseException
 from common import get_corresponding_key
+from replace_base import ReplaceBase
 
 AdgroupDBService = None
 ShopInfo = None
 KeywordDBService = None
 KeywordChangedTestService = None
 
-class ReplaceKeywordsvonAdd(object):
+class ReplaceKeywordsvonAdd(ReplaceBase):
     '''
     新增关键词
     create_time\modify_time需要单独赋值
     '''
-    def __init__ (self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
-        self.api_name = api_name
-        self.nick = nick
-        self.fkey = fkey
-        self.ivalue = ivalue
-        self.campaign_id = campaign_id
-        self.adgroup_id = adgroup_id
-
     def replace_ret_values(self):
         global AdgroupDBService
         if not AdgroupDBService:from adgroup_db.services.adgroup_db_service import AdgroupDBService

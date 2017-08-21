@@ -18,6 +18,7 @@ import copy
 from datetime import datetime
 from exceptions import ApiVirtualResponseException
 from common import get_corresponding_key
+from replace_base import ReplaceBase
 
 AdgroupDBService = None
 ShopInfo = None
@@ -25,18 +26,10 @@ KeywordDBService = None
 CampaignDBService = None
 KeywordChangedTestService = None
 
-class ReplaceKeywordsDelete(object):
+class ReplaceKeywordsDelete(ReplaceBase):
     '''
     关键词删除
     '''
-    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
-        self.api_name = api_name
-        self.nick = nick
-        self.fkey = fkey 
-        self.ivalue = ivalue #这里fkey是一个keyword_ids的字符串
-        self.campaign_id = campaign_id
-        self.adgroup_id = adgroup_id
-
     def replace_ret_values(self):
         global AdgroupDBService
         if not AdgroupDBService:from adgroup_db.services.adgroup_db_service import AdgroupDBService

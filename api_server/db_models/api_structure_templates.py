@@ -124,6 +124,9 @@ if __name__ == "__main__":
     api_input =     {'timestamp': u'1502780512885', 'start_time': u'2017-08-05 15:00:27', 'page_size': u'300', 'nick': u'chinchinstyle', 'method': u'taobao.simba.keywords.changed.get', 'page_no': u'1'}
     api_output = {'simba_keywords_changed_get_response': {'keywords': {'keyword_list': {'keyword': [{'keyword_id': 360535591428, 'adgroup_id': 771324767, 'modified_time': '2017-08-10 16:47:30', 'nick': 'chinchinstyle'}]}, 'total_item': 5}, 'request_id': 's77g52vlhocu'}}
 
+    api_name = "taobao.simba.keywordids.deleted.get"
+    api_input = {'timestamp': u'1503280081820', 'start_time': u'2017-08-11 09:48:01', 'page_size': u'1000', 'nick': u'chinchinstyle', 'method': u'taobao.simba.keywordids.deleted.get', 'page_no': u'1'}
+    api_output = {'simba_keywordids_deleted_get_response': {'deleted_keyword_ids': {'number': [361390730650]}, 'request_id': '10fasd7dsmrum'}}
     ApiStructureTemplate.set_api_structure(api_name,api_input,api_output)
     res = ApiStructureTemplate.get_api_structure_by_name(api_name)
     print res

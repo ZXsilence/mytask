@@ -7,3 +7,4 @@ from replace_keywordsvon_add import *
 from replace_keywords_delete import *
 from replace_keywordsbykeywordids_get import *
 from replace_keywords_changed_get import *
+from replace_keywordids_deleted_get import *

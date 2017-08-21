@@ -14,22 +14,17 @@ import logging
 logger2 = logging.getLogger("api_virtual")
 from datetime import datetime
 from common import get_corresponding_key
+from replace_base import ReplaceBase
 
 KeywordDBService = None
 ShopInfo = None
 KeywordChangedTestService = None
 
-class ReplaceKeywordsPricevonSet(object):
+class ReplaceKeywordsPricevonSet(ReplaceBase):
     '''
     设置关键词出价，返回值替换
     set 接口，1先改db 2再改api返回值
     '''
-    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
-        self.api_name = api_name
-        self.nick = nick
-        self.fkey = fkey
-        self.ivalue = ivalue
-
     def replace_ret_values(self):
         global KeywordDBService
         if not KeywordDBService:from keyword_db.services.keyword_db_service_new import KeywordDBService
@@ -83,7 +78,6 @@ class ReplaceKeywordsPricevonSet(object):
         logger2.info("存虚拟库成功！api_name:%s " % self.api_name)
 
         #将改价的词，更新到 keyword_change_虚拟表中
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         KeywordChangedTestService.upsert_keywords_changed(sid,to_save_db_keyword_list)
         logger2.info("keyword_change_虚拟表中更新成功！")
 

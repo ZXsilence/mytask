@@ -18,6 +18,7 @@ class ApiVirtualReplaceKeyConfig(object):
         "taobao.simba.keywordsbyadgroupid.get":"adgroup_id",
         "taobao.simba.keywordsbykeywordids.get":"keyword_ids",
         "taobao.simba.keywords.changed.get":"start_time",
+        "taobao.simba.keywordids.deleted.get":"start_time",
 
         #写api
         "taobao.simba.keywords.pricevon.set":"keywordid_prices",
@@ -29,6 +30,7 @@ class ApiVirtualReplaceKeyConfig(object):
         "taobao.simba.keywordsbyadgroupid.get":"keywords",
         "taobao.simba.keywordsbykeywordids.get":"keywords",
         "taobao.simba.keywords.changed.get":"keywords",
+        "taobao.simba.keywordids.deleted.get":"deleted_keyword_ids",
 
         #写api
         "taobao.simba.keywords.pricevon.set":"keywords",

@@ -131,11 +131,13 @@ class  ApiVirtualService(object):
         return self.response,rawContent
 
 #递归寻找，将为list的对象显示出来
-BASE_TYPE = [str,bool,int,float,tuple,dict,datetime,unicode]
+BASE_TYPE = [str,bool,int,long,float,tuple,dict,datetime,unicode]
 def covertObjRecursively(attr):
     if isinstance(attr,list): #是list对象
         if len(attr)==0:
             return []
+        if type(attr[0]) in BASE_TYPE:
+                return attr
         if isinstance(attr[0].toDict(),dict):
             res = [k.toDict() for k in attr ]
             for res0 in res:

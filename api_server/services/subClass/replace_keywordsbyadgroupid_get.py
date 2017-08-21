@@ -12,21 +12,16 @@
 import os,sys,copy
 import logging
 logger2 = logging.getLogger("api_virtual")
+from replace_base import ReplaceBase
 
 KeywordDBService = None
 ShopInfo = None
 
-class ReplaceKeywordsByAdgroupidGet(object):
+class ReplaceKeywordsByAdgroupidGet(ReplaceBase):
     '''
     根据推广组id获取关键词列表接口
     api_name:taobao.simba.keywordsbyadgroupid.get
     '''
-    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
-        self.api_name = api_name
-        self.nick = nick
-        self.fkey = fkey
-        self.ivalue = ivalue
-
     def replace_ret_values(self):
         global KeywordDBService
         if not KeywordDBService:from keyword_db.services.keyword_db_service_new import KeywordDBService
