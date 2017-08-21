@@ -37,6 +37,7 @@ class ApiVirtualReplaceRetBase(object):
                 setting = SUB_CLASS_MAPPINGS.get(self.api_name,None)
                 if not setting:
                     logger2.error("错误：未能找到%s对应的子类方法！" % self.api_name)
+                    raise ApiVirtualResponseException("错误：未能找到%s对应的子类方法！" % self.api_name)
                 sub_class_name = setting["class"]
                 sub_class = globals()[sub_class_name]
                 self.sub_class_obj = apply(sub_class,(self.api_name,self.nick,self.fkey,self.ivalue,self.campaign_id,self.adgroup_id))
@@ -45,6 +46,7 @@ class ApiVirtualReplaceRetBase(object):
                 raise e
             except Exception,e:
                 logger2.exception(e)
+                raise e
         return self.sub_class_obj
 
     #返回值替换统一入口
