@@ -59,6 +59,7 @@ class  ApiVirtualService(object):
         #入参结构异常捕获
         if not self.params_dict.get(ikey,None):
             logger2.error("错误：入参没有%s字段，无法进行返回值替换！" % ikey)
+            return None,None
 
         #入参值处理
         try:
@@ -138,13 +139,17 @@ def covertObjRecursively(attr):
             return []
         if type(attr[0]) in BASE_TYPE:
                 return attr
-        if isinstance(attr[0].toDict(),dict):
-            res = [k.toDict() for k in attr ]
-            for res0 in res:
-                for k ,v in res0.iteritems():
-                    if type(v) == type(datetime.datetime.now()):
-                        res0[k] = datetime.datetime.strftime(v,"%Y-%m-%d %H:%M:%S")
-            return res
+        try:
+            if isinstance(attr[0].toDict(),dict):
+                res = [k.toDict() for k in attr ]
+                for res0 in res:
+                    for k ,v in res0.iteritems():
+                        if type(v) == type(datetime.datetime.now()):
+                            res0[k] = datetime.datetime.strftime(v,"%Y-%m-%d %H:%M:%S")
+                return res
+        except Exception,e:
+            logger2.exception("原值返回！attr:%s , type(attr):%s " % (attr,type(attr)))
+            return attr
     elif type(attr) in BASE_TYPE:# 属性是基础类型
         return attr
     else: #还是class继续递归
