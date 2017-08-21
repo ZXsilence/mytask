@@ -56,7 +56,7 @@ class ReplaceKeywordsChangedGet(ReplaceBase):
         if olen > flen:
             sub_fkey.extend([copy.deepcopy(sub_fkey[0]) for i in range(olen-flen)])
         elif olen < flen:
-            sub_fkey = sub_fkey[:(flen-olen)]
+            sub_fkey = sub_fkey[:olen]
         if [] == sub_fkey:
             setattr(self.fkey,"keyword_list",sub_fkey)
             return self.fkey

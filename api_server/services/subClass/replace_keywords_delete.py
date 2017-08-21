@@ -80,7 +80,7 @@ class ReplaceKeywordsDelete(ReplaceBase):
         if klen > olen:
             self.fkey.extend([ copy.deepcopy(self.fkey[0]) for i in range(klen-olen)])
         elif klen < olen:
-            self.fkey = self.fkey[:(olen-klen)]
+            self.fkey = self.fkey[:klen]
 
         #全部删除的情况
         if [] == self.fkey:

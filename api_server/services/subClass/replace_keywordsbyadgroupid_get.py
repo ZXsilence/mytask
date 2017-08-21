@@ -37,13 +37,14 @@ class ReplaceKeywordsByAdgroupidGet(ReplaceBase):
         #根据推广组id从虚拟库找出关键词列表
         keywords_list = KeywordDBService.get_keywords_by_adgroup_id(sid,adgroup_id)
 
-        inputLen = len(keywords_list)
-        outputLen = len(self.fkey)
+        outputLen = len(keywords_list)
+        inputLen = len(self.fkey)
         if inputLen > outputLen:
-            self.fkey.extend([copy.deepcopy(self.fkey[0]) for i in range(inputLen-outputLen)])
+            self.fkey = self.fkey[:outputLen]
         elif inputLen < outputLen:
-            self.fkey = self.fkey[:(outputLen-inputLen)]
-
+            self.fkey.extend([copy.deepcopy(self.fkey[0]) for i in range(outputLen-inputLen)])
+        if [] == self.fkey:
+            return self.fkey
         #根据返回结构里的键，进行返回值替换
         rkeys = self.fkey[0].toDict().keys()
         n_change_keys = []

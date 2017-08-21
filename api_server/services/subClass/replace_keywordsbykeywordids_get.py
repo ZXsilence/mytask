@@ -61,7 +61,7 @@ class ReplaceKeywordsbykeywordidsGet(ReplaceBase):
         if klen > olen:
             self.fkey.extend([ copy.deepcopy(self.fkey[0]) for i in range(klen-olen)])
         elif klen < olen:
-            self.fkey = self.fkey[:(olen-klen)]
+            self.fkey = self.fkey[:klen]
 
         keys = r_keyword_lists[0].keys()
         for i in range(klen):
