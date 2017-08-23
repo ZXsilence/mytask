@@ -166,6 +166,17 @@ IAP_SETTINGS = {
     ]
 }
 
+# 托管计划数量+1，领航版功能试用，车图，详情页，诊断
+IAP_TOTAL_LIST = [
+    {
+        'article_code': 'FW_GOODS-1000495518',
+        'item_code': 'FW_GOODS-1000495518-1'
+    },
+    {
+        'article_code': 'FW_GOODS-1000485359',
+        'item_code': 'FW_GOODS-1000485359-1'
+    }
+]
 
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
