@@ -26,7 +26,7 @@ OK = ['Already up-to-date.']
 NO_INSTALL = ['TaobaoOpenPythonSDK','AutoTests']
 
 PDIR = os.path.abspath(os.path.dirname(os.curdir))
-
+Alls = ["Webpage","backends","comm_lib","Stuff","Algorithm","TaobaoOpenPythonSDK","JdWeb","JdBackend","JdApi","JDAlgorithm","ZZAlgorithm"]
 class TimeOutException(Exception):
     def __init__(self,msg):
         self.msg = msg
@@ -155,6 +155,7 @@ def mergeInstallOther(wares):
     print "\033[1;32;40m开始合并远端主分支 ...\033[0m"
     os.chdir(PDIR)
     dirs = os.listdir(PDIR)
+    dirs = [k for k in dirs if k in Alls]
     results={}
     pwares = []
     totalError = 0
@@ -196,6 +197,7 @@ def useage():
     print  "\033[1;36;40mpython %s other\033[0m（输入线上仓库名、分支名进行pull、install）" % f
     print  "\033[1;36;40mpython %s other 1\033[0m（输入线上仓库名、分支名进行pull、install，重启apache）" % f
     print  "\033[1;36;40mpython %s apache\033[0m（仅启动apahce）" % f
+    print  "\033[1;36;40mpython %s install\033[0m（仅启动install）" % f
 
 if __name__ == "__main__":
     print "\033[0m"
@@ -285,5 +287,10 @@ if __name__ == "__main__":
             mergeInstallOther([])
         elif sys.argv[1] == "apache":
             restartApache()
+        elif sys.argv[1] == "install":
+            os.chdir(PDIR)
+            dirs = os.listdir(PDIR)
+            dirs = [k for k in dirs if k in Alls]
+            install(dirs)
     else:
         useage()
