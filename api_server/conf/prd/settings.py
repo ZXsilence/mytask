@@ -303,16 +303,6 @@ IAP_TOTAL_LIST = [
     }
 ]
 
-# 计量型内购服务
-PURCHASE_ARTICLE_CODE_TO_TYPE = {
-    # 车图
-    'FW_GOODS-1000497765': 'neigou_img',
-    # 详情页制作
-    'FW_GOODS-1000498191': 'neigou_detail',
-    # 诊断
-    'FW_GOODS-1000498061': 'neigou_diagnose'
-}
-
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
               'normal_test',                    #普通测试

@@ -198,12 +198,6 @@ IAP_TOTAL_LIST = [
     }
 ]
 
-# 计量型内购服务
-PURCHASE_ARTICLE_CODE_TO_TYPE = {
-    'FW_GOODS-1000485359': 'neigou_detail',
-}
-
-
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
               'normal_test',                    #普通测试
