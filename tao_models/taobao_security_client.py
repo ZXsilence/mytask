@@ -13,7 +13,6 @@ if __name__ == '__main__':
     import os,sys
     sys.path.append('../../comm_lib/')
     sys.path.append('../../TaobaoOpenPythonSDK/')
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     from api_server.conf import set_env
     set_env.getEnvReady()
     from api_server.conf.settings import set_api_source
@@ -27,7 +26,7 @@ from datetime import datetime
 class TaoBaoSecurityClient():
 
     SPLIT_CHAR_DICT = {'nick':'~', 'normal':unichr(0x01), 'search':'~', 'phone':'$', 'receiver_name':'~', 'simple':'~'}
-    secret_cache = {}
+    SECRET_CACHE = {}
     IV = '0102030405060708'
 
     @classmethod
@@ -49,8 +48,6 @@ class TaoBaoSecurityClient():
         ##非法密文
         if not secret_dto:
             return data
-        #user_secret_data = {'secret':'cVE1/bLZlGy5llntfRjr+g==','secret_version':1}
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         user_secret_data = cls.get_user_secret(session,nick,soft_code,current_version)
         if not user_secret_data:
             raise Exception('not get user secret')
@@ -107,7 +104,7 @@ class TaoBaoSecurityClient():
     def get_user_secret(cls,session,nick,soft_code,version):
         from tao_models.secret_get import SecretGet
         cache_key = '%s%s' %(session,version) if version else session
-        secret_data = cls.secret_cache.get(cache_key)
+        secret_data = cls.SECRET_CACHE.get(cache_key)
         now = datetime.now()
         _t = long(time.mktime(now.utctimetuple())*1000)
         if secret_data and secret_data['invalid_time'] > _t:
@@ -118,7 +115,7 @@ class TaoBaoSecurityClient():
                 return
             item = {'secret_version':data['secret_version'],'secret':data['secret'],'invalid_time':_t + data['interval'] * 1000,\
                     'max_invalid_time':_t + data['max_interval'] * 1000}
-            cls.secret_cache[cache_key] = item
+            cls.SECRET_CACHE[cache_key] = item
             return item
         else:
             return secret_data
