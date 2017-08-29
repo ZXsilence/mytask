@@ -103,7 +103,47 @@ APP_SETTINGS = {
         #    'article_code':'FW_GOODS-1886294',
         #    'soft_code':'JX'
         #},
+
+        # 省油宝内购服务，app_key、app_secret都与省油宝保持一致
+        'TGJHS': {
+            'name': '托管计划数量+1',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498060',
+            'soft_code': 'TGJHS'
+        },
+        'LHBSY': {
+            'name': '领航版功能试用',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000497964',
+            'soft_code': 'LHBSY'
+        },
+        'CT': {
+            'name': '车图',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000497765',
+            'soft_code': 'CT'
+        },
+        'XQY': {
+            'name': '详情页',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498191',
+            'soft_code': 'XQY'
+        },
+        'ZD': {
+            'name': '诊断',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498061',
+            'soft_code': 'ZD'
+        }
 }
+
+# 省油宝内购服务soft_code，仅用于订单获取脚本insert_orders，在调用ApiService的execute方法时，会统一转换成'SYB'
+PURCHASE_SOFT_CODE_TUPLE = ('TGJHS', 'LHBSY', 'CT', 'XQY', 'ZD')
 
 # SYB In-Application Purchase，key为SYB版本item_code，sub_type：1=周期型，2=计量型
 IAP_SETTINGS = {
@@ -238,25 +278,40 @@ IAP_SETTINGS = {
 IAP_TOTAL_LIST = [
     {
         'article_code': 'FW_GOODS-1000498060',
-        'item_code': 'FW_GOODS-1000498060-1'
+        'item_code': 'FW_GOODS-1000498060-1',
+        'sub_type': 1
     },
     {
         'article_code': 'FW_GOODS-1000497964',
-        'item_code': 'FW_GOODS-1000497964-1'
+        'item_code': 'FW_GOODS-1000497964-1',
+        'sub_type': 1
     },
     {
         'article_code': 'FW_GOODS-1000497765',
-        'item_code': 'FW_GOODS-1000497765-1'
+        'item_code': 'FW_GOODS-1000497765-1',
+        'sub_type': 2
     },
     {
         'article_code': 'FW_GOODS-1000498191',
-        'item_code': 'FW_GOODS-1000498191-1'
+        'item_code': 'FW_GOODS-1000498191-1',
+        'sub_type': 2
     },
     {
         'article_code': 'FW_GOODS-1000498061',
-        'item_code': 'FW_GOODS-1000498061-1'
+        'item_code': 'FW_GOODS-1000498061-1',
+        'sub_type': 2
     }
 ]
+
+# 计量型内购服务
+PURCHASE_ARTICLE_CODE_TO_TYPE = {
+    # 车图
+    'FW_GOODS-1000497765': 'neigou_img',
+    # 详情页制作
+    'FW_GOODS-1000498191': 'neigou_detail',
+    # 诊断
+    'FW_GOODS-1000498061': 'neigou_diagnose'
+}
 
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [

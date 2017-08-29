@@ -102,8 +102,26 @@ APP_SETTINGS = {
         #    'article_code':'FW_GOODS-1886294',
         #    'soft_code':'JX'
         #},
+
+        # 省油宝内购服务，app_key、app_secret都与省油宝保持一致，soft_code仅用于订单获取脚本insert_orders,在调用ApiService的execute方法时，会统一转换成'SYB'
+        'TGJHS': {
+            'name': '托管计划数量+1',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000495518',
+            'soft_code': 'TGJHS'
+        },
+        'XQY': {
+            'name': '详情页',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000485359',
+            'soft_code': 'XQY'
+        }
 }
 
+# 省油宝内购服务soft_code
+PURCHASE_SOFT_CODE_TUPLE = ('TGJHS', 'LHBSY', 'CT', 'XQY', 'ZD')
 
 # SYB In-Application Purchase，key为SYB版本item_code，sub_type：1=周期型，2=计量型
 IAP_SETTINGS = {
@@ -170,13 +188,21 @@ IAP_SETTINGS = {
 IAP_TOTAL_LIST = [
     {
         'article_code': 'FW_GOODS-1000495518',
-        'item_code': 'FW_GOODS-1000495518-1'
+        'item_code': 'FW_GOODS-1000495518-1',
+        'sub_type': 1
     },
     {
         'article_code': 'FW_GOODS-1000485359',
-        'item_code': 'FW_GOODS-1000485359-1'
+        'item_code': 'FW_GOODS-1000485359-1',
+        'sub_type': 2
     }
 ]
+
+# 计量型内购服务
+PURCHASE_ARTICLE_CODE_TO_TYPE = {
+    'FW_GOODS-1000485359': 'neigou_detail',
+}
+
 
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
