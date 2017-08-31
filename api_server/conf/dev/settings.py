@@ -19,10 +19,11 @@ APISDK = os.path.normpath(os.path.join(currDir,'../../../TaobaoOpenPythonSDK'))
 BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
-#SERVER_URL = "http://223.5.20.253:8002/router/rest"
-API_HOST = "121.199.170.144"
+API_HOST = "10.132.171.237"
 API_PORT = 30002 
-SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
+SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
+#SERVER_URL = "https://eco.taobao.com/router/rest"
+#SERVER_URL = "http://gw.api.tbsandbox.com/router/rest"
 
 API_THRIFT = {
         'host':'localhost',
@@ -60,6 +61,13 @@ APP_SETTINGS = {
             'article_code':'ts-1796606',
             'soft_code':'SYB'
         },
+        #'SYB':{
+        #    'name':'省油宝',
+        #    'app_key':'1012685542',
+        #    'app_secret':'sandboxa3455d0b2a043ecab96dfa6f9',
+        #    'article_code':'ts-1796606',
+        #    'soft_code':'SYB'
+        #},
         'BD':{
             'name':'北斗',
             'app_key':'21065688',
