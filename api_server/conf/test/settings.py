@@ -20,9 +20,11 @@ BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
 #SERVER_URL = "http://223.5.20.253:8002/router/rest"
-API_HOST = "121.199.170.144"
+API_HOST = "10.132.171.237"
 API_PORT = 30002 
-SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
+#API_HOST = 'eco.taobao.com'
+#API_PORT = 80
+SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
         'host':'localhost',

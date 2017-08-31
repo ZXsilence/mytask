@@ -45,12 +45,15 @@ class SimbaKeywordsQscoreSplitGet(object):
         rsp = ApiService.execute(req,nick,soft_code)
         if not rsp.result.toDict():
             return []
-        return rsp.result.toDict()['result'].get('word_score_list',{}).get('wordscorelist',[])
+        
+        if type(rsp.result.toDict()['result']) == dict:
+            return rsp.result.toDict()['result'].get('word_score_list',{}).get('wordscorelist',[])
+        return change_obj_to_dict_deeply(rsp.result).get('result',{}).get('word_score_list',[])
 
 if __name__ == '__main__':
-    nick = 'chinchinstyle'
-    adgroup_id = 732193626
-    keyword_id_list = [314935722886,314935722888,314935722888]
+    nick = '北京学海轩图书专营店'
+    adgroup_id = 724526392
+    keyword_id_list = [364375757308,364375757315]
     res = SimbaKeywordsQscoreSplitGet.get_keywords_split_qscore(nick, adgroup_id, keyword_id_list)
     print res
 
