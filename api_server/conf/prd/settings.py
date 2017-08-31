@@ -104,7 +104,7 @@ APP_SETTINGS = {
         #    'soft_code':'JX'
         #},
 
-        # 省油宝内购服务，app_key、app_secret都与省油宝保持一致
+        # 省油宝内购服务，app_key、app_secret都与省油宝保持一致，soft_code仅用于订单获取脚本insert_orders，在调用ApiService的execute方法时，会统一转换成'SYB'
         'TGJHS': {
             'name': '托管计划数量+1',
             'app_key': '12685542',
@@ -142,7 +142,7 @@ APP_SETTINGS = {
         }
 }
 
-# 省油宝内购服务soft_code，仅用于订单获取脚本insert_orders，在调用ApiService的execute方法时，会统一转换成'SYB'
+# 省油宝内购服务soft_code
 PURCHASE_SOFT_CODE_TUPLE = ('TGJHS', 'LHBSY', 'CT', 'XQY', 'ZD')
 
 # SYB In-Application Purchase，key为SYB版本item_code，sub_type：1=周期型，2=计量型
@@ -274,29 +274,33 @@ IAP_SETTINGS = {
     ]
 }
 
-# 托管计划数量+1，领航版功能试用，车图，详情页，诊断
 IAP_TOTAL_LIST = [
     {
+        'name': '托管计划数量+1',
         'article_code': 'FW_GOODS-1000498060',
         'item_code': 'FW_GOODS-1000498060-1',
         'sub_type': 1
     },
     {
+        'name': '领航版功能试用',
         'article_code': 'FW_GOODS-1000497964',
         'item_code': 'FW_GOODS-1000497964-1',
         'sub_type': 1
     },
     {
+        'name': '车图',
         'article_code': 'FW_GOODS-1000497765',
         'item_code': 'FW_GOODS-1000497765-1',
         'sub_type': 2
     },
     {
+        'name': '详情页制作',
         'article_code': 'FW_GOODS-1000498191',
         'item_code': 'FW_GOODS-1000498191-1',
         'sub_type': 2
     },
     {
+        'name': '诊断',
         'article_code': 'FW_GOODS-1000498061',
         'item_code': 'FW_GOODS-1000498061-1',
         'sub_type': 2
