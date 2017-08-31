@@ -28,7 +28,6 @@ API_THRIFT = {
         'host':'mm_test_in',
         'port':9091
     }
-
 api_source = None
 def set_api_source(source):
     global api_source
