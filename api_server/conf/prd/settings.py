@@ -19,9 +19,10 @@ APISDK = os.path.normpath(os.path.join(currDir,'../../../TaobaoOpenPythonSDK'))
 BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
-API_HOST = "gw.api.taobao.com"
-API_PORT = 80 
-SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
+API_HOST_old = "gw.api.taobao.com"
+API_HOST = 'eco.taobao.com'
+API_PORT = 80
+SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
         #'host':'api.maimiaotech.com',
@@ -103,7 +104,47 @@ APP_SETTINGS = {
         #    'article_code':'FW_GOODS-1886294',
         #    'soft_code':'JX'
         #},
+
+        # 省油宝内购服务，app_key、app_secret都与省油宝保持一致，soft_code仅用于订单获取脚本insert_orders，在调用ApiService的execute方法时，会统一转换成'SYB'
+        'TGJHS': {
+            'name': '托管计划数量+1',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498060',
+            'soft_code': 'TGJHS'
+        },
+        'LHBSY': {
+            'name': '领航版功能试用',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000497964',
+            'soft_code': 'LHBSY'
+        },
+        'CT': {
+            'name': '车图',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000497765',
+            'soft_code': 'CT'
+        },
+        'XQY': {
+            'name': '详情页',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498191',
+            'soft_code': 'XQY'
+        },
+        'ZD': {
+            'name': '诊断',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498061',
+            'soft_code': 'ZD'
+        }
 }
+
+# 省油宝内购服务soft_code
+PURCHASE_SOFT_CODE_TUPLE = ('TGJHS', 'LHBSY', 'CT', 'XQY', 'ZD')
 
 # SYB In-Application Purchase，key为SYB版本item_code，sub_type：1=周期型，2=计量型
 IAP_SETTINGS = {
@@ -234,27 +275,36 @@ IAP_SETTINGS = {
     ]
 }
 
-# 托管计划数量+1，领航版功能试用，车图，详情页，诊断
 IAP_TOTAL_LIST = [
     {
+        'name': '托管计划数量+1',
         'article_code': 'FW_GOODS-1000498060',
-        'item_code': 'FW_GOODS-1000498060-1'
+        'item_code': 'FW_GOODS-1000498060-1',
+        'sub_type': 1
     },
     {
+        'name': '领航版功能试用',
         'article_code': 'FW_GOODS-1000497964',
-        'item_code': 'FW_GOODS-1000497964-1'
+        'item_code': 'FW_GOODS-1000497964-1',
+        'sub_type': 1
     },
     {
+        'name': '车图',
         'article_code': 'FW_GOODS-1000497765',
-        'item_code': 'FW_GOODS-1000497765-1'
+        'item_code': 'FW_GOODS-1000497765-1',
+        'sub_type': 2
     },
     {
+        'name': '详情页制作',
         'article_code': 'FW_GOODS-1000498191',
-        'item_code': 'FW_GOODS-1000498191-1'
+        'item_code': 'FW_GOODS-1000498191-1',
+        'sub_type': 2
     },
     {
+        'name': '诊断',
         'article_code': 'FW_GOODS-1000498061',
-        'item_code': 'FW_GOODS-1000498061-1'
+        'item_code': 'FW_GOODS-1000498061-1',
+        'sub_type': 2
     }
 ]
 

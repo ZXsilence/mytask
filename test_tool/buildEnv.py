@@ -220,7 +220,7 @@ if __name__ == "__main__":
             warehouses = raw_input("输入仓库名，以空格分隔(删除请按Ctrl+Backspace),退出按q：")
             if warehouses.lower() == 'q':
                 exit(0)
-            wares = warehouses.split(" ")
+            wares = [ k for k in warehouses.split(" ") if k not in ("", " ") ] 
             not_valid_name = []
             for ware in wares:
                 if ware not in valid_wares:
@@ -243,7 +243,7 @@ if __name__ == "__main__":
         while(not breakBrach):
             ware2br_str = ""
             branches = raw_input("按输入的仓库名顺序输入测试分支(删除请按Ctrl+Backspace)：")
-            brs = branches.split(" ")
+            brs = [ k for k in branches.split(" ") if k not in ("", " ")]
             if len(wares) != len(brs):
                 print "输入的仓库名和分支名个数不一，请重试！"
                 breakBrach = False
