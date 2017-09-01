@@ -44,7 +44,7 @@ class TaoBaoAuthTokenCreate(object):
             info = rsp['error_response']
             raise ErrorResponseException(code=info['code'], msg=info['msg'], sub_code=info['sub_code'], sub_msg=info['sub_msg'])
         token_result = simplejson.loads(rsp['top_auth_token_create_response']['token_result'])
-        token_result['nick'] = urllib.unquote_plus(token_result['taobao_user_nick'])
+        token_result['taobao_user_nick'] = urllib.unquote_plus(token_result['taobao_user_nick'])
         return token_result
 
 if __name__ == '__main__':
