@@ -243,7 +243,7 @@ IAP_SETTINGS = {
             'sub_type': 2
         }
     ],
-    # 云车手 --> 车图，详情页，诊断
+    # 云车手 --> 车图，详情页
     'ts-1796606-v7': [
         {
             'article_code': 'FW_GOODS-1000497765',
@@ -252,13 +252,9 @@ IAP_SETTINGS = {
         {
             'article_code': 'FW_GOODS-1000498191',
             'sub_type': 2
-        },
-        {
-            'article_code': 'FW_GOODS-1000498061',
-            'sub_type': 2
         }
     ],
-    # 资深云车手 --> 车图，详情页，诊断
+    # 资深云车手 --> 车图，详情页
     'ts-1796606-v9': [
         {
             'article_code': 'FW_GOODS-1000497765',
@@ -266,10 +262,6 @@ IAP_SETTINGS = {
         },
         {
             'article_code': 'FW_GOODS-1000498191',
-            'sub_type': 2
-        },
-        {
-            'article_code': 'FW_GOODS-1000498061',
             'sub_type': 2
         }
     ]
