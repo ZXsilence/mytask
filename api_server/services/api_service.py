@@ -10,7 +10,7 @@ import time
 import simplejson
 from datetime import datetime
 from TaobaoSdk.Exceptions import ErrorResponseException
-from api_server.conf.settings import API_THRIFT,APP_SETTINGS
+from api_server.conf.settings import API_THRIFT,APP_SETTINGS,PURCHASE_SOFT_CODE_TUPLE
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
 from api_server.conf.settings import API_SOURCE
@@ -30,6 +30,8 @@ class ApiService(object):
         params_str = simplejson.dumps(params_dict)
         if nick is None:
             nick = ''
+        if soft_code in PURCHASE_SOFT_CODE_TUPLE:
+            soft_code = 'SYB'
         if soft_code is None:
             soft_code = ''
         if api_source is None:

@@ -16,7 +16,8 @@ if __name__ == '__main__':
 
 from TaobaoSdk import VasSubscSearchRequest
 from TaobaoSdk.Exceptions import  ErrorResponseException
-
+from api_server.services.api_service import ApiService
+from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.conf import settings as tao_model_settings
 from tao_models.common.decorator import  tao_api_exception
 
@@ -74,22 +75,33 @@ class VasSubscSearch(object):
             raise ErrorResponseException(code=rsp.code, msg=rsp.msg, sub_code=rsp.sub_msg, sub_msg=rsp.sub_msg)
 
         return rsp.article_subs
+
+    @classmethod
+    def search_vas_subsc_generally(cls, article_code, **kwargs):
+        req = VasSubscSearchRequest()
+        req.article_code = article_code
+        for k, v in kwargs.iteritems():
+            setattr(req, k, v)
+        rsp = ApiService.execute(req, cache=False)
+        return {
+            'article_subs': change_obj_to_dict_deeply(rsp.article_subs),
+            'total_item': change_obj_to_dict_deeply(rsp.total_item)
+        }
         
-        
-        
+
 if __name__ == '__main__':
     article_code = 'ts-1797607'
     start_deadline = datetime.date.today() - datetime.timedelta(days=0)
     end_deadline = datetime.date.today() - datetime.timedelta(days=10)
     nick = 'chinchinstyle'
-    
-    #result = VasSubscSearch.search_vas_subsc_by_nick(nick, article_code,start_deadline)
-    
+
     result = VasSubscSearch.search_vas_subsc_by_nick(nick, article_code, start_deadline, None)
     for article_sub in result:
         print article_sub.toDict()
-        
     print len(result)
-        
-        
-        
+
+    search_dict = {
+        'nick': '麦苗科技001'
+    }
+    article_code = 'FW_GOODS-1000495518'
+    print VasSubscSearch.search_vas_subsc_generally(article_code, **search_dict)
