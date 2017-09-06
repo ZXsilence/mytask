@@ -269,7 +269,7 @@ IAP_SETTINGS = {
 
 IAP_TOTAL_LIST = [
     {
-        'name': '托管计划数量+1',
+        'name': '自动计划数加油包',
         'article_code': 'FW_GOODS-1000498060',
         'item_code': 'FW_GOODS-1000498060-1',
         'sub_type': 1
@@ -281,19 +281,19 @@ IAP_TOTAL_LIST = [
         'sub_type': 1
     },
     {
-        'name': '车图',
+        'name': '资深设计创意车图制作',
         'article_code': 'FW_GOODS-1000497765',
         'item_code': 'FW_GOODS-1000497765-1',
         'sub_type': 2
     },
     {
-        'name': '详情页制作',
+        'name': '资深设计详情页定制服务',
         'article_code': 'FW_GOODS-1000498191',
         'item_code': 'FW_GOODS-1000498191-1',
         'sub_type': 2
     },
     {
-        'name': '诊断',
+        'name': '资深车手1对1详细诊断',
         'article_code': 'FW_GOODS-1000498061',
         'item_code': 'FW_GOODS-1000498061-1',
         'sub_type': 2
