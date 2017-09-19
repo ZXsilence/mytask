@@ -22,6 +22,8 @@ sys.path.append(BACKENDS)
 API_HOST = 'eco.taobao.com'
 API_HOST = 'gw.api.taobao.com'
 API_PORT = 80
+SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
+API_HOST = "gw.api.taobao.com"
 SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
