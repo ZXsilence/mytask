@@ -207,6 +207,8 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                                 raise TaoApiMaxRetryException("retry %i times ,but still failed. reason:%s"%(MAX_RETRY_TIMES,e))
                             sleep(1)
                             continue
+                        elif e.sub_code and e.sub_code == '205_E_PARAMETER_LIST_OUT_OF_BOUND':
+                            raise 
                         elif e.sub_code and e.sub_code.startswith('isv'):
                             #错误码为15，且以isv开头的子错误码，属于业务异常，直接抛出，无需重试
                             raise
