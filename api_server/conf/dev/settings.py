@@ -21,7 +21,7 @@ sys.path.append(APISDK)
 sys.path.append(BACKENDS)
 API_HOST = "10.132.171.237"
 API_PORT = 30002 
-SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
+SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 #SERVER_URL = "https://eco.taobao.com/router/rest"
 #SERVER_URL = "http://gw.api.tbsandbox.com/router/rest"
 
