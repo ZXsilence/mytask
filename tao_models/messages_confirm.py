@@ -20,7 +20,7 @@ if __name__ == '__main__':
     from api_server.conf.settings import set_api_source
     set_api_source('normal_test')
 
-from TaobaoSdk import TmcMessagesConsumeRequest
+from TaobaoSdk import TmcMessagesConfirmRequest
 from TaobaoSdk.Exceptions import ErrorResponseException
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
@@ -35,12 +35,13 @@ class MessagesConfirm(object):
     @tao_api_exception()
     def cofirm_message(cls,message_ids):
         if not message_ids:return
-        req = TmcMessagesConsumeRequest()
+        req = TmcMessagesConfirmRequest()
         req.s_message_ids= ','.join(str(id) for id in message_ids)
         nick = None
         soft_code = 'SYB'
         rsp = ApiService.execute(req,nick,soft_code)
+        return change_obj_to_dict_deeply(rsp.is_success)
 
 if __name__ == '__main__':
     ids = [3161701776715387330]
-    MessagesConfirm.cofirm_message(ids)
+    print MessagesConfirm.cofirm_message(ids)

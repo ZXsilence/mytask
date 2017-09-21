@@ -197,6 +197,7 @@ def useage():
     print  "\033[1;36;40mpython %s other\033[0m（输入线上仓库名、分支名进行pull、install）" % f
     print  "\033[1;36;40mpython %s other 1\033[0m（输入线上仓库名、分支名进行pull、install，重启apache）" % f
     print  "\033[1;36;40mpython %s apache\033[0m（仅启动apahce）" % f
+    print  "\033[1;36;40mpython %s install\033[0m（仅启动install）" % f
 
 if __name__ == "__main__":
     print "\033[0m"
@@ -219,7 +220,7 @@ if __name__ == "__main__":
             warehouses = raw_input("输入仓库名，以空格分隔(删除请按Ctrl+Backspace),退出按q：")
             if warehouses.lower() == 'q':
                 exit(0)
-            wares = warehouses.split(" ")
+            wares = [ k for k in warehouses.split(" ") if k not in ("", " ") ] 
             not_valid_name = []
             for ware in wares:
                 if ware not in valid_wares:
@@ -242,7 +243,7 @@ if __name__ == "__main__":
         while(not breakBrach):
             ware2br_str = ""
             branches = raw_input("按输入的仓库名顺序输入测试分支(删除请按Ctrl+Backspace)：")
-            brs = branches.split(" ")
+            brs = [ k for k in branches.split(" ") if k not in ("", " ")]
             if len(wares) != len(brs):
                 print "输入的仓库名和分支名个数不一，请重试！"
                 breakBrach = False
@@ -286,5 +287,10 @@ if __name__ == "__main__":
             mergeInstallOther([])
         elif sys.argv[1] == "apache":
             restartApache()
+        elif sys.argv[1] == "install":
+            os.chdir(PDIR)
+            dirs = os.listdir(PDIR)
+            dirs = [k for k in dirs if k in Alls]
+            install(dirs)
     else:
         useage()

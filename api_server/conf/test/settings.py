@@ -20,9 +20,11 @@ BACKENDS = os.path.normpath(os.path.join(currDir,'../../../backends/'))
 sys.path.append(APISDK)
 sys.path.append(BACKENDS)
 #SERVER_URL = "http://223.5.20.253:8002/router/rest"
-API_HOST = "121.199.170.144"
-API_PORT = 30002 
-SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
+API_HOST = "10.132.171.237"
+API_PORT = 30001
+#API_HOST = 'eco.taobao.com'
+#API_PORT = 80
+SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
         'host':'localhost',
@@ -112,8 +114,201 @@ APP_SETTINGS = {
         #    'article_code':'FW_GOODS-1886294',
         #    'soft_code':'JX'
         #},
+
+        # 省油宝内购服务，app_key、app_secret都与省油宝保持一致，soft_code仅用于订单获取脚本insert_orders，在调用ApiService的execute方法时，会统一转换成'SYB'
+        'TGJHS': {
+            'name': '托管计划数量+1',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498060',
+            'soft_code': 'TGJHS'
+        },
+        'LHBSY': {
+            'name': '领航版功能试用',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000497964',
+            'soft_code': 'LHBSY'
+        },
+        'CT': {
+            'name': '车图',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000497765',
+            'soft_code': 'CT'
+        },
+        'XQY': {
+            'name': '详情页',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498191',
+            'soft_code': 'XQY'
+        },
+        'ZD': {
+            'name': '诊断',
+            'app_key': '12685542',
+            'app_secret': '6599a8ba3455d0b2a043ecab96dfa6f9',
+            'article_code': 'FW_GOODS-1000498061',
+            'soft_code': 'ZD'
+        }
 }
 
+# 省油宝内购服务soft_code
+PURCHASE_SOFT_CODE_TUPLE = ('TGJHS', 'LHBSY', 'CT', 'XQY', 'ZD')
+
+# SYB In-Application Purchase，key为SYB版本item_code，sub_type：1=周期型，2=计量型
+IAP_SETTINGS = {
+    # 基础 --> 托管计划数量+1，领航版功能试用，车图，详情页，诊断
+    'ts-1796606-3': [
+        {
+            'article_code': 'FW_GOODS-1000498060',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497964',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 进阶 --> 托管计划数量+1，领航版功能试用，车图，详情页，诊断
+    'ts-1796606-v5': [
+        {
+            'article_code': 'FW_GOODS-1000498060',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497964',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 旗舰 --> 领航版功能试用，车图，详情页，诊断
+    'ts-1796606-v5_old': [
+        {
+            'article_code': 'FW_GOODS-1000497964',
+            'sub_type': 1
+        },
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 领航 --> 车图，详情页，诊断
+    'ts-1796606-v10': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 领航顾问 --> 车图，详情页，诊断
+    'ts-1796606-v6': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498061',
+            'sub_type': 2
+        }
+    ],
+    # 云车手 --> 车图，详情页
+    'ts-1796606-v7': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        }
+    ],
+    # 资深云车手 --> 车图，详情页
+    'ts-1796606-v9': [
+        {
+            'article_code': 'FW_GOODS-1000497765',
+            'sub_type': 2
+        },
+        {
+            'article_code': 'FW_GOODS-1000498191',
+            'sub_type': 2
+        }
+    ]
+}
+
+IAP_TOTAL_LIST = [
+    {
+        'name': '自动计划数加油包',
+        'article_code': 'FW_GOODS-1000498060',
+        'item_code': 'FW_GOODS-1000498060-1',
+        'sub_type': 1
+    },
+    {
+        'name': '领航版功能试用',
+        'article_code': 'FW_GOODS-1000497964',
+        'item_code': 'FW_GOODS-1000497964-1',
+        'sub_type': 1
+    },
+    {
+        'name': '资深设计创意车图制作',
+        'article_code': 'FW_GOODS-1000497765',
+        'item_code': 'FW_GOODS-1000497765-1',
+        'sub_type': 2
+    },
+    {
+        'name': '资深设计详情页定制服务',
+        'article_code': 'FW_GOODS-1000498191',
+        'item_code': 'FW_GOODS-1000498191-1',
+        'sub_type': 2
+    },
+    {
+        'name': '资深车手1对1详细诊断',
+        'article_code': 'FW_GOODS-1000498061',
+        'item_code': 'FW_GOODS-1000498061-1',
+        'sub_type': 2
+    }
+]
 
 #API调用源注册，只有注册过的source才允许调用API
 API_SOURCE = [
