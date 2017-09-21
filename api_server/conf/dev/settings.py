@@ -26,8 +26,8 @@ SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 #SERVER_URL = "http://gw.api.tbsandbox.com/router/rest"
 
 API_THRIFT = {
-        'host':'mm_app_in',
-        'port':9090
+        'host':'localhost',
+        'port':9999
     }
 
 api_source = None

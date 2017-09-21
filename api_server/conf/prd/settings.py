@@ -28,7 +28,7 @@ SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
         #'host':'api.maimiaotech.com',
-        'host':'10.242.173.131',
+        'host':'10.153.207.93',
         'port':30005
     }
 
