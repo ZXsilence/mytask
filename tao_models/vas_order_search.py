@@ -59,6 +59,18 @@ class VasOrderSearch(object):
         return change_obj_to_dict_deeply(article_biz_orders_all)
 
     @classmethod
+    def search_vas_order_generally(cls, article_code, **kwargs):
+        req = VasOrderSearchRequest()
+        req.article_code = article_code
+        for k, v in kwargs.iteritems():
+            setattr(req, k, v)
+        rsp = ApiService.execute(req)
+        return {
+            'article_biz_orders': change_obj_to_dict_deeply(rsp.article_biz_orders),
+            'total_item': change_obj_to_dict_deeply(rsp.total_item)
+        }
+
+    @classmethod
     def search_vas_order_yesterday(cls, soft_code):
         yes = datetime.datetime.now() - datetime.timedelta(days=1)
         today = datetime.datetime.now()
@@ -121,3 +133,12 @@ if __name__ == '__main__':
     result = VasOrderSearch.search_vas_order_by_nick_new(start, today, soft_code,nick)
     for element in result:
         print element
+    search_dict = {
+        # 'item_code': 'FW_GOODS-1000495518-1',
+        'nick': '麦苗科技001',
+        # 'page_size': 2
+    }
+    # article_code = 'FW_GOODS-1000495518'
+    article_code = 'FW_GOODS-1000485359'
+    print VasOrderSearch.search_vas_order_generally(article_code, **search_dict)
+

@@ -68,3 +68,17 @@ class ApiDataService(object):
         params = {'rpt_type':'onSaleItem','nick':nick,'max_page':max_page}
         data = ClientService.execute(params,nick)
         return data
+
+    @classmethod
+    def get_encrypt(cls,nick,content,encrypt_type,access_token,appkey):
+        '''java api数据加密'''
+        params = {'content':content,'type':encrypt_type,'rpt_type':'encrypt','access_token':access_token,'appkey':appkey}
+        data = ClientService.execute(params,nick)
+        return data
+
+    @classmethod
+    def get_decrypt(cls,nick,content,decrypt_type,access_token,appkey):
+        '''java api数据解密'''
+        params = {'content':content,'type':decrypt_type,'rpt_type':'decrypt','access_token':access_token,'appkey':appkey}
+        data = ClientService.execute(params,nick)
+        return data

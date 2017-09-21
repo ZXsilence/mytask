@@ -28,13 +28,13 @@ class VasSubscribeGet(object):
 
     @classmethod
     @tao_api_exception(5)
-    def get_vas_subscribe(cls, nick, soft_code):
+    def get_vas_subscribe(cls, nick, soft_code, article_code=None):
         """
         given a campaign_id, get the adgroup list in this campaign
         """
         req = VasSubscribeGetRequest()
         req.nick = nick
-        req.article_code = APP_SETTINGS[soft_code]['article_code']
+        req.article_code = article_code if article_code else APP_SETTINGS[soft_code]['article_code']
         soft_code = None
         rsp = ApiService.execute(req,nick,soft_code)
         return change_obj_to_dict_deeply(rsp.article_user_subscribes)
@@ -57,8 +57,7 @@ class VasSubscribeGet(object):
 
 
 if __name__ == '__main__':
-    nick = 'm优品'
+    nick = '麦苗科技001'
     soft_code = 'SYB'
-    article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, soft_code)
-    for article_user_subscribe in article_user_subscribes:
-        print article_user_subscribe
+    article_user_subscribes = VasSubscribeGet.get_vas_subscribe(nick, soft_code, 'FW_GOODS-1000495518')
+    print article_user_subscribes

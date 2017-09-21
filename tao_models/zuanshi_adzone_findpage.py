@@ -70,7 +70,7 @@ class ZuanshiAdzoneFindPage(object):
             if tmp_list:
                 data_list.extend(tmp_list)
             if not tmp_list or len(tmp_list) < cls.page_size:
-                break;
+                break
             page_num +=1
         return data_list 
 

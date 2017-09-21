@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 class TradesSoldGet(object):
 
     PAGE_SIZE = 100
-    DEFAULT_FIELDS = 'seller_nick, buyer_nick, title, type, created, tid, seller_rate, seller_can_rate, buyer_rate, can_rate, status, payment, discount_fee, adjust_fee, post_fee, total_fee, pay_time, end_time, modified, consign_time, buyer_obtain_point_fee, point_fee, real_point_fee, received_payment, pic_path, num_iid, num, price, cod_fee, cod_status, shipping_type, receiver_state, receiver_city, receiver_district, receiver_zip, seller_flag, alipay_no, is_lgtype, is_force_wlb, is_brand_sale, buyer_area, has_buyer_message, credit_card_fee, lg_aging_type, lg_aging, step_trade_status, step_paid_fee, mark_desc, has_yfx, yfx_fee,yfx_id, yfx_type, trade_source, send_time, seller_phone'
+    DEFAULT_FIELDS = 'seller_nick, title, type, created, tid, seller_rate, seller_can_rate, buyer_rate, can_rate, status, payment, discount_fee, adjust_fee, post_fee, total_fee, pay_time, end_time, modified, consign_time,  point_fee, real_point_fee, received_payment, pic_path, num_iid, num, price, cod_fee, cod_status, shipping_type, seller_flag, is_lgtype, is_force_wlb, is_brand_sale, buyer_area, has_buyer_message, credit_card_fee, lg_aging_type, lg_aging, step_trade_status, step_paid_fee, mark_desc, has_yfx, yfx_fee,yfx_id, yfx_type, trade_source, send_time, seller_phone'
 
     @classmethod
     @tao_api_exception(3)
@@ -63,9 +63,9 @@ class TradesSoldGet(object):
         return change_obj_to_dict_deeply(total_trade_list)
 
 def test_get_trade_list():
-    nick = '沃尔盾家居专营店'
-    start_created_str = "2014-01-01"
-    end_created_str = "2014-01-15"
+    nick = '麦苗科技001'
+    start_created_str = "2017-08-23"
+    end_created_str = "2017-08-28"
     total_trade_list = TradesSoldGet.get_trades_sold_list(nick, start_created_str, end_created_str)
     for trade in total_trade_list:
         print trade
