@@ -19,6 +19,7 @@ from TaobaoSdk.Request.SimbaSerchcrowdBatchDeleteRequest import SimbaSerchcrowdB
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
+from TaobaoSdk.Exceptions import ErrorResponseException
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +32,17 @@ class SimbaSerchcrowdBatchDelete(object):
         req.nick = nick
         req.sub_nick = sub_nick
         req.adgroup_crowd_ids = ','.join([str(d)  for d in adgroup_crowd_ids])
-        rsp = ApiService.execute(req,nick,soft_code)
+        try:
+            rsp = ApiService.execute(req,nick,soft_code)
+        except ErrorResponseException,e:
+            if e.sub_code == '205_E_PARAMETER_LIST_OUT_OF_BOUND':
+                return []
         return change_obj_to_dict_deeply(rsp.delete_list)
 
 
 if __name__ == '__main__':
     nick = "麦苗科技001"
     sub_nick = None
-    adgroup_crowd_ids = 284702226148
+    adgroup_crowd_ids = [284702226148]
     soft_code = 'SYB'
     print SimbaSerchcrowdBatchDelete.serchcrowdbatch_delete(nick, sub_nick, adgroup_crowd_ids, soft_code)
