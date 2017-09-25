@@ -141,8 +141,10 @@ def upload_customer_img_with_base64(root_path, nick, file_obj, img_target=None, 
 
 def _img_kongjian_add_category(nick, category_name):
     category_list = PictureCategoryGet.get_picture_category_name(nick, category_name)
-    if category_list and category_list[0]['picture_category_name'] == category_name:
-        category_id = category_list[0]['picture_category_id']
+    for category in category_list:
+        if category['picture_category_name'] == category_name:
+            category_id = category['picture_category_id']
+            break
     else:
         res = PictureCategoryAdd.add_picture_category(nick, category_name)
         category_id = res['picture_category_id']
