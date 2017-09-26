@@ -127,6 +127,23 @@ if __name__ == "__main__":
     api_name = "taobao.simba.keywordids.deleted.get"
     api_input = {'timestamp': u'1503280081820', 'start_time': u'2017-08-11 09:48:01', 'page_size': u'1000', 'nick': u'chinchinstyle', 'method': u'taobao.simba.keywordids.deleted.get', 'page_no': u'1'}
     api_output = {'simba_keywordids_deleted_get_response': {'deleted_keyword_ids': {'number': [361390730650]}, 'request_id': '10fasd7dsmrum'}}
+
+    api_name = 'taobao.simba.rtrpt.cust.get'
+    api_input = {'the_date': u'2017-09-25', 'timestamp': u'1506324502409', 'method': u'taobao.simba.rtrpt.cust.get', 'nick': u'chinchinstyle'}
+    api_output = {'simba_rtrpt_cust_get_response': {'results': {'rt_rpt_result_entity_d_t_o': [{'impression': '9364', 'cpc': '87.57', 'cost': '3065', 'cpm': '327.32', 'ctr': '0.37', 'roi': '1.3', 'directtransactionshipping': '1', 'indirecttransactionshipping': '0', 'carttotal': '0', 'indirectcarttotal': '0', 'transactionshippingtotal': '1', 'indirecttransaction': '0.0', 'favshoptotal': '2', 'directtransaction': '3990.0', 'favtotal': '2', 'favitemtotal': '0', 'click': '35', 'directcarttotal': '0', 'transactiontotal': '3990.0', 'coverage':'0'}]}, 'request_id': '10fjzz3q50qq3'}}
+
+    api_name = "taobao.simba.rtrpt.campaign.get"
+    api_input = {'the_date': u'2017-09-26', 'timestamp': u'1506391983794', 'method': u'taobao.simba.rtrpt.campaign.get', 'nick': u'\u4e94\u8c37\u7cae\u4e0d\u6742'}
+    api_output ={'simba_rtrpt_campaign_get_response': {'resultss': {'rt_rpt_result_entity_d_t_o': [{'impression': '1703', 'roi': '11.38', 'directtransactionshipping': '1', 'cost': '908', 'directtransaction': '10330', 'favshoptotal': '0', 'click': '13', 'transactiontotal': '10330', 'indirecttransactionshipping': '0', 'source': '1', 'indirecttransaction': '0', 'thedate': '2017-09-26', 'transactionshippingtotal': '1', 'coverage': '7.69', 'directcarttotal': '0', 'favtotal': '0', 'cpm': '533.18', 'ctr': '0.76', 'campaignid': '10745526', 'cpc': '69.85', 'search_type': '0', 'indirectcarttotal': '0', 'carttotal': '0', 'favitemtotal': '0'}]}, 'request_id': 'sjq7aeka0oy4'}}
+
+    api_name = "taobao.simba.rtrpt.adgroup.get"
+    api_input = {'the_date': u'2017-09-26', 'timestamp': u'1506403509561', 'campaign_id': u'16448401', 'page_size': u'500', 'nick': u'\u5bb6\u5c45\u6e90\u5bb6\u5177\u65d7\u8230\u5e97', 'page_number': u'1', 'method': u'taobao.simba.rtrpt.adgroup.get'}
+    api_output = {'simba_rtrpt_adgroup_get_response': {'results': {'rt_rpt_result_entity_d_t_o': [{'impression': '85', 'adgroupid': '791982654', 'roi': '0.00', 'directtransactionshipping': '0', 'cost': '848', 'directtransaction': '0', 'favshoptotal': '0', 'click': '3', 'transactiontotal': '0', 'indirecttransactionshipping': '0', 'source': '4', 'indirecttransaction': '0', 'thedate': '2017-09-26', 'transactionshippingtotal': '0', 'coverage': '0.00', 'directcarttotal': '0', 'favtotal': '0', 'cpm': '9976.47', 'ctr': '3.53', 'campaignid': '16448401', 'cpc': '282.67', 'search_type': '0', 'indirectcarttotal': '5', 'carttotal': '5', 'favitemtotal': '0'}]}, 'request_id': 'zt91g144hpo7'}}
+    
+    api_name = "taobao.simba.rtrpt.bidword.get"
+    api_input = {'the_date': u'2017-09-26', 'timestamp': u'1506411595299', 'campaign_id': u'16448401', 'nick': u'\u5bb6\u5c45\u6e90\u5bb6\u5177\u65d7\u8230\u5e97', 'method': u'taobao.simba.rtrpt.bidword.get', 'adgroup_id': u'722979883'}
+    api_output = {'simba_rtrpt_bidword_get_response': {'results': {'rt_rpt_result_entity_d_t_o': [{'impression': '71', 'adgroupid': '722979883', 'roi': '0.0', 'directtransactionshipping': '0', 'cost': '1248', 'directtransaction': '0.0', 'favshoptotal': '0', 'click': '3', 'transactiontotal': '0.0', 'indirecttransactionshipping': '0', 'source': '4', 'indirecttransaction': '0.0', 'bidwordid': '355996751575', 'thedate': '2017-09-26', 'transactionshippingtotal': '0', 'directcarttotal': '0', 'favtotal': '2', 'cpm': '17577.46', 'ctr': '4.23', 'campaignid': '16448401', 'cpc': '416.0', 'indirectcarttotal': '0', 'carttotal': '0', 'favitemtotal': '2'}]}, 'request_id': '10cgsjwevicwq'}}
+
     ApiStructureTemplate.set_api_structure(api_name,api_input,api_output)
     res = ApiStructureTemplate.get_api_structure_by_name(api_name)
     print res

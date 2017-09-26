@@ -8,3 +8,6 @@ from replace_keywords_delete import *
 from replace_keywordsbykeywordids_get import *
 from replace_keywords_changed_get import *
 from replace_keywordids_deleted_get import *
+from replace_simba_rtrpt_cust_get import *
+from replace_simba_rtrpt_campaign_get import *
+from replace_simba_rtrpt_adgroup_get import *

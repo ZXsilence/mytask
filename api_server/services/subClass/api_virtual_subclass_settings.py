@@ -17,6 +17,9 @@ SUB_CLASS_MAPPINGS = {
     "taobao.simba.keywordsbykeywordids.get":{"class":"ReplaceKeywordsbykeywordidsGet"},
     "taobao.simba.keywords.changed.get":{"class":"ReplaceKeywordsChangedGet"},
     "taobao.simba.keywordids.deleted.get":{"class":"ReplaceKeywordidsDeletedGet"},
+    "taobao.simba.rtrpt.cust.get":{"class":"ReplaceSimbaRtrptCustGet"},
+    "taobao.simba.rtrpt.campaign.get":{"class":"ReplaceSimbaRtrptCampaignGet"},
+    "taobao.simba.rtrpt.adgroup.get":{"class":"ReplaceSimbaRtrptAdgroupGet"},
 }
 
 
