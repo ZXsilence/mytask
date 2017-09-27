@@ -48,7 +48,8 @@ class ApiService(object):
         api_name = params_dict['method']
         replace_input_api_names = ApiVirtualReplaceKeyConfig.API_INPUT_REPLACE_KEY.keys()
         replace_output_api_names = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.keys()
-        API_VIRTUAL = API_VIRTUAL_TEST and (api_name in replace_input_api_names) and (api_name in replace_output_api_names)
+        #此处限制：只有测试帐号的报表接口才走样本库虚拟
+        API_VIRTUAL = API_VIRTUAL_TEST and (api_name in replace_input_api_names) and (api_name in replace_output_api_names) and nick in ("麦苗科技001","chinchinstyle")
 
         is_get = True
         cache_key = None
