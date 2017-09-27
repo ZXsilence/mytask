@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class SimbaKeywordidsDeletedGet(object):
 
-    PAGE_SIZE = 1000
+    PAGE_SIZE = 200
 
     @classmethod
     @tao_api_exception()
@@ -59,7 +59,8 @@ def test():
     nick = 'chinchinstyle'
     from datetime import datetime,timedelta
     start_time = datetime.now() - timedelta(days=10)
-    print SimbaKeywordidsDeletedGet.get_keywordids_deleted(nick,start_time)
+    #print SimbaKeywordidsDeletedGet.get_keywordids_deleted(nick,start_time)
+    res = SimbaKeywordidsDeletedGet.get_keywordids_deleted("世家家居旗舰店", datetime(2017, 9, 27, 10, 14, 44))
 
 if __name__ == '__main__':
     test()
