@@ -20,6 +20,7 @@ SUB_CLASS_MAPPINGS = {
     "taobao.simba.rtrpt.cust.get":{"class":"ReplaceSimbaRtrptCustGet"},
     "taobao.simba.rtrpt.campaign.get":{"class":"ReplaceSimbaRtrptCampaignGet"},
     "taobao.simba.rtrpt.adgroup.get":{"class":"ReplaceSimbaRtrptAdgroupGet"},
+    "taobao.simba.rtrpt.bidword.get":{"class":"ReplaceSimbaRtrptBidwordGet"},
 }
 
 
