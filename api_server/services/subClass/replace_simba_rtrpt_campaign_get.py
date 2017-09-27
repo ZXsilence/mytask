@@ -29,6 +29,7 @@ class ReplaceSimbaRtrptCampaignGet(ReplaceBase):
     ps:
         调试前涉及到假数据，所以存在db_campaign_ids和api_campaign_ids的映射。实际通过nick、campaign_id取样本库数据时，映射过程可以省略
     '''
+    _from_sample_db = False
     def replace_ret_values(self):
         #输入参数判断
         rt_date = self.ivalue
@@ -43,7 +44,11 @@ class ReplaceSimbaRtrptCampaignGet(ReplaceBase):
         campaign_list = SimbaCampaignsGet.get_campaign_list(self.nick)
         api_campaign_ids = [k['campaign_id'] for k in campaign_list]
         db_campaign_ids = list(set([k['campaignid'] for k in db_campaign_rpt_list]))
-
+        if  self._from_sample_db:
+            only_api = api_campaign_ids - db_campaign_ids
+            only_db = db_campaign_ids - api_campaign_ids
+            api_campaign_ids = api_campaign_ids - only_api - only_db
+            db_campaign_ids = db_campaign_ids - only_api - only_db
         #当api_campaign_ids > db_campaign_ids 时，按db_campaign_ids封装。默认未封装的计划报表是{}
         api_ids = len(api_campaign_ids)
         db_ids = len(db_campaign_ids)
