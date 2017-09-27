@@ -45,7 +45,8 @@ class SimbaKeywordsQscoreSplitGet(object):
         rsp = ApiService.execute(req,nick,soft_code)
         if not rsp.result.toDict():
             return []
-        
+        if 'result' not in rsp.result.toDict():
+            return []
         if type(rsp.result.toDict()['result']) == dict:
             return rsp.result.toDict()['result'].get('word_score_list',{}).get('wordscorelist',[])
         return change_obj_to_dict_deeply(rsp.result).get('result',{}).get('word_score_list',[])
