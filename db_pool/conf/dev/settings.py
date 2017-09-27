@@ -23,7 +23,7 @@ RDS1 = {
                  'sample_analysis','workflow','keywords_deleted_new',\
                  'user_item','yzb','advert','ysf','rpt_all_new',\
                  'yzb_busi','yzb_operation_log','yzb_creatives',\
-                 'yzb_rpt_all','yzb_monitor','yzb_traffic']
+                 'yzb_rpt_all','yzb_monitor','yzb_traffic','api_virtual']
         }
 
 #rds2实例连接池配置
