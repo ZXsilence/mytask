@@ -13,13 +13,17 @@ from TaobaoSdk.Exceptions import ErrorResponseException
 from api_server.conf.settings import API_THRIFT,APP_SETTINGS,PURCHASE_SOFT_CODE_TUPLE
 from api_server.common.exceptions import ApiSourceError
 from api_server.thrift.ApiCenterClient import ApiCenterClient
-from api_server.conf.settings import API_SOURCE
+from api_server.conf.settings import API_SOURCE,API_VIRTUAL_TEST
 from api_server.conf.settings import get_api_source 
 from api_server.common.decorator import sdk_exception
 from api_server.services.api_cache_service import ApiCacheService
 from api_server.services.api_cache_config import ApiCacheConfig
+from api_server.services.api_virtual_service import ApiVirtualService
+from api_server.services.api_virtual_replace_key_config import ApiVirtualReplaceKeyConfig
+from api_server.services.subClass.exceptions import ApiVirtualResponseException
 
 logger = logging.getLogger(__name__)
+logger2 = logging.getLogger("api_virtual")
 
 class ApiService(object):
 
@@ -40,6 +44,13 @@ class ApiService(object):
         if not params_dict.get('nick') and nick:
             params_dict['nick'] = nick
         method_config = ApiCacheConfig.API_METHOD_CONFIG.get(params_dict['method'])
+
+        api_name = params_dict['method']
+        replace_input_api_names = ApiVirtualReplaceKeyConfig.API_INPUT_REPLACE_KEY.keys()
+        replace_output_api_names = ApiVirtualReplaceKeyConfig.API_OUTPUT_REPLACE_KEY.keys()
+        #此处限制：只有测试帐号的报表接口才走样本库虚拟
+        API_VIRTUAL = API_VIRTUAL_TEST and (api_name in replace_input_api_names) and (api_name in replace_output_api_names) and nick in ("麦苗科技001","chinchinstyle")
+
         is_get = True
         cache_key = None
         #北斗临时单独处理
@@ -54,8 +65,18 @@ class ApiService(object):
                 rsp_obj = ApiService.getResponseObj(cache_data)
                 if 'sub_code' not in rsp_obj.responseBody and  'sub_msg' not in rsp_obj.responseBody:
                     return rsp_obj
-        rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
-        rsp_obj = ApiService.getResponseObj(rsp_dict)
+
+        ApiVirtualService_obj = None
+        if API_VIRTUAL:
+            ApiVirtualService_obj = ApiVirtualService(params_dict,soft_code,api_source)
+            rsp_dict = ApiVirtualService_obj.call_virtual_db()
+            if not rsp_dict:
+                msg = "错误：测试模式，call_virtual_db返回为None！"
+                logger2.error(msg)
+                raise ErrorResponseException(code=100, msg=msg, sub_msg=msg)
+        else:
+            rsp_dict = ApiService.call_sdk(params_str,nick,soft_code,api_source)
+        rsp_obj = ApiService.getResponseObj(rsp_dict,ApiVirtualService_obj,API_VIRTUAL)
         if not rsp_obj.isSuccess() or ('sub_code' in rsp_obj.responseBody and 'sub_msg' in rsp_obj.responseBody):
             raise ErrorResponseException(code=rsp_obj.code, msg=rsp_obj.msg, sub_code=rsp_obj.sub_code, sub_msg=rsp_obj.sub_msg,params=params_dict,rsp=rsp_obj)
         #update清理cache
@@ -91,10 +112,15 @@ class ApiService(object):
         return parameters
 
     @staticmethod
-    def getResponseObj(rsp_dict):
+    def getResponseObj(rsp_dict,ApiVirtualService_obj=None,API_VIRTUAL=None):
         '''
         将rsp_dict转为rsp_obj
         '''
+        if API_VIRTUAL and not ApiVirtualService_obj:
+            msg = "错误：测试模式，ApiVirtualService_obj对象为空，不能走虚拟库！"
+            logger2.error(msg)
+            raise ErrorResponseException(code=100, msg=msg, sub_msg=msg)
+
         responses = list()
         rawContent = simplejson.dumps(rsp_dict)
         try:
@@ -103,9 +129,20 @@ class ApiService(object):
                 ResponseClass = getattr(sys.modules["TaobaoSdk.Response.%s" % key], key)
                 response = ResponseClass(value)
                 response.responseStatus = 200
+                if API_VIRTUAL:
+                    try:
+                        response,rawContent = ApiVirtualService_obj.replace_virtual_response(response)
+                        if not response or not rawContent:
+                            msg = "替换返回值失败！"
+                            raise ApiVirtualResponseException(msg)
+                    except Exception,e:
+                        logger2.error(e)
+                        raise e
                 response.responseBody = rawContent
                 responses.append(response)
             return (tuple(responses))[0]
+        except ApiVirtualResponseException,e:
+            raise e
         except ValueError,e:
             if "does not match format '%Y-%m-%d %H:%M:%S'" in str(e):
                 #时间转换
