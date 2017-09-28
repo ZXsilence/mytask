@@ -208,6 +208,7 @@ if __name__ == '__main__':
     the_date = datetime.datetime.now()
     #rpt_list = SimbaRtRptBidwordGet.get_bidword_rt_rpt_list(nick, campaign_id, adgroup_id, the_date)
     rpt_list = SimbaRtRptBidwordGet.get_bidword_platform_rt_rpt_list(nick, campaign_id, adgroup_id, the_date)
+    #rpt_list = SimbaRtRptBidwordGet.get_bidword_rt_detail_rpt_list(nick, campaign_id, adgroup_id, the_date)
     for rpt in rpt_list:
         print rpt
     #for rpt in rpt_list:

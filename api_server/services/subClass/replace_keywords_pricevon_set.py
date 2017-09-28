@@ -1,0 +1,84 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@author: tanglingling
+@contact: tanglingling@maimiaotech.com
+@date: 2017-08-08 15:18
+@version: 0.0.0
+@license: Copyright Maimiaotech.com
+@copyright: Copyright Maimiaotech.com
+
+"""
+import os,sys,simplejson,copy
+import logging
+logger2 = logging.getLogger("api_virtual")
+from datetime import datetime
+from common import get_corresponding_key
+from replace_base import ReplaceBase
+
+KeywordDBService = None
+ShopInfo = None
+KeywordChangedTestService = None
+
+class ReplaceKeywordsPricevonSet(ReplaceBase):
+    '''
+    设置关键词出价，返回值替换
+    set 接口，1先改db 2再改api返回值
+    '''
+    def replace_ret_values(self):
+        global KeywordDBService
+        if not KeywordDBService:from keyword_db.services.keyword_db_service_new import KeywordDBService
+        global ShopInfo
+        if not ShopInfo:from shop_db.db_models.shop_info import ShopInfo
+        global KeywordChangedTestService
+        if not KeywordChangedTestService: from keyword_db.services.keywords_changed_test_service import KeywordChangedTestService
+
+        #根据推广组id从虚拟库找出关键词列表
+        sid = ShopInfo.get_sid_by_nick(self.nick)
+        keywords_list = KeywordDBService.get_keywords(sid)
+
+        #入参和实际关键词求交集，确定最终可以替换的关键词
+        i_keyword_ids = [k['keywordId'] for k in self.ivalue]
+        o_keyword_ids = [k['keyword_id'] for k in keywords_list]
+        keyword_ids = list(set(i_keyword_ids).intersection(set(o_keyword_ids)))
+
+        i_keyword_dict = {}
+        for iv in self.ivalue: i_keyword_dict[iv['keywordId']] = iv
+        o_keyword_dict = {}
+        for ov in keywords_list: o_keyword_dict[ov['keyword_id']] = ov.toDict()
+
+        #api返回值替换
+        ikeys = self.ivalue[0].keys()
+        okeys = keywords_list[0].toDict().keys()
+        to_save_db_keyword_list = []
+        for i in range( len(keyword_ids) ):
+
+            keyword_id = keyword_ids[i]
+            ikeyword = i_keyword_dict[keyword_id]
+            okeyword = o_keyword_dict[keyword_id]
+
+            for  k in okeys: #非修改值替换，如campaign_id、adgroup_id、create_time等值
+                if hasattr(self.fkey[i],k):
+                    v = okeyword[k]
+                    setattr(self.fkey[i],k, v)
+
+            for ik in ikeys:
+                iv = i_keyword_dict[keyword_id][ik] #获取设置值
+                ok = get_corresponding_key(ik)#获取返回结构对应键
+                if hasattr(self.fkey[i],ok):
+                    setattr(self.fkey[i],ok,iv)#替换api返回键对应值
+                    okeyword[ok] = iv #替换存db的关键词列表
+            if hasattr(self.fkey[i],"modified_time"):
+                setattr(self.fkey[i],"modified_time",datetime.now())
+                okeyword['modified_time'] = datetime.now()
+            to_save_db_keyword_list.append(okeyword)
+
+        #替换值后存虚拟库
+        KeywordDBService.update_keyword_list(sid,to_save_db_keyword_list)
+        logger2.info("存虚拟库成功！api_name:%s " % self.api_name)
+
+        #将改价的词，更新到 keyword_change_虚拟表中
+        KeywordChangedTestService.upsert_keywords_changed(sid,to_save_db_keyword_list)
+        logger2.info("keyword_change_虚拟表中更新成功！")
+
+        return self.fkey
