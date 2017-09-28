@@ -205,8 +205,11 @@ class ClouddataMbpDataGet(object):
         return ret
 
     @classmethod
-    def get_shop_wx_nature_query(cls, sid, sdate, edate):
-        """获取店铺wx自然query"""
+    def get_shop_wx_nature_query_old(cls, sid, sdate, edate):
+        """获取店铺wx自然query
+
+        老接口，已换新接口
+        """
 
         sdate_str = sdate.strftime("%Y%m%d")
         edate_str = edate.strftime("%Y%m%d")
@@ -218,6 +221,54 @@ class ClouddataMbpDataGet(object):
         #sql_id = 108468
         ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
         return ret
+    
+    @classmethod
+    def get_shop_wx_nature_query(cls, sid, sdate, edate):
+        """获取店铺wx自然query
+
+        每个shop每日所有关键词，每20条合并一条传输，
+        即每100000query分一页。
+        在这里再拆分。
+        """
+
+        sdate_str = sdate.strftime("%Y%m%d")
+        edate_str = edate.strftime("%Y%m%d")
+        query_dict = {"shop_id":sid, "sdate":sdate_str, "edate":edate_str}
+        result_list = []
+        sql_id = 112508
+        ret = ClouddataMbpDataGet.get_data_from_clouddata(sql_id, query_dict)
+        query_list = []
+        for e in ret:
+            default_dict = {"thedate": e["thedate"], "shop_id": e["shop_id"], "seller_id": e["seller_id"], "dt": e["dt"]}
+            querys = e["querys"].split("\\\\")
+            for query in querys:
+                query_seg = query.split("\\")
+                if len(query_seg) != 20:
+                    logger.info("shop:%s, query:%s segment error", sid, query)
+                    continue
+                di = copy.deepcopy(default_dict)
+                di['auction_id'] = query_seg[0]
+                di['query'] = query_seg[1]
+                di['click'] = query_seg[2]
+                di['uv'] = query_seg[3]
+                di['direct_ord_item_cnt'] = query_seg[4]
+                di['indirect_ord_item_cnt'] = query_seg[5]
+                di['ord_item_cnt'] = query_seg[6]
+                di['direct_ord_amt'] = query_seg[7]
+                di['indirect_ord_amt'] = query_seg[8]
+                di['ord_amt'] = query_seg[9]
+                di['direct_ord_cnt'] = query_seg[10]
+                di['indirect_ord_cnt'] = query_seg[11]
+                di['ord_cnt'] = query_seg[12]
+                di['direct_pay'] = query_seg[13]
+                di['indirect_pay'] = query_seg[14]
+                di['pay'] = query_seg[15]
+                di['direct_alipay_winner_num'] = query_seg[16]
+                di['direct_alipay_auction_num'] = query_seg[17]
+                di['direct_alipay_trade_amt'] = query_seg[18]
+                di['direct_alipay_trade_num'] = query_seg[19]
+                query_list.append(di)
+        return query_list
 
     @classmethod
     def get_shop_pc_trace_log(cls,sid, sdate, edate):
