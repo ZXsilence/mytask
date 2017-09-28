@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 class SimbaKeywordsChangedGet(object):
 
-    PAGE_SIZE = 1000
+    PAGE_SIZE = 200
 
     @classmethod
     def get_keywords_changed(cls, nick, start_time):
@@ -65,6 +65,59 @@ class SimbaKeywordsChangedGet(object):
             return 0 
         total_pages = (rsp.keywords.total_item +  cls.PAGE_SIZE  -1)/ cls.PAGE_SIZE 
         return total_pages
+   
+    @classmethod
+    def get_page_num_and_first_page(cls, nick, start_time):
+        """获取分页数及第一页的关键词
+        
+        目前api每页最大项数为200
+        分页数由返回的总项数除以200得到
+
+        Args:
+            nick: ...
+            start_time: 得到此时间点之后到系统当前时间的词变化数据，不能大于一个月
+
+        Returns:
+            page_num: 分页数
+            keywords: 第一页关键词id列表
+
+        """
+        req = SimbaKeywordsChangedGetRequest()
+        req.nick = nick
+        req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        req.page_no = 1
+        rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(nick,req)
+        if not rsp.keywords.total_item:
+            return 0, []
+        page_num = (rsp.keywords.total_item + 200 - 1) / 200
+        keywords = [item.keyword_id for item in rsp.keywords.keyword_list]
+        return page_num, keywords
+
+    @classmethod
+    def get_keywords_id_changed_remain(cls, nick, start_time, page_num):
+        """获取第二页以后的关键词
+        
+        配合get_page_num_and_first_page方法使用
+        与原方法相比,减小了第一次调用
+
+        Args:
+            nick: ...
+            start_time: 得到此时间点之后到系统当前时间的词变化数据，不能大于一个月
+            page_num: 分页数
+
+        Returns:
+            keywords: 关键词id列表
+
+        """
+        req = SimbaKeywordsChangedGetRequest()
+        req.nick = nick
+        req.start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        keywords = []
+        for curr_page_no in range(2, page_num + 1):
+            req.page_no = curr_page_no
+            rsp = SimbaKeywordsChangedGet._get_sub_keywords_changed(nick,req)
+            keywords.extend([item.keyword_id for item in rsp.keywords.keyword_list])
+        return keywords
     
     @classmethod
     def get_keywords_id_changed(cls,nick,start_time):
@@ -99,9 +152,13 @@ def test():
     nick = 'chinchinstyle'
     from datetime import datetime,timedelta
     start_time = datetime.now() - timedelta(days=10)
-    SimbaKeywordsChangedGet.PAGE_SIZE = 300
-    print SimbaKeywordsChangedGet.get_total_page(nick,start_time)
-    print SimbaKeywordsChangedGet.get_keywords_id_changed(nick,start_time)
+    #SimbaKeywordsChangedGet.PAGE_SIZE = 300
+    #print SimbaKeywordsChangedGet.get_total_page(nick,start_time)
+    #print SimbaKeywordsChangedGet.get_keywords_id_changed(nick,start_time)
+    start_time = datetime(2017, 9, 12, 10, 14, 44)
+    nick = "世家家居旗舰店"
+    res = SimbaKeywordsChangedGet.get_page_num_and_first_page(nick, start_time)
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
 
 if __name__ == '__main__':
     test()
