@@ -100,23 +100,5 @@ if __name__ == '__main__':
     nick = '优美妮旗舰店'
     nick2 = '飞利浦官方旗舰店'
     try_list = ZuanshiAdzoneFindPage.get_adzone_list(nick,settle_type_list  = '1,2')
-    adzone_id_list = set([i['adzone_id'] for i in try_list])
-    res = []
-    for d in try_list:
-        if adzone_id_list:
-            if d['adzone_id'] in adzone_id_list:
-                res.append(d)
-                adzone_id_list.remove(d['adzone_id'])
-        else:
-            break
-    print len(res)
-    #from collections import Counter
-    #id_list = [i['adzone_id'] for i in try_list]
-    #data = Counter(id_list)
-    #repeat_id = []
-    #for k,v in data.iteritems():
-    #    if v > 1:
-    #        repeat_id.append(k)
-    #final = filter(lambda x:x['adzone_id'] in repeat_id, try_list)
-    #for f in final:
-    #   print f['adzone_id'], f['adzone_name'], f['adzone_size_list'], f['adzone_level'], f['allow_ad_format_list'], f['media_type'], f['allow_adv_type']
+    for t_l in try_list:
+        print t_l
