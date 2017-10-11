@@ -28,6 +28,7 @@ SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
         #'host':'api.maimiaotech.com',
+        #'host':'10.153.207.93',
         'host':'10.242.173.131',
         'port':30005
     }
@@ -44,7 +45,7 @@ def set_api_source(source):
 def get_api_source():
     global api_source
     return api_source
-
+API_VIRTUAL_TEST=False
 logger = logging.getLogger("api_server")
 hdlr = logging.FileHandler('/alidata1/logs/api_server.log')
 hdlr.setLevel(logging.DEBUG)
@@ -54,6 +55,7 @@ logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
 
+logger2 = logger
 
 APP_SETTINGS = {
 
