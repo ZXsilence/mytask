@@ -27,7 +27,7 @@ API_PORT = 30001
 SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
-        'host':'localhost',
+        'host':'mm_test_in',
         'port':9091
     }
 
