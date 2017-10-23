@@ -85,7 +85,6 @@ def scp_file(root_path, ext_path, file_name,servers=['10.132.174.13','10.132.174
                     sftp.put(root_path + ext_path + file_name,dest_path + ext_path + file_name)
                 ssh.close()
             except Exception,e:
-                print root_path + ext_path + file_name,dest_path + ext_path + file_name
                 print e
                 retry_times+=1
                 if retry_times > max_retry_times:
