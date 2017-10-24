@@ -29,7 +29,7 @@ def useage():
    
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        ip = API_THRIFT['host']
+        ip = '0.0.0.0'
         port = API_THRIFT['port']
     elif len(sys.argv) == 3:
         ip = sys.argv[1]
