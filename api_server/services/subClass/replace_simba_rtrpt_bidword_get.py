@@ -24,16 +24,24 @@ class ReplaceSimbaRtrptBidwordGet(ReplaceBase):
     '''
     关键词实时报表
     '''
-    _from_sample_db = False
+    _from_sample_db = True
 
     def replace_ret_values(self):
         #输入参数判断
-        rt_date = self.ivalue
+        rt_date = str(self.ivalue)
         if datetime.combine(datetime.now(),dt.time()).strftime("%Y-%m-%d") != str(rt_date):
            logger2.error("输入参数有误，实时时间传入不对！")
            raise ApiVirtualResponseException("输入参数有误，实时时间传入不对！")
         if self._from_sample_db:
-            pass
+            from report_db.db_models_sample.rpt_keywordrealtime import RptKeywordRealTimeSample
+            from shop_db.db_models.shop_info import ShopInfo
+            sid = ShopInfo.get_sid_by_nick(self.nick)
+            try:
+                db_bidword_rpt_list = RptKeywordRealTimeSample.get_rpt_list_by_adgroup_ids(rt_date,rt_date,self.nick,sid,[self.adgroup_id],False)
+            except Exception,e:
+                logger2.error("获取关键词实时报表失败！",exc_info=True)
+                raise ApiVirtualResponseException(e.msg or "获取关键词实时报表失败！")
+
         else:
             db_bidword_rpt_list = [{'impression': '77', 'adgroupid': '722979883', 'roi': '0.0', 'directtransactionshipping': '0', 'cost': '1248', 'directtransaction': '0.0', 'favshoptotal': '0', 'click': '3', 'transactiontotal': '0.0', 'indirecttransactionshipping': '0', 'source': '4', 'indirecttransaction': '0.0', 'bidwordid': '355996751575', 'thedate': '2017-09-26', 'transactionshippingtotal': '0', 'directcarttotal': '0', 'favtotal': '2', 'cpm': '16207.79', 'ctr': '3.9', 'campaignid': '16448401', 'cpc': '416.0', 'indirectcarttotal': '0', 'carttotal': '0', 'favitemtotal': '2'},{'impression': '41', 'adgroupid': '722979883', 'campaignid': '16448401', 'source': '4', 'thedate': '2017-09-26', 'bidwordid': '355996751590'},{'impression': '100', 'adgroupid': '722979883', 'cpm': '29160.0', 'ctr': '8.0', 'campaignid': '16448401', 'cpc': '364.5', 'source': '4', 'thedate': '2017-09-26', 'cost': '2916', 'bidwordid': '368599341651', 'click': '8'}]
 
@@ -73,11 +81,11 @@ class ReplaceSimbaRtrptBidwordGet(ReplaceBase):
         if self._from_sample_db:
             #api有，db没有==》新增推广组
             #api没有，db有==》删除推广组   这2种都不进行封装
-            only_api = api_adgroup_ids - db_adgroup_ids
-            only_db = db_adgroup_ids - api_adgroup_ids
+            only_api =set( api_adgroup_ids) - set(db_adgroup_ids)
+            only_db = set(db_adgroup_ids) - set(api_adgroup_ids)
             # api和db都排除这2种情况
-            api_adgroup_ids = api_adgroup_ids - only_api - only_db
-            db_adgroup_ids = db_adgroup_ids - only_api - only_db
+            api_adgroup_ids =list(set( api_adgroup_ids) - only_api - only_db)
+            db_adgroup_ids = list(set(db_adgroup_ids) - only_api - only_db)
         #以最小的结果进行映射
         api_len = len(api_adgroup_ids)
         db_len = len(db_adgroup_ids)
@@ -97,11 +105,11 @@ class ReplaceSimbaRtrptBidwordGet(ReplaceBase):
         if self._from_sample_db:
             #api有，db没有==》新增关键词
             #api没有，db有==》删除关键词   这2种都不进行封装
-            only_api = api_bidword_ids - db_bidword_ids
-            only_db = db_bidword_ids - api_bidword_ids
+            only_api = set(api_bidword_ids) - set(db_bidword_ids)
+            only_db = set(db_bidword_ids) - set( api_bidword_ids)
             # api、db排除这2种情况
-            api_bidword_ids = api_bidword_ids - only_api - only_db
-            db_bidword_ids = db_bidword_ids - only_api - only_db
+            api_bidword_ids =list(set( api_bidword_ids) - only_api - only_db)
+            db_bidword_ids =list(set( db_bidword_ids) - only_api - only_db)
         #以最小的结果进行映射
         api_k_len = len(api_bidword_ids)
         db_k_len = len(db_bidword_ids)
