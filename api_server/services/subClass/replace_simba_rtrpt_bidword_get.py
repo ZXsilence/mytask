@@ -133,6 +133,9 @@ class ReplaceSimbaRtrptBidwordGet(ReplaceBase):
 
         #api返回值封装
         db_keys = [k.keys() for k in db_bidword_rpt_list]
+        if db_keys == []:
+            self.fkey=[]
+            return self.fkey
         db_keys = reduce(operator.add,db_keys)
         db_keys = list(set(db_keys))
         for i , rpt in enumerate(db_bidword_rpt_list):
