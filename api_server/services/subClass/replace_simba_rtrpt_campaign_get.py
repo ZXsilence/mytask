@@ -29,29 +29,38 @@ class ReplaceSimbaRtrptCampaignGet(ReplaceBase):
     ps:
         调试前涉及到假数据，所以存在db_campaign_ids和api_campaign_ids的映射。实际通过nick、campaign_id取样本库数据时，映射过程可以省略
     '''
-    _from_sample_db = False
+    _from_sample_db = True
     def replace_ret_values(self):
+        from tao_models.simba_campaigns_get import SimbaCampaignsGet
+        campaign_list = SimbaCampaignsGet.get_campaign_list(self.nick)
+        api_campaign_ids = [k['campaign_id'] for k in campaign_list]
         #输入参数判断
-        rt_date = self.ivalue
+        rt_date = str(self.ivalue)
         if datetime.combine(datetime.now(),dt.time()).strftime("%Y-%m-%d") != str(rt_date):
            logger2.error("输入参数有误，实时时间传入不对！")
            raise ApiVirtualResponseException("输入参数有误，实时时间传入不对！")
 
         #从样本库获取campaign的样本报表
         if self._from_sample_db:
-            pass
+            from report_db.db_models_sample.rpt_campaignrealtime import RptCampaignRealTimeSample
+            from shop_db.db_models.shop_info import ShopInfo
+            sid = ShopInfo.get_sid_by_nick(self.nick)
+            try:
+                db_campaign_rpt_list = []
+                for campaign_id in api_campaign_ids:
+                    db_campaign_rpt_list.extend(RptCampaignRealTimeSample.get_rpt_list(rt_date,rt_date,self.nick,sid,campaign_id,False))
+            except Exception ,e:
+                logger2.error("获取计划实时报表失败！",exec_info=True)
+                raise ApiVirtualResponseException("获取计划实时报表失败！")
         else:
             db_campaign_rpt_list = [{'impression': '1909', 'roi': '10.23', 'directtransactionshipping': '1', 'cost': '1010', 'directtransaction': '10330', 'favshoptotal': '0', 'click': '14', 'transactiontotal': '10330', 'indirecttransactionshipping': '0', 'source': '1', 'indirecttransaction': '0', 'thedate': '2017-09-26', 'transactionshippingtotal': '1', 'coverage': '7.14', 'directcarttotal': '1', 'favtotal': '0', 'cpm': '529.07', 'ctr': '0.73', 'campaignid': '10745526', 'cpc': '72.14', 'search_type': '0', 'indirectcarttotal': '0', 'carttotal': '1', 'favitemtotal': '0'}, {'impression': '519', 'roi': '0.00', 'cpm': '0.00', 'ctr': '0.00', 'campaignid': '10745526', 'cpc': '0.00', 'search_type': '2', 'source': '1', 'thedate': '2017-09-26', 'cost': '0', 'coverage': '0.00', 'click': '0'}, {'impression': '3', 'roi': '0.00', 'cpm': '0.00', 'ctr': '0.00', 'campaignid': '10745526', 'cpc': '0.00', 'search_type': '2', 'source': '2', 'thedate': '2017-09-26', 'cost': '0', 'coverage': '0.00', 'click': '0'}, {'impression': '521', 'cpm': '1598.85', 'ctr': '1.92', 'campaignid': '10745526', 'cpc': '83.30', 'search_type': '0', 'source': '4', 'thedate': '2017-09-26', 'cost': '833', 'click': '10'}, {'impression': '625', 'cpm': '1107.20', 'ctr': '1.60', 'campaignid': '10745526', 'cpc': '69.20', 'search_type': '2', 'source': '4', 'thedate': '2017-09-26', 'cost': '692', 'click': '10'}, {'impression': '2', 'roi': '0.00', 'cpm': '0.00', 'ctr': '0.00', 'campaignid': '10745526', 'cpc': '0.00', 'search_type': '0', 'source': '5', 'thedate': '2017-09-26', 'cost': '0', 'coverage': '0.00', 'click': '0'}, {'impression': '989', 'cpm': '141.56', 'ctr': '0.20', 'campaignid': '10745526', 'cpc': '70.00', 'search_type': '2', 'source': '5', 'thedate': '2017-09-26', 'cost': '140', 'click': '2'}, {'impression': '762', 'roi': '0.00', 'cpm': '0.00', 'ctr': '0.00', 'campaignid': '13758630', 'cpc': '0.00', 'search_type': '0', 'source': '1', 'thedate': '2017-09-26', 'cost': '0', 'coverage': '0.00', 'click': '0'}, {'impression': '13', 'roi': '0.00', 'cpm': '0.00', 'ctr': '0.00', 'campaignid': '13758630', 'cpc': '0.00', 'search_type': '2', 'source': '1', 'thedate': '2017-09-26', 'cost': '0', 'coverage': '0.00', 'click': '0'}]
         #api获取计划id，方便对样本库中计划id进行替换
-        from tao_models.simba_campaigns_get import SimbaCampaignsGet
-        campaign_list = SimbaCampaignsGet.get_campaign_list(self.nick)
-        api_campaign_ids = [k['campaign_id'] for k in campaign_list]
         db_campaign_ids = list(set([k['campaignid'] for k in db_campaign_rpt_list]))
         if  self._from_sample_db:
-            only_api = api_campaign_ids - db_campaign_ids
-            only_db = db_campaign_ids - api_campaign_ids
-            api_campaign_ids = api_campaign_ids - only_api - only_db
-            db_campaign_ids = db_campaign_ids - only_api - only_db
+            only_api =set( api_campaign_ids) - set( db_campaign_ids)
+            only_db = set(db_campaign_ids) - set(api_campaign_ids)
+            api_campaign_ids =list(set( api_campaign_ids) - only_api - only_db)
+            db_campaign_ids = list(set(db_campaign_ids) - only_api - only_db)
         #当api_campaign_ids > db_campaign_ids 时，按db_campaign_ids封装。默认未封装的计划报表是{}
         api_ids = len(api_campaign_ids)
         db_ids = len(db_campaign_ids)
