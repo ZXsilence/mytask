@@ -144,6 +144,13 @@ if __name__ == "__main__":
     api_input = {'the_date': u'2017-09-26', 'timestamp': u'1506411595299', 'campaign_id': u'16448401', 'nick': u'\u5bb6\u5c45\u6e90\u5bb6\u5177\u65d7\u8230\u5e97', 'method': u'taobao.simba.rtrpt.bidword.get', 'adgroup_id': u'722979883'}
     api_output = {'simba_rtrpt_bidword_get_response': {'results': {'rt_rpt_result_entity_d_t_o': [{'impression': '71', 'adgroupid': '722979883', 'roi': '0.0', 'directtransactionshipping': '0', 'cost': '1248', 'directtransaction': '0.0', 'favshoptotal': '0', 'click': '3', 'transactiontotal': '0.0', 'indirecttransactionshipping': '0', 'source': '4', 'indirecttransaction': '0.0', 'bidwordid': '355996751575', 'thedate': '2017-09-26', 'transactionshippingtotal': '0', 'directcarttotal': '0', 'favtotal': '2', 'cpm': '17577.46', 'ctr': '4.23', 'campaignid': '16448401', 'cpc': '416.0', 'indirectcarttotal': '0', 'carttotal': '0', 'favitemtotal': '2'}]}, 'request_id': '10cgsjwevicwq'}}
 
+    api_name = "taobao.simba.rpt.adgroupkeywordbase.get"
+    api_input = {}
+    api_output = {'simba_rpt_adgroupkeywordbase_get_response': {'rpt_adgroupkeyword_base_list': [{'avgpos': '12', 'ctr': '1.63', 'adgroupid': 722815068, 'nick': u'\u897f\u74dc\u5988\u5988\u65d7\u8230\u5e97', 'cpm': '1644.93', 'searchtype': 'SEARCH', 'campaignid': 44854263, 'cpc': '101.13', 'source': 'SUMMARY', 'cost': '61489', 'keywordstr': u'\u5b55\u5987\u6253\u5e95\u88e4', 'keywordid': 304819868593, 'date': '2017-10-29', 'impressions': '37381', 'click': '608'}]}}
+    
+    api_name="taobao.simba.rpt.adgroupkeywordeffect.get"
+    api_input={}
+    api_output={'simba_rpt_adgroupkeywordeffect_get_response': {'rpt_adgroupkeyword_effect_list': [{'favitemcount': '15', 'adgroupid': 722815068, 'favshopcount': '1', 'directpay': '93579', 'searchtype': 'SEARCH', 'campaignid': 44854263, 'indirectpay': '9819', 'nick': u'\u897f\u74dc\u5988\u5988\u65d7\u8230\u5e97', 'indirectcarttotal': '10', 'keywordstr': u'\u5b55\u5987\u6253\u5e95\u88e4', 'indirectpaycount': '3', 'keywordid': 304819868593, 'date': '2017-10-29', 'carttotal': '80', 'directpaycount': '29', 'directcarttotal': '70', 'source': 'SUMMARY'}]}}
     ApiStructureTemplate.set_api_structure(api_name,api_input,api_output)
     res = ApiStructureTemplate.get_api_structure_by_name(api_name)
     print res

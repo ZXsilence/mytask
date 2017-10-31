@@ -26,6 +26,7 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
+from api_server.services.subClass.exceptions import ApiVirtualResponseException
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
 TaskService = None
@@ -261,6 +262,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         raise W2securityException('w2-security-authorize-invalid') 
                     else:
                         raise  e
+                except  ApiVirtualResponseException,e:
+                    retry_times = MAX_RETRY_TIMES
+                    raise e
                 else:
                     if retry_times:
                         logger.info("retry success, total_retry time:%i"%retry_times)

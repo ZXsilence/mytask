@@ -25,6 +25,8 @@ class ApiVirtualReplaceKeyConfig(object):
         "taobao.simba.rtrpt.campaign.get":"the_date",
         "taobao.simba.rtrpt.adgroup.get":"the_date",
         "taobao.simba.rtrpt.bidword.get":"the_date",
+        "taobao.simba.rpt.adgroupkeywordeffect.get":"start_time",
+        "taobao.simba.rpt.adgroupkeywordbase.get":"start_time",
         #写api
         #"taobao.simba.keywords.pricevon.set":"keywordid_prices",
         #"taobao.simba.keywordsvon.add":"keyword_prices",
@@ -42,6 +44,8 @@ class ApiVirtualReplaceKeyConfig(object):
         "taobao.simba.rtrpt.campaign.get":"resultss",
         "taobao.simba.rtrpt.adgroup.get":"results",
         "taobao.simba.rtrpt.bidword.get":"results",
+        "taobao.simba.rpt.adgroupkeywordeffect.get":"rpt_adgroupkeyword_effect_list",
+        "taobao.simba.rpt.adgroupkeywordbase.get":"rpt_adgroupkeyword_base_list",
         #写api
         #"taobao.simba.keywords.pricevon.set":"keywords",
         #"taobao.simba.keywordsvon.add":"keywords",
