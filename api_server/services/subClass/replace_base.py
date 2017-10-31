@@ -24,6 +24,6 @@ class ReplaceBase(object):
             for k,v in args[0].iteritems():
                 if k in ("adgroup_id","campaign_id"):
                     v = int(v)
-                #if type(v)==unicode:
-                #    v = str(v)
+                if type(v)==unicode:
+                    v = str(v)
                 setattr(self,k,v)
