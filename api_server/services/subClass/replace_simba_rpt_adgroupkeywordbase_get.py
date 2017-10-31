@@ -54,5 +54,5 @@ class ReplaceSimbaRptAdgroupkeywordbaseGet(ReplaceBase):
                 else:
                     self.fkey[i][key] = unicode(rpt[key])
 
-        logger2.info("获取关键词基础报表成功！nick:%s,campaign_id:%s,adgroup_id:%s" % (self.nick,self.campaign_id,self.adgroup_id))
+        logger2.info("获取关键词基础报表成功！start_time:%s,end_time:%s,nick:%s,campaign_id:%s,adgroup_id:%s" % (self.start_time,self.end_time,self.nick,self.campaign_id,self.adgroup_id))
         return json.dumps(self.fkey)
