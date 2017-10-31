@@ -21,6 +21,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaRptAdgroupkeywordbaseGetRequest
 from tao_models.common.decorator import  tao_api_exception
 from api_server.services.api_service import ApiService
+from api_server.conf.settings import API_VIRTUAL_TEST
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num
 from TaobaoSdk.Exceptions import ErrorResponseException
@@ -66,6 +67,8 @@ class SimbaRptAdgroupkeywordbaseGet(object):
             l = cls._sub_get_rpt_adgroupkeywordbase_list(req,nick)
             base_list.extend(l)
             if len(l) < 500:
+                break
+            if API_VIRTUAL_TEST and nick in ("chinchinstyle","麦苗科技001"):
                 break
             req.page_no += 1
         logger.info("get_rpt_adgroupkeywordbase_list, adgroup_id:%s, sdate:%s, edate:%s"%(adgroup_id, start_time, end_time))

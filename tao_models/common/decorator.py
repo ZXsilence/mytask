@@ -74,6 +74,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         logger.info(args[0].__class__.__name__ + "return None")
                         return None
                     res =  func(*args, **kwargs)
+                except  ApiVirtualResponseException,e:
+                    retry_times = MAX_RETRY_TIMES
+                    return e
                 except ErrorResponseException,e:
                     logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))
@@ -262,9 +265,6 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         raise W2securityException('w2-security-authorize-invalid') 
                     else:
                         raise  e
-                except  ApiVirtualResponseException,e:
-                    retry_times = MAX_RETRY_TIMES
-                    raise e
                 else:
                     if retry_times:
                         logger.info("retry success, total_retry time:%i"%retry_times)
