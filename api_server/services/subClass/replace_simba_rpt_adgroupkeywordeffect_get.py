@@ -31,10 +31,10 @@ class ReplaceSimbaRptAdgroupkeywordeffectGet(ReplaceBase):
             rpt_list = RptKeywordeffectSample.get_rpt_list_by_adgroup_ids(self.start_time,self.end_time,self.nick,sid,[self.adgroup_id],is_summary)
         except Exception,e :
             logger2.error("获取关键词基础报表失败！",exc_info=True)
-            ApiVirtualResponseException("获取关键词基础报表失败！")
+            raise ApiVirtualResponseException("获取关键词基础报表失败！")
         if rpt_list == []:
             self.fkey = []
-            return self.fkey
+            return json.dumps(self.fkey)
         #返回结构长度扩展
         self.fkey = json.loads(self.fkey)
         len_fkey = len(self.fkey)
