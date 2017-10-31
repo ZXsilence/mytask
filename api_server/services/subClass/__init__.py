@@ -12,3 +12,5 @@ from replace_simba_rtrpt_cust_get import *
 from replace_simba_rtrpt_campaign_get import *
 from replace_simba_rtrpt_adgroup_get import *
 from replace_simba_rtrpt_bidword_get import *
+from replace_simba_rpt_adgroupkeywordbase_get import *
+from replace_simba_rpt_adgroupkeywordeffect_get import *

@@ -98,12 +98,7 @@ class  ApiVirtualService(object):
                 fkey = fkey[:(outputLen-inputLen)]
 
         #返回值替换
-        campaign_id = self.params_dict.get("campaign_id",None)
-        adgroup_id = self.params_dict.get("adgroup_id",None)
-        campaign_id = int(campaign_id) if campaign_id else campaign_id
-        adgroup_id = int(adgroup_id) if adgroup_id else adgroup_id
-
-        replace_obj = ApiVirtualReplaceRetBase(self.api_name,self.nick,fkey,ivalue,campaign_id,adgroup_id)
+        replace_obj = ApiVirtualReplaceRetBase(self.api_name,self.nick,fkey,ivalue,self.params_dict)
         try:
             fkey = replace_obj.replace_ret_values() #返回值替换公共入口
             if fkey is None: #必须判断为None才报错，因为fkey可能为[]，是允许的
@@ -128,7 +123,10 @@ class  ApiVirtualService(object):
             attrs = [k for k in dir(content) if not k.startswith("_") and k != "toDict" ]
             for attr in attrs:
                 rawContent[response_name][attr] = covertObjRecursively(getattr(content,attr))
-        rawContent = simplejson.dumps(rawContent)
+        if self.api_name in ["taobao.simba.rpt.adgroupkeywordeffect.get","taobao.simba.rpt.adgroupkeywordbase.get"]:
+            rawContent = str(rawContent)
+        else:
+            rawContent = simplejson.dumps(rawContent)
         return self.response,rawContent
 
 #递归寻找，将为list的对象显示出来
