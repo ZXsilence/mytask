@@ -19,6 +19,7 @@ if __name__ == '__main__':
 from TaobaoSdk import SimbaRtrptAdgroupGetRequest 
 from tao_models.common.decorator import  tao_api_exception, rt_check_retry
 from api_server.services.api_service import ApiService
+from api_server.conf.settings import API_VIRTUAL_TEST
 from api_server.common.util import change_obj_to_dict_deeply
 from tao_models.num_tools import change2num, KEYS_INT, KEYS_FLOAT, KEYS_RT
 
@@ -183,6 +184,8 @@ class SimbaRtRptAdgroupGet(object):
                 l = []
             rpt_list.extend(l)
             if len(l) < 500:
+                break
+            if API_VIRTUAL_TEST and nick in ("chinchinstyle","麦苗科技001"):
                 break
             req.page_number += 1
 
