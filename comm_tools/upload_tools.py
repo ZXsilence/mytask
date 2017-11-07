@@ -124,11 +124,14 @@ def upload_customer_img_with_base64(root_path, nick, file_obj, img_target=None, 
     img_data = img_data[re.search(';base64', img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
-    import Image, ImageFile
-    ImageFile.LOAD_TRUNCATED_IMAGES = True
-    image = Image.open(file_path)
-    out = image.resize((image.size[0],image.size[1]),Image.ANTIALIAS)
-    out.save(file_path, 'JPEG', quality=90)
+    #除以1000非1024
+    imge_data_size = os.path.getsize(file_path)/1000
+    if imge_data_size > 500:
+        import Image, ImageFile
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
+        image = Image.open(file_path)
+        out = image.resize((image.size[0],image.size[1]),Image.ANTIALIAS)
+        out.save(file_path, 'JPEG', quality=90)
     if img_target == 'is_toutu':
         category_id = _img_kongjian_add_category(nick, CATEGORY_SYB_TOUTU)
     elif img_target == 'is_zhutu':
@@ -165,11 +168,14 @@ def upload_customer_img_with_base64_new(root_path,nick,file_obj):
     img_data = img_data[re.search(';base64',img_data).start()+8:]
     destination.write(base64.b64decode(img_data))
     destination.close()
-    import Image, ImageFile
-    ImageFile.LOAD_TRUNCATED_IMAGES = True
-    image = Image.open(file_path)
-    out = image.resize((image.size[0],image.size[1]),Image.ANTIALIAS)
-    out.save(file_path, 'JPEG', quality=90)
+    #除以1000非1024
+    imge_data_size = os.path.getsize(file_path)/1000
+    if imge_data_size > 500:
+        import Image, ImageFile
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
+        image = Image.open(file_path)
+        out = image.resize((image.size[0],image.size[1]),Image.ANTIALIAS)
+        out.save(file_path, 'JPEG', quality=90)
     rsp = PictureUpload.upload_img(nick,file_path)
     return rsp['picture']['picture_path']
 
