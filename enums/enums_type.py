@@ -14,6 +14,8 @@ class PlatformId(object):
     pc_out = 2
     wx_in = 8
     wx_out = 16
+    nonsearch_in = 1
+    nonsearch_out = 2
 
     CODE_TO_STR = {
             1:'pc_in',
@@ -22,6 +24,10 @@ class PlatformId(object):
             8:'wx_in',
             16:'wx_out'
             }
+    CODE_TO_STR2 = {
+            1:'nonsearch_in',
+            2:'nonsearch_out'
+    }
     
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
