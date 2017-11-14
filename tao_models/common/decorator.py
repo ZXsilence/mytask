@@ -26,6 +26,7 @@ from TaobaoSdk.Exceptions.SDKRetryException import SDKRetryException
 from tao_models.common.exceptions import   DataOutdateException
 from tao_models.common.exceptions import  *
 from api_server.common.exceptions import ApiSourceError
+from api_server.services.subClass.exceptions import ApiVirtualResponseException
 logger = logging.getLogger(__name__)
 mail_logger = logging.getLogger('django.request')
 TaskService = None
@@ -73,6 +74,9 @@ def tao_api_exception(MAX_RETRY_TIMES = 6):
                         logger.info(args[0].__class__.__name__ + "return None")
                         return None
                     res =  func(*args, **kwargs)
+                except  ApiVirtualResponseException,e:
+                    retry_times = MAX_RETRY_TIMES
+                    return e
                 except ErrorResponseException,e:
                     logger.info('exception: code %d *args:%s', e.code, str(args))
                     logger.info('exception:**kwargs:%s'%str(kwargs))

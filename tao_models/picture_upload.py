@@ -27,7 +27,7 @@ from shop_db.services.shop_info_service import ShopInfoService
 from api_server.conf.settings import APP_SETTINGS,SERVER_URL,API_NEED_SUBWAY_TOKEN,API_HOST,API_PORT
 from api_server.services.api_service import ApiService
 from api_server.common.util import change_obj_to_dict_deeply
-
+from busi_service.common.exceptions import BusiException
 logger = logging.getLogger(__name__)
 
 
@@ -59,7 +59,10 @@ class PictureUpload(object):
             try:
                 resp= req.getResponse(access_token)
             except Exception,e:
-                exception = ErrorResponseException(code=e.errorcode,msg=e.message,sub_code=e.subcode,sub_msg=e.submsg)
+                if e.errorcode == 533:
+                    exception = BusiException(e.submsg)
+                else:
+                    exception = ErrorResponseException(code=e.errorcode,msg=e.message,sub_code=e.subcode,sub_msg=e.submsg)
                 continue
             return resp['picture_upload_response'] 
         if exception:
