@@ -219,6 +219,7 @@ class OperationType(object):
     CHANGE_CAMPAIGN_SETTINGS = 700
     CHANGE_ADGROUP_SETTINGS = 701
     CHANGE_ADGROUP_MOBILE_DISCOUNT = 702
+    CHANGE_ADGROUP_DEFAULT_PRICE = 703                      
     CHANGE_CAMPAIGN_WX_CPC_MAX = 705
     CHANGE_ADGROUP_WX_CPC_MAX = 706
     UPDATE_PRICE_FOR_PC_CPC_MAX = 707 
@@ -373,6 +374,7 @@ class OperationType(object):
         CHANGE_CAMPAIGN_SETTINGS,
         CHANGE_ADGROUP_SETTINGS,
         CHANGE_ADGROUP_MOBILE_DISCOUNT,
+        CHANGE_ADGROUP_DEFAULT_PRICE,
 
         UPDATE_STAR_KEYWORD_MAX_PRICE_PC,
         UPDATE_STAR_KEYWORD_MAX_PRICE_MOBILE,
@@ -643,6 +645,7 @@ class OperationType(object):
 
         CHANGE_ADGROUP_WX_CPC_MAX,
         CHANGE_ADGROUP_MOBILE_DISCOUNT,
+        CHANGE_ADGROUP_DEFAULT_PRICE,
 
         ADD_CREATIVE_NORMAL,
         DELETE_CREATIVE_NORMAL
@@ -685,6 +688,7 @@ ADGROUP_LEVEL_LOG_COMMENT = {
 
     OperationType.CHANGE_ADGROUP_WX_CPC_MAX: '推广组设置调整',
     OperationType.CHANGE_ADGROUP_MOBILE_DISCOUNT: '推广组设置调整',
+    OperationType.CHANGE_ADGROUP_DEFAULT_PRICE: '推广组设置调整',
 
     OperationType.ADD_CREATIVE_NORMAL: '创意调整',
     OperationType.DELETE_CREATIVE_NORMAL: '创意调整',
@@ -847,6 +851,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.CHANGE_CAMPAIGN_SETTINGS:"用户修改自动计划设置"
     ,OperationType.CHANGE_ADGROUP_SETTINGS:"用户修改推广组设置"
     ,OperationType.CHANGE_ADGROUP_MOBILE_DISCOUNT:"修改推广组移动折扣"
+    ,OperationType.CHANGE_ADGROUP_DEFAULT_PRICE:"修改推广组默认出价"
     ,OperationType.ADD_RULE:"新增"
     ,OperationType.UPDATE_RULE:"修改"
     ,OperationType.DELETE_RULE:"删除"
