@@ -14,6 +14,8 @@ class PlatformId(object):
     pc_out = 2
     wx_in = 8
     wx_out = 16
+    nonsearch_in = 1
+    nonsearch_out = 2
 
     CODE_TO_STR = {
             1:'pc_in',
@@ -22,6 +24,10 @@ class PlatformId(object):
             8:'wx_in',
             16:'wx_out'
             }
+    CODE_TO_STR2 = {
+            1:'nonsearch_in',
+            2:'nonsearch_out'
+    }
     
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
@@ -63,6 +69,7 @@ class OperationType(object):
     DELETE_USER_DELETE_TAOBAO = 16
     DELETE_GARBAGE_MAX_PRICE = 17
     DELETE_MANUAL_ADGROUP = 18
+    DELETE_ADGROUP_LIMIT_NUM = 26
 
     #分层新增
     DELETE_LOW_CTR = 19 
@@ -467,7 +474,8 @@ class OperationType(object):
         DELETE_LOW_ROI ,
         DELETE_LOW_PV,
         DELETE_IS_GARBAGE_BY_USER,
-        DELETE_LOW_CUST_SCORE
+        DELETE_LOW_CUST_SCORE,
+        DELETE_ADGROUP_LIMIT_NUM
     ]
 
     ALL_KEYWORD_UPDATE_TYPES = [
@@ -696,7 +704,8 @@ OPTTYPE_COMMENT = {
     , OperationType.DELETE_USER_DELETE : "关键词被用户手工删除"
     , OperationType.DELETE_USER_DELETE_TAOBAO : "关键词被用户在直通车手工删除"
     , OperationType.DELETE_GARBAGE_MAX_PRICE : "7天无展现关键词，已经删除"
-    
+    , OperationType.DELETE_ADGROUP_LIMIT_NUM: "推广组词数超过200个，删除多余词"
+
     , OperationType.DELETE_LOW_PV_MAX_PRICE : "关键词已经达到用户设置的最高出价，仍然没有展现，已经删除"
     , OperationType.DELETE_LOW_PV_BEST_POSITION : "关键词已经排在首页，仍然没有展现，已经删除"
     

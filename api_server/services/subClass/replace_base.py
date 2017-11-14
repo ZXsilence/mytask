@@ -14,10 +14,16 @@ import logging
 logger2 = logging.getLogger("api_virtual")
 
 class ReplaceBase(object):
-    def __init__(self,api_name,nick,fkey,ivalue,campaign_id=None,adgroup_id=None):
+    def __init__(self,api_name,nick,fkey,ivalue,*args):
         self.api_name = api_name
         self.nick = nick
         self.fkey = fkey
         self.ivalue = ivalue
-        self.campaign_id = campaign_id
-        self.adgroup_id = adgroup_id
+        #动态赋值变量
+        if isinstance(args[0],dict):
+            for k,v in args[0].iteritems():
+                if k in ("adgroup_id","campaign_id"):
+                    v = int(v)
+                if type(v)==unicode:
+                    v = str(v)
+                setattr(self,k,v)

@@ -21,13 +21,13 @@ sys.path.append(APISDK)
 sys.path.append(BACKENDS)
 #SERVER_URL = "http://223.5.20.253:8002/router/rest"
 API_HOST = "10.132.171.237"
-API_PORT = 30001
+API_PORT = 30002
 #API_HOST = 'eco.taobao.com'
 #API_PORT = 80
-SERVER_URL = "https://%s:%s/router/rest" %(API_HOST,API_PORT)
+SERVER_URL = "http://%s:%s/router/rest" %(API_HOST,API_PORT)
 
 API_THRIFT = {
-        'host':'localhost',
+        'host':'mm_test_in',
         'port':9091
     }
 

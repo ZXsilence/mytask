@@ -64,14 +64,14 @@ class ZuanshiCrowdFind(object):
         crowd_list = change_obj_to_dict_deeply(rsp.result).get('crowds',{}).get('crowd_d_t_o')
         if crowd_list:
             for crowd in crowd_list:
-                crowd['sub_crowds'] = crowd['sub_crowds']['sub_crowd_d_t_o']
+                crowd['sub_crowds'] = crowd.get('sub_crowds',{}).get('sub_crowd_d_t_o',[])
                 crowd['matrix_prices'] = crowd['matrix_prices']['matrix_price_d_t_o']
         return crowd_list
 
 if __name__ == '__main__':
-    nick = '优美妮旗舰店'
-    campaign_id = 217069448
-    adgroup_id = 217061436
+    nick = '传奇家居旗舰店'
+    campaign_id = 264579139 
+    adgroup_id = 264164102
     try_list = ZuanshiCrowdFind.get_crowd_list(nick,campaign_id,adgroup_id)
     print try_list
     #for obj in try_list:
