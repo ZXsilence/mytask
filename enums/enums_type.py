@@ -14,8 +14,6 @@ class PlatformId(object):
     pc_out = 2
     wx_in = 8
     wx_out = 16
-    nonsearch_in = 1
-    nonsearch_out = 2
 
     CODE_TO_STR = {
             1:'pc_in',
@@ -24,10 +22,6 @@ class PlatformId(object):
             8:'wx_in',
             16:'wx_out'
             }
-    CODE_TO_STR2 = {
-            1:'nonsearch_in',
-            2:'nonsearch_out'
-    }
     
 class WordDeleteType(object):
     AUDIT_UNPASS = 1
@@ -172,6 +166,7 @@ class OperationType(object):
     CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT = 331
     OPEN_CAMPAIGN_PLATFORM_OPTIMIZE = 332
     CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE = 333
+    OPEN_CAMPAIGN_NONSEARCH_OPTIMIZE = 338
 
     ADD_NEW_CAMPAIGN_SETTINGS = 334
     IGNORE_CAMPAIGN_NO_ADGROUP = 335
@@ -371,6 +366,7 @@ class OperationType(object):
         CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT,
         OPEN_CAMPAIGN_PLATFORM_OPTIMIZE,
         CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE,
+        OPEN_CAMPAIGN_NONSEARCH_OPTIMIZE,
         CHANGE_CAMPAIGN_SETTINGS,
         CHANGE_ADGROUP_SETTINGS,
         CHANGE_ADGROUP_MOBILE_DISCOUNT,
@@ -845,6 +841,7 @@ OPTTYPE_COMMENT = {
     ,OperationType.CHANGE_CAMPAIGN_PLATFORM_WX_DISCOUNT:"调整无线平台折扣"
     ,OperationType.OPEN_CAMPAIGN_PLATFORM_OPTIMIZE:"开启平台优化"
     ,OperationType.CLOSE_CAMPAIGN_PLATFORM_OPTIMIZE:"关闭平台优化"
+    ,OperationType.OPEN_CAMPAIGN_NONSEARCH_OPTIMIZE:"开启定向优化"
     ,OperationType.ADD_NEW_CAMPAIGN_SETTINGS:"新设置自动计划"
     ,OperationType.RISE_ADGROUP_CPC_MAX:"为了效果加大投入,推广单元最高出价增加10%"
     ,OperationType.DROP_ADGROUP_CPC_MAX:"为了效果减少投入,推广单元最高出价减少10%"
