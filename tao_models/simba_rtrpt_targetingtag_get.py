@@ -38,7 +38,7 @@ class SimbaRtrptTargetingtagGet(object):
         req.adgroup_id = adgroup_id
         req.the_date = tdate.strftime("%Y-%m-%d")
         req.traffic_type = source 
-        rsp = ApiService.execute(req,nick,"SYB")
+        rsp = ApiService.execute(req,nick)
         return change2num(change_obj_to_dict_deeply(rsp.results))
 
 
