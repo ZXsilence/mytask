@@ -50,6 +50,8 @@ class ReplaceSimbaRptAdgroupkeywordbaseGet(ReplaceBase):
             for key in rpt_keys:
                 if key == "date":
                     self.fkey[i][key] = rpt[key].strftime("%Y-%m-%d")
+                elif key in ["adgroupid","campaignid","keywordid"]:
+                    self.fkey[i][key] = rpt[key]
                 else:
                     self.fkey[i][key] = unicode(rpt[key])
 
