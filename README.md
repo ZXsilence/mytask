@@ -1,2 +1,3 @@
-this is git2
 # mytask
+this is git1
+this is git2
